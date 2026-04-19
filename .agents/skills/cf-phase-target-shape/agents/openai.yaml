@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:phase-target-shape"
+  short_description: "Define the hard-path target direction"
+policy:
+  allow_implicit_invocation: false

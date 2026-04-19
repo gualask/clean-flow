@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:start"
+  short_description: "Start or resume the full Cflow workflow"
+policy:
+  allow_implicit_invocation: false

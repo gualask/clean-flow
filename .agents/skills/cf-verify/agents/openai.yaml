@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:verify"
+  short_description: "Collect factual evidence before completion"
+policy:
+  allow_implicit_invocation: false

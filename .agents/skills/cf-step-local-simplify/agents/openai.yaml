@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:step-local-simplify"
+  short_description: "Reduce local cognitive load after structural work"
+policy:
+  allow_implicit_invocation: false

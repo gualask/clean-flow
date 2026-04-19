@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:feedback-intake"
+  short_description: "Evaluate review feedback before acting"
+policy:
+  allow_implicit_invocation: false

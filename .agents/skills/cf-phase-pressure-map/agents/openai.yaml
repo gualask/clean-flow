@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:phase-pressure-map"
+  short_description: "Map the current work unit before structural changes"
+policy:
+  allow_implicit_invocation: false
