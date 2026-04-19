@@ -34,11 +34,10 @@ At the checkpoint:
 
 ## Preflight
 
-1. Read `AGENTS.md`.
-2. Read `architecture.md` if it exists.
-3. Read `refactor-brief.md` if it exists.
-4. Re-check the repository state.
-5. Treat the repository as the source of truth.
+1. Read `architecture.md` if it exists.
+2. Read `refactor-brief.md` if it exists.
+3. Re-check the repository state.
+4. Treat the repository as the source of truth.
 
 ## Intent inference
 

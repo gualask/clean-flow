@@ -13,11 +13,10 @@ This is a lightweight alignment step, not a spec-writing phase.
 
 ## Preflight
 
-1. Read `AGENTS.md`.
-2. Read `architecture.md` if it exists.
-3. Read `refactor-brief.md` if it exists.
-4. Re-check repository facts that matter for the open decisions.
-5. Treat the repository as the source of truth.
+1. Read `architecture.md` if it exists.
+2. Read `refactor-brief.md` if it exists.
+3. Re-check repository facts that matter for the open decisions.
+4. Treat the repository as the source of truth.
 
 ## Trigger
 

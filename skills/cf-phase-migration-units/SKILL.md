@@ -11,11 +11,10 @@ Translate a hard path into reviewable, bounded migration units.
 
 ## Preflight
 
-1. Read `AGENTS.md`.
-2. Read `architecture.md`.
-3. Read `refactor-brief.md`.
-4. Re-check the repository.
-5. Treat the repository as the source of truth.
+1. Read `architecture.md`.
+2. Read `refactor-brief.md`.
+3. Re-check the repository.
+4. Treat the repository as the source of truth.
 
 ## Rules
 

@@ -5,7 +5,7 @@ Cflow is a skill pack for **behavior-preserving cleanup and refactor work**.
 This repository is the **source of truth** for the pack:
 
 - `skills/` contains the canonical skills
-- `templates/` contains bootstrap repository files
+- `templates/` contains artifact templates
 - `bin/` and `src/` contain the sync CLI
 - `test/` covers the sync behavior and the packaged skill structure
 
@@ -15,7 +15,7 @@ Installed repositories still receive the skills in `.agents/skills`.
 
 ```text
 skills/   canonical skill source
-templates/ bootstrap repo files
+templates/ artifact templates
 src/      sync and fingerprint logic
 bin/      CLI entrypoint
 test/     filesystem and structure tests
@@ -25,7 +25,6 @@ test/     filesystem and structure tests
 
 Keep these file names exactly in lowercase:
 
-- `AGENTS.md`
 - `architecture.md`
 - `refactor-brief.md`
 
@@ -104,6 +103,8 @@ Current automated coverage focuses on:
 - structural checks for packaged skills
 
 Templates are not wired into the CLI yet. They are kept separately because they need a stricter bootstrap/update policy than the skill sync.
+
+Manual `cf-start` invocation and artifact-backed resume do not depend on `AGENTS.md`.
 
 ## Default usage
 

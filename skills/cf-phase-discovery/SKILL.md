@@ -22,11 +22,10 @@ You must determine:
 
 ## Preflight
 
-1. Read `AGENTS.md`.
-2. Read `architecture.md` if it exists.
-3. Read `refactor-brief.md` if it exists.
-4. Re-check the repository.
-5. Treat the repository as the source of truth.
+1. Read `architecture.md` if it exists.
+2. Read `refactor-brief.md` if it exists.
+3. Re-check the repository.
+4. Treat the repository as the source of truth.
 
 ## Analyze at repository level
 
