@@ -16,6 +16,7 @@ const HELP_TEXT = `Usage:
 
 Notes:
   - install syncs skills/ into <repo>/.agents/skills
+  - repo installs also bootstrap <repo>/.cflow/ and add .cflow/ to .gitignore
   - --global targets $CODEX_HOME/skills or ~/.codex/skills
   - remove deletes only Cflow-owned skills
 `;
@@ -43,6 +44,7 @@ export async function main(argv, io = { stdout: process.stdout, stderr: process.
         ? await installSkills({
             sourceRoot: SOURCE_ROOT,
             destinationRoot,
+            repoRoot: options.global ? null : path.resolve(options.targetPath),
             dryRun: options.dryRun,
           })
         : await removeSkills({
@@ -136,6 +138,11 @@ function writeSummary(stream, result) {
     stream.write(`Pruned: ${result.pruned.length}\n`);
     stream.write(`Conflicts: ${result.conflicts.length}\n`);
     stream.write(`Applied: ${result.applied ? "yes" : "no"}\n`);
+    if (result.artifactRoot) {
+      stream.write(`Artifact root: ${result.artifactRoot}\n`);
+      stream.write(`Artifact dir created: ${result.artifactDirectoryCreated ? "yes" : "no"}\n`);
+      stream.write(`Gitignore updated: ${result.gitignoreUpdated ? "yes" : "no"}\n`);
+    }
     writeEntries(stream, "Added skills", result.added);
     writeEntries(stream, "Updated skills", result.updated);
     writeEntries(stream, "Pruned skills", result.pruned);

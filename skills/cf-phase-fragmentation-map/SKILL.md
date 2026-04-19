@@ -20,8 +20,8 @@ Look for:
 
 ## Preflight
 
-- Read `architecture.md`.
-- Read `refactor-brief.md` if it exists.
+- Read `.cflow/architecture.md`.
+- Read `.cflow/refactor-brief.md` if it exists.
 - If no brief exists, this skill may still run when the prompt gives an explicit local or repo-level scope.
 - Re-check the repository.
 - Treat the repository as the source of truth.

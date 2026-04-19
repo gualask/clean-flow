@@ -7,8 +7,8 @@ Use this before a structural move, not before discovery.
 
 ## Preflight
 
-- Read `architecture.md`.
-- Read `refactor-brief.md` first if it exists.
+- Read `.cflow/architecture.md`.
+- Read `.cflow/refactor-brief.md` first if it exists.
 - If no brief exists, only continue when the prompt already gives an explicit, local, behavior-preserving scope.
 - If no brief exists and the scope is not explicit and local, stop before designing checks and route to `cf-start` or the correct `cf-phase-*` skill.
 - Verify the repository state before trusting the brief or the prompt.

@@ -11,8 +11,8 @@ Turn feedback into a verified next action instead of a reflex edit.
 
 ## Preflight
 
-- Read `architecture.md`.
-- Read `refactor-brief.md` if it exists.
+- Read `.cflow/architecture.md`.
+- Read `.cflow/refactor-brief.md` if it exists.
 - Re-check the touched area and repository state.
 
 ## Rules

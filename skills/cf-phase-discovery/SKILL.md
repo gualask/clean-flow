@@ -18,12 +18,12 @@ You must determine:
 - architecture fit
 - whether intervention is actually justified
 - which intervention modes are plausible
-- whether `architecture.md` and `refactor-brief.md` should be created or refreshed
+- whether `.cflow/architecture.md` and `.cflow/refactor-brief.md` should be created or refreshed
 
 ## Preflight
 
-1. Read `architecture.md` if it exists.
-2. Read `refactor-brief.md` if it exists.
+1. Read `.cflow/architecture.md` if it exists.
+2. Read `.cflow/refactor-brief.md` if it exists.
 3. Re-check the repository.
 4. Treat the repository as the source of truth.
 
@@ -67,9 +67,9 @@ Do not choose the final mode yet, but identify what is plausible:
 
 ## Artifact behavior
 
-Update or create `architecture.md` when it is missing, stale, or materially incomplete.
+Update or create `.cflow/architecture.md` when it is missing, stale, or materially incomplete.
 
-Update or create `refactor-brief.md` when the work is non-trivial, risky, multi-step, or likely to resume later.
+Update or create `.cflow/refactor-brief.md` when the work is non-trivial, risky, multi-step, or likely to resume later.
 
 ## Output format
 

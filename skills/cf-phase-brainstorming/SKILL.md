@@ -13,8 +13,8 @@ This is a lightweight alignment step, not a spec-writing phase.
 
 ## Preflight
 
-1. Read `architecture.md` if it exists.
-2. Read `refactor-brief.md` if it exists.
+1. Read `.cflow/architecture.md` if it exists.
+2. Read `.cflow/refactor-brief.md` if it exists.
 3. Re-check repository facts that matter for the open decisions.
 4. Treat the repository as the source of truth.
 
@@ -72,8 +72,8 @@ Rules:
 
 Once enough decisions are aligned:
 
-- update `architecture.md` if repository guidance became clearer
-- create or refresh `refactor-brief.md` if the work is non-trivial
+- update `.cflow/architecture.md` if repository guidance became clearer
+- create or refresh `.cflow/refactor-brief.md` if the work is non-trivial
 - keep work units concise
 - do not write pseudo-code
 - do not freeze brittle file lists

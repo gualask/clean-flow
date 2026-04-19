@@ -7,8 +7,8 @@ Do review only. Do not introduce new structural changes in this skill unless the
 
 ## Preflight
 
-- Read `architecture.md`.
-- Read `refactor-brief.md` if it exists.
+- Read `.cflow/architecture.md`.
+- Read `.cflow/refactor-brief.md` if it exists.
 - Re-check the touched area and the current repository state.
 - Treat the repository as the source of truth.
 
@@ -25,7 +25,7 @@ Review for:
 - better naming and local readability
 - absence of fake layers or architecture theater
 - absence of cleanup mania
-- coherence with `architecture.md`
+- coherence with `.cflow/architecture.md`
 - whether the touched unit should stop here or needs one more bounded pass
 
 ## Also check

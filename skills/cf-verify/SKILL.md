@@ -7,8 +7,8 @@ Use this at the end of a completed bounded unit.
 
 ## Preflight
 
-- Read `architecture.md`.
-- Read `refactor-brief.md` if it exists.
+- Read `.cflow/architecture.md`.
+- Read `.cflow/refactor-brief.md` if it exists.
 - Re-check the touched area and the repository state.
 
 ## Goal

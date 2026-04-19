@@ -25,8 +25,8 @@ test/     filesystem and structure tests
 
 Keep these file names exactly in lowercase:
 
-- `architecture.md`
-- `refactor-brief.md`
+- `.cflow/architecture.md`
+- `.cflow/refactor-brief.md`
 
 ## Entrypoints
 
@@ -59,7 +59,7 @@ Advanced execution:
 node ./bin/cflow-skills.mjs install /path/to/repo
 ```
 
-The CLI syncs `skills/` into `/path/to/repo/.agents/skills`.
+The CLI syncs `skills/` into `/path/to/repo/.agents/skills`, bootstraps `/path/to/repo/.cflow/`, and adds `.cflow/` to the repository `.gitignore`.
 
 Global install:
 
@@ -105,6 +105,7 @@ Current automated coverage focuses on:
 Templates are not wired into the CLI yet. They are kept separately because they need a stricter bootstrap/update policy than the skill sync.
 
 Manual `cf-start` invocation and artifact-backed resume do not depend on `AGENTS.md`.
+The Cflow artifact paths are `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
 
 ## Default usage
 
@@ -117,7 +118,7 @@ $cf-start Analyze this repository, propose the right path, and stop at the align
 Resume from artifacts:
 
 ```text
-$cf-start Read architecture.md and refactor-brief.md, then resume from the correct phase for the current work unit.
+$cf-start Read .cflow/architecture.md and .cflow/refactor-brief.md, then resume from the correct phase for the current work unit.
 ```
 
 Practical rule of thumb:

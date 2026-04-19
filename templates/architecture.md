@@ -1,4 +1,4 @@
-# architecture.md
+# .cflow/architecture.md
 
 ## Purpose
 

@@ -11,8 +11,8 @@ Define a bounded, repository-fitting target shape for a hard restructure.
 
 ## Preflight
 
-1. Read `architecture.md`.
-2. Read `refactor-brief.md`.
+1. Read `.cflow/architecture.md`.
+2. Read `.cflow/refactor-brief.md`.
 3. Re-check the repository.
 4. Treat the repository as the source of truth.
 

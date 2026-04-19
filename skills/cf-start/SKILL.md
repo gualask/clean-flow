@@ -1,6 +1,6 @@
 ---
 name: cf-start
-description: Main entrypoint for Cflow. Use to start or resume most cleanup and refactor work. Run repository assessment, evaluate both concentration and fragmentation pressure, update architecture.md, and always stop at an alignment checkpoint before non-trivial execution.
+description: Main entrypoint for Cflow. Use to start or resume most cleanup and refactor work. Run repository assessment, evaluate both concentration and fragmentation pressure, update .cflow/architecture.md, and always stop at an alignment checkpoint before non-trivial execution.
 ---
 
 This is the normal entrypoint for the pack.
@@ -13,7 +13,7 @@ Advance the workflow yourself whenever the correct next phase is clear.
 Handle one of these two modes:
 
 - **fresh assessment** for a new cleanup or refactor
-- **artifact-backed resume** from `architecture.md` and `refactor-brief.md`
+- **artifact-backed resume** from `.cflow/architecture.md` and `.cflow/refactor-brief.md`
 
 ## Hard rule
 
@@ -29,13 +29,13 @@ At the checkpoint:
 ## Language rules
 
 - Use the user's language for conversational output.
-- Use the repository's dominant documentation language for `architecture.md` and `refactor-brief.md`.
+- Use the repository's dominant documentation language for `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
 - If the repository has no dominant documentation language, use the user's language for those artifacts too.
 
 ## Preflight
 
-1. Read `architecture.md` if it exists.
-2. Read `refactor-brief.md` if it exists.
+1. Read `.cflow/architecture.md` if it exists.
+2. Read `.cflow/refactor-brief.md` if it exists.
 3. Re-check the repository state.
 4. Treat the repository as the source of truth.
 
@@ -92,8 +92,8 @@ You must determine:
 Rules:
 
 - Keep assessment repository-level.
-- Update or create `architecture.md` whenever it is missing, stale, or materially incomplete.
-- For non-trivial work, create or refresh `refactor-brief.md`.
+- Update or create `.cflow/architecture.md` whenever it is missing, stale, or materially incomplete.
+- For non-trivial work, create or refresh `.cflow/refactor-brief.md`.
 - Do not implement yet.
 - Always end fresh assessment at the alignment checkpoint with exactly one focused question.
 
@@ -153,9 +153,9 @@ Provide exactly these sections:
 
 ## Artifact update requirements
 
-If `architecture.md` exists or is created, update it when repository understanding or guidance materially changed.
+If `.cflow/architecture.md` exists or is created, update it when repository understanding or guidance materially changed.
 
-If `refactor-brief.md` exists or is created, update at least:
+If `.cflow/refactor-brief.md` exists or is created, update at least:
 
 - `Context`
 - `Assessment summary`

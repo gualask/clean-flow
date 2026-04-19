@@ -9,8 +9,8 @@ Do not reopen repository architecture in this skill.
 
 ## Preflight
 
-- Read `architecture.md`.
-- Read `refactor-brief.md` first if it exists.
+- Read `.cflow/architecture.md`.
+- Read `.cflow/refactor-brief.md` first if it exists.
 - If no brief exists, only continue when the prompt already gives an explicit, local touched area.
 - If no brief exists and the touched area is not explicit and local, stop before edits and route to `cf-start` or the correct `cf-phase-*` skill.
 - Re-check the touched area and repository state.

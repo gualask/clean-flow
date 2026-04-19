@@ -7,8 +7,8 @@ Use this to apply one bounded **consolidation-oriented** cleanup step.
 
 ## Preflight
 
-- Read `architecture.md`.
-- Read `refactor-brief.md` first if it exists.
+- Read `.cflow/architecture.md`.
+- Read `.cflow/refactor-brief.md` first if it exists.
 - If no brief exists, continue only when the prompt already gives an explicit, local, behavior-preserving scope.
 - If no brief exists and the scope is not explicit and local, stop before implementation and route to `cf-start` or the correct `cf-phase-*` skill.
 - Re-check the touched area before moving code.

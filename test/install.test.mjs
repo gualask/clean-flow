@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import path from "node:path";
 import test from "node:test";
-import { mkdir } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 
 import { installSkills } from "../src/commands/install.mjs";
 import { computeSkillFingerprint } from "../src/lib/fingerprint.mjs";
@@ -16,20 +16,25 @@ import {
 test("install copies new skills and writes owned markers", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
-  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
+  const repoRoot = path.join(workspace, "repo");
+  const destinationRoot = path.join(repoRoot, ".agents", "skills");
 
   await mkdir(sourceRoot, { recursive: true });
   await writeSkill(sourceRoot, "cf-start");
   await writeSkill(sourceRoot, "cf-review");
 
-  const result = await installSkills({ sourceRoot, destinationRoot });
+  const result = await installSkills({ sourceRoot, destinationRoot, repoRoot });
 
   assert.equal(result.added.length, 2);
   assert.equal(result.updated.length, 0);
   assert.equal(result.pruned.length, 0);
   assert.equal(result.conflicts.length, 0);
   assert.equal(result.applied, true);
+  assert.equal(result.artifactDirectoryCreated, true);
+  assert.equal(result.gitignoreUpdated, true);
   assert.deepEqual(await listDirectoryNames(destinationRoot), ["cf-review", "cf-start"]);
+  assert.deepEqual(await listDirectoryNames(repoRoot), [".agents", ".cflow"]);
+  assert.match(await readText(path.join(repoRoot, ".gitignore")), /^\.cflow\/$/m);
 
   const marker = await readMarker(path.join(destinationRoot, "cf-start"));
   assert.equal(marker.owner, "clean-flow");
@@ -40,7 +45,8 @@ test("install copies new skills and writes owned markers", async () => {
 test("install updates owned skills, prunes removed owned skills, and keeps foreign skills", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
-  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
+  const repoRoot = path.join(workspace, "repo");
+  const destinationRoot = path.join(repoRoot, ".agents", "skills");
 
   await mkdir(sourceRoot, { recursive: true });
   await mkdir(destinationRoot, { recursive: true });
@@ -67,7 +73,7 @@ test("install updates owned skills, prunes removed owned skills, and keeps forei
     fingerprint: await computeSkillFingerprint(ownedOld),
   });
 
-  const result = await installSkills({ sourceRoot, destinationRoot });
+  const result = await installSkills({ sourceRoot, destinationRoot, repoRoot });
 
   assert.equal(result.updated.length, 1);
   assert.equal(result.added.length, 1);
@@ -89,7 +95,8 @@ test("install updates owned skills, prunes removed owned skills, and keeps forei
 test("install reports conflicts and leaves foreign same-name skills untouched", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
-  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
+  const repoRoot = path.join(workspace, "repo");
+  const destinationRoot = path.join(repoRoot, ".agents", "skills");
 
   await mkdir(sourceRoot, { recursive: true });
   await mkdir(destinationRoot, { recursive: true });
@@ -99,7 +106,7 @@ test("install reports conflicts and leaves foreign same-name skills untouched", 
   });
 
   const before = await readText(path.join(destinationRoot, "cf-start", "SKILL.md"));
-  const result = await installSkills({ sourceRoot, destinationRoot });
+  const result = await installSkills({ sourceRoot, destinationRoot, repoRoot });
   const after = await readText(path.join(destinationRoot, "cf-start", "SKILL.md"));
 
   assert.equal(result.conflicts.length, 1);
@@ -110,14 +117,38 @@ test("install reports conflicts and leaves foreign same-name skills untouched", 
 test("install dry-run computes the plan without mutating the target", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
-  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
+  const repoRoot = path.join(workspace, "repo");
+  const destinationRoot = path.join(repoRoot, ".agents", "skills");
 
   await mkdir(sourceRoot, { recursive: true });
   await writeSkill(sourceRoot, "cf-start");
 
-  const result = await installSkills({ sourceRoot, destinationRoot, dryRun: true });
+  const result = await installSkills({ sourceRoot, destinationRoot, repoRoot, dryRun: true });
 
   assert.equal(result.added.length, 1);
   assert.equal(result.applied, false);
+  assert.equal(result.artifactDirectoryCreated, true);
+  assert.equal(result.gitignoreUpdated, true);
   assert.deepEqual(await listDirectoryNames(destinationRoot), []);
+  assert.deepEqual(await listDirectoryNames(repoRoot), []);
+});
+
+test("install keeps existing .gitignore cflow entry without duplication", async () => {
+  const workspace = await makeTempWorkspace();
+  const sourceRoot = path.join(workspace, "source");
+  const repoRoot = path.join(workspace, "repo");
+  const destinationRoot = path.join(repoRoot, ".agents", "skills");
+
+  await mkdir(sourceRoot, { recursive: true });
+  await mkdir(repoRoot, { recursive: true });
+  await writeSkill(sourceRoot, "cf-start");
+  await writeFile(path.join(repoRoot, ".gitignore"), "node_modules/\n.cflow/\n", "utf8");
+
+  const result = await installSkills({ sourceRoot, destinationRoot, repoRoot });
+
+  assert.equal(result.gitignoreUpdated, false);
+  assert.equal(
+    (await readText(path.join(repoRoot, ".gitignore"))).match(/^\.cflow\/$/gm)?.length ?? 0,
+    1,
+  );
 });
