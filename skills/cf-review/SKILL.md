@@ -1,0 +1,64 @@
+---
+name: cf-review
+description: Review a completed bounded refactor step and judge whether it reduced pressure without over-engineering. Use after structural work and before final verification or acceptance.
+---
+
+Do review only. Do not introduce new structural changes in this skill unless the user explicitly asks.
+
+## Preflight
+
+- Read `architecture.md`.
+- Read `refactor-brief.md` if it exists.
+- Re-check the touched area and the current repository state.
+- Treat the repository as the source of truth.
+
+## Goal
+
+Judge whether the refactor improved structure in a proportionate way.
+
+Review for:
+
+- reduction of mixed responsibilities
+- reduction of concentration pressure
+- reduction of fragmentation pressure when relevant
+- clearer role boundaries
+- better naming and local readability
+- absence of fake layers or architecture theater
+- absence of cleanup mania
+- coherence with `architecture.md`
+- whether the touched unit should stop here or needs one more bounded pass
+
+## Also check
+
+- whether the refactor widened scope unnecessarily
+- whether current remaining issues are local and acceptable
+- whether residual risk is mostly coverage rather than structure
+- whether a broader change is being smuggled in without justification
+
+## Output format
+
+Make `cf-review` explicit inside the response body.
+
+Provide exactly these sections:
+
+1. **What improved**
+2. **What is still mixed or unclear**
+3. **Over-engineering check**
+4. **Boundary clarity check**
+5. **Fragmentation / indirection check**
+6. **Risk check**
+7. **Recommended next action**
+
+## Artifact updates
+
+If a brief exists, update before stopping:
+
+- `Review notes`
+- `Execution state`
+- `Handoff notes`
+
+If review changes confidence in the target direction, also update:
+
+- `Target direction`
+- `Unknowns to re-check`
+- `Alignment notes`

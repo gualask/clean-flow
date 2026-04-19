@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:phase fragmentation map"
+  short_description: "Map pressure caused by over-splitting and artificial boundaries"
+policy:
+  allow_implicit_invocation: false

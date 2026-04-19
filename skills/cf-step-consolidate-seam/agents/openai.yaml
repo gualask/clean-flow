@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:step consolidate seam"
+  short_description: "Apply one bounded consolidation-oriented structural step"
+policy:
+  allow_implicit_invocation: false

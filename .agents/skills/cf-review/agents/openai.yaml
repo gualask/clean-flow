@@ -1,5 +1,0 @@
-interface:
-  display_name: "Cflow:review"
-  short_description: "Review structural quality after a bounded refactor step"
-policy:
-  allow_implicit_invocation: false

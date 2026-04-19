@@ -1,5 +1,0 @@
-interface:
-  display_name: "Cflow:phase-discovery"
-  short_description: "Analyze repo context and choose soft vs hard"
-policy:
-  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:verify"
+  short_description: "Verify a refactor with factual evidence"
+policy:
+  allow_implicit_invocation: true

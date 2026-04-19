@@ -1,5 +1,0 @@
-interface:
-  display_name: "Cflow:phase-brainstorming"
-  short_description: "Align on material cleanup choices before locking direction"
-policy:
-  allow_implicit_invocation: false

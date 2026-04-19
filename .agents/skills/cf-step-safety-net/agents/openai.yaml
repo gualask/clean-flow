@@ -1,5 +1,0 @@
-interface:
-  display_name: "Cflow:step-safety-net"
-  short_description: "Establish behavior locks before structural edits"
-policy:
-  allow_implicit_invocation: false

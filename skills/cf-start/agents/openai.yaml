@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:start"
+  short_description: "Main entrypoint for assessment, alignment, and resume"
+policy:
+  allow_implicit_invocation: true

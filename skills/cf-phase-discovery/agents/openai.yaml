@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:phase discovery"
+  short_description: "Repository-level discovery without implementation"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:step safety net"
+  short_description: "Lock behavior before structural work"
+policy:
+  allow_implicit_invocation: false
