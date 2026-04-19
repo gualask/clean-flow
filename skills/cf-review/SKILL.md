@@ -37,8 +37,6 @@ Review for:
 
 ## Output format
 
-Make `cf-review` explicit inside the response body.
-
 Provide exactly these sections:
 
 1. **What improved**

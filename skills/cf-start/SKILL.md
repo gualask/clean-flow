@@ -130,8 +130,6 @@ Provide exactly these sections:
 5. **Artifacts updated**
 6. **Alignment checkpoint**
 
-Make `cf-start` explicit inside the response body.
-
 End with exactly one focused question.
 
 ### For execution or resume progress
@@ -144,8 +142,6 @@ Provide exactly these sections:
 5. **What remains**
 6. **Next action**
 
-Make `cf-start` explicit inside the response body.
-
 ### For reassessment without code changes
 Provide exactly these sections:
 
@@ -155,8 +151,6 @@ Provide exactly these sections:
 4. **Artifacts updated**
 5. **What remains**
 6. **Next action**
-
-Make `cf-start` explicit inside the response body.
 
 ## Artifact update requirements
 

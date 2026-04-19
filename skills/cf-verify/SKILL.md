@@ -48,8 +48,6 @@ If a move, rename, split, merge, or re-export happened, search reference categor
 
 ## Output format
 
-Make `cf-verify` explicit inside the response body.
-
 Provide exactly these sections:
 
 1. **Checks attempted**

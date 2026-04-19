@@ -35,8 +35,6 @@ Turn feedback into a verified next action instead of a reflex edit.
 
 ## Output format
 
-Make `cf-feedback-intake` explicit inside the response body.
-
 Provide exactly these sections:
 
 1. **Feedback restatement**

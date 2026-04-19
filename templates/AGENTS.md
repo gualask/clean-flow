@@ -105,10 +105,10 @@ Rules:
   - last active skill
   - current work unit
   - next expected entrypoint
+  - recommended next action
 
-## Skill observability contract
+## Resume state contract
 
-- When a Cflow skill responds, make the active skill explicit in the response body.
 - Keep `Execution state.last active skill` and `Execution state.next expected entrypoint` current in `refactor-brief.md`.
 
 ## Context hygiene contract
