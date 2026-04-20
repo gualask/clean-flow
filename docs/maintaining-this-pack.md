@@ -77,6 +77,9 @@ docs/     maintainer documentation
 For per-skill entry, gating, and routing decisions, use [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md).
 This document keeps the rules and validation logic; the matrix records the current per-skill contract.
 
+For collaborative validation on real target repositories, use [repo-trial-rules.md](/Users/blazar/Dev/clean-flow/docs/repo-trial-rules.md).
+That document defines the user plus LLM trial loop and should stay separate from the pack's internal maintenance rules.
+
 ## Skill Reference
 
 This section is a maintainer-facing quick reference.
