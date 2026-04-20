@@ -195,7 +195,7 @@ Mixed-path rule:
 
 #### `cf-step-consolidate-seam`
 
-- Does: applies one bounded consolidation-oriented step to reduce over-fragmentation while preserving behavior, and surfaces discovered bugs separately instead of silently folding them into the same structural pass.
+- Does: applies one bounded consolidation-oriented step to reduce over-fragmentation while preserving behavior, avoids ownership moves with weak payoff, and surfaces discovered bugs separately instead of silently folding them into the same structural pass.
 - Use when: the active work unit is `mode: consolidate` and a credible safety net exists.
 - Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and a consolidation-ready seam. In the normal flow, the active work unit should be `mode: consolidate`.
 - Produces: a six-section execution report covering current state, work executed, checks, artifacts, remaining work, and next action.
@@ -215,7 +215,7 @@ Mixed-path rule:
 
 #### `cf-review`
 
-- Does: reviews one completed bounded refactor step and judges whether it reduced pressure without over-engineering.
+- Does: reviews one completed bounded refactor step and judges whether it reduced pressure without over-engineering, including whether ownership moves simplified the caller, entry points stayed thin, and dead-weight wrappers were avoided.
 - Use when: structural work already happened and you want judgment before acceptance or final verification.
 - Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and a clearly touched area to inspect.
 - Produces: a seven-section review covering improvements, remaining mixing, over-engineering, boundary clarity, fragmentation, risk, and next action.

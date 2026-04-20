@@ -36,7 +36,9 @@ This step is for seams where **fragmentation pressure** dominates.
 - Keep the resulting seam easier to read than the starting point.
 - Avoid swinging into a new god file.
 - Prefer one bounded merge or collapse at a time.
+- Preserve existing dataflow and avoid unnecessary allocations, clones, or passes over the same data unless they clearly reduce complexity.
 - If the consolidation reveals a genuinely autonomous sub-seam, keep it local unless reuse is already real.
+- Do not move responsibility across a boundary unless that move materially simplifies the caller; if the caller still performs nearly the same branching or 1:1 mapping afterward, leave the ownership where it is or defer the step.
 - If you discover a likely bug or behavior inconsistency while consolidating, do not silently fold the fix into the same structural step unless the user explicitly asked for it.
 - Report that bug or inconsistency clearly in `What remains` and `Next action` so the user can decide whether to address it separately.
 

@@ -23,8 +23,10 @@ Review for:
 - reduction of concentration pressure
 - reduction of fragmentation pressure when relevant
 - clearer role boundaries
+- thin entry points that still act mostly as glue
 - better naming and local readability
 - absence of fake layers or architecture theater
+- absence of dead weight such as empty wrappers or forwarding with no semantic value
 - absence of cleanup mania
 - coherence with `.cflow/architecture.md`
 - whether the touched unit should stop here or needs one more bounded pass
@@ -35,6 +37,7 @@ Review for:
 - whether current remaining issues are local and acceptable
 - whether residual risk is mostly coverage rather than structure
 - whether a broader change is being smuggled in without justification
+- whether ownership was moved without materially simplifying the caller
 
 ## Output format
 

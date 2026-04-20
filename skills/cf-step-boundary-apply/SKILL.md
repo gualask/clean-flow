@@ -30,6 +30,7 @@ This step is for seams where **concentration pressure** dominates.
 - Do not leave external-system access scattered through orchestration code.
 - Extract pure logic only when it is genuinely autonomous.
 - Prefer local, clear helpers over generic utilities.
+- Preserve existing dataflow and avoid unnecessary allocations, clones, or passes over the same data unless they clearly reduce complexity.
 - Add a new file, module, or type only if it reduces real complexity.
 - Avoid dead code, workaround logic, and speculative abstractions.
 
