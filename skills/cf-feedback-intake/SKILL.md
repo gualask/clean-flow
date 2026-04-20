@@ -1,8 +1,7 @@
 ---
 name: cf-feedback-intake
-description: Intake review feedback safely. Use when a human or another agent gave refactor feedback and you want to verify it before acting.
+description: Intake review feedback safely. Use when refactor feedback already exists and you want to verify it before acting.
 ---
-
 Do not implement feedback blindly in this skill.
 
 ## Goal
@@ -11,8 +10,10 @@ Turn feedback into a verified next action instead of a reflex edit.
 
 ## Preflight
 
+- If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
 - Read `.cflow/architecture.md`.
 - Read `.cflow/refactor-brief.md` if it exists.
+- If the feedback target or current path is too unclear to verify, stop and route to `cf-start` first.
 - Re-check the touched area and repository state.
 
 ## Rules

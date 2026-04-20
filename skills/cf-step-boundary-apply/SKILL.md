@@ -2,11 +2,11 @@
 name: cf-step-boundary-apply
 description: Apply one bounded split-oriented structural refactor step while preserving behavior. Use when concentration pressure dominates and a credible safety net exists.
 ---
-
 Use this to apply one bounded **split-oriented** cleanup step.
 
 ## Preflight
 
+- If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
 - Read `.cflow/architecture.md`.
 - Read `.cflow/refactor-brief.md` first if it exists.
 - If no brief exists, continue only when the prompt already gives an explicit, local, behavior-preserving scope.

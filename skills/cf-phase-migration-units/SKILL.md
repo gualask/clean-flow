@@ -2,7 +2,6 @@
 name: cf-phase-migration-units
 description: Break a hard restructure into bounded migration units. Use after the target direction is aligned and before implementation.
 ---
-
 Do not implement in this skill.
 
 ## Goal
@@ -11,10 +10,12 @@ Translate a hard path into reviewable, bounded migration units.
 
 ## Preflight
 
-1. Read `.cflow/architecture.md`.
-2. Read `.cflow/refactor-brief.md`.
-3. Re-check the repository.
-4. Treat the repository as the source of truth.
+1. If `.cflow/architecture.md` or `.cflow/refactor-brief.md` is missing, stop and route to `cf-start` first.
+2. Read `.cflow/architecture.md`.
+3. Read `.cflow/refactor-brief.md`.
+4. If the target direction is not already aligned, stop and route to `cf-start` or `cf-phase-target-shape`.
+5. Re-check the repository.
+6. Treat the repository as the source of truth.
 
 ## Rules
 

@@ -2,7 +2,6 @@
 name: cf-phase-discovery
 description: Repository-level discovery for Cflow. Analyze context, architecture fit, premise check, and likely intervention modes without implementing code.
 ---
-
 Do discovery only. Do not implement, move files, or write patches.
 
 ## Goal
@@ -64,6 +63,9 @@ Do not choose the final mode yet, but identify what is plausible:
 - soft-mixed
 - hard-restructure
 - no-structural-refactor
+
+Treat `soft-mixed` as a repository-level outcome only.
+Later work units must still choose `split` or `consolidate`.
 
 ## Artifact behavior
 

@@ -20,13 +20,14 @@ Cflow has three distinct runtime pieces:
    - `cflow-skills install` copies the skill directories
    - install does not bootstrap `.cflow/`
 2. bootstrap
-   - `cf-start` bootstraps the target repository on first use
+   - `cf-start` is the only supported user-facing entrypoint
    - `cf-start` creates `.cflow/` when needed
    - `cf-start` adds `.cflow/` to `.gitignore` when needed
    - `cf-start` creates `.cflow/architecture.md` and `.cflow/refactor-brief.md` from its asset templates when needed
 3. execution
    - `cf-start` handles assessment, alignment, and resume
-   - phase and step skills assume the Cflow artifacts already exist, unless their own local-scope rules say otherwise
+   - all other skills are internal workflow skills
+   - internal skills are normally reached from `cf-start`, with context prepared according to each skill contract
 
 ## Canonical Artifact Paths
 
@@ -63,17 +64,236 @@ docs/     maintainer documentation
 ## Key Design Decisions
 
 - Cflow does not depend on `AGENTS.md` for manual start or artifact-backed resume.
-- `cf-start` is the only bootstrap entrypoint.
+- `cf-start` is the only supported user-facing entrypoint.
+- `cf-start` owns the supported first-use bootstrap of `.cflow/*` state.
 - `.cflow/*` is Cflow-owned state in the target repository.
+- Internal skills are gated by required context, not by actor identity alone.
+- If an internal skill is invoked directly and the required context is missing, it must stop and route back to `cf-start`.
 - Existing repository docs may be used as evidence during analysis.
 - The installer distributes skills; it does not initialize repository state.
+- `soft-mixed` is a repository-level assessment outcome, not an execution mode for one step.
+- Every executable work unit must choose exactly one mode: `split` or `consolidate`.
+
+For per-skill entry, gating, and routing decisions, use [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md).
+This document keeps the rules and validation logic; the matrix records the current per-skill contract.
+
+## Skill Reference
+
+This section is a maintainer-facing quick reference.
+The source of truth remains each `skills/*/SKILL.md`.
+
+Standalone labels:
+
+- `yes`: direct invocation is a supported user entrypoint
+- `no`: the skill is internal and is not a supported direct user entrypoint
+
+### Public Skill
+
+#### `cf-start`
+
+- Does: handles fresh assessment or artifact-backed resume and is the only supported user-facing entrypoint for the pack.
+- Use when: starting most cleanup or refactor work, resuming existing work, or re-entering the flow after review or verify needs.
+- Expects: repository state only; existing `.cflow/architecture.md` and `.cflow/refactor-brief.md` are optional.
+- Produces: a six-section fresh assessment ending at `Alignment checkpoint`, or a six-section resume or reassessment progress report.
+- Standalone: `yes`
+- Artifacts: full bootstrap and refresh; creates `.cflow/`, updates `.gitignore`, and creates or refreshes `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
+- Typical next step: user confirmation, `cf-phase-brainstorming`, `cf-phase-concentration-map`, `cf-phase-fragmentation-map`, `cf-step-safety-net`, `cf-review`, or `cf-verify`.
+
+Mixed-path rule:
+
+- `soft-mixed` is allowed only as a repository-level outcome.
+- In `soft-mixed`, `cf-start` breaks the work into bounded work units.
+- Each work unit must declare exactly one execution mode: `split` or `consolidate`.
+- There is no `mixed` execution step.
+
+### Internal Skills
+
+#### `cf-phase-discovery`
+
+- Does: performs repository-level discovery and intervention framing without implementing code.
+- Use when: `cf-start` needs a discovery pass before choosing or refining the next path.
+- Expects: repository state; existing `.cflow/architecture.md` and `.cflow/refactor-brief.md` are optional.
+- Produces: a seven-section discovery report covering context, architecture fit, premise check, candidate areas, plausible modes, artifact decision, and next action.
+- Standalone: `no`
+- Artifacts: may create or refresh `.cflow/architecture.md` and `.cflow/refactor-brief.md` when the flow calls for it.
+- Typical next step: `cf-phase-brainstorming`, `cf-phase-concentration-map`, or `cf-phase-fragmentation-map`.
+
+#### `cf-phase-brainstorming`
+
+- Does: resolves user decisions that materially change scope, exclusions, risk, or direction after assessment.
+- Use when: `cf-start` already assessed the repository and the user does more than simple confirmation.
+- Expects: repository facts plus an assessed direction or live decision to resolve; existing artifacts may already exist depending on the path.
+- Produces: either one focused question when a decision is still open, or a four-section alignment report.
+- Standalone: `no`
+- Artifacts: may update `.cflow/architecture.md` and create or refresh `.cflow/refactor-brief.md` once enough decisions are aligned.
+- Typical next step: `cf-phase-target-shape`, `cf-step-safety-net`, or the chosen bounded execution path.
+
+#### `cf-phase-concentration-map`
+
+- Does: maps concentration pressure in a repository area or local seam and identifies the safest split direction.
+- Use when: the current work unit or path points to a `split` move and the seam still needs mapping.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and either a selected seam from the active plan or an explicit local or repo-level scope when allowed by the flow.
+- Produces: a seven-section seam map covering scope, dense seams, workflow map, role classification, split direction, risks, and next action.
+- Standalone: `no`
+- Artifacts: updates the brief when it exists or is created in the active flow.
+- Typical next step: `cf-step-safety-net` or `cf-step-boundary-apply`.
+
+#### `cf-phase-fragmentation-map`
+
+- Does: maps fragmentation pressure caused by pass-through wrappers, artificial boundaries, or excessive hop count.
+- Use when: the current work unit or path points to a `consolidate` move and the seam still needs boundary analysis.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and either a selected seam from the active plan or an explicit local or repo-level scope when allowed by the flow.
+- Produces: a six-section fragmentation report covering scope, artificial boundaries, indirection cost, consolidation candidates, risks, and next action.
+- Standalone: `no`
+- Artifacts: updates the brief when it exists or is created in the active flow.
+- Typical next step: `cf-step-safety-net` or `cf-step-consolidate-seam`.
+
+#### `cf-phase-target-shape`
+
+- Does: defines the bounded target direction for a hard restructure when soft intervention is not enough.
+- Use when: assessment and alignment already justify a broader hard-path change and the repository needs a concrete target shape.
+- Expects: existing `.cflow/architecture.md`, existing `.cflow/refactor-brief.md`, and an already justified hard-path direction.
+- Produces: a six-section target-shape report covering rationale, boundary model, packaging direction, migration constraints, artifacts updated, and next action.
+- Standalone: `no`
+- Artifacts: updates existing artifacts.
+- Typical next step: `cf-phase-migration-units`.
+
+#### `cf-phase-migration-units`
+
+- Does: breaks a hard restructure into bounded, reviewable migration units before implementation.
+- Use when: the hard-path target direction is already aligned and you need concrete migration units instead of a big-bang rewrite.
+- Expects: existing `.cflow/architecture.md`, existing `.cflow/refactor-brief.md`, and an already aligned hard-path target.
+- Produces: a five-section migration plan covering strategy, migration units, what stays unchanged, artifacts updated, and next action.
+- Standalone: `no`
+- Artifacts: updates existing artifacts.
+- Typical next step: `cf-step-safety-net` for the first bounded migration unit.
+
+#### `cf-step-safety-net`
+
+- Does: establishes the smallest credible behavior lock before structural work.
+- Use when: the current work unit is clear and you need a go or no-go decision before editing code.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and a clearly described refactoring surface from the active work unit or explicit local scope.
+- Produces: a six-section safety-net report covering refactoring surface, behavior to lock, protections, remaining gaps, and next action.
+- Standalone: `no`
+- Artifacts: updates the brief when it exists or is created in the active flow.
+- Typical next step: `cf-step-boundary-apply` or `cf-step-consolidate-seam`.
+
+#### `cf-step-boundary-apply`
+
+- Does: applies one bounded split-oriented structural refactor step while preserving behavior.
+- Use when: the active work unit is `mode: split`, the seam is mapped enough, and a credible safety net exists.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and enough seam mapping to name workflows and safe split direction. In the normal flow, the active work unit should be `mode: split`.
+- Produces: a six-section execution report covering current state, work executed, checks, artifacts, remaining work, and next action.
+- Standalone: `no`
+- Artifacts: updates the brief when it exists or is created in the active flow.
+- Typical next step: `cf-step-local-simplify`, `cf-review`, or `cf-verify`.
+
+#### `cf-step-consolidate-seam`
+
+- Does: applies one bounded consolidation-oriented step to reduce over-fragmentation while preserving behavior.
+- Use when: the active work unit is `mode: consolidate` and a credible safety net exists.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and a consolidation-ready seam. In the normal flow, the active work unit should be `mode: consolidate`.
+- Produces: a six-section execution report covering current state, work executed, checks, artifacts, remaining work, and next action.
+- Standalone: `no`
+- Artifacts: updates the brief when it exists or is created in the active flow.
+- Typical next step: `cf-step-local-simplify`, `cf-review`, or `cf-verify`.
+
+#### `cf-step-local-simplify`
+
+- Does: improves naming, control flow, and helper shape in the touched area without reopening architecture.
+- Use when: a bounded structural step is already done and local readability can still improve.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and the touched area from the active work unit.
+- Produces: a six-section simplification report covering current state, simplifications applied, checks, artifacts, remaining work, and next action.
+- Standalone: `no`
+- Artifacts: updates existing artifacts when the brief exists.
+- Typical next step: `cf-review` or `cf-verify`.
+
+#### `cf-review`
+
+- Does: reviews one completed bounded refactor step and judges whether it reduced pressure without over-engineering.
+- Use when: structural work already happened and you want judgment before acceptance or final verification.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and a clearly touched area to inspect.
+- Produces: a seven-section review covering improvements, remaining mixing, over-engineering, boundary clarity, fragmentation, risk, and next action.
+- Standalone: `no`
+- Artifacts: updates existing artifacts when the brief exists.
+- Typical next step: `cf-verify`, one more bounded step, or `cf-feedback-intake`.
+
+#### `cf-verify`
+
+- Does: collects factual evidence that a bounded unit still works after refactor.
+- Use when: a bounded cleanup or migration unit is finished and needs tests, lint, typecheck, build, smoke checks, or reference audits.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and a touched area with a credible verification path.
+- Produces: a five-section verification report covering attempted checks, passed checks, skipped checks, confidence, and next action.
+- Standalone: `no`
+- Artifacts: updates existing artifacts when the brief exists.
+- Typical next step: close the unit or route back to the last step skill if the evidence is not yet strong enough.
+
+#### `cf-feedback-intake`
+
+- Does: turns review feedback into a verified next action instead of implementing it blindly.
+- Use when: refactor feedback already exists and you need to validate it against the repository and current plan.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, the feedback itself, and the touched repository area.
+- Produces: a five-section feedback assessment covering restatement, repository evidence, assessment, path impact, and next action.
+- Standalone: `no`
+- Artifacts: updates existing artifacts when the brief exists.
+- Typical next step: accept, narrow, reject, or route the feedback into `cf-review`, `cf-verify`, or a bounded execution skill.
+
+## Skill Change Validation
+
+When changing any part of a skill, validate it in both of these scenarios:
+
+1. invocation by the agent inside the Cflow workflow
+2. explicit invocation by a human
+
+These two scenarios are mandatory even when only one of them is officially supported.
+
+### Scenario Contract
+
+- `cf-start` must work as the supported direct human entrypoint.
+- Every other skill is an internal workflow skill and is not a supported direct human entrypoint.
+- Internal skills must still remain readable when opened or invoked directly by a human, even when the correct next action is to route back to `cf-start`.
+- Internal skills may still work when invoked directly if their required context already exists.
+- Internal skills must stop only on missing required context, not merely because the invoker is human.
+
+### Validation Checklist
+
+For each skill change, ask all of these:
+
+- `Description`: does the `description:` still describe the real situation in both scenarios?
+- `Role wording`: if the text says `user`, `human`, `reviewer`, or `agent`, does that actor identity materially change the skill behavior?
+- `State wording`: if actor identity does not matter, rewrite the text in state-based terms such as existing feedback, selected work unit, open decision, or touched area.
+- `Entrypoint clarity`: is it clear whether the skill is public or internal?
+- `Gate type`: is the gate state-based rather than actor-based?
+- `Preflight`: do the preflight rules make sense both when the skill is reached from flow and when a human reads or invokes it directly?
+- `Artifact behavior`: do create, refresh, assume, or update rules match the actual contract of the skill?
+- `Output contract`: does the output still make sense for the next step in the workflow?
+- `Reference sync`: does the `Skill Reference` section still say the same thing as the skill file?
+- `Matrix sync`: does [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md) still reflect the same contract?
+
+### Wording Rule
+
+Prefer state-based wording over actor-based wording.
+
+Good examples:
+
+- `Use when refactor feedback already exists and you want to verify it before acting.`
+- `Use when the current work unit is clear and a behavior lock is needed before edits.`
+
+Use actor-based wording only when the actor identity changes the skill behavior.
+
+Example:
+
+- `cf-phase-brainstorming` may refer to the user because the trigger is specifically that the user is steering the direction instead of merely confirming it.
 
 ## Maintainer Workflow
 
 When changing the pack:
 
 - update the relevant `SKILL.md` files in `skills/`
-- if bootstrap behavior changes, update `skills/cf-start/SKILL.md`
+- if a skill contract changes, update both its `SKILL.md` and the `Skill Reference` section in this document
+- if a skill contract changes, update [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md) too
+- if bootstrap behavior changes, update `skills/cf-start/SKILL.md` and this document
+- if the allowed execution modes or work-unit contract changes, update `skills/cf-start/SKILL.md`, `skills/cf-start/assets/refactor-brief.template.md`, and this document
 - if bootstrap artifact structure changes, update `skills/cf-start/assets/*`
 - if install/remove behavior changes, update `src/` and the filesystem tests
 - keep `README.md` focused on user-facing install and usage, not maintainer detail
@@ -100,13 +320,14 @@ Current automated coverage checks:
 The most important manual validation is still a real target-repo run:
 
 1. install the pack into a target repo
-2. invoke `$cf-start`
+2. invoke `$cf-start` as the standard first-use path
 3. confirm the target repo gets:
    - `.agents/skills/...`
    - `.cflow/`
    - `.cflow/architecture.md` when needed
    - `.cflow/refactor-brief.md` when needed
    - `.gitignore` updated with `.cflow/` when needed
+4. if you changed an internal skill contract, confirm that invoking it without the required artifacts routes back to `cf-start` instead of bootstrapping state on its own
 
 ## Related Files
 

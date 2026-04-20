@@ -1,9 +1,10 @@
 ---
 name: cf-start
-description: Main entrypoint for Cflow. Use to start or resume most cleanup and refactor work. Run repository assessment, evaluate both concentration and fragmentation pressure, update .cflow/architecture.md, and always stop at an alignment checkpoint before non-trivial execution.
+description: Main and only supported user-facing entrypoint for Cflow. Use to start or resume most cleanup and refactor work, bootstrap .cflow state, evaluate concentration and fragmentation pressure, and stop at an alignment checkpoint before non-trivial execution.
 ---
 
-This is the normal entrypoint for the pack.
+This is the only supported user-facing entrypoint for the pack.
+Do not tell the user to invoke internal phase or step skills directly.
 
 Do not behave like a router that only suggests another skill.
 Advance the workflow yourself whenever the correct next phase is clear.
@@ -67,7 +68,7 @@ Heuristics:
 
 - If there is no live brief or the task looks new, start with assessment.
 - If there is a live brief and the user says resume / continue / proceed, resume from the correct phase.
-- If the user explicitly asks only for review or verification, route to that mode.
+- If the user explicitly asks only for review or verification, bootstrap or refresh prerequisites first and then route internally to that mode.
 - For non-trivial fresh work, default to **assessment-then-alignment**.
 
 ## Fresh assessment responsibilities
@@ -107,6 +108,8 @@ Rules:
 - Keep assessment repository-level.
 - Update or create `.cflow/architecture.md` whenever it is missing, stale, or materially incomplete.
 - For non-trivial work, create or refresh `.cflow/refactor-brief.md`.
+- Treat `soft-mixed` as a repository-level outcome, not as one executable step.
+- In `soft-mixed`, break the work into bounded work units and assign each unit exactly one `mode`: `split` or `consolidate`.
 - Do not implement yet.
 - Always end fresh assessment at the alignment checkpoint with exactly one focused question.
 
@@ -119,9 +122,10 @@ Resume from the correct point:
 - if the brief is stale or the seam changed materially -> reassessment
 - if the current unit is selected but not mapped enough -> concentration or fragmentation mapping
 - if the unit needs a behavior lock -> safety-net
+- if the repository direction is `soft-mixed`, pick the next work unit by its local dominant pressure and use that unit's declared mode
 - if the unit is ready for structural work:
-  - use split work when concentration dominates
-  - use consolidate work when fragmentation dominates
+  - use split work when the work unit mode is `split`
+  - use consolidate work when the work unit mode is `consolidate`
 - if code already changed and needs judgment -> review
 - if the work is ready for factual closure -> verify
 
@@ -186,3 +190,6 @@ Update these too when they changed:
 - `Verification`
 - `Review notes`
 - `Unknowns to re-check`
+
+In `soft-mixed`, every `Work units` entry must use `mode: split` or `mode: consolidate`.
+Do not use `mode: mixed` for one executable work unit.

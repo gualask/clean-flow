@@ -2,13 +2,13 @@
 name: cf-step-local-simplify
 description: Simplify naming, control flow, and helper shape inside the touched area without reopening architecture. Use after a bounded structural step when local readability can still improve.
 ---
-
 Use this after `cf-step-boundary-apply` or `cf-step-consolidate-seam`, not before.
 
 Do not reopen repository architecture in this skill.
 
 ## Preflight
 
+- If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
 - Read `.cflow/architecture.md`.
 - Read `.cflow/refactor-brief.md` first if it exists.
 - If no brief exists, only continue when the prompt already gives an explicit, local touched area.

@@ -2,13 +2,14 @@
 name: cf-review
 description: Review a completed bounded refactor step and judge whether it reduced pressure without over-engineering. Use after structural work and before final verification or acceptance.
 ---
-
 Do review only. Do not introduce new structural changes in this skill unless the user explicitly asks.
 
 ## Preflight
 
+- If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
 - Read `.cflow/architecture.md`.
 - Read `.cflow/refactor-brief.md` if it exists.
+- If the completed step or touched area is not clear enough to review, stop and route to `cf-start` first.
 - Re-check the touched area and the current repository state.
 - Treat the repository as the source of truth.
 

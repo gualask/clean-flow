@@ -2,13 +2,14 @@
 name: cf-verify
 description: Verify a refactor with factual evidence such as tests, lint, typecheck, build, or smoke checks. Use at the end of a bounded cleanup or migration unit.
 ---
-
 Use this at the end of a completed bounded unit.
 
 ## Preflight
 
+- If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
 - Read `.cflow/architecture.md`.
 - Read `.cflow/refactor-brief.md` if it exists.
+- If the completed unit or touched area is not clear enough to verify, stop and route to `cf-start` first.
 - Re-check the touched area and the repository state.
 
 ## Goal

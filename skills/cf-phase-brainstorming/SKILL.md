@@ -2,7 +2,6 @@
 name: cf-phase-brainstorming
 description: User alignment for Cflow after assessment. Use when the user wants to adjust scope, exclusions, risk, or direction before execution.
 ---
-
 Do not implement in this skill.
 
 ## Goal
@@ -15,8 +14,9 @@ This is a lightweight alignment step, not a spec-writing phase.
 
 1. Read `.cflow/architecture.md` if it exists.
 2. Read `.cflow/refactor-brief.md` if it exists.
-3. Re-check repository facts that matter for the open decisions.
-4. Treat the repository as the source of truth.
+3. If there is no already assessed direction and no concrete decision to resolve yet, stop and route to `cf-start` first.
+4. Re-check repository facts that matter for the open decisions.
+5. Treat the repository as the source of truth.
 
 ## Trigger
 

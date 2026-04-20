@@ -4,14 +4,11 @@ Cflow is a skill pack for **behavior-preserving cleanup and refactor work**, wit
 
 ## Skills Available
 
-Public:
+Supported user entrypoint:
 
 - `cf-start`
-- `cf-review`
-- `cf-verify`
-- `cf-feedback-intake`
 
-Advanced analysis:
+Internal workflow skills:
 
 - `cf-phase-discovery`
 - `cf-phase-brainstorming`
@@ -19,13 +16,13 @@ Advanced analysis:
 - `cf-phase-fragmentation-map`
 - `cf-phase-target-shape`
 - `cf-phase-migration-units`
-
-Advanced execution:
-
 - `cf-step-safety-net`
 - `cf-step-boundary-apply`
 - `cf-step-consolidate-seam`
 - `cf-step-local-simplify`
+- `cf-review`
+- `cf-verify`
+- `cf-feedback-intake`
 
 ## Install
 
@@ -72,6 +69,17 @@ Dry run:
 ```bash
 node ./bin/cflow-skills.mjs install /path/to/repo --dry-run
 ```
+
+## First Use
+
+Installing the pack only syncs `skills/` into the target location.
+It does not create `.cflow/` by itself.
+
+For supported first use and resume, always start with `cf-start`.
+`cf-start` is the only supported user-facing entrypoint and it handles bootstrap, assessment, resume, work-unit selection, and `.gitignore` updates for `.cflow/`.
+
+All other skills are internal workflow skills.
+They are not meant to be invoked directly by users.
 
 ## Uninstall
 

@@ -2,7 +2,6 @@
 name: cf-phase-fragmentation-map
 description: Analyze pressure caused by over-splitting, pass-through wrappers, or artificial boundaries. Use during assessment or before a consolidate-oriented work unit.
 ---
-
 Do analysis first. Do not implement in this skill.
 
 ## Goal
@@ -20,9 +19,11 @@ Look for:
 
 ## Preflight
 
+- If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
 - Read `.cflow/architecture.md`.
 - Read `.cflow/refactor-brief.md` if it exists.
-- If no brief exists, this skill may still run when the prompt gives an explicit local or repo-level scope.
+- If no brief exists, continue only when the prompt gives an explicit local or repo-level scope.
+- If no brief exists and the scope is not explicit, stop and route to `cf-start` first.
 - Re-check the repository.
 - Treat the repository as the source of truth.
 

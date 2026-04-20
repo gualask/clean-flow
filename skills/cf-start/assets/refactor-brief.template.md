@@ -51,13 +51,13 @@
 
 - WU-01:
   - goal:
-  - mode:
+  - mode: split | consolidate
   - risk:
   - validation:
   - status:
 - WU-02:
   - goal:
-  - mode:
+  - mode: split | consolidate
   - risk:
   - validation:
   - status:

@@ -2,7 +2,6 @@
 name: cf-phase-target-shape
 description: Define the target direction for a hard restructure when soft intervention is not enough. Use only after assessment and alignment clearly justify a broader change.
 ---
-
 Do not implement in this skill.
 
 ## Goal
@@ -11,10 +10,12 @@ Define a bounded, repository-fitting target shape for a hard restructure.
 
 ## Preflight
 
-1. Read `.cflow/architecture.md`.
-2. Read `.cflow/refactor-brief.md`.
-3. Re-check the repository.
-4. Treat the repository as the source of truth.
+1. If `.cflow/architecture.md` or `.cflow/refactor-brief.md` is missing, stop and route to `cf-start` first.
+2. Read `.cflow/architecture.md`.
+3. Read `.cflow/refactor-brief.md`.
+4. If hard restructure is not already justified, stop and route to `cf-start` or `cf-phase-brainstorming`.
+5. Re-check the repository.
+6. Treat the repository as the source of truth.
 
 ## Rules
 
