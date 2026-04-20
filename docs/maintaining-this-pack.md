@@ -39,6 +39,10 @@ Target repositories use these canonical paths:
 
 The canonical skill definitions live in `skills/`.
 
+Agent-specific install entrypoints live in `install/<agent>/`, for example `install/codex/GLOBAL.md` and `install/codex/LOCAL.md`.
+
+The Codex entrypoints use a temporary shallow clone of this repository for each command. They do not keep a persistent pack checkout under `~/.codex/`.
+
 For bootstrap artifacts, the source templates live inside `cf-start`:
 
 - `skills/cf-start/assets/architecture.template.md`
