@@ -37,6 +37,8 @@ This step is for seams where **fragmentation pressure** dominates.
 - Avoid swinging into a new god file.
 - Prefer one bounded merge or collapse at a time.
 - If the consolidation reveals a genuinely autonomous sub-seam, keep it local unless reuse is already real.
+- If you discover a likely bug or behavior inconsistency while consolidating, do not silently fold the fix into the same structural step unless the user explicitly asked for it.
+- Report that bug or inconsistency clearly in `What remains` and `Next action` so the user can decide whether to address it separately.
 
 ## Before finishing
 
