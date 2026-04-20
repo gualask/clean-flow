@@ -28,3 +28,14 @@ test("packaged skills expose frontmatter and agent config", async () => {
     );
   }
 });
+
+test("cf-start ships bootstrap asset templates", async () => {
+  assert.equal(
+    await pathExists(path.join(SKILLS_ROOT, "cf-start", "assets", "architecture.template.md")),
+    true,
+  );
+  assert.equal(
+    await pathExists(path.join(SKILLS_ROOT, "cf-start", "assets", "refactor-brief.template.md")),
+    true,
+  );
+});

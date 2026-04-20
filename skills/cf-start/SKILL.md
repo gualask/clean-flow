@@ -39,6 +39,19 @@ At the checkpoint:
 3. Re-check the repository state.
 4. Treat the repository as the source of truth.
 
+## Bootstrap
+
+Use `assets/architecture.template.md` and `assets/refactor-brief.template.md` as the source templates for Cflow artifacts.
+
+When bootstrapping or refreshing Cflow artifacts:
+
+- create `.cflow/` if it does not exist
+- add `.cflow/` to the repository `.gitignore` if the entry is missing
+- create `.cflow/architecture.md` from `assets/architecture.template.md` when a repository map is needed and the file is missing
+- create `.cflow/refactor-brief.md` from `assets/refactor-brief.template.md` when the work is non-trivial, risky, multi-step, or likely to resume later and the file is missing
+- never create root-level `architecture.md` or `refactor-brief.md` for Cflow
+- when a Cflow artifact already exists, update it in place instead of re-copying the template blindly
+
 ## Intent inference
 
 Infer the current intent from the user's prompt.

@@ -5,7 +5,6 @@ Cflow is a skill pack for **behavior-preserving cleanup and refactor work**.
 This repository is the **source of truth** for the pack:
 
 - `skills/` contains the canonical skills
-- `templates/` contains artifact templates
 - `bin/` and `src/` contain the sync CLI
 - `test/` covers the sync behavior and the packaged skill structure
 
@@ -15,7 +14,6 @@ Installed repositories still receive the skills in `.agents/skills`.
 
 ```text
 skills/   canonical skill source
-templates/ artifact templates
 src/      sync and fingerprint logic
 bin/      CLI entrypoint
 test/     filesystem and structure tests
@@ -59,7 +57,7 @@ Advanced execution:
 node ./bin/cflow-skills.mjs install /path/to/repo
 ```
 
-The CLI syncs `skills/` into `/path/to/repo/.agents/skills`, bootstraps `/path/to/repo/.cflow/`, and adds `.cflow/` to the repository `.gitignore`.
+The CLI syncs `skills/` into `/path/to/repo/.agents/skills`.
 
 Global install:
 
@@ -100,12 +98,11 @@ Current automated coverage focuses on:
 - update + prune + preserve foreign skills
 - conflict detection on foreign same-name skills
 - remove of Cflow-owned skills only
-- structural checks for packaged skills
-
-Templates are not wired into the CLI yet. They are kept separately because they need a stricter bootstrap/update policy than the skill sync.
+- structural checks for packaged skills and `cf-start` bootstrap assets
 
 Manual `cf-start` invocation and artifact-backed resume do not depend on `AGENTS.md`.
 The Cflow artifact paths are `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
+Bootstrap for those artifacts happens inside `cf-start`, using the templates shipped in `skills/cf-start/assets/`.
 
 ## Default usage
 
