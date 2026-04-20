@@ -1,32 +1,8 @@
 # Cflow
 
-Cflow is a skill pack for **behavior-preserving cleanup and refactor work**.
+Cflow is a skill pack for **behavior-preserving cleanup and refactor work**, with artifact-backed resume through `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
 
-This repository is the **source of truth** for the pack:
-
-- `skills/` contains the canonical skills
-- `bin/` and `src/` contain the sync CLI
-- `test/` covers the sync behavior and the packaged skill structure
-
-Installed repositories still receive the skills in `.agents/skills`.
-
-## Repository layout
-
-```text
-skills/   canonical skill source
-src/      sync and fingerprint logic
-bin/      CLI entrypoint
-test/     filesystem and structure tests
-```
-
-## Canonical files
-
-Keep these file names exactly in lowercase:
-
-- `.cflow/architecture.md`
-- `.cflow/refactor-brief.md`
-
-## Entrypoints
+## Skills Available
 
 Public:
 
@@ -73,6 +49,8 @@ Dry run:
 node ./bin/cflow-skills.mjs install /path/to/repo --dry-run
 ```
 
+## Uninstall
+
 Remove only Cflow-owned skills from a target:
 
 ```bash
@@ -80,57 +58,4 @@ node ./bin/cflow-skills.mjs remove /path/to/repo
 node ./bin/cflow-skills.mjs remove --global
 ```
 
-The sync model is:
-
-- upsert all skills from `skills/`
-- prune only skills previously installed by Cflow
-- never touch non-Cflow skills with the same path unless they are explicitly adopted in a future version
-
-## Test
-
-```bash
-npm test
-```
-
-Current automated coverage focuses on:
-
-- install on empty target
-- update + prune + preserve foreign skills
-- conflict detection on foreign same-name skills
-- remove of Cflow-owned skills only
-- structural checks for packaged skills and `cf-start` bootstrap assets
-
-Manual `cf-start` invocation and artifact-backed resume do not depend on `AGENTS.md`.
-The Cflow artifact paths are `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
-Bootstrap for those artifacts happens inside `cf-start`, using the templates shipped in `skills/cf-start/assets/`.
-
-## Default usage
-
-Normal start:
-
-```text
-$cf-start Analyze this repository, propose the right path, and stop at the alignment checkpoint.
-```
-
-Resume from artifacts:
-
-```text
-$cf-start Read .cflow/architecture.md and .cflow/refactor-brief.md, then resume from the correct phase for the current work unit.
-```
-
-Practical rule of thumb:
-
-- start with `cf-start`
-- expect a mandatory alignment checkpoint after the first assessment
-- keep one thread for assessment + alignment + one bounded work unit
-- if a split-oriented step is still fuzzy locally, run `cf-phase-concentration-map` before editing
-- do not start with a `cf-step-*` skill unless the work unit is already clear
-
-## Language rule
-
-- conversational output follows the user's language
-- durable artifacts follow the dominant documentation language of the repository
-
-## Changelog
-
-See [CHANGELOG.md](./CHANGELOG.md).
+For pack maintenance and runtime design, see [docs/maintaining-this-pack.md](./docs/maintaining-this-pack.md).
