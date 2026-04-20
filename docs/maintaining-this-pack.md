@@ -73,6 +73,8 @@ docs/     maintainer documentation
 - The installer distributes skills; it does not initialize repository state.
 - `soft-mixed` is a repository-level assessment outcome, not an execution mode for one step.
 - Every executable work unit must choose exactly one mode: `split` or `consolidate`.
+- After a non-trivial fresh assessment, `cf-start` must stop at an alignment checkpoint before execution.
+- After that checkpoint, simple confirmation may proceed; any non-trivial reply must enter `cf-phase-brainstorming` until the direction is clear enough.
 
 For per-skill entry, gating, and routing decisions, use [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md).
 This document keeps the rules and validation logic; the matrix records the current per-skill contract.
@@ -100,7 +102,7 @@ Standalone labels:
 - Produces: a six-section fresh assessment ending at `Alignment checkpoint`, or a six-section resume or reassessment progress report.
 - Standalone: `yes`
 - Artifacts: full bootstrap and refresh; creates `.cflow/`, updates `.gitignore`, and creates or refreshes `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
-- Typical next step: user confirmation, `cf-phase-brainstorming`, `cf-phase-concentration-map`, `cf-phase-fragmentation-map`, `cf-step-safety-net`, `cf-review`, or `cf-verify`.
+- Typical next step: user simple confirmation into execution, or `cf-phase-brainstorming` if the user gives any non-trivial reply at the alignment checkpoint.
 
 Mixed-path rule:
 
@@ -124,7 +126,7 @@ Mixed-path rule:
 #### `cf-phase-brainstorming`
 
 - Does: resolves user decisions that materially change scope, exclusions, risk, or direction after assessment.
-- Use when: `cf-start` already assessed the repository and the user does more than simple confirmation.
+- Use when: `cf-start` already assessed the repository and the user gave a non-trivial reply at the alignment checkpoint.
 - Expects: repository facts plus an assessed direction or live decision to resolve; existing artifacts may already exist depending on the path.
 - Produces: either one focused question when a decision is still open, or a four-section alignment report.
 - Standalone: `no`

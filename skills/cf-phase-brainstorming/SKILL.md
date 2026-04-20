@@ -9,6 +9,7 @@ Do not implement in this skill.
 Resolve only the decisions that materially change the cleanup or refactor.
 
 This is a lightweight alignment step, not a spec-writing phase.
+Stay in this phase until the direction is clear enough to proceed safely.
 
 ## Preflight
 
@@ -20,16 +21,9 @@ This is a lightweight alignment step, not a spec-writing phase.
 
 ## Trigger
 
-Use this when the user does more than simple confirmation.
+Use this when the user gives any non-trivial reply after the assessment checkpoint.
 
-Simple confirmation examples:
-
-- proceed
-- prosegui
-- continue
-- vai avanti
-
-Anything beyond that means the user is steering the direction and this skill should align it.
+Anything beyond simple confirmation means the user is steering the direction and this skill should align it before execution continues.
 
 ## Deliberation mode
 
@@ -88,3 +82,5 @@ If alignment is now sufficient, provide exactly these sections:
 2. **Remaining exclusions or non-goals**
 3. **Artifacts updated**
 4. **Recommended next action**
+
+Do not resume execution from this skill while a material decision is still open.

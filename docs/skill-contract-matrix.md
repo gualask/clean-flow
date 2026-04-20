@@ -23,7 +23,7 @@ It does not assume that every skill already enforces that routing with the same 
 | --- | --- | --- | --- | --- | --- |
 | `cf-start` | public | yes | yes | repository state only; existing `.cflow/*` artifacts are optional | bootstrap or reassess, then continue internally |
 | `cf-phase-discovery` | internal | no | yes | repository state only; existing `.cflow/*` artifacts are optional | n/a; discovery can start from repository state |
-| `cf-phase-brainstorming` | internal | no | conditional | an already assessed direction or a concrete decision to resolve; repository facts must be checkable | route to `cf-start` for assessment or alignment context |
+| `cf-phase-brainstorming` | internal | no | conditional | an already assessed direction plus a non-trivial reply or concrete decision to resolve; repository facts must be checkable | route to `cf-start` for assessment or alignment context |
 | `cf-phase-concentration-map` | internal | no | conditional | architecture map plus repository check; brief optional; if no brief exists, the prompt must give an explicit local or repo-level scope | route to `cf-start` or the assessment path first |
 | `cf-phase-fragmentation-map` | internal | no | conditional | architecture map plus repository check; brief optional; if no brief exists, the prompt must give an explicit local or repo-level scope | route to `cf-start` or the assessment path first |
 | `cf-phase-target-shape` | internal | no | conditional | hard path already justified; `.cflow/architecture.md` and `.cflow/refactor-brief.md` already present | route to `cf-start`, then reassess or align before hard-path design |

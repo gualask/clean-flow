@@ -23,9 +23,11 @@ Do this even when you already have a recommendation.
 
 At the checkpoint:
 
-- if the user confirms, continue with the proposed path
-- if the user changes something material, switch into brainstorming
-- if the user says nothing material and only says "continue", treat that as confirmation
+- if the user replies with simple confirmation only, continue with the proposed path
+- if the user gives any non-trivial reply, switch into brainstorming first
+
+Simple confirmation means short approval with no new steering.
+Any doubt, question, reassurance request, scope change, risk concern, or direction change counts as a non-trivial reply and must enter brainstorming.
 
 ## Language rules
 
@@ -112,6 +114,7 @@ Rules:
 - In `soft-mixed`, break the work into bounded work units and assign each unit exactly one `mode`: `split` or `consolidate`.
 - Do not implement yet.
 - Always end fresh assessment at the alignment checkpoint with exactly one focused question.
+- After the alignment checkpoint, simple confirmation may proceed directly into execution; any non-trivial reply must go through brainstorming first.
 
 ## Resume responsibilities
 
