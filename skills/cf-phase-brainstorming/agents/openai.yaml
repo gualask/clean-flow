@@ -2,4 +2,4 @@ interface:
   display_name: "Cflow:phase brainstorming"
   short_description: "Alignment and decision steering after assessment"
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

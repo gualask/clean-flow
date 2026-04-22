@@ -29,6 +29,8 @@ Cflow has three distinct runtime pieces:
    - all other skills are internal workflow skills
    - internal skills are normally reached from `cf-start`, with context prepared according to each skill contract
 
+For the single-page end-to-end flow, see [workflow-map.md](./workflow-map.md).
+
 ## Canonical Artifact Paths
 
 Target repositories use these canonical paths:
@@ -68,6 +70,7 @@ docs/     maintainer documentation
 - `cf-start` owns the supported first-use bootstrap of `.cflow/*` state.
 - `.cflow/*` is Cflow-owned state in the target repository.
 - Internal skills are gated by required context, not by actor identity alone.
+- Internal skills being non-public does not mean they are explicit-only in Codex; routable Cflow workflow skills should remain implicitly invocable so Codex can enter the next step when the task matches the skill description.
 - If an internal skill is invoked directly and the required context is missing, it must stop and route back to `cf-start`.
 - Existing repository docs may be used as evidence during analysis.
 - The installer distributes skills; it does not initialize repository state.
@@ -81,6 +84,8 @@ This document keeps the rules and validation logic; the matrix records the curre
 
 For collaborative validation on real target repositories, use [repo-trial-rules.md](/Users/blazar/Dev/clean-flow/docs/repo-trial-rules.md).
 That document defines the user plus LLM trial loop and should stay separate from the pack's internal maintenance rules.
+
+For the shortest runtime-oriented walkthrough of the flow, see [workflow-map.md](./workflow-map.md).
 
 ## Skill Reference
 
@@ -268,6 +273,7 @@ For each skill change, ask all of these:
 - `Role wording`: if the text says `user`, `human`, `reviewer`, or `agent`, does that actor identity materially change the skill behavior?
 - `State wording`: if actor identity does not matter, rewrite the text in state-based terms such as existing feedback, selected work unit, open decision, or touched area.
 - `Entrypoint clarity`: is it clear whether the skill is public or internal?
+- `Codex invocation policy`: does `agents/openai.yaml` use the right `allow_implicit_invocation` value for this skill, and is that choice consistent with the intended workflow routing?
 - `Gate type`: is the gate state-based rather than actor-based?
 - `Preflight`: do the preflight rules make sense both when the skill is reached from flow and when a human reads or invokes it directly?
 - `Artifact behavior`: do create, refresh, assume, or update rules match the actual contract of the skill?
@@ -297,6 +303,7 @@ When changing the pack:
 - update the relevant `SKILL.md` files in `skills/`
 - if a skill contract changes, update both its `SKILL.md` and the `Skill Reference` section in this document
 - if a skill contract changes, update [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md) too
+- if you add a new routable workflow skill, give it `agents/openai.yaml` metadata and keep `allow_implicit_invocation: true` unless there is a documented exception
 - if bootstrap behavior changes, update `skills/cf-start/SKILL.md` and this document
 - if the allowed execution modes or work-unit contract changes, update `skills/cf-start/SKILL.md`, `skills/cf-start/assets/refactor-brief.template.md`, and this document
 - if bootstrap artifact structure changes, update `skills/cf-start/assets/*`
@@ -318,6 +325,7 @@ Current automated coverage checks:
 - conflict detection on foreign same-name skills
 - remove of Cflow-owned skills only
 - structural checks for packaged skills
+- Codex implicit invocation policy for shipped Cflow skills
 - presence of `cf-start` bootstrap assets
 
 ## Manual Smoke Checks

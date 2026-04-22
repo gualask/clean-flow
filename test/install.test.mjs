@@ -11,7 +11,7 @@ import {
   makeTempWorkspace,
   readText,
   writeSkill,
-} from "../test-support/helpers.mjs";
+} from "./support/helpers.mjs";
 
 test("install copies new skills and writes owned markers", async () => {
   const workspace = await makeTempWorkspace();

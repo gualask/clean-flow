@@ -81,6 +81,8 @@ For supported first use and resume, always start with `cf-start`.
 All other skills are internal workflow skills.
 They are not meant to be invoked directly by users.
 
+For an end-to-end workflow view, see [docs/workflow-map.md](./docs/workflow-map.md).
+
 ## Uninstall
 
 Remove only Cflow-owned skills from a target:
@@ -103,3 +105,4 @@ node ./bin/cflow-skills.mjs remove --global
 ```
 
 For pack maintenance and runtime design, see [docs/maintaining-this-pack.md](./docs/maintaining-this-pack.md).
+For the workflow map, see [docs/workflow-map.md](./docs/workflow-map.md).

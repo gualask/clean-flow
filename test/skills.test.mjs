@@ -29,6 +29,21 @@ test("packaged skills expose frontmatter and agent config", async () => {
   }
 });
 
+test("packaged Cflow skills allow implicit Codex invocation", async () => {
+  const skills = await listSkillDirectories(SKILLS_ROOT);
+
+  assert.ok(skills.length > 0);
+
+  for (const skill of skills) {
+    const openaiYaml = await readFile(path.join(skill.path, "agents", "openai.yaml"), "utf8");
+    assert.match(
+      openaiYaml,
+      /^\s*allow_implicit_invocation:\s*true\s*$/m,
+      `${skill.name} should allow implicit Codex invocation`,
+    );
+  }
+});
+
 test("cf-start ships bootstrap asset templates", async () => {
   assert.equal(
     await pathExists(path.join(SKILLS_ROOT, "cf-start", "assets", "architecture.template.md")),

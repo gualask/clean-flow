@@ -17,6 +17,12 @@ The source of truth remains each `skills/*/SKILL.md`.
 This matrix records the current contract.
 It does not assume that every skill already enforces that routing with the same explicit gate wording.
 
+## Codex Invocation Policy
+
+- `internal` means "not a supported direct human entrypoint". It does not mean "explicit-only" in Codex.
+- Cflow workflow skills should normally allow implicit invocation so Codex can route into the next relevant step when the task matches the skill description.
+- If a skill is intentionally explicit-only in Codex, document that exception in the skill, in this matrix, and in [maintaining-this-pack.md](/Users/blazar/Dev/clean-flow/docs/maintaining-this-pack.md).
+
 ## Entry And Routing
 
 | Skill | Role | Supported direct human entrypoint | Can still work if directly invoked | Minimum context to proceed | If context missing |

@@ -10,7 +10,7 @@ import {
   listDirectoryNames,
   makeTempWorkspace,
   writeSkill,
-} from "../test-support/helpers.mjs";
+} from "./support/helpers.mjs";
 
 test("remove deletes only Cflow-owned skills", async () => {
   const workspace = await makeTempWorkspace();

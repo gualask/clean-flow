@@ -5,6 +5,7 @@ description: Main and only supported user-facing entrypoint for Cflow. Use to st
 
 This is the only supported user-facing entrypoint for the pack.
 Do not tell the user to invoke internal phase or step skills directly.
+Internal phase and step skills are still part of the routable Cflow workflow; do not treat `internal` as meaning explicit-only when the state-based trigger for the next step is already present.
 
 Do not behave like a router that only suggests another skill.
 Advance the workflow yourself whenever the correct next phase is clear.

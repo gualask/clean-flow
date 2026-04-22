@@ -7,6 +7,6 @@
     "cflow-skills": "./bin/cflow-skills.mjs"
   },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test test/*.test.mjs"
   }
 }
