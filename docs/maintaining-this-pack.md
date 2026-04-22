@@ -205,8 +205,8 @@ Mixed-path rule:
 #### `cf-step-consolidate-seam`
 
 - Does: applies one bounded consolidation-oriented step to reduce over-fragmentation while preserving behavior, avoids ownership moves with weak payoff, and surfaces discovered bugs separately instead of silently folding them into the same structural pass.
-- Use when: the active work unit is `mode: consolidate` and a credible safety net exists.
-- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and a consolidation-ready seam. In the normal flow, the active work unit should be `mode: consolidate`.
+- Use when: the active work unit is `mode: consolidate`, or the prompt already gives an explicit local seam where the artificial boundary is clear, and a credible safety net exists.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and either a consolidation-ready seam or enough local clarity to tell that the current boundary is artificial. If that boundary is still unclear, route to `cf-phase-fragmentation-map` instead of guessing. In the normal flow, the active work unit should be `mode: consolidate`.
 - Produces: a six-section execution report covering current state, work executed, checks, artifacts, remaining work, and next action.
 - Standalone: `no`
 - Artifacts: updates the brief when it exists or is created in the active flow.

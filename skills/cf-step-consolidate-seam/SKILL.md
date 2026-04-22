@@ -11,6 +11,7 @@ Use this to apply one bounded **consolidation-oriented** cleanup step.
 - Read `.cflow/refactor-brief.md` first if it exists.
 - If no brief exists, continue only when the prompt already gives an explicit, local, behavior-preserving scope.
 - If no brief exists and the scope is not explicit and local, stop before implementation and route to `cf-start` or the correct `cf-phase-*` skill.
+- If it is still unclear whether the target boundary is artificial or semantically real, stop and route to `cf-phase-fragmentation-map` instead of guessing.
 - Re-check the touched area before moving code.
 - Verify the repository state before trusting the brief or the prompt.
 - Treat the repository as the source of truth.
