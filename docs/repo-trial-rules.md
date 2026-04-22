@@ -77,6 +77,7 @@ Before suggesting a skill change, collect as much of this packet as possible:
 - whether `.cflow/architecture.md` existed
 - whether `.cflow/refactor-brief.md` existed
 - relevant `Work units`, `Execution state`, or `Target direction` if a brief existed
+- Codex UI trace when available, for example `Explored -> Read SKILL.md (...)`
 - what the skill actually did
 - what the user expected it to do instead
 - concrete output snippets or artifact changes when relevant
@@ -127,6 +128,7 @@ Add a secondary label only when it materially changes the fix.
 - One repository can reveal a real contradiction in the current contract.
 - One repository does not automatically justify a general new rule.
 - If the report depends on missing context, treat it as inconclusive until that context is supplied.
+- When Codex shows `Read SKILL.md (...)` in the UI trace, treat that as evidence that the skill instructions were loaded for that pass. Do not overstate it as proof of a formal handoff model unless the trace shows more than that.
 - Prefer exact output, artifact diffs, or precise paraphrases over broad summaries.
 
 ## LLM Responsibilities

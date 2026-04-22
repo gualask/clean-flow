@@ -5,17 +5,13 @@ description: Main and only supported user-facing entrypoint for Cflow. Use to st
 
 This is the only supported user-facing entrypoint for the pack.
 Do not tell the user to invoke internal phase or step skills directly.
-Internal phase and step skills are still part of the routable Cflow workflow; do not treat `internal` as meaning explicit-only when the state-based trigger for the next step is already present.
-
+Internal phase and step skills are still valid workflow steps when the repository state already fits them.
 Do not behave like a router that only suggests another skill.
 Advance the workflow yourself whenever the correct next phase is clear.
 
 ## Goal
 
-Handle one of these two modes:
-
-- **fresh assessment** for a new cleanup or refactor
-- **artifact-backed resume** from `.cflow/architecture.md` and `.cflow/refactor-brief.md`
+Handle fresh assessment, artifact-backed resume, or review/verify re-entry through `cf-start`.
 
 ## Hard rule
 
@@ -85,26 +81,13 @@ Internally perform:
 5. provisional intervention mode
 6. artifact updates
 
-You must determine:
+Determine:
 
-- repository context
-- domain gravity
-- external boundaries
-- current boundary model
-- current packaging model
-- architecture fit
+- repository context and domain gravity
+- current boundary / packaging shape and architecture fit
 - whether intervention is justified
-- the likely dominant pressure:
-  - concentration
-  - fragmentation
-  - mixed
-  - neither
-- the credible intervention mode:
-  - soft-split
-  - soft-consolidate
-  - soft-mixed
-  - hard-restructure
-  - no-structural-refactor
+- dominant pressure: concentration | fragmentation | mixed | neither
+- intervention mode: soft-split | soft-consolidate | soft-mixed | hard-restructure | no-structural-refactor
 
 Rules:
 
@@ -115,7 +98,6 @@ Rules:
 - In `soft-mixed`, break the work into bounded work units and assign each unit exactly one `mode`: `split` or `consolidate`.
 - Do not implement yet.
 - Always end fresh assessment at the alignment checkpoint with exactly one focused question.
-- After the alignment checkpoint, simple confirmation may proceed directly into execution; any non-trivial reply must go through brainstorming first.
 
 ## Resume responsibilities
 
@@ -123,18 +105,16 @@ Resume is not a phase. Re-enter the correct phase using the brief and the reposi
 
 Resume from the correct point:
 
-- if the brief is stale or the seam changed materially -> reassessment
-- if the current unit is selected but not mapped enough -> concentration or fragmentation mapping
-- if the unit needs a behavior lock -> safety-net
-- if the repository direction is `soft-mixed`, pick the next work unit by its local dominant pressure and use that unit's declared mode
-- if the unit is ready for structural work:
-  - use split work when the work unit mode is `split`
-  - use consolidate work when the work unit mode is `consolidate`
-- if code already changed and needs judgment -> review
-- if the work is ready for factual closure -> verify
+- if the brief is stale, the seam changed materially, or `current work unit` is `none` -> reassessment or next-unit selection
+- if an active work unit is selected but not ready -> concentration or fragmentation mapping, or safety-net
+- if an active work unit is ready for structural work -> execute by its declared mode:
+  - `split` -> split work
+  - `consolidate` -> consolidate work
+- if structural work is already done -> review or verify based on whether judgment or factual closure is needed
 
 Rules:
 
+- In `soft-mixed`, select the next work unit by local dominant pressure and use that unit's declared mode.
 - Do not silently switch direction without updating the artifacts.
 - Do not execute more than one bounded work unit per invocation unless the user explicitly asked for a broader pass.
 
@@ -186,6 +166,8 @@ If `.cflow/refactor-brief.md` exists or is created, update at least:
 - `Execution state`
 - `Handoff notes`
 
+- In `Execution state`, set `current work unit` to the active selected unit, or `none` at a safe stopping point with no next unit selected.
+
 Update these too when they changed:
 
 - `Target direction`
@@ -194,6 +176,3 @@ Update these too when they changed:
 - `Verification`
 - `Review notes`
 - `Unknowns to re-check`
-
-In `soft-mixed`, every `Work units` entry must use `mode: split` or `mode: consolidate`.
-Do not use `mode: mixed` for one executable work unit.

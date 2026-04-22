@@ -84,7 +84,7 @@
 
 - flow stage:
 - last active skill:
-- current work unit:
+- current work unit: active WU id, or `none` at a safe stopping point
 - next expected entrypoint:
 - recommended next action:
 - stop / continue note:

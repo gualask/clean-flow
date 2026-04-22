@@ -73,11 +73,14 @@ docs/     maintainer documentation
 - Internal skills being non-public does not mean they are explicit-only in Codex; routable Cflow workflow skills should remain implicitly invocable so Codex can enter the next step when the task matches the skill description.
 - If an internal skill is invoked directly and the required context is missing, it must stop and route back to `cf-start`.
 - Existing repository docs may be used as evidence during analysis.
+- Files under `docs/` are maintainer documentation, not runtime instructions for models using the skills.
+- Do not assume anything under `docs/` is automatically visible to the model at runtime; if a rule must shape behavior, it must live in the relevant `skills/*/SKILL.md`.
 - The installer distributes skills; it does not initialize repository state.
 - `soft-mixed` is a repository-level assessment outcome, not an execution mode for one step.
 - Every executable work unit must choose exactly one mode: `split` or `consolidate`.
 - After a non-trivial fresh assessment, `cf-start` must stop at an alignment checkpoint before execution.
 - After that checkpoint, simple confirmation may proceed; any non-trivial reply must enter `cf-phase-brainstorming` until the direction is clear enough.
+- In `.cflow/refactor-brief.md`, `current work unit` means the active selected unit only; after a completed safe stop with no new unit selected, it should be `none` rather than the last completed unit.
 
 For per-skill entry, gating, and routing decisions, use [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md).
 This document keeps the rules and validation logic; the matrix records the current per-skill contract.
@@ -107,6 +110,7 @@ Standalone labels:
 - Produces: a six-section fresh assessment ending at `Alignment checkpoint`, or a six-section resume or reassessment progress report.
 - Standalone: `yes`
 - Artifacts: full bootstrap and refresh; creates `.cflow/`, updates `.gitignore`, and creates or refreshes `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
+- Execution-state rule: when a bounded unit is completed and no next unit is selected yet, `current work unit` should be `none`; completed-unit history belongs in `Work units` and handoff sections, not in `current work unit`.
 - Typical next step: user simple confirmation into execution, or `cf-phase-brainstorming` if the user gives any non-trivial reply at the alignment checkpoint.
 
 Mixed-path rule:
@@ -277,6 +281,8 @@ For each skill change, ask all of these:
 - `Gate type`: is the gate state-based rather than actor-based?
 - `Preflight`: do the preflight rules make sense both when the skill is reached from flow and when a human reads or invokes it directly?
 - `Artifact behavior`: do create, refresh, assume, or update rules match the actual contract of the skill?
+- `Runtime prompt boundary`: if a rule is needed for runtime behavior, does it still live in `SKILL.md` rather than only in `docs/`?
+- `No docs leakage assumption`: did you avoid treating `docs/` content as if it were automatically available to the model using the skill?
 - `Output contract`: does the output still make sense for the next step in the workflow?
 - `Reference sync`: does the `Skill Reference` section still say the same thing as the skill file?
 - `Matrix sync`: does [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md) still reflect the same contract?
@@ -301,6 +307,7 @@ Example:
 When changing the pack:
 
 - update the relevant `SKILL.md` files in `skills/`
+- treat `skills/*/SKILL.md` as the runtime source of truth; do not remove runtime instructions from a skill just because similar guidance exists under `docs/`
 - if a skill contract changes, update both its `SKILL.md` and the `Skill Reference` section in this document
 - if a skill contract changes, update [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md) too
 - if you add a new routable workflow skill, give it `agents/openai.yaml` metadata and keep `allow_implicit_invocation: true` unless there is a documented exception
