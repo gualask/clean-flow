@@ -1,5 +1,5 @@
 ---
-name: cf-phase-migration-units
+name: cf-phase-migration-unit-planning
 description: Break a hard restructure into bounded migration units. Use after the target direction is aligned and before implementation.
 ---
 Do not implement in this skill.

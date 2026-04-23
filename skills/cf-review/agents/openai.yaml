@@ -1,5 +1,5 @@
 interface:
   display_name: "Cflow:review"
-  short_description: "Judge whether the refactor reduced pressure without over-engineering"
+  short_description: "Judge whether one bounded refactor step reduced pressure without over-engineering"
 policy:
   allow_implicit_invocation: true

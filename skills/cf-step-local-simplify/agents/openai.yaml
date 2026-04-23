@@ -1,5 +1,5 @@
 interface:
   display_name: "Cflow:step local simplify"
-  short_description: "Improve local readability after structural work"
+  short_description: "Improve local readability after a bounded structural step"
 policy:
   allow_implicit_invocation: true

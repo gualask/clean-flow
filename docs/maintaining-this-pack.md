@@ -78,6 +78,8 @@ docs/     maintainer documentation
 - The installer distributes skills; it does not initialize repository state.
 - `soft-mixed` is a repository-level assessment outcome, not an execution mode for one step.
 - Every executable work unit must choose exactly one mode: `split` or `consolidate`.
+- `cf-phase-work-unit-planning` is the lightweight planning phase for ordering bounded work units without carrying hard-path structural context.
+- `cf-phase-target-shape` plus `cf-phase-migration-unit-planning` are reserved for broader hard-path restructuring where the target direction itself must be defined and then proved incrementally.
 - After a non-trivial fresh assessment, `cf-start` must stop at an alignment checkpoint before execution.
 - After that checkpoint, simple confirmation may proceed; any non-trivial reply must enter `cf-phase-brainstorming` until the direction is clear enough.
 - In `.cflow/refactor-brief.md`, `current work unit` means the active selected unit only; after a completed safe stop with no new unit selected, it should be `none` rather than the last completed unit.
@@ -111,7 +113,7 @@ Standalone labels:
 - Standalone: `yes`
 - Artifacts: full bootstrap and refresh; creates `.cflow/`, updates `.gitignore`, and creates or refreshes `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
 - Execution-state rule: when a bounded unit is completed and no next unit is selected yet, `current work unit` should be `none`; completed-unit history belongs in `Work units` and handoff sections, not in `current work unit`.
-- Typical next step: user simple confirmation into execution, or `cf-phase-brainstorming` if the user gives any non-trivial reply at the alignment checkpoint.
+- Typical next step: user simple confirmation into `cf-phase-work-unit-planning` or `cf-phase-target-shape`, depending on the proposed path, or `cf-phase-brainstorming` if the user gives any non-trivial reply at the alignment checkpoint.
 
 Mixed-path rule:
 
@@ -130,7 +132,7 @@ Mixed-path rule:
 - Produces: a seven-section discovery report covering context, architecture fit, premise check, candidate areas, plausible modes, artifact decision, and next action.
 - Standalone: `no`
 - Artifacts: may create or refresh `.cflow/architecture.md` and `.cflow/refactor-brief.md` when the flow calls for it.
-- Typical next step: `cf-phase-brainstorming`, `cf-phase-concentration-map`, or `cf-phase-fragmentation-map`.
+- Typical next step: `cf-phase-brainstorming`, `cf-phase-work-unit-planning`, or `cf-phase-target-shape`.
 
 #### `cf-phase-brainstorming`
 
@@ -140,7 +142,7 @@ Mixed-path rule:
 - Produces: either one focused question when a decision is still open, or a four-section alignment report.
 - Standalone: `no`
 - Artifacts: may update `.cflow/architecture.md` and create or refresh `.cflow/refactor-brief.md` once enough decisions are aligned.
-- Typical next step: `cf-phase-target-shape`, `cf-step-safety-net`, or the chosen bounded execution path.
+- Typical next step: `cf-phase-work-unit-planning`, `cf-phase-target-shape`, or the chosen bounded execution path when the next unit is already clear enough.
 
 #### `cf-phase-concentration-map`
 
@@ -162,6 +164,16 @@ Mixed-path rule:
 - Artifacts: updates the brief when it exists or is created in the active flow.
 - Typical next step: `cf-step-safety-net` or `cf-step-consolidate-seam`.
 
+#### `cf-phase-work-unit-planning`
+
+- Does: turns assessed cleanup or refactor pressure into a lightweight ordered backlog of bounded work units before implementation.
+- Use when: assessment or alignment already surfaced multiple credible candidates and you need to choose or sequence the next unit without invoking hard-path planning.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and either an assessed set of candidate areas or an explicit bounded scope to order. If a broader boundary or packaging decision is still unresolved, route to `cf-phase-target-shape` instead.
+- Produces: a six-section planning report covering scope, candidate units, ordering logic, recommended next unit, artifacts updated, and next action.
+- Standalone: `no`
+- Artifacts: may create or update `.cflow/refactor-brief.md` while ordering work units, recording dependencies, and setting the recommended next unit.
+- Typical next step: `cf-phase-concentration-map`, `cf-phase-fragmentation-map`, or `cf-step-safety-net`.
+
 #### `cf-phase-target-shape`
 
 - Does: defines the bounded target direction for a hard restructure when soft intervention is not enough.
@@ -170,9 +182,9 @@ Mixed-path rule:
 - Produces: a six-section target-shape report covering rationale, boundary model, packaging direction, migration constraints, artifacts updated, and next action.
 - Standalone: `no`
 - Artifacts: updates existing artifacts.
-- Typical next step: `cf-phase-migration-units`.
+- Typical next step: `cf-phase-migration-unit-planning`.
 
-#### `cf-phase-migration-units`
+#### `cf-phase-migration-unit-planning`
 
 - Does: breaks a hard restructure into bounded, reviewable migration units before implementation.
 - Use when: the hard-path target direction is already aligned and you need concrete migration units instead of a big-bang rewrite.

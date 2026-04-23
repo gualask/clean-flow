@@ -14,8 +14,9 @@ Internal workflow skills:
 - `cf-phase-brainstorming`
 - `cf-phase-concentration-map`
 - `cf-phase-fragmentation-map`
+- `cf-phase-work-unit-planning`
 - `cf-phase-target-shape`
-- `cf-phase-migration-units`
+- `cf-phase-migration-unit-planning`
 - `cf-step-safety-net`
 - `cf-step-boundary-apply`
 - `cf-step-consolidate-seam`

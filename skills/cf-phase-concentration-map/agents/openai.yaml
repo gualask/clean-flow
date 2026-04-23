@@ -1,5 +1,5 @@
 interface:
   display_name: "Cflow:phase concentration map"
-  short_description: "Map pressure caused by dense seams and mixed responsibilities"
+  short_description: "Map concentration pressure and safe split direction for a seam"
 policy:
   allow_implicit_invocation: true

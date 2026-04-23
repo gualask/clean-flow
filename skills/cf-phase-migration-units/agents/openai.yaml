@@ -1,5 +1,0 @@
-interface:
-  display_name: "Cflow:phase migration units"
-  short_description: "Break a hard path into bounded migration units"
-policy:
-  allow_implicit_invocation: true

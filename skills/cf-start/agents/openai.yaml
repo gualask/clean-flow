@@ -1,5 +1,5 @@
 interface:
   display_name: "Cflow:start"
-  short_description: "Main entrypoint for assessment, alignment, and resume"
+  short_description: "Bootstrap artifacts, assess, align, and resume refactor work"
 policy:
   allow_implicit_invocation: true

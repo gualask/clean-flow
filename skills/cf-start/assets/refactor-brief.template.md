@@ -52,15 +52,23 @@
 - WU-01:
   - goal:
   - mode: split | consolidate
+  - priority:
+  - depends on:
+  - may simplify:
+  - may complicate:
   - risk:
   - validation:
-  - status:
+  - status: pending | recommended-next | active | done | deferred | dropped
 - WU-02:
   - goal:
   - mode: split | consolidate
+  - priority:
+  - depends on:
+  - may simplify:
+  - may complicate:
   - risk:
   - validation:
-  - status:
+  - status: pending | recommended-next | active | done | deferred | dropped
 
 ## Safety net
 
@@ -85,6 +93,7 @@
 - flow stage:
 - last active skill:
 - current work unit: active WU id, or `none` at a safe stopping point
+- recommended next work unit:
 - next expected entrypoint:
 - recommended next action:
 - stop / continue note:

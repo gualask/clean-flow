@@ -35,16 +35,18 @@ flowchart TD
     G --> F
     D --> F
 
-    F -- soft split --> H[cf-phase-concentration-map]
-    F -- soft consolidate --> I[cf-phase-fragmentation-map]
-    F -- soft mixed --> J[Pick next work unit by local pressure]
-    J --> H
-    J --> I
+    F -- soft split --> J[cf-phase-work-unit-planning]
+    F -- soft consolidate --> J
+    F -- soft mixed --> J
     F -- hard restructure --> K[cf-phase-target-shape]
     F -- review only --> R[cf-review]
     F -- verify only --> S[cf-verify]
 
-    K --> L[cf-phase-migration-units]
+    K --> L[cf-phase-migration-unit-planning]
+    J --> J1{Recommended next work unit}
+    J1 -- mode: split --> H[cf-phase-concentration-map when seam needs mapping]
+    J1 -- mode: consolidate --> I[cf-phase-fragmentation-map when seam needs mapping]
+    J1 -- ready for structural work --> M[cf-step-safety-net]
     H --> M[cf-step-safety-net]
     I --> M
     L --> M
@@ -69,6 +71,7 @@ flowchart TD
 - Fresh non-trivial work always stops at the alignment checkpoint before implementation.
 - A short approval can continue directly from the checkpoint.
 - Any non-trivial steering after the checkpoint must go through `cf-phase-brainstorming` first.
+- Lightweight work normally enters `cf-phase-work-unit-planning` before local mapping or execution so the brief records the ordered backlog and the recommended next unit.
 - Hard-path work must define target shape and migration units before code edits.
 - Resume is not its own phase; `cf-start` re-enters the correct phase using the brief and current repository state.
 
@@ -79,8 +82,9 @@ flowchart TD
 | Entry and bootstrap | `cf-start` | Reads existing `.cflow/*`, creates or refreshes artifacts when needed, and decides whether this is fresh assessment, resume, review, or verify. | Indirectly, only by routing into execution later |
 | Repository assessment | `cf-start`, `cf-phase-discovery` | Builds repository-level understanding, checks whether intervention is justified, and frames plausible direction. | No |
 | Alignment | `cf-start`, `cf-phase-brainstorming` | Stops after fresh assessment, then resolves user steering before execution continues. | No |
+| Work-unit planning | `cf-phase-work-unit-planning` | Orders credible bounded work units, records dependencies, and chooses the recommended next unit without invoking hard-path structural planning. | No |
 | Local mapping | `cf-phase-concentration-map`, `cf-phase-fragmentation-map` | Maps the active seam and clarifies whether the next bounded unit should split or consolidate. | No |
-| Hard-path planning | `cf-phase-target-shape`, `cf-phase-migration-units` | Defines a repository-fitting target direction and breaks it into bounded migration units. | No |
+| Hard-path planning | `cf-phase-target-shape`, `cf-phase-migration-unit-planning` | Defines a repository-fitting target direction and breaks it into bounded migration units that prove that direction incrementally. | No |
 | Safety lock | `cf-step-safety-net` | Chooses the smallest credible behavior lock before structural work. | No |
 | Structural execution | `cf-step-boundary-apply`, `cf-step-consolidate-seam` | Applies exactly one bounded structural unit, preserving behavior. | Yes |
 | Local cleanup | `cf-step-local-simplify` | Improves naming and local readability after a structural step without reopening architecture. | Yes |
@@ -90,19 +94,19 @@ flowchart TD
 
 ### Soft Split
 
-`cf-start` -> alignment checkpoint -> `cf-phase-concentration-map` -> `cf-step-safety-net` -> `cf-step-boundary-apply` -> optional `cf-step-local-simplify` -> `cf-review` -> `cf-verify`
+`cf-start` -> alignment checkpoint -> `cf-phase-work-unit-planning` -> `cf-phase-concentration-map` -> `cf-step-safety-net` -> `cf-step-boundary-apply` -> optional `cf-step-local-simplify` -> `cf-review` -> `cf-verify`
 
 ### Soft Consolidate
 
-`cf-start` -> alignment checkpoint -> `cf-phase-fragmentation-map` -> `cf-step-safety-net` -> `cf-step-consolidate-seam` -> optional `cf-step-local-simplify` -> `cf-review` -> `cf-verify`
+`cf-start` -> alignment checkpoint -> `cf-phase-work-unit-planning` -> `cf-phase-fragmentation-map` -> `cf-step-safety-net` -> `cf-step-consolidate-seam` -> optional `cf-step-local-simplify` -> `cf-review` -> `cf-verify`
 
 ### Hard Restructure
 
-`cf-start` -> alignment checkpoint -> `cf-phase-target-shape` -> `cf-phase-migration-units` -> `cf-step-safety-net` -> one bounded execution unit -> `cf-review` -> `cf-verify`
+`cf-start` -> alignment checkpoint -> `cf-phase-target-shape` -> `cf-phase-migration-unit-planning` -> `cf-step-safety-net` -> one bounded execution unit -> `cf-review` -> `cf-verify`
 
 ### Resume
 
-`cf-start` -> re-enter mapping, safety-net, execution, review, or verify based on `.cflow/refactor-brief.md` and current repository state
+`cf-start` -> re-enter work-unit planning, mapping, safety-net, execution, review, or verify based on `.cflow/refactor-brief.md` and current repository state
 
 ## Artifacts Through The Flow
 

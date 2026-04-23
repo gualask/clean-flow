@@ -1,5 +1,5 @@
 interface:
   display_name: "Cflow:step safety net"
-  short_description: "Lock behavior before structural work"
+  short_description: "Choose the smallest credible behavior lock before structural edits"
 policy:
   allow_implicit_invocation: true
