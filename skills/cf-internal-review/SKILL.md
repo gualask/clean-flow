@@ -6,12 +6,10 @@ Do review only. Do not introduce new structural changes in this skill unless the
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
-- Read `.cflow/architecture.md`.
-- Read `.cflow/refactor-brief.md` if it exists.
+- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture-map`.
+- Read architecture plus existing `.cflow/refactor-brief.md`.
 - If the completed step or touched area is not clear enough to review, stop and route to `cf-start` first.
-- Re-check the touched area and the current repository state.
-- Treat the repository as the source of truth.
+- Re-check the touched area and treat repository state as the source of truth.
 
 ## Goal
 
@@ -46,15 +44,7 @@ Review for:
 
 ## Output format
 
-Provide exactly these sections:
-
-1. **What improved**
-2. **What is still mixed or unclear**
-3. **Over-engineering check**
-4. **Boundary clarity check**
-5. **Fragmentation / indirection check**
-6. **Risk check**
-7. **Recommended next action**
+Return sections: **What improved**, **What is still mixed or unclear**, **Over-engineering check**, **Boundary clarity check**, **Fragmentation / indirection check**, **Risk check**, **Recommended next action**.
 
 ## Artifact updates
 

@@ -6,16 +6,12 @@ Use this to apply one bounded **consolidation-oriented** cleanup step.
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
-- Read `.cflow/architecture.md`.
-- Read `.cflow/refactor-brief.md` first if it exists.
-- If no brief exists, continue only when the prompt already gives an explicit, local, behavior-preserving scope.
-- If no brief exists and the scope is not explicit and local, stop before implementation and route to `cf-start` or the correct internal skill.
+- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture-map`.
+- Read architecture plus existing `.cflow/refactor-brief.md`.
+- Without a brief, continue only with an explicit, local, behavior-preserving scope; otherwise route to `cf-start` or the correct internal skill.
 - If there is no credible safety lock for the current structural move, stop and route to `cf-internal-safety-net` first.
 - If it is still unclear whether the target boundary is artificial or semantically real, stop and route to `cf-internal-fragmentation-map` instead of guessing.
-- Re-check the touched area before moving code.
-- Verify the repository state before trusting the brief or the prompt.
-- Treat the repository as the source of truth.
+- Re-check the touched area and treat repository state as the source of truth.
 
 ## Goal
 
@@ -37,7 +33,7 @@ This step is for seams where **fragmentation pressure** dominates.
 - Preserve behavior unless behavior change is explicitly requested.
 - Keep the resulting seam easier to read than the starting point.
 - Avoid swinging into a new god file.
-- Prefer one bounded merge or collapse at a time.
+- Prefer one bounded merge or collapse at a time, scoped to one work unit or cohesive local unit.
 - Preserve existing dataflow and avoid unnecessary allocations, clones, or passes over the same data unless they clearly reduce complexity.
 - If the consolidation reveals a genuinely autonomous sub-seam, keep it local unless reuse is already real.
 - Do not move responsibility across a boundary unless that move materially simplifies the caller; if the caller still performs nearly the same branching or 1:1 mapping afterward, leave the ownership where it is or defer the step.
@@ -65,14 +61,7 @@ If you merged, renamed, removed, or relocated files or symbols, run an explicit 
 
 ## Output format
 
-Provide exactly these sections:
-
-1. **Current state**
-2. **Work unit executed**
-3. **Checks run**
-4. **Artifacts updated**
-5. **What remains**
-6. **Next action**
+Return sections: **Current state**, **Work unit executed**, **Checks run**, **Artifacts updated**, **What remains**, **Next action**.
 
 ## Artifact updates
 

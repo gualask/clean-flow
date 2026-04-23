@@ -1,5 +1,6 @@
 interface:
   display_name: "Cflow:internal verify"
   short_description: "Verify a bounded refactor step with factual evidence"
+  default_prompt: "Use $cf-internal-verify to verify the completed refactor with factual checks."
 policy:
   allow_implicit_invocation: true

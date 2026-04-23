@@ -10,14 +10,10 @@ Translate a hard path into reviewable, bounded migration units.
 
 ## Preflight
 
-1. If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
-2. If `.cflow/refactor-brief.md` is missing, stop and route to `cf-start` first.
-3. Read `.cflow/architecture.md`.
-4. Read `.cflow/refactor-brief.md`.
-5. If a hard path is justified but the target direction is not yet aligned, stop and route to `cf-internal-target-shape`.
-6. If the current state does not justify hard-path planning at all, stop and route to `cf-start`.
-7. Re-check the repository.
-8. Treat the repository as the source of truth.
+1. Require current `.cflow/architecture.md` and `.cflow/refactor-brief.md`; route to `cf-architecture-map` or `cf-start` if missing.
+2. If a hard path is justified but target direction is not aligned, route to `cf-internal-target-shape`.
+3. If hard-path planning is not justified, route to `cf-start`.
+4. Re-check the repository and treat it as the source of truth.
 
 ## Rules
 
@@ -32,13 +28,7 @@ Translate a hard path into reviewable, bounded migration units.
 
 ## Output format
 
-Provide exactly these sections:
-
-1. **Migration strategy**
-2. **Migration units**
-3. **What stays unchanged for now**
-4. **Artifacts updated**
-5. **Recommended next action**
+Return sections: **Migration strategy**, **Migration units**, **What stays unchanged for now**, **Artifacts updated**, **Recommended next action**.
 
 ## Artifact updates
 

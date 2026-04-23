@@ -8,14 +8,11 @@ Do not reopen repository architecture in this skill.
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
-- Read `.cflow/architecture.md`.
-- Read `.cflow/refactor-brief.md` first if it exists.
+- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture-map`.
+- Read architecture plus existing `.cflow/refactor-brief.md`.
 - If the touched area is not clearly anchored in a recently completed bounded structural step, stop and route to `cf-start` first.
-- If no brief exists, only continue when the prompt already gives an explicit, local touched area.
-- If no brief exists and the touched area is not explicit and local, stop before edits and route to `cf-start` or the correct internal skill.
-- Re-check the touched area and repository state.
-- Verify the repository state before acting.
+- Without a brief, continue only with an explicit, local touched area; otherwise route to `cf-start` or the correct internal skill.
+- Re-check the touched area and repository state before acting.
 - Do not broaden scope in this step.
 
 ## Goal
@@ -39,14 +36,7 @@ Improve local readability without changing the chosen structural direction.
 
 ## Output format
 
-Provide exactly these sections:
-
-1. **Current state**
-2. **Local simplifications applied**
-3. **Checks run**
-4. **Artifacts updated**
-5. **What remains**
-6. **Next action**
+Return sections: **Current state**, **Local simplifications applied**, **Checks run**, **Artifacts updated**, **What remains**, **Next action**.
 
 ## Artifact updates
 

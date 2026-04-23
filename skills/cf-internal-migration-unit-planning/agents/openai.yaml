@@ -1,5 +1,6 @@
 interface:
   display_name: "Cflow:internal migration unit planning"
   short_description: "Plan bounded migration units for an aligned hard path"
+  default_prompt: "Use $cf-internal-migration-unit-planning to plan bounded migration units for the aligned hard path."
 policy:
   allow_implicit_invocation: true

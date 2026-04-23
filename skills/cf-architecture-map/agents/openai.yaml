@@ -1,5 +1,6 @@
 interface:
   display_name: "Cflow:architecture map"
   short_description: "Build or refresh .cflow/architecture.md from repository state"
+  default_prompt: "Use $cf-architecture-map to build or refresh the Cflow architecture map."
 policy:
   allow_implicit_invocation: true

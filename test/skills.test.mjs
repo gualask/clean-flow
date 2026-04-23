@@ -44,6 +44,22 @@ test("packaged Cflow skills allow implicit Codex invocation", async () => {
   }
 });
 
+test("packaged Cflow skills expose default prompts", async () => {
+  const skills = await listSkillDirectories(SKILLS_ROOT);
+
+  assert.ok(skills.length > 0);
+
+  for (const skill of skills) {
+    const openaiYaml = await readFile(path.join(skill.path, "agents", "openai.yaml"), "utf8");
+    const escapedSkillName = skill.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    assert.match(
+      openaiYaml,
+      new RegExp(`^\\s*default_prompt:\\s*".*\\$${escapedSkillName}.*"\\s*$`, "m"),
+      `${skill.name} should expose a default_prompt that mentions $${skill.name}`,
+    );
+  }
+});
+
 test("cf-start ships bootstrap asset templates", async () => {
   assert.equal(
     await pathExists(path.join(SKILLS_ROOT, "cf-start", "assets", "architecture.template.md")),
@@ -86,9 +102,29 @@ test("public entrypoints keep bootstrap and routing ownership split", async () =
   );
 });
 
+test("cf-cognitive stays standalone and local", async () => {
+  const cognitiveBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
+    "utf8",
+  );
+
+  assert.match(
+    cognitiveBody,
+    /This is a supported public entrypoint for local file-level cognitive complexity refactors\./,
+  );
+  assert.match(cognitiveBody, /If no file is provided, discover candidate files/);
+  assert.match(cognitiveBody, /edit only the best first file in the current invocation/);
+  assert.match(cognitiveBody, /\*\*Behavior preservation\*\*/);
+  assert.match(cognitiveBody, /Do not bootstrap or require `\.cflow\/` artifacts\./);
+  assert.match(
+    cognitiveBody,
+    /route to `cf-start` instead/,
+  );
+});
+
 test("only public entrypoints omit the cf-internal prefix", async () => {
   const skills = await listSkillDirectories(SKILLS_ROOT);
-  const publicSkillNames = new Set(["cf-start", "cf-architecture-map"]);
+  const publicSkillNames = new Set(["cf-start", "cf-architecture-map", "cf-cognitive"]);
 
   for (const skill of skills) {
     const isPublic = publicSkillNames.has(skill.name);

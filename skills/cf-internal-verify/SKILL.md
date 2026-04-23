@@ -6,12 +6,10 @@ Use this at the end of a completed bounded unit.
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
-- Read `.cflow/architecture.md`.
-- Read `.cflow/refactor-brief.md` if it exists.
+- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture-map`.
+- Read architecture plus existing `.cflow/refactor-brief.md`.
 - If the completed unit or touched area is not clear enough to verify, stop and route to `cf-start` first.
-- Re-check the touched area and the repository state.
-- Treat the repository as the source of truth.
+- Re-check the touched area and treat repository state as the source of truth.
 
 ## Goal
 
@@ -51,13 +49,7 @@ If a move, rename, split, merge, or re-export happened, run an explicit referenc
 
 ## Output format
 
-Provide exactly these sections:
-
-1. **Checks attempted**
-2. **Checks passed**
-3. **Checks not run**
-4. **Confidence and remaining risk**
-5. **Recommended next action**
+Return sections: **Checks attempted**, **Checks passed**, **Checks not run**, **Confidence and remaining risk**, **Recommended next action**.
 
 ## Artifact updates
 

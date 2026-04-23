@@ -6,20 +6,16 @@ Use this to apply one bounded **split-oriented** cleanup step.
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
-- Read `.cflow/architecture.md`.
-- Read `.cflow/refactor-brief.md` first if it exists.
-- If no brief exists, continue only when the prompt already gives an explicit, local, behavior-preserving scope.
-- If no brief exists and the scope is not explicit and local, stop before implementation and route to `cf-start` or the correct internal skill.
+- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture-map`.
+- Read architecture plus existing `.cflow/refactor-brief.md`.
+- Without a brief, continue only with an explicit, local, behavior-preserving scope; otherwise route to `cf-start` or the correct internal skill.
 - If there is no credible safety lock for the current structural move, stop and route to `cf-internal-safety-net` first.
 - If the seam is still not mapped enough to name the hidden workflows, role classification, and safe split direction, stop and route to `cf-internal-concentration-map` instead of guessing.
-- Re-check the touched area before moving code.
-- Verify the repository state before trusting the brief or the prompt.
-- Treat the repository as the source of truth.
+- Re-check the touched area and treat repository state as the source of truth.
 
 ## Goal
 
-Apply the current bounded work unit without widening scope.
+Apply the current bounded work unit or cohesive local unit without widening scope.
 
 This step is for seams where **concentration pressure** dominates.
 
@@ -37,7 +33,7 @@ This step is for seams where **concentration pressure** dominates.
 
 ## Structural step discipline
 
-- Stay within one bounded work unit unless the user explicitly broadens scope.
+- Stay within one bounded work unit or cohesive local unit unless the user explicitly broadens scope.
 - Record meaningful drift between the brief and the codebase.
 - Prefer one meaningful structural move at a time when practical.
 - If the safety lock breaks after a move, stop and investigate before stacking more changes on top.
@@ -66,14 +62,7 @@ Search categories separately when relevant:
 
 ## Output format
 
-Provide exactly these sections:
-
-1. **Current state**
-2. **Work unit executed**
-3. **Checks run**
-4. **Artifacts updated**
-5. **What remains**
-6. **Next action**
+Return sections: **Current state**, **Work unit executed**, **Checks run**, **Artifacts updated**, **What remains**, **Next action**.
 
 ## Artifact updates
 

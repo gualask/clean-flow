@@ -30,13 +30,10 @@ Look for:
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
-- Read `.cflow/architecture.md`.
-- Read `.cflow/refactor-brief.md` if it exists.
-- If no brief exists, continue only when the prompt gives an explicit local or repo-level scope.
-- If no brief exists and the scope is not explicit, stop and route to `cf-start` first.
-- Re-check the repository.
-- Treat the repository as the source of truth.
+- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture-map`.
+- Read architecture plus existing `.cflow/refactor-brief.md`.
+- Without a brief, continue only with an explicit local or repo-level scope; otherwise route to `cf-start`.
+- Re-check the repository and treat it as the source of truth.
 
 ## Analyze in this order
 
@@ -55,15 +52,7 @@ Look for:
 
 ## Output format
 
-Provide exactly these sections:
-
-1. **Concentration scope**
-2. **Dense seams or touched seam**
-3. **Workflow map**
-4. **Role classification and boundary confusion**
-5. **Safe split direction**
-6. **Refactor risks**
-7. **Recommended next action**
+Return sections: **Concentration scope**, **Dense seams or touched seam**, **Workflow map**, **Role classification and boundary confusion**, **Safe split direction**, **Refactor risks**, **Recommended next action**.
 
 ## Artifact updates
 

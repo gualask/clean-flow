@@ -34,8 +34,10 @@ Rules:
 - Use `cf-internal-assessment` when repository-level intervention framing is still needed after architecture context is current.
 - For non-trivial work, create or refresh `.cflow/refactor-brief.md`.
 - Treat `soft-mixed` as a repository-level outcome, not as one executable step.
-- In `soft-mixed`, break the work into bounded work units and assign each unit exactly one `mode`: `split` or `consolidate`.
-- For lightweight paths, propose `cf-internal-work-unit-planning` as the next planning phase before local mapping or execution unless the next active unit is already clearly selected and recorded.
+- In `soft-mixed`, break work into bounded work units only when there is more than one cohesive intervention; assign each work unit exactly one `mode`: `split` or `consolidate`.
+- Do not split one coherent local cleanup into multiple work units just to make the units smaller.
+- For lightweight paths, use the local fast lane when the next cohesive local unit is explicit, local, low-risk, behavior-preserving, and already clear enough to map, lock, or execute.
+- Otherwise propose `cf-internal-work-unit-planning` before local mapping or execution.
 - For hard restructure, propose `cf-internal-target-shape` first, then `cf-internal-migration-unit-planning`.
 - Do not implement yet.
 - Always end fresh assessment at the alignment checkpoint with exactly one focused question.
@@ -49,7 +51,8 @@ Resume from the correct point:
 - if repository-level intervention framing is still unclear -> `cf-internal-assessment`
 - if hard-path direction is chosen but target shape is still unresolved -> `cf-internal-target-shape`
 - if hard-path direction is aligned but migration units are not yet planned -> `cf-internal-migration-unit-planning`
-- if `current work unit` is `none` and the next bounded unit is not yet selected and recorded -> `cf-internal-work-unit-planning`
+- if `current work unit` is `none` and there are multiple credible candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work -> `cf-internal-work-unit-planning`
+- if `current work unit` is `none` but the prompt or brief gives one explicit, local, behavior-preserving cohesive unit -> continue by mapping, locking, or executing that unit instead of forcing planning
 - if an active work unit is selected but not ready -> concentration or fragmentation mapping, or safety-net
 - if an active work unit is ready for structural work -> execute by its declared mode:
   - `split` -> split work
@@ -59,6 +62,6 @@ Resume from the correct point:
 Rules:
 
 - In `soft-mixed`, select the next work unit by local dominant pressure and use that unit's declared mode.
-- Do not jump from lightweight assessment directly into local mapping or execution unless the next active work unit is already explicitly selected in the brief or prompt.
+- Do not jump from lightweight assessment directly into local mapping or execution unless the next cohesive local unit is already explicit in the brief or prompt.
 - Do not silently switch direction without updating the artifacts.
-- Do not execute more than one bounded work unit per invocation unless the user explicitly asked for a broader pass.
+- Do not execute more than one cohesive bounded unit per invocation unless the user explicitly asked for a broader pass.

@@ -72,6 +72,7 @@ Before suggesting a skill change, collect as much of this packet as possible:
 - exact invocation path:
   - `cf-start`
   - `cf-architecture-map`
+  - `cf-cognitive`
   - internal skill reached from flow
   - internal skill invoked directly
 - exact user prompt or the closest faithful paraphrase

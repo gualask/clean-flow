@@ -74,19 +74,15 @@ Once enough decisions are aligned:
 - keep work units concise
 - do not write pseudo-code
 - do not freeze brittle file lists
-- for lightweight paths, recommend `cf-internal-work-unit-planning` unless the next active work unit and its immediate next phase are already explicit and recorded
+- for lightweight paths, use the local fast lane when one cohesive local unit and its immediate next phase are already explicit enough to continue
+- recommend `cf-internal-work-unit-planning` when multiple credible candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work still need sequencing
 - for hard-path restructuring, recommend `cf-internal-target-shape` before migration-unit planning
 
 ## Output rules
 
 If a decision is still open, end with exactly one focused question.
 
-If alignment is now sufficient, provide exactly these sections:
-
-1. **Aligned decisions**
-2. **Remaining exclusions or non-goals**
-3. **Artifacts updated**
-4. **Recommended next action**
+If alignment is now sufficient, return sections: **Aligned decisions**, **Remaining exclusions or non-goals**, **Artifacts updated**, **Recommended next action**.
 
 Do not resume execution from this skill while a material decision is still open.
-Do not skip `cf-internal-work-unit-planning` on lightweight paths unless the next active work unit is already explicitly selected and ready to continue.
+Do not skip `cf-internal-work-unit-planning` on lightweight paths unless the next cohesive local unit is already explicit and ready to continue.

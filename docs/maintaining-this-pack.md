@@ -22,6 +22,7 @@ Cflow has three distinct runtime pieces:
 2. bootstrap
    - `cf-start` is the main supported user-facing workflow entrypoint
    - `cf-architecture-map` is the supported user-facing repository-mapping entrypoint
+   - `cf-cognitive` is the supported user-facing file-level cognitive complexity refactor entrypoint, with optional candidate discovery
    - `cf-architecture-map` creates `.cflow/` when needed
    - `cf-architecture-map` adds `.cflow/` to `.gitignore` when needed
    - `cf-architecture-map` creates or refreshes `.cflow/architecture.md` from the shared asset template when needed
@@ -29,6 +30,7 @@ Cflow has three distinct runtime pieces:
 3. execution
    - `cf-start` handles assessment, alignment, and resume
    - `cf-architecture-map` may be reached directly or internally from other skills that need current architecture context
+   - `cf-cognitive` discovers candidates when needed and performs one local source-file refactor without requiring Cflow artifacts
    - all remaining skills are internal workflow skills
    - internal skills are normally reached from `cf-start`, with context prepared according to each skill contract
 
@@ -71,12 +73,14 @@ docs/     maintainer documentation
 - Cflow does not depend on `AGENTS.md` for manual start or artifact-backed resume.
 - `cf-start` is the main supported user-facing workflow entrypoint.
 - `cf-architecture-map` is the supported standalone repository-mapping entrypoint.
+- `cf-cognitive` is the supported standalone file-level cognitive complexity refactor entrypoint, with optional candidate discovery.
 - `cf-architecture-map` owns the supported bootstrap of `.cflow/`, `.gitignore` for `.cflow/`, and `.cflow/architecture.md`.
 - `cf-start` owns workflow entry plus supported creation or refresh of `.cflow/refactor-brief.md`.
+- `cf-cognitive` does not create or require `.cflow/*` artifacts.
 - `.cflow/*` is Cflow-owned state in the target repository.
 - Internal skills are gated by required context, not by actor identity alone.
 - Internal skills being non-public does not mean they are explicit-only in Codex; routable Cflow workflow skills should remain implicitly invocable so Codex can enter the next step when the task matches the skill description.
-- If a skill is invoked without required architecture context, it must stop and route to `cf-architecture-map`.
+- If an internal workflow skill is invoked without required architecture context, it must stop and route to `cf-architecture-map`.
 - If an internal skill is invoked directly and some earlier workflow context beyond architecture is missing, it must stop and route back to `cf-start` or the required earlier phase.
 - Existing repository docs may be used as evidence during analysis.
 - Files under `docs/` are maintainer documentation, not runtime instructions for models using the skills.
@@ -84,7 +88,9 @@ docs/     maintainer documentation
 - The installer distributes skills; it does not initialize repository state.
 - `soft-mixed` is a repository-level assessment outcome, not an execution mode for one step.
 - Every executable work unit must choose exactly one mode: `split` or `consolidate`.
-- `cf-internal-work-unit-planning` is the lightweight planning phase for ordering bounded work units without carrying hard-path structural context.
+- A local fast lane may skip work-unit planning when one explicit, local, low-risk, behavior-preserving cohesive unit is already clear enough to map, lock, or execute.
+- `cf-internal-work-unit-planning` is the lightweight planning phase for ordering cohesive bounded work units without carrying hard-path structural context.
+- Use work-unit planning when multiple candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work must be sequenced.
 - `cf-internal-target-shape` plus `cf-internal-migration-unit-planning` are reserved for broader hard-path restructuring where the target direction itself must be defined and then proved incrementally.
 - After a non-trivial fresh assessment, `cf-start` must stop at an alignment checkpoint before execution.
 - After that checkpoint, simple confirmation may proceed; any non-trivial reply must enter `cf-internal-brainstorming` until the direction is clear enough.
@@ -195,7 +201,7 @@ Standalone labels:
 - Standalone: `yes`
 - Artifacts: creates or refreshes `.cflow/refactor-brief.md` when needed and routes through `cf-architecture-map` when `.cflow/architecture.md`, `.cflow/`, or `.gitignore` bootstrap work is needed.
 - Execution-state rule: when a bounded unit is completed and no next unit is selected yet, `current work unit` should be `none`; completed-unit history belongs in `Work units` and handoff sections, not in `current work unit`.
-- Typical next step: user simple confirmation into `cf-internal-work-unit-planning` or `cf-internal-target-shape`, depending on the proposed path, or `cf-internal-brainstorming` if the user gives any non-trivial reply at the alignment checkpoint.
+- Typical next step: user simple confirmation into the local fast lane, `cf-internal-work-unit-planning`, or `cf-internal-target-shape`, depending on the proposed path, or `cf-internal-brainstorming` if the user gives any non-trivial reply at the alignment checkpoint.
 
 #### `cf-architecture-map`
 
@@ -207,10 +213,20 @@ Standalone labels:
 - Artifacts: creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and never creates or refreshes `.cflow/refactor-brief.md`.
 - Typical next step: stop after mapping, or continue into `cf-start` when the user wants assessment, planning, or resume.
 
+#### `cf-cognitive`
+
+- Does: finds or refactors one source file at a time to reduce cognitive complexity by simplifying tangled local flow and extracting cohesive file-local helpers while preserving behavior.
+- Use when: the user asks for local cognitive complexity reduction, with or without an explicit file path.
+- Expects: repository state; an explicit source file target is optional. `.cflow/architecture.md` and `.cflow/refactor-brief.md` are not required.
+- Produces: a seven-section report covering candidate selection, target file, complexity hotspots, refactor applied, behavior preservation, checks run, and complexity result plus remaining risk.
+- Standalone: `yes`
+- Artifacts: does not create or update `.cflow/*`.
+- Typical next step: stop after the local refactor and relevant verification, recommend the next discovered candidate if useful, or route to `cf-start` if the work grows beyond local file-by-file cleanup.
+
 Mixed-path rule:
 
 - `soft-mixed` is allowed only as a repository-level outcome.
-- In `soft-mixed`, `cf-start` breaks the work into bounded work units.
+- In `soft-mixed`, `cf-start` breaks the work into bounded work units only when there is more than one cohesive intervention.
 - Each work unit must declare exactly one execution mode: `split` or `consolidate`.
 - There is no `mixed` execution step.
 
@@ -224,7 +240,7 @@ Mixed-path rule:
 - Produces: a five-section assessment report covering premise check, candidate areas, plausible modes, artifact decision, and next action.
 - Standalone: `no`
 - Artifacts: may create or refresh `.cflow/refactor-brief.md`; it must route to `cf-architecture-map` instead of creating or refreshing `.cflow/architecture.md`.
-- Typical next step: `cf-internal-brainstorming`, `cf-internal-work-unit-planning`, or `cf-internal-target-shape`.
+- Typical next step: `cf-internal-brainstorming`, the local fast lane, `cf-internal-work-unit-planning`, or `cf-internal-target-shape`.
 
 #### `cf-internal-brainstorming`
 
@@ -234,7 +250,7 @@ Mixed-path rule:
 - Produces: either one focused question when a decision is still open, or a four-section alignment report.
 - Standalone: `no`
 - Artifacts: may update existing `.cflow/architecture.md` guidance and create or refresh `.cflow/refactor-brief.md` once enough decisions are aligned to route without another alignment pass.
-- Typical next step: `cf-internal-work-unit-planning`, `cf-internal-target-shape`, or the chosen bounded execution path only when the next active unit and its immediate next phase are already explicit.
+- Typical next step: the local fast lane, `cf-internal-work-unit-planning`, `cf-internal-target-shape`, or the chosen bounded execution path only when the next cohesive local unit and its immediate next phase are already explicit.
 
 #### `cf-internal-concentration-map`
 
@@ -258,9 +274,9 @@ Mixed-path rule:
 
 #### `cf-internal-work-unit-planning`
 
-- Does: turns assessed cleanup or refactor pressure into a lightweight ordered backlog of bounded work units before implementation.
-- Use when: assessment or alignment already surfaced multiple credible candidates and you need to choose or sequence the next unit without invoking hard-path planning.
-- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and either an assessed set of candidate areas or an explicit bounded scope to order. If assessment context is still missing, route to `cf-start`; if a broader boundary or packaging decision is still unresolved, route to `cf-internal-target-shape` instead.
+- Does: turns assessed cleanup or refactor pressure into a lightweight ordered backlog of cohesive bounded work units before implementation.
+- Use when: assessment or alignment surfaced multiple credible candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work that needs sequencing without invoking hard-path planning.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and either sequencing pressure or an explicit bounded scope to order. If assessment context is still missing, route to `cf-start`; if one cohesive local unit is already clear, use the local fast lane instead; if a broader boundary or packaging decision is still unresolved, route to `cf-internal-target-shape` instead.
 - Produces: a six-section planning report covering scope, candidate units, ordering logic, recommended next unit, artifacts updated, and next action.
 - Standalone: `no`
 - Artifacts: may create or update `.cflow/refactor-brief.md` while ordering work units, recording dependencies, and setting either an active current work unit or exactly one recommended next unit.
@@ -289,8 +305,8 @@ Mixed-path rule:
 #### `cf-internal-safety-net`
 
 - Does: establishes the smallest credible behavior lock before structural work.
-- Use when: the current work unit is clear and you need a go or no-go decision before editing code.
-- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and a clearly described refactoring surface from the active work unit or explicit local scope.
+- Use when: the current work unit or cohesive local unit is clear and you need a go or no-go decision before editing code.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and a clearly described refactoring surface from the active work unit, local fast lane, or explicit local scope.
 - Produces: a six-section safety-net report covering refactoring surface, behavior to lock, protections, remaining gaps, and next action.
 - Standalone: `no`
 - Artifacts: updates the brief when it exists or is created in the active flow.
@@ -299,8 +315,8 @@ Mixed-path rule:
 #### `cf-internal-boundary-apply`
 
 - Does: applies one bounded split-oriented structural refactor step while preserving behavior.
-- Use when: the active work unit is `mode: split`, the seam is mapped enough, and a credible safety net exists.
-- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and enough seam mapping to name workflows and safe split direction. In the normal flow, the active work unit should be `mode: split`.
+- Use when: the active work unit is `mode: split`, or the local fast lane has one cohesive split-oriented unit, the seam is mapped enough, and a credible safety net exists.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and enough seam mapping to name workflows and safe split direction. In the normal planned flow, the active work unit should be `mode: split`; in the local fast lane, the prompt or brief must make the cohesive local unit explicit.
 - Produces: a six-section execution report covering current state, work executed, checks, artifacts, remaining work, and next action.
 - Standalone: `no`
 - Artifacts: updates the brief when it exists or is created in the active flow.
@@ -309,8 +325,8 @@ Mixed-path rule:
 #### `cf-internal-consolidate-seam`
 
 - Does: applies one bounded consolidation-oriented step to reduce over-fragmentation while preserving behavior, avoids ownership moves with weak payoff, and surfaces discovered bugs separately instead of silently folding them into the same structural pass.
-- Use when: the active work unit is `mode: consolidate`, or the prompt already gives an explicit local seam where the artificial boundary is clear, and a credible safety net exists.
-- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and either a consolidation-ready seam or enough local clarity to tell that the current boundary is artificial. If that boundary is still unclear, route to `cf-internal-fragmentation-map` instead of guessing. In the normal flow, the active work unit should be `mode: consolidate`.
+- Use when: the active work unit is `mode: consolidate`, the local fast lane has one cohesive consolidation-oriented unit, or the prompt already gives an explicit local seam where the artificial boundary is clear, and a credible safety net exists.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and either a consolidation-ready seam or enough local clarity to tell that the current boundary is artificial. If that boundary is still unclear, route to `cf-internal-fragmentation-map` instead of guessing. In the normal planned flow, the active work unit should be `mode: consolidate`; in the local fast lane, the prompt or brief must make the cohesive local unit explicit.
 - Produces: a six-section execution report covering current state, work executed, checks, artifacts, remaining work, and next action.
 - Standalone: `no`
 - Artifacts: updates the brief when it exists or is created in the active flow.
@@ -320,7 +336,7 @@ Mixed-path rule:
 
 - Does: improves naming, control flow, and helper shape in the touched area without reopening architecture.
 - Use when: a bounded structural step is already done and local readability can still improve.
-- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and the touched area from the active work unit.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and the touched area from the active work unit or local fast lane.
 - Produces: a six-section simplification report covering current state, simplifications applied, checks, artifacts, remaining work, and next action.
 - Standalone: `no`
 - Artifacts: updates existing artifacts when the brief exists.
@@ -369,6 +385,7 @@ These two scenarios are mandatory even when only one of them is officially suppo
 
 - `cf-start` must work as the main supported direct human workflow entrypoint.
 - `cf-architecture-map` must work as the supported direct human repository-mapping entrypoint.
+- `cf-cognitive` must work as the supported direct human file-level cognitive complexity refactor entrypoint, including no-file discovery mode.
 - Every remaining skill is an internal workflow skill and is not a supported direct human entrypoint.
 - Internal skills must still remain readable when opened or invoked directly by a human, even when the correct next action is to route to `cf-architecture-map`, `cf-start`, or another earlier required phase.
 - Internal skills may still work when invoked directly if their required context already exists.
@@ -400,7 +417,7 @@ Prefer state-based wording over actor-based wording.
 Good examples:
 
 - `Use when refactor feedback already exists and you want to verify it before acting.`
-- `Use when the current work unit is clear and a behavior lock is needed before edits.`
+- `Use when the current work unit or cohesive local unit is clear and a behavior lock is needed before edits.`
 
 Use actor-based wording only when the actor identity changes the skill behavior.
 
@@ -450,13 +467,14 @@ The most important manual validation is still a real target-repo run:
 1. install the pack into a target repo
 2. invoke `$cf-start` as the standard workflow first-use path
 3. optionally invoke `$cf-architecture-map` as the standalone repository-mapping path
-4. confirm the target repo gets:
+4. optionally invoke `$cf-cognitive` with one explicit source file target and once without a file target in a disposable target repo
+5. confirm the target repo gets:
    - `.agents/skills/...`
    - `.cflow/`
    - `.cflow/architecture.md` when needed
    - `.cflow/refactor-brief.md` when needed
    - `.gitignore` updated with `.cflow/` when needed
-5. if you changed an internal skill contract, confirm that invoking it without the required architecture context routes to `cf-architecture-map`, and that invoking it without some earlier workflow context routes to `cf-start` or the required earlier phase instead of bootstrapping state on its own
+6. if you changed an internal skill contract, confirm that invoking it without the required architecture context routes to `cf-architecture-map`, and that invoking it without some earlier workflow context routes to `cf-start` or the required earlier phase instead of bootstrapping state on its own
 
 ## Related Files
 
@@ -464,6 +482,8 @@ The most important manual validation is still a real target-repo run:
 - `CHANGELOG.md`
 - `skills/cf-architecture-map/SKILL.md`
 - `skills/cf-architecture-map/agents/openai.yaml`
+- `skills/cf-cognitive/SKILL.md`
+- `skills/cf-cognitive/agents/openai.yaml`
 - `skills/cf-start/SKILL.md`
 - `skills/cf-start/assets/architecture.template.md`
 - `skills/cf-start/assets/refactor-brief.template.md`

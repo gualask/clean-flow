@@ -1,5 +1,6 @@
 interface:
   display_name: "Cflow:internal feedback intake"
   short_description: "Validate review feedback before turning it into action"
+  default_prompt: "Use $cf-internal-feedback-intake to validate refactor feedback before acting."
 policy:
   allow_implicit_invocation: true

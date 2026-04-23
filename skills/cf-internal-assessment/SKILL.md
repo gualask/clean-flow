@@ -17,12 +17,9 @@ You must determine:
 
 ## Preflight
 
-1. If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
-2. Read `.cflow/architecture.md`.
-3. Read `.cflow/refactor-brief.md` if it exists.
-4. Re-check the repository.
-5. If current repository state makes `.cflow/architecture.md` stale or materially incomplete for assessment, stop and route to `cf-architecture-map` first.
-6. Treat the repository as the source of truth.
+1. Require current `.cflow/architecture.md`; if missing, stale, or materially incomplete, stop and route to `cf-architecture-map`.
+2. Read architecture plus existing `.cflow/refactor-brief.md`.
+3. Re-check the repository and treat it as the source of truth.
 
 ## Premise check
 
@@ -61,13 +58,7 @@ If assessment identifies candidate intervention areas worth carrying forward and
 
 ## Output format
 
-Provide exactly these sections:
-
-1. **Premise check**
-2. **Candidate intervention areas**
-3. **Plausible intervention modes**
-4. **Artifact decision**
-5. **Recommended next action**
+Return sections: **Premise check**, **Candidate intervention areas**, **Plausible intervention modes**, **Artifact decision**, **Recommended next action**.
 
 ## Anti-goals
 

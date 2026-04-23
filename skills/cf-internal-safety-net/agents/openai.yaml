@@ -1,5 +1,6 @@
 interface:
   display_name: "Cflow:internal safety net"
   short_description: "Choose the smallest credible behavior lock before structural edits"
+  default_prompt: "Use $cf-internal-safety-net to choose a behavior lock before structural edits."
 policy:
   allow_implicit_invocation: true

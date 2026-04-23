@@ -19,13 +19,10 @@ Look for:
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
-- Read `.cflow/architecture.md`.
-- Read `.cflow/refactor-brief.md` if it exists.
-- If no brief exists, continue only when the prompt gives an explicit local or repo-level scope.
-- If no brief exists and the scope is not explicit, stop and route to `cf-start` first.
-- Re-check the repository.
-- Treat the repository as the source of truth.
+- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture-map`.
+- Read architecture plus existing `.cflow/refactor-brief.md`.
+- Without a brief, continue only with an explicit local or repo-level scope; otherwise route to `cf-start`.
+- Re-check the repository and treat it as the source of truth.
 
 ## Analyze in this order
 
@@ -41,14 +38,7 @@ Look for:
 
 ## Output format
 
-Provide exactly these sections:
-
-1. **Fragmentation scope**
-2. **Artificial boundaries**
-3. **Indirection cost**
-4. **Consolidation candidates**
-5. **Refactor risks**
-6. **Recommended next action**
+Return sections: **Fragmentation scope**, **Artificial boundaries**, **Indirection cost**, **Consolidation candidates**, **Refactor risks**, **Recommended next action**.
 
 ## Artifact updates
 

@@ -1,5 +1,6 @@
 interface:
   display_name: "Cflow:internal work unit planning"
-  short_description: "Order assessed work units and choose the recommended next unit"
+  short_description: "Order cohesive work units and choose the recommended next unit"
+  default_prompt: "Use $cf-internal-work-unit-planning to order cohesive refactor work units."
 policy:
   allow_implicit_invocation: true

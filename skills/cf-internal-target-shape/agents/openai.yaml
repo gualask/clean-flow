@@ -1,5 +1,6 @@
 interface:
   display_name: "Cflow:internal target shape"
   short_description: "Define the target direction for a broader structural change"
+  default_prompt: "Use $cf-internal-target-shape to define the target direction for a hard restructure."
 policy:
   allow_implicit_invocation: true

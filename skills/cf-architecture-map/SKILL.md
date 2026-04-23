@@ -56,14 +56,7 @@ When bootstrapping or refreshing the architecture map:
 
 ## Output rules
 
-Provide exactly these sections:
-
-1. **Repository context**
-2. **External boundaries**
-3. **Current boundary and packaging model**
-4. **Architecture fit**
-5. **Artifacts updated**
-6. **Recommended next action**
+Return sections: **Repository context**, **External boundaries**, **Current boundary and packaging model**, **Architecture fit**, **Artifacts updated**, **Recommended next action**.
 
 ## Artifact updates
 

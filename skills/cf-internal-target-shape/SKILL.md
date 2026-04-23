@@ -10,14 +10,10 @@ Define a bounded, repository-fitting target shape for a hard restructure.
 
 ## Preflight
 
-1. If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
-2. If `.cflow/refactor-brief.md` is missing, stop and route to `cf-start` first.
-3. Read `.cflow/architecture.md`.
-4. Read `.cflow/refactor-brief.md`.
-5. If hard restructure is not already justified, stop and route to `cf-start`.
-6. If unresolved user steering still blocks target-shape decisions, stop and route to `cf-internal-brainstorming`.
-7. Re-check the repository.
-8. Treat the repository as the source of truth.
+1. Require current `.cflow/architecture.md` and `.cflow/refactor-brief.md`; route to `cf-architecture-map` or `cf-start` if missing.
+2. If hard restructure is not already justified, route to `cf-start`.
+3. If unresolved user steering still blocks target-shape decisions, route to `cf-internal-brainstorming`.
+4. Re-check the repository and treat it as the source of truth.
 
 ## Rules
 
@@ -32,14 +28,7 @@ Define a bounded, repository-fitting target shape for a hard restructure.
 
 ## Output format
 
-Provide exactly these sections:
-
-1. **Hard-path rationale**
-2. **Target boundary model**
-3. **Target packaging direction**
-4. **Migration constraints**
-5. **Artifacts updated**
-6. **Recommended next action**
+Return sections: **Hard-path rationale**, **Target boundary model**, **Target packaging direction**, **Migration constraints**, **Artifacts updated**, **Recommended next action**.
 
 ## Artifact updates
 

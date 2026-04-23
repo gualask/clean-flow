@@ -14,9 +14,10 @@ When the next phase is already clear from repository state and Cflow artifacts, 
 
 Handle fresh assessment, artifact-backed resume, or review/verify re-entry through `cf-start`.
 
-For non-trivial execution paths:
+For fresh work after assessment and alignment:
 
-- lightweight cleanup or refactor must enter `cf-internal-work-unit-planning` before local mapping or execution, unless the next active work unit is already clearly selected and recorded
+- local fast lane may skip work-unit planning when the scope is explicit, local, low-risk, behavior-preserving, and already has one cohesive stop condition
+- lightweight cleanup or refactor must enter `cf-internal-work-unit-planning` before local mapping or execution when there are multiple credible candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work
 - hard-path restructuring must enter `cf-internal-target-shape` and then `cf-internal-migration-unit-planning` before implementation
 
 ## Hard rule
@@ -56,100 +57,41 @@ Ensure you have read these references in this invocation when their trigger cond
 
 Use `assets/refactor-brief.template.md` as the source template whenever brief bootstrap is required.
 
-## Intent modes
-
-Infer the current intent from the user's prompt.
-
-Use these modes:
-
-- **assessment-only**
-- **assessment-then-alignment**
-- **resume-existing-work**
-- **review-or-verify**
-
 ## Fresh assessment
 
-Internally perform:
+Use [references/routing.md](references/routing.md) for intent inference, fresh assessment details, and path selection.
 
-1. architecture map when missing or stale
-2. repository assessment
-3. concentration lens
-4. fragmentation lens
-5. provisional intervention mode
-6. artifact updates
+At a high level:
 
-Determine:
+1. ensure architecture context is current
+2. assess repository-level intervention pressure
+3. apply concentration and fragmentation lenses
+4. frame the proposed path
+5. update artifacts when needed
 
-- whether intervention is justified
-- candidate intervention areas worth tracking in the brief
-- dominant pressure: concentration | fragmentation | mixed | neither
-- intervention mode: soft-split | soft-consolidate | soft-mixed | hard-restructure | no-structural-refactor
-
-Rules:
-
-- Keep assessment repository-level.
-- If `.cflow/architecture.md` is missing, stale, or materially incomplete, use `cf-architecture-map` before finalizing repository-level assessment.
-- Use `cf-internal-assessment` when repository-level intervention framing is still needed after architecture context is current.
-- For non-trivial work, create or refresh `.cflow/refactor-brief.md`.
-- Treat `soft-mixed` as a repository-level outcome, not as one executable step.
-- In `soft-mixed`, break the work into bounded work units and assign each unit exactly one `mode`: `split` or `consolidate`.
-- For lightweight paths, propose `cf-internal-work-unit-planning` as the next planning phase before local mapping or execution unless the next active unit is already clearly selected and recorded.
-- For hard restructure, propose `cf-internal-target-shape` first, then `cf-internal-migration-unit-planning`.
-- Do not implement yet.
-- Always end fresh assessment at the alignment checkpoint with exactly one focused question.
+Do not implement during fresh assessment.
+Always end non-trivial fresh assessment at the alignment checkpoint with exactly one focused question.
 
 ## Resume
 
 Resume is not a phase. Re-enter the correct phase using the brief and the repository.
 
-Rules:
-
-- If `.cflow/architecture.md` is missing, stale, or materially incomplete for the current repository state, use `cf-architecture-map` first.
-- If the brief is stale, or repository changes made the recorded path or work-unit state unreliable, reassess first.
-- If repository-level intervention framing is still unclear after architecture context is current, use `cf-internal-assessment`.
-- If hard-path direction is chosen but target shape is still unresolved, use `cf-internal-target-shape`.
-- If hard-path direction is aligned but migration units are not yet planned, use `cf-internal-migration-unit-planning`.
-- If `current work unit` is `none` and the next bounded unit is not yet selected and recorded, use `cf-internal-work-unit-planning`.
-- If an active work unit exists and its seam still needs mapping, continue into the matching map skill.
-- If an active work unit exists and mapping is sufficient but behavior is not yet locked, continue into `cf-internal-safety-net`.
-- If an active work unit exists and it is ready for structural work, execute it by its declared mode.
-- If an active work unit's structural work is already complete, continue into `cf-internal-review` or `cf-internal-verify`.
-- Do not silently switch direction without updating the artifacts.
-- Do not execute more than one bounded work unit per invocation unless the user explicitly asked for a broader pass.
+Use the brief, repository state, and [references/routing.md](references/routing.md) to resume from the correct phase.
+Do not silently switch direction without updating artifacts.
+Do not execute more than one cohesive bounded unit per invocation unless the user explicitly asked for a broader pass.
 
 ## Output rules
 
 ### For fresh assessment
-Provide exactly these sections:
-
-1. **Repository assessment**
-2. **Concentration pressure**
-3. **Fragmentation pressure**
-4. **Proposed path**
-5. **Artifacts updated**
-6. **Alignment checkpoint**
+Return sections: **Repository assessment**, **Concentration pressure**, **Fragmentation pressure**, **Proposed path**, **Artifacts updated**, **Alignment checkpoint**.
 
 End with exactly one focused question.
 
 ### For execution or resume progress
-Provide exactly these sections:
-
-1. **Current state**
-2. **Work unit executed**
-3. **Checks run**
-4. **Artifacts updated**
-5. **What remains**
-6. **Next action**
+Return sections: **Current state**, **Work unit executed**, **Checks run**, **Artifacts updated**, **What remains**, **Next action**.
 
 ### For reassessment without code changes
-Provide exactly these sections:
-
-1. **Current state**
-2. **Reassessment result**
-3. **Checks run**
-4. **Artifacts updated**
-5. **What remains**
-6. **Next action**
+Return sections: **Current state**, **Reassessment result**, **Checks run**, **Artifacts updated**, **What remains**, **Next action**.
 
 ## Artifact update baseline
 

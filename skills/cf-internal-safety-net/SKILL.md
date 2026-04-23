@@ -1,18 +1,15 @@
 ---
 name: cf-internal-safety-net
-description: Establish a behavior lock before structural changes. Use after the current work unit is clear and before bounded structural edits.
+description: Establish a behavior lock before structural changes. Use after the current work unit or cohesive local unit is clear and before bounded structural edits.
 ---
 Use this before a structural move, not before discovery.
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
-- Read `.cflow/architecture.md`.
-- Read `.cflow/refactor-brief.md` first if it exists.
-- If no brief exists, only continue when the prompt already gives an explicit, local, behavior-preserving scope.
-- If no brief exists and the scope is not explicit and local, stop before designing checks and route to `cf-start` or the correct internal skill.
-- If a brief exists but the current work unit or refactoring surface is still too unclear to name the behavior to lock, stop and route back to the correct planning or map skill before designing checks.
-- Verify the repository state before trusting the brief or the prompt.
+- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture-map`.
+- Read architecture plus existing `.cflow/refactor-brief.md`.
+- Without a brief, continue only with an explicit, local, behavior-preserving scope; otherwise route to `cf-start` or the correct internal skill.
+- If a brief exists but the current work unit, cohesive local unit, or refactoring surface is still too unclear to name the behavior to lock, stop and route back to the correct planning or map skill before designing checks.
 - Do not invent a broader cleanup direction in this skill.
 
 ## Goal
@@ -26,6 +23,7 @@ Use the narrowest believable protection that materially reduces refactor risk.
 Identify exactly what is about to change:
 
 - current work unit if a brief exists
+- cohesive local unit if using the local fast lane
 - touched workflow, module, or feature area
 - relevant boundaries that could be disturbed
 - behavior that must remain stable
@@ -61,14 +59,7 @@ For each part of the refactoring surface, ask:
 
 ## Required output
 
-Provide exactly these sections:
-
-1. **Refactoring surface**
-2. **Behavior to lock**
-3. **Existing protections**
-4. **Added or recommended protections**
-5. **Remaining gaps**
-6. **Go / no-go and recommended next action**
+Return sections: **Refactoring surface**, **Behavior to lock**, **Existing protections**, **Added or recommended protections**, **Remaining gaps**, **Go / no-go and recommended next action**.
 
 ## Artifact updates
 

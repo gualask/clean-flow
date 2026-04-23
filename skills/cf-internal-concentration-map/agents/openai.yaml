@@ -1,5 +1,6 @@
 interface:
   display_name: "Cflow:internal concentration map"
   short_description: "Map concentration pressure and safe split direction for a seam"
+  default_prompt: "Use $cf-internal-concentration-map to map concentration pressure and split direction."
 policy:
   allow_implicit_invocation: true
