@@ -11,6 +11,7 @@ Use this to apply one bounded **split-oriented** cleanup step.
 - Read `.cflow/refactor-brief.md` first if it exists.
 - If no brief exists, continue only when the prompt already gives an explicit, local, behavior-preserving scope.
 - If no brief exists and the scope is not explicit and local, stop before implementation and route to `cf-start` or the correct `cf-phase-*` skill.
+- If there is no credible safety lock for the current structural move, stop and route to `cf-step-safety-net` first.
 - If the seam is still not mapped enough to name the hidden workflows, role classification, and safe split direction, stop and route to `cf-phase-concentration-map` instead of guessing.
 - Re-check the touched area before moving code.
 - Verify the repository state before trusting the brief or the prompt.
@@ -44,13 +45,15 @@ This step is for seams where **concentration pressure** dominates.
 
 ## Before finishing
 
-Run the smallest relevant verification you can from this list:
+Run at least one relevant verification from this list when one is available:
 
 - targeted tests
 - lint
 - typecheck
 - build
 - narrow smoke check
+
+If no relevant verification is available, say that explicitly in `Checks run` or `What remains`.
 
 If you moved, renamed, split, or re-exported symbols, also run an explicit **reference audit** for the touched names and paths.
 Search categories separately when relevant:
@@ -73,6 +76,8 @@ Provide exactly these sections:
 6. **Next action**
 
 ## Artifact updates
+
+If `.cflow/refactor-brief.md` is missing and this step produces resumable execution state, create it before returning.
 
 If a brief exists or you create one, update before stopping:
 

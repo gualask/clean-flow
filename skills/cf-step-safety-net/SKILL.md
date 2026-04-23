@@ -11,6 +11,7 @@ Use this before a structural move, not before discovery.
 - Read `.cflow/refactor-brief.md` first if it exists.
 - If no brief exists, only continue when the prompt already gives an explicit, local, behavior-preserving scope.
 - If no brief exists and the scope is not explicit and local, stop before designing checks and route to `cf-start` or the correct `cf-phase-*` skill.
+- If a brief exists but the current work unit or refactoring surface is still too unclear to name the behavior to lock, stop and route back to the correct planning or map skill before designing checks.
 - Verify the repository state before trusting the brief or the prompt.
 - Do not invent a broader cleanup direction in this skill.
 
@@ -47,6 +48,7 @@ Rules:
 - Characterization tests lock current behavior, not ideal behavior.
 - Do not weaken or rewrite tests just to make a refactor pass.
 - If the area has no credible lock and cannot be checked reasonably, say so explicitly.
+- If remaining gaps make the structural move too risky, return a `no-go` outcome and do not route directly into execution.
 
 ## Phase 3: coverage audit
 
@@ -69,6 +71,8 @@ Provide exactly these sections:
 6. **Go / no-go and recommended next action**
 
 ## Artifact updates
+
+If `.cflow/refactor-brief.md` is missing and this pass produces resumable safety-net state, create it before returning.
 
 If a brief exists or you create one, update before stopping:
 

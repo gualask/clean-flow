@@ -11,6 +11,8 @@ Resolve only the decisions that materially change the cleanup or refactor.
 This is a lightweight alignment step, not a spec-writing phase.
 Stay in this phase until the direction is clear enough to proceed safely.
 
+Alignment is sufficient only when the next phase, scope boundaries, exclusions, and whether to continue are explicit enough to route without another alignment pass.
+
 ## Preflight
 
 1. Read `.cflow/architecture.md` if it exists.
@@ -67,11 +69,11 @@ Rules:
 Once enough decisions are aligned:
 
 - update `.cflow/architecture.md` if repository guidance became clearer
-- create or refresh `.cflow/refactor-brief.md` if the work is non-trivial
+- create or refresh `.cflow/refactor-brief.md` if the work is non-trivial or the aligned decisions now create resumable handoff state
 - keep work units concise
 - do not write pseudo-code
 - do not freeze brittle file lists
-- for lightweight paths, recommend `cf-phase-work-unit-planning` unless the next active work unit is already clear and recorded
+- for lightweight paths, recommend `cf-phase-work-unit-planning` unless the next active work unit and its immediate next phase are already explicit and recorded
 - for hard-path restructuring, recommend `cf-phase-target-shape` before migration-unit planning
 
 ## Output rules

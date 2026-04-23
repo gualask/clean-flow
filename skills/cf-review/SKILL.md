@@ -39,6 +39,11 @@ Review for:
 - whether a broader change is being smuggled in without justification
 - whether ownership was moved without materially simplifying the caller
 
+## Recommendation rules
+
+- If structure is acceptable and only factual closure is missing, recommend `cf-verify`.
+- If one more bounded pass is needed, name the exact next phase or step rather than recommending generic more work.
+
 ## Output format
 
 Provide exactly these sections:

@@ -32,8 +32,8 @@ It does not assume that every skill already enforces that routing with the same 
 | `cf-phase-brainstorming` | internal | no | conditional | an already assessed direction plus a non-trivial reply or concrete decision to resolve; repository facts must be checkable | route to `cf-start` for assessment or alignment context |
 | `cf-phase-concentration-map` | internal | no | conditional | architecture map plus repository check; brief optional; if no brief exists, the prompt must give an explicit local or repo-level scope | route to `cf-start` or the assessment path first |
 | `cf-phase-fragmentation-map` | internal | no | conditional | architecture map plus repository check; brief optional; if no brief exists, the prompt must give an explicit local or repo-level scope | route to `cf-start` or the assessment path first |
-| `cf-phase-work-unit-planning` | internal | no | conditional | architecture map plus either an assessed set of credible candidate areas or an explicit bounded scope to order; brief optional | route to `cf-start` or `cf-phase-target-shape` when assessment or structural direction is still unclear |
-| `cf-phase-target-shape` | internal | no | conditional | hard path already justified; `.cflow/architecture.md` and `.cflow/refactor-brief.md` already present | route to `cf-start`, then reassess or align before hard-path design |
+| `cf-phase-work-unit-planning` | internal | no | conditional | architecture map plus either an assessed set of credible candidate areas or an explicit bounded scope to order; brief optional | route to `cf-start` when assessment context is missing, or to `cf-phase-target-shape` when structural direction is still unresolved |
+| `cf-phase-target-shape` | internal | no | conditional | hard path already justified; `.cflow/architecture.md` and `.cflow/refactor-brief.md` already present | route to `cf-start` when hard restructure is not justified, or to `cf-phase-brainstorming` when unresolved user steering still blocks target-shape decisions |
 | `cf-phase-migration-unit-planning` | internal | no | conditional | target direction already aligned; `.cflow/architecture.md` and `.cflow/refactor-brief.md` already present | route to `cf-start` or `cf-phase-target-shape` first |
 | `cf-step-safety-net` | internal | no | conditional | architecture map plus a clear current work unit; if no brief exists, the prompt must give an explicit local, behavior-preserving scope | stop and route to `cf-start` or the correct `cf-phase-*` skill |
 | `cf-step-boundary-apply` | internal | no | conditional | architecture map plus a mapped split-oriented work unit; if no brief exists, the prompt must give an explicit local, behavior-preserving scope | stop and route to `cf-start` or `cf-phase-concentration-map` |
@@ -48,11 +48,11 @@ It does not assume that every skill already enforces that routing with the same 
 | Skill | `.cflow/architecture.md` expectation | `.cflow/refactor-brief.md` expectation | Artifact behavior | May edit code |
 | --- | --- | --- | --- | --- |
 | `cf-start` | optional | optional | full bootstrap and refresh of Cflow artifacts | via internal routing |
-| `cf-phase-discovery` | optional | optional | may create or refresh `architecture.md`; may create or refresh `refactor-brief.md` for non-trivial work | no |
-| `cf-phase-brainstorming` | optional | optional | may refresh `architecture.md`; may create or refresh `refactor-brief.md` once alignment is sufficient | no |
+| `cf-phase-discovery` | optional | optional | may create or refresh `architecture.md`; may create or refresh `refactor-brief.md` for non-trivial work or resumable discovery state | no |
+| `cf-phase-brainstorming` | optional | optional | may refresh `architecture.md`; may create or refresh `refactor-brief.md` once alignment is sufficient or resumable alignment state exists | no |
 | `cf-phase-concentration-map` | required | optional; explicit scope if absent | may create or update `refactor-brief.md`; may also update assessment and target fields when the likely mode changes | no |
 | `cf-phase-fragmentation-map` | required | optional; explicit scope if absent | may create or update `refactor-brief.md`; may also update assessment and target fields when the likely mode changes | no |
-| `cf-phase-work-unit-planning` | required | optional | may create or update `refactor-brief.md` while ordering candidate work units and setting the recommended next unit | no |
+| `cf-phase-work-unit-planning` | required | optional | may create or update `refactor-brief.md` while ordering candidate work units, setting the recommended next unit, and persisting resumable planning state | no |
 | `cf-phase-target-shape` | required | required | refresh existing brief fields for hard-path direction | no |
 | `cf-phase-migration-unit-planning` | required | required | refresh existing brief fields for migration planning | no |
 | `cf-step-safety-net` | required | optional; explicit local scope if absent | may create or update `refactor-brief.md` while locking the current work unit | no |

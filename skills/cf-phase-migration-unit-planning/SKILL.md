@@ -13,9 +13,10 @@ Translate a hard path into reviewable, bounded migration units.
 1. If `.cflow/architecture.md` or `.cflow/refactor-brief.md` is missing, stop and route to `cf-start` first.
 2. Read `.cflow/architecture.md`.
 3. Read `.cflow/refactor-brief.md`.
-4. If the target direction is not already aligned, stop and route to `cf-start` or `cf-phase-target-shape`.
-5. Re-check the repository.
-6. Treat the repository as the source of truth.
+4. If a hard path is justified but the target direction is not yet aligned, stop and route to `cf-phase-target-shape`.
+5. If the current state does not justify hard-path planning at all, stop and route to `cf-start`.
+6. Re-check the repository.
+7. Treat the repository as the source of truth.
 
 ## Rules
 
@@ -23,9 +24,10 @@ Translate a hard path into reviewable, bounded migration units.
 - Prefer the smallest first unit that proves the target direction.
 - Keep each migration unit behavior-preserving unless a behavior change was explicitly requested.
 - Record what is intentionally deferred.
-- Choose and record the first migration unit that should prove or de-risk the target direction.
-- If that first unit is clear enough to continue immediately, mark it as the active current work unit.
+- Choose and record exactly one first migration unit that should prove or de-risk the target direction.
+- Mark that first migration unit as the active current work unit only when its goal, dependency order, and immediate next phase are explicit enough to continue without another planning pass.
 - If planning stops before activation, leave `current work unit` as `none` and record that first migration unit as `recommended next work unit`.
+- Never finish planning with both `current work unit` and `recommended next work unit` unset.
 
 ## Output format
 
@@ -47,5 +49,5 @@ Update:
 - `Handoff notes`
 - `Unknowns to re-check`
 
-- In `Execution state`, set `current work unit` to the active selected migration unit when one is ready to continue.
+- In `Execution state`, set `current work unit` to the active selected migration unit only when that unit is ready to continue without another planning pass.
 - Otherwise set `current work unit` to `none` and set `recommended next work unit` to the first migration unit.

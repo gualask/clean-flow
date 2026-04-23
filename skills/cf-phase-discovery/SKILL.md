@@ -17,7 +17,7 @@ You must determine:
 - architecture fit
 - whether intervention is actually justified
 - which intervention modes are plausible
-- whether `.cflow/architecture.md` and `.cflow/refactor-brief.md` should be created or refreshed
+- whether `.cflow/architecture.md` and `.cflow/refactor-brief.md` must be created or refreshed in this pass
 
 ## Preflight
 
@@ -71,7 +71,9 @@ Later work units must still choose `split` or `consolidate`.
 
 Update or create `.cflow/architecture.md` when it is missing, stale, or materially incomplete.
 
-Update or create `.cflow/refactor-brief.md` when the work is non-trivial, risky, multi-step, or likely to resume later.
+Update or create `.cflow/refactor-brief.md` when the work is non-trivial, risky, multi-step, or needs resumable handoff state.
+
+If discovery identifies candidate intervention areas worth carrying forward and the brief is missing, create it before returning.
 
 ## Output format
 

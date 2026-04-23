@@ -11,6 +11,7 @@ Do not reopen repository architecture in this skill.
 - If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
 - Read `.cflow/architecture.md`.
 - Read `.cflow/refactor-brief.md` first if it exists.
+- If the touched area is not clearly anchored in a recently completed bounded structural step, stop and route to `cf-start` first.
 - If no brief exists, only continue when the prompt already gives an explicit, local touched area.
 - If no brief exists and the touched area is not explicit and local, stop before edits and route to `cf-start` or the correct `cf-phase-*` skill.
 - Re-check the touched area and repository state.
@@ -34,6 +35,7 @@ Improve local readability without changing the chosen structural direction.
 - Do not split files just to make them shorter.
 - Avoid vague names like `manager`, `processor`, `util`, `helper`, or `common` unless the role is genuinely narrow and explicit.
 - Stop if the simplification would reopen structural choices.
+- After editing code, run at least one lightweight relevant check when one is available.
 
 ## Output format
 

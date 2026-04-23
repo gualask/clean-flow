@@ -11,6 +11,7 @@ Use this at the end of a completed bounded unit.
 - Read `.cflow/refactor-brief.md` if it exists.
 - If the completed unit or touched area is not clear enough to verify, stop and route to `cf-start` first.
 - Re-check the touched area and the repository state.
+- Treat the repository as the source of truth.
 
 ## Goal
 
@@ -24,6 +25,7 @@ Collect factual evidence that the touched area still works.
 - Use the safety net and planned checks when they exist.
 - If the project has no formal checks, use the narrowest credible smoke test or inspection you can.
 - If you cannot verify, say exactly what is missing.
+- Never finish without either running at least one factual check or stating exactly why no factual check could be run.
 
 ## Verification sources
 
@@ -39,7 +41,7 @@ Use whichever are relevant and available:
 - diff inspection for obviously dangerous drift
 - reference audit when names or files moved
 
-If a move, rename, split, merge, or re-export happened, search reference categories separately when relevant rather than relying on one broad search:
+If a move, rename, split, merge, or re-export happened, run an explicit reference audit and search these categories separately when relevant rather than relying on one broad search:
 
 - direct calls and type references
 - string literals containing old names or paths

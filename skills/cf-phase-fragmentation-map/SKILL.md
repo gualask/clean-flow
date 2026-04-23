@@ -37,6 +37,7 @@ Look for:
    - consolidate
    - leave it alone
    - defer because the seam is not yet worth touching
+6. If consolidation is not justified, do not route into `cf-step-safety-net` or structural execution from this skill.
 
 ## Output format
 
@@ -50,6 +51,8 @@ Provide exactly these sections:
 6. **Recommended next action**
 
 ## Artifact updates
+
+If `.cflow/refactor-brief.md` is missing and this pass produces resumable seam-mapping state, create it before returning.
 
 If a brief exists or is created, update:
 

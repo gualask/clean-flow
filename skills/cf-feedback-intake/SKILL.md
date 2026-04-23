@@ -15,6 +15,7 @@ Turn feedback into a verified next action instead of a reflex edit.
 - Read `.cflow/refactor-brief.md` if it exists.
 - If the feedback target or current path is too unclear to verify, stop and route to `cf-start` first.
 - Re-check the touched area and repository state.
+- Treat the repository as the source of truth.
 
 ## Rules
 
@@ -27,12 +28,14 @@ Turn feedback into a verified next action instead of a reflex edit.
   - ambiguous feedback
   - style-only feedback that does not justify churn
   - feedback that conflicts with repository evidence or agreed constraints
+- Place the feedback in exactly one primary assessment bucket before recommending the next action.
 - If one clarification is truly needed, ask one focused question only.
 - Only after that recommend whether to:
   - accept it
   - narrow it
   - reject it
   - route back to another Cflow skill
+- If you recommend accepting or narrowing the feedback, name the exact next Cflow skill instead of suggesting generic follow-up work.
 
 ## Output format
 

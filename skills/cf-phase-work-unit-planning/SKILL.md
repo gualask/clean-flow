@@ -15,7 +15,7 @@ Use this when the next step is not "design a new repository shape", but "choose 
 1. If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
 2. Read `.cflow/architecture.md`.
 3. Read `.cflow/refactor-brief.md` if it exists.
-4. If there is no credible assessed direction, no candidate intervention areas, and no explicit bounded scope to order, stop and route to `cf-start` or `cf-phase-discovery`.
+4. If there is no assessed direction, no candidate intervention areas, and no explicit bounded scope to order, stop and route to `cf-start`.
 5. If a broader boundary or packaging decision is still unresolved, stop and route to `cf-phase-target-shape` instead of faking lightweight planning.
 6. Re-check the candidate areas in the repository.
 7. Treat the repository as the source of truth.
@@ -32,8 +32,9 @@ Use this when the next step is not "design a new repository shape", but "choose 
 - Keep each work unit explicitly `mode: split` or `mode: consolidate`.
 - Choose exactly one `recommended-next` unit.
 - Do not activate multiple work units at once.
-- If the next unit is clear enough to continue into local mapping, safety-net, or execution, mark it as the active current work unit.
-- If planning stops before activation, leave `current work unit` as `none` and record exactly one `recommended next work unit`.
+- Mark a unit as the active current work unit only when its goal, mode, dependency order, and immediate next phase are explicit enough to continue without another planning pass.
+- If no unit meets that activation threshold, leave `current work unit` as `none` and record exactly one `recommended next work unit`.
+- Never finish planning with both `current work unit` and `recommended next work unit` unset.
 - Do not invent a repo-wide target shape in this skill.
 - Do not freeze brittle file lists when the unit can be named more stably in workflow or seam terms.
 
@@ -50,6 +51,8 @@ Provide exactly these sections:
 
 ## Artifact updates
 
+If `.cflow/refactor-brief.md` is missing and this planning pass produces resumable work-unit state, create it before returning.
+
 If a brief exists or is created, update:
 
 - `Work units`
@@ -57,7 +60,7 @@ If a brief exists or is created, update:
 - `Handoff notes`
 - `Unknowns to re-check`
 
-- In `Execution state`, set `current work unit` to the active selected unit when one is ready to continue.
+- In `Execution state`, set `current work unit` to the active selected unit only when that unit is ready to continue without another planning pass.
 - Otherwise set `current work unit` to `none` and set `recommended next work unit` to the best next candidate.
 
 If planning clarifies the near-term path, also update:
