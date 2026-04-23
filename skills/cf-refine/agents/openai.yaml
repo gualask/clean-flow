@@ -1,5 +1,0 @@
-interface:
-  display_name: "Cflow:refine"
-  short_description: "Apply one bounded local refinement pass"
-policy:
-  allow_implicit_invocation: true

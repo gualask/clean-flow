@@ -28,10 +28,9 @@ Cflow has three distinct runtime pieces:
    - `cf-start` creates or refreshes `.cflow/refactor-brief.md` from its asset template when needed
 3. execution
    - `cf-start` handles assessment, alignment, and resume
-   - `cf-refine` is the supported user-facing local refinement entrypoint for one bounded pass without repo-level planning
    - `cf-architecture-map` may be reached directly or internally from other skills that need current architecture context
    - all remaining skills are internal workflow skills
-   - internal skills are normally reached from `cf-start` or `cf-refine`, with context prepared according to each skill contract
+   - internal skills are normally reached from `cf-start`, with context prepared according to each skill contract
 
 For the single-page end-to-end flow, see [workflow-map.md](./workflow-map.md).
 
@@ -72,10 +71,8 @@ docs/     maintainer documentation
 - Cflow does not depend on `AGENTS.md` for manual start or artifact-backed resume.
 - `cf-start` is the main supported user-facing workflow entrypoint.
 - `cf-architecture-map` is the supported standalone repository-mapping entrypoint.
-- `cf-refine` is the supported standalone local-refinement entrypoint.
 - `cf-architecture-map` owns the supported bootstrap of `.cflow/`, `.gitignore` for `.cflow/`, and `.cflow/architecture.md`.
 - `cf-start` owns workflow entry plus supported creation or refresh of `.cflow/refactor-brief.md`.
-- `cf-refine` does not create `.cflow/*` itself and must stay bounded to one local pass.
 - `.cflow/*` is Cflow-owned state in the target repository.
 - Internal skills are gated by required context, not by actor identity alone.
 - Internal skills being non-public does not mean they are explicit-only in Codex; routable Cflow workflow skills should remain implicitly invocable so Codex can enter the next step when the task matches the skill description.
@@ -209,16 +206,6 @@ Standalone labels:
 - Standalone: `yes`
 - Artifacts: creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and never creates or refreshes `.cflow/refactor-brief.md`.
 - Typical next step: stop after mapping, or continue into `cf-start` when the user wants assessment, planning, or resume.
-
-#### `cf-refine`
-
-- Does: applies one bounded local readability or shape cleanup pass without repo-level planning.
-- Use when: the user wants one local refinement step that should stay inside a clear touched area and not become a structural refactor workflow.
-- Expects: an explicit local scope, or a smallest clear local area inferable from the prompt and repository state; existing `.cflow/*` artifacts are optional.
-- Produces: a five-section refine report covering fit, changes, checks, escalations, and next action.
-- Standalone: `yes`
-- Artifacts: does not create `.cflow/*` itself; when extra confidence is needed it may route through `cf-architecture-map` and then use `cf-internal-safety-net`, `cf-internal-review`, or `cf-internal-verify`.
-- Typical next step: stop after the local pass, escalate to `cf-start` when the work is really structural or multi-step, or use `cf-internal-verify` when the pass needs stronger evidence.
 
 Mixed-path rule:
 
@@ -382,7 +369,6 @@ These two scenarios are mandatory even when only one of them is officially suppo
 
 - `cf-start` must work as the main supported direct human workflow entrypoint.
 - `cf-architecture-map` must work as the supported direct human repository-mapping entrypoint.
-- `cf-refine` must work as the supported direct human local-refinement entrypoint.
 - Every remaining skill is an internal workflow skill and is not a supported direct human entrypoint.
 - Internal skills must still remain readable when opened or invoked directly by a human, even when the correct next action is to route to `cf-architecture-map`, `cf-start`, or another earlier required phase.
 - Internal skills may still work when invoked directly if their required context already exists.
@@ -464,15 +450,13 @@ The most important manual validation is still a real target-repo run:
 1. install the pack into a target repo
 2. invoke `$cf-start` as the standard workflow first-use path
 3. optionally invoke `$cf-architecture-map` as the standalone repository-mapping path
-4. optionally invoke `$cf-refine` as the standalone one-pass local refinement path
-5. confirm the target repo gets:
+4. confirm the target repo gets:
    - `.agents/skills/...`
    - `.cflow/`
    - `.cflow/architecture.md` when needed
    - `.cflow/refactor-brief.md` when needed
    - `.gitignore` updated with `.cflow/` when needed
-   - note: `cf-refine` may finish without creating `.cflow/*` when no internal Cflow skill was needed
-6. if you changed an internal skill contract, confirm that invoking it without the required architecture context routes to `cf-architecture-map`, and that invoking it without some earlier workflow context routes to `cf-start` or the required earlier phase instead of bootstrapping state on its own
+5. if you changed an internal skill contract, confirm that invoking it without the required architecture context routes to `cf-architecture-map`, and that invoking it without some earlier workflow context routes to `cf-start` or the required earlier phase instead of bootstrapping state on its own
 
 ## Related Files
 
@@ -480,8 +464,6 @@ The most important manual validation is still a real target-repo run:
 - `CHANGELOG.md`
 - `skills/cf-architecture-map/SKILL.md`
 - `skills/cf-architecture-map/agents/openai.yaml`
-- `skills/cf-refine/SKILL.md`
-- `skills/cf-refine/agents/openai.yaml`
 - `skills/cf-start/SKILL.md`
 - `skills/cf-start/assets/architecture.template.md`
 - `skills/cf-start/assets/refactor-brief.template.md`

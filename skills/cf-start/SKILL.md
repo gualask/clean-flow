@@ -4,7 +4,7 @@ description: Main public workflow entrypoint for Cflow. Use to start or resume c
 ---
 
 This is the main public workflow entrypoint for the pack.
-`cf-architecture-map` and `cf-refine` are also supported public entrypoints, but only for standalone repository mapping and bounded local refinement.
+`cf-architecture-map` is also a supported public entrypoint, but only for standalone repository mapping.
 Do not tell the user to invoke internal skills directly.
 Internal workflow skills are still valid workflow steps when the repository state already fits them.
 Do not behave like a router that only suggests another skill.

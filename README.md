@@ -8,7 +8,6 @@ Supported public entrypoints:
 
 - `cf-start`
 - `cf-architecture-map`
-- `cf-refine`
 
 Internal workflow skills:
 
@@ -83,10 +82,6 @@ For supported workflow first use and resume, start with `cf-start`.
 
 For standalone repository mapping, use `cf-architecture-map`.
 `cf-architecture-map` is the public entrypoint that bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and creates or refreshes `.cflow/architecture.md`.
-
-For one bounded local cleanup pass that should stay local, use `cf-refine`.
-`cf-refine` is the public entrypoint for local readability and shape cleanup without repo-level planning.
-It does not create `.cflow/*` by itself and must route to `cf-start` when the work becomes structural or multi-step.
 
 When `cf-start` needs architecture context, it routes through `cf-architecture-map` internally before continuing.
 

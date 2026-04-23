@@ -29,7 +29,6 @@ It does not assume that every skill already enforces that routing with the same 
 | --- | --- | --- | --- | --- | --- |
 | `cf-start` | public | yes | yes | repository state only; existing `.cflow/*` artifacts are optional | bootstrap or reassess, then continue internally |
 | `cf-architecture-map` | public | yes | yes | repository state only; existing `.cflow/architecture.md` is optional | create or refresh architecture context, then stop or continue from there |
-| `cf-refine` | public | yes | yes | an explicit local scope, or a smallest clear local area inferable from the prompt and repository state; `.cflow/*` artifacts are optional | route to `cf-start` when refine fit or local scope is unclear; route to `cf-architecture-map` first only when escalating into internal safety, review, or verify skills |
 | `cf-internal-assessment` | internal | no | conditional | current `.cflow/architecture.md`; `.cflow/refactor-brief.md` optional | route to `cf-architecture-map` first |
 | `cf-internal-brainstorming` | internal | no | conditional | current `.cflow/architecture.md` plus an already assessed direction and a non-trivial reply or concrete decision to resolve | route to `cf-architecture-map` when architecture is missing, otherwise to `cf-start` for assessment or alignment context |
 | `cf-internal-concentration-map` | internal | no | conditional | architecture map plus repository check; brief optional; if no brief exists, the prompt must give an explicit local or repo-level scope | route to `cf-architecture-map` when architecture is missing, otherwise to `cf-start` or the assessment path first |
@@ -51,7 +50,6 @@ It does not assume that every skill already enforces that routing with the same 
 | --- | --- | --- | --- | --- |
 | `cf-start` | optional | optional | workflow entry plus creation or refresh of `.cflow/refactor-brief.md`; routes to `cf-architecture-map` when architecture bootstrap or refresh is needed | via internal routing |
 | `cf-architecture-map` | optional | optional; ignored by this skill | creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and never creates or refreshes `.cflow/refactor-brief.md` | no |
-| `cf-refine` | optional | optional; ignored by this skill unless internal escalation later updates it | does not create `.cflow/*` itself; may route to `cf-architecture-map` and then use `cf-internal-safety-net`, `cf-internal-review`, or `cf-internal-verify` when extra confidence is needed | yes |
 | `cf-internal-assessment` | required | optional | may create or refresh `.cflow/refactor-brief.md` for non-trivial work or resumable assessment state; never creates or refreshes `architecture.md` | no |
 | `cf-internal-brainstorming` | required | optional | may update existing `architecture.md` guidance and may create or refresh `refactor-brief.md` once alignment is sufficient or resumable alignment state exists | no |
 | `cf-internal-concentration-map` | required | optional; explicit scope if absent | may create or update `refactor-brief.md`; may also update assessment and target fields when the likely mode changes | no |

@@ -61,11 +61,10 @@ test("public entrypoints keep bootstrap and routing ownership split", async () =
     path.join(SKILLS_ROOT, "cf-architecture-map", "SKILL.md"),
     "utf8",
   );
-  const refineBody = await readFile(path.join(SKILLS_ROOT, "cf-refine", "SKILL.md"), "utf8");
 
   assert.match(
     startBody,
-    /`cf-architecture-map` and `cf-refine` are also supported public entrypoints/,
+    /`cf-architecture-map` is also a supported public entrypoint/,
   );
   assert.match(
     startBody,
@@ -85,25 +84,11 @@ test("public entrypoints keep bootstrap and routing ownership split", async () =
     architectureMapBody,
     /never create or refresh `\.cflow\/refactor-brief\.md` in this skill/,
   );
-
-  assert.match(
-    refineBody,
-    /This is a supported public entrypoint for bounded local refinement\./,
-  );
-  assert.match(refineBody, /You do not need `\.cflow\/\*` to start this skill\./);
-  assert.match(
-    refineBody,
-    /Do not create or refresh `\.cflow\/refactor-brief\.md` from this skill itself\./,
-  );
-  assert.match(
-    refineBody,
-    /When the task does not fit `cf-refine`, say so clearly in `Refine fit`, make no code edits, and route to `cf-start`\./,
-  );
 });
 
 test("only public entrypoints omit the cf-internal prefix", async () => {
   const skills = await listSkillDirectories(SKILLS_ROOT);
-  const publicSkillNames = new Set(["cf-start", "cf-architecture-map", "cf-refine"]);
+  const publicSkillNames = new Set(["cf-start", "cf-architecture-map"]);
 
   for (const skill of skills) {
     const isPublic = publicSkillNames.has(skill.name);

@@ -53,7 +53,6 @@ When bootstrapping or refreshing the architecture map:
 - Map the current shape before judging whether refactor work is justified.
 - Do not choose work units, intervention modes, or target shape in this skill.
 - If the user also needs refactor planning or resume, recommend `cf-start` after the map is updated.
-- If the user wants one bounded local cleanup pass without repo-level planning, recommend `cf-refine` after the map is updated.
 
 ## Output rules
 

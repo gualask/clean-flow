@@ -11,7 +11,6 @@ The phase index below is the text fallback if the diagram is not rendered.
 
 - `cf-start` is the main supported direct user entrypoint for workflow execution and resume.
 - `cf-architecture-map` is also a supported direct user entrypoint, but only for standalone repository mapping.
-- `cf-refine` is also a supported direct user entrypoint, but only for one bounded local refinement pass.
 - `cflow-skills install` only syncs `skills/`; it does not create `.cflow/`.
 - All remaining skills are internal workflow steps, not supported user-facing entrypoints.
 - Internal workflow skills should still be implicitly invocable in Codex when their descriptions match the current step.
@@ -25,20 +24,6 @@ The phase index below is the text fallback if the diagram is not rendered.
 flowchart TD
     A[User invokes cf-architecture-map] --> A1[Build or refresh .cflow/architecture.md]
     A1 --> A2[Return map and recommend stop or continue with cf-start]
-
-    B0[User invokes cf-refine] --> B1{Fits one bounded local pass?}
-    B1 -- no --> B
-    B1 -- yes --> B2{Need safety net before edits?}
-    B2 -- yes --> B3[Ensure architecture context with cf-architecture-map]
-    B3 --> B4[cf-internal-safety-net when confidence is needed]
-    B2 -- no --> B5[Local refine pass in cf-refine]
-    B4 --> B5
-    B5 --> B6{Need review or verify after edits?}
-    B6 -- review --> B7[Optional cf-internal-review]
-    B6 -- verify --> B8[Optional cf-internal-verify]
-    B6 -- none --> B9[Stop after local pass]
-    B7 --> B8
-    B8 --> B9
 
     B[User invokes cf-start] --> C{Current architecture map is usable?}
     C -- no or stale --> A1
@@ -105,7 +90,6 @@ flowchart TD
 - Fresh non-trivial work always stops at the alignment checkpoint before implementation.
 - `cf-start` ensures architecture context is current before fresh assessment or resume; when it is not, it routes through `cf-architecture-map` first.
 - `cf-architecture-map` can also be used standalone and stop cleanly after updating `.cflow/architecture.md`.
-- `cf-refine` is a separate public path for one bounded local pass. If the task becomes structural, multi-step, or architecture-shaping, it must route to `cf-start` instead of stretching the refine pass.
 - A short approval can continue directly from the checkpoint.
 - Any non-trivial steering after the checkpoint must go through `cf-internal-brainstorming` first.
 - Repository-level assessment framing may stay inside `cf-start` or use `cf-internal-assessment` when a dedicated pass is needed.
@@ -118,7 +102,6 @@ flowchart TD
 | Stage | Skills | What happens | May edit code |
 | --- | --- | --- | --- |
 | Architecture mapping and bootstrap | `cf-architecture-map` | Creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and returns without planning work units. | No |
-| Local refine entry | `cf-refine` | Applies one bounded local cleanup pass, or routes to `cf-start` when the work is really structural, multi-step, or architecture-shaping. | Yes |
 | Workflow entry and resume | `cf-start` | Uses current artifacts, ensures architecture context is current, and decides whether this is fresh assessment, resume, review, or verify. | Indirectly, only by routing into execution later |
 | Repository assessment | `cf-start`, `cf-internal-assessment` | Checks whether intervention is justified, records candidate intervention areas, and frames plausible direction using the current architecture map. | No |
 | Alignment | `cf-start`, `cf-internal-brainstorming` | Stops after fresh assessment, then resolves user steering before execution continues. | No |
@@ -135,10 +118,6 @@ flowchart TD
 ### Standalone Architecture Map
 
 `cf-architecture-map` -> update `.cflow/architecture.md` -> stop or continue with `cf-start`
-
-### Local Refine
-
-`cf-refine` -> optional `cf-architecture-map` -> optional `cf-internal-safety-net` -> local refine pass -> optional `cf-internal-review` -> optional `cf-internal-verify`
 
 ### Soft Split
 
@@ -164,6 +143,5 @@ flowchart TD
   - `.cflow/architecture.md`
   - `.cflow/refactor-brief.md`
 - `cf-architecture-map` owns bootstrap of `.cflow/`, updates `.gitignore` when needed, and creates or refreshes `.cflow/architecture.md`.
-- `cf-refine` does not create `.cflow/*` itself; it may route through `cf-architecture-map` when internal safety, review, or verify skills need architecture context.
 - `cf-start` owns workflow entry plus creation or refresh of `.cflow/refactor-brief.md` when needed.
 - Execution, review, and verification skills keep the brief current as the handoff record between invocations.
