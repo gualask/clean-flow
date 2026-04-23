@@ -12,7 +12,7 @@ Use this when the next step is not "design a new repository shape", but "choose 
 
 ## Preflight
 
-1. If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
+1. If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
 2. Read `.cflow/architecture.md`.
 3. Read `.cflow/refactor-brief.md` if it exists.
 4. If there is no assessed direction, no candidate intervention areas, and no explicit bounded scope to order, stop and route to `cf-start`.

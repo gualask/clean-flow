@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:architecture map"
+  short_description: "Build or refresh .cflow/architecture.md from repository state"
+policy:
+  allow_implicit_invocation: true

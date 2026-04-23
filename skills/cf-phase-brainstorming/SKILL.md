@@ -15,11 +15,12 @@ Alignment is sufficient only when the next phase, scope boundaries, exclusions, 
 
 ## Preflight
 
-1. Read `.cflow/architecture.md` if it exists.
-2. Read `.cflow/refactor-brief.md` if it exists.
-3. If there is no already assessed direction and no concrete decision to resolve yet, stop and route to `cf-start` first.
-4. Re-check repository facts that matter for the open decisions.
-5. Treat the repository as the source of truth.
+1. If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
+2. Read `.cflow/architecture.md`.
+3. Read `.cflow/refactor-brief.md` if it exists.
+4. If there is no already assessed direction and no concrete decision to resolve yet, stop and route to `cf-start` first.
+5. Re-check repository facts that matter for the open decisions.
+6. Treat the repository as the source of truth.
 
 ## Trigger
 

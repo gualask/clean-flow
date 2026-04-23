@@ -1,9 +1,10 @@
 ---
 name: cf-start
-description: Main and only supported user-facing entrypoint for Cflow. Use to start or resume most cleanup and refactor work, bootstrap .cflow state, evaluate concentration and fragmentation pressure, and stop at an alignment checkpoint before non-trivial execution.
+description: Main public workflow entrypoint for Cflow. Use to start or resume cleanup and refactor work, bootstrap `.cflow/refactor-brief.md`, evaluate concentration and fragmentation pressure, and stop at an alignment checkpoint before non-trivial execution.
 ---
 
-This is the only supported user-facing entrypoint for the pack.
+This is the main public workflow entrypoint for the pack.
+`cf-architecture-map` and `cf-refine` are also supported public entrypoints, but only for standalone repository mapping and bounded local refinement.
 Do not tell the user to invoke internal phase or step skills directly.
 Internal phase and step skills are still valid workflow steps when the repository state already fits them.
 Do not behave like a router that only suggests another skill.
@@ -51,9 +52,9 @@ Ensure you have read these references in this invocation when their trigger cond
 - Ensure you have read [references/routing.md](references/routing.md) before choosing the entry mode when assessment vs resume vs review-or-verify is not trivially obvious from the prompt and repository state.
 - Ensure you have read [references/routing.md](references/routing.md) before finalizing the proposed path for any non-trivial fresh assessment.
 - Ensure you have read [references/routing.md](references/routing.md) before resume routing whenever the next phase is not already obvious from an active current work unit.
-- Ensure you have read [references/artifacts.md](references/artifacts.md) before creating `.cflow/`, touching `.gitignore`, creating or refreshing `.cflow/*`, or deciding which brief fields must be updated.
+- Ensure you have read [references/artifacts.md](references/artifacts.md) before creating or refreshing `.cflow/refactor-brief.md`, or deciding which brief fields must be updated.
 
-Use `assets/architecture.template.md` and `assets/refactor-brief.template.md` as the source templates whenever artifact bootstrap is required.
+Use `assets/refactor-brief.template.md` as the source template whenever brief bootstrap is required.
 
 ## Intent modes
 
@@ -70,17 +71,15 @@ Use these modes:
 
 Internally perform:
 
-1. repository discovery
-2. concentration lens
-3. fragmentation lens
-4. premise check
+1. architecture map when missing or stale
+2. repository assessment
+3. concentration lens
+4. fragmentation lens
 5. provisional intervention mode
 6. artifact updates
 
 Determine:
 
-- repository context and domain gravity
-- current boundary / packaging shape and architecture fit
 - whether intervention is justified
 - candidate intervention areas worth tracking in the brief
 - dominant pressure: concentration | fragmentation | mixed | neither
@@ -89,6 +88,8 @@ Determine:
 Rules:
 
 - Keep assessment repository-level.
+- If `.cflow/architecture.md` is missing, stale, or materially incomplete, use `cf-architecture-map` before finalizing repository-level assessment.
+- Use `cf-phase-assessment` when repository-level intervention framing is still needed after architecture context is current.
 - For non-trivial work, create or refresh `.cflow/refactor-brief.md`.
 - Treat `soft-mixed` as a repository-level outcome, not as one executable step.
 - In `soft-mixed`, break the work into bounded work units and assign each unit exactly one `mode`: `split` or `consolidate`.
@@ -103,7 +104,9 @@ Resume is not a phase. Re-enter the correct phase using the brief and the reposi
 
 Rules:
 
+- If `.cflow/architecture.md` is missing, stale, or materially incomplete for the current repository state, use `cf-architecture-map` first.
 - If the brief is stale, or repository changes made the recorded path or work-unit state unreliable, reassess first.
+- If repository-level intervention framing is still unclear after architecture context is current, use `cf-phase-assessment`.
 - If hard-path direction is chosen but target shape is still unresolved, use `cf-phase-target-shape`.
 - If hard-path direction is aligned but migration units are not yet planned, use `cf-phase-migration-unit-planning`.
 - If `current work unit` is `none` and the next bounded unit is not yet selected and recorded, use `cf-phase-work-unit-planning`.
@@ -150,7 +153,8 @@ Provide exactly these sections:
 
 ## Artifact update baseline
 
-If `.cflow/architecture.md` exists or is created, update it whenever current repository understanding or guidance in the file would otherwise be stale.
+Do not create or refresh `.cflow/architecture.md` directly in this skill.
+Use `cf-architecture-map` when the architecture map is missing or stale.
 
 If `.cflow/refactor-brief.md` exists or is created, update the fields required by [references/artifacts.md](references/artifacts.md).
 

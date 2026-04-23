@@ -6,7 +6,7 @@ Use this before a structural move, not before discovery.
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
+- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
 - Read `.cflow/architecture.md`.
 - Read `.cflow/refactor-brief.md` first if it exists.
 - If no brief exists, only continue when the prompt already gives an explicit, local, behavior-preserving scope.

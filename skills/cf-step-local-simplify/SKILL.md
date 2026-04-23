@@ -8,7 +8,7 @@ Do not reopen repository architecture in this skill.
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
+- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
 - Read `.cflow/architecture.md`.
 - Read `.cflow/refactor-brief.md` first if it exists.
 - If the touched area is not clearly anchored in a recently completed bounded structural step, stop and route to `cf-start` first.

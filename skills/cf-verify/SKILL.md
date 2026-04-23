@@ -6,7 +6,7 @@ Use this at the end of a completed bounded unit.
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
+- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
 - Read `.cflow/architecture.md`.
 - Read `.cflow/refactor-brief.md` if it exists.
 - If the completed unit or touched area is not clear enough to verify, stop and route to `cf-start` first.

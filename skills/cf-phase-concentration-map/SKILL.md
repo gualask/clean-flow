@@ -30,7 +30,7 @@ Look for:
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
+- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
 - Read `.cflow/architecture.md`.
 - Read `.cflow/refactor-brief.md` if it exists.
 - If no brief exists, continue only when the prompt gives an explicit local or repo-level scope.

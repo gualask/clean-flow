@@ -20,14 +20,18 @@ Cflow has three distinct runtime pieces:
    - `cflow-skills install` copies the skill directories
    - install does not bootstrap `.cflow/`
 2. bootstrap
-   - `cf-start` is the only supported user-facing entrypoint
-   - `cf-start` creates `.cflow/` when needed
-   - `cf-start` adds `.cflow/` to `.gitignore` when needed
-   - `cf-start` creates `.cflow/architecture.md` and `.cflow/refactor-brief.md` from its asset templates when needed
+   - `cf-start` is the main supported user-facing workflow entrypoint
+   - `cf-architecture-map` is the supported user-facing repository-mapping entrypoint
+   - `cf-architecture-map` creates `.cflow/` when needed
+   - `cf-architecture-map` adds `.cflow/` to `.gitignore` when needed
+   - `cf-architecture-map` creates or refreshes `.cflow/architecture.md` from the shared asset template when needed
+   - `cf-start` creates or refreshes `.cflow/refactor-brief.md` from its asset template when needed
 3. execution
    - `cf-start` handles assessment, alignment, and resume
-   - all other skills are internal workflow skills
-   - internal skills are normally reached from `cf-start`, with context prepared according to each skill contract
+   - `cf-refine` is the supported user-facing local refinement entrypoint for one bounded pass without repo-level planning
+   - `cf-architecture-map` may be reached directly or internally from other skills that need current architecture context
+   - all remaining skills are internal workflow skills
+   - internal skills are normally reached from `cf-start` or `cf-refine`, with context prepared according to each skill contract
 
 For the single-page end-to-end flow, see [workflow-map.md](./workflow-map.md).
 
@@ -51,7 +55,7 @@ For bootstrap artifacts, the source templates live inside `cf-start`:
 - `skills/cf-start/assets/architecture.template.md`
 - `skills/cf-start/assets/refactor-brief.template.md`
 
-Keep `cf-start` bootstrap logic and these asset files aligned.
+Keep `cf-architecture-map`, `cf-start`, and these asset files aligned.
 
 ## Repository Layout
 
@@ -66,12 +70,17 @@ docs/     maintainer documentation
 ## Key Design Decisions
 
 - Cflow does not depend on `AGENTS.md` for manual start or artifact-backed resume.
-- `cf-start` is the only supported user-facing entrypoint.
-- `cf-start` owns the supported first-use bootstrap of `.cflow/*` state.
+- `cf-start` is the main supported user-facing workflow entrypoint.
+- `cf-architecture-map` is the supported standalone repository-mapping entrypoint.
+- `cf-refine` is the supported standalone local-refinement entrypoint.
+- `cf-architecture-map` owns the supported bootstrap of `.cflow/`, `.gitignore` for `.cflow/`, and `.cflow/architecture.md`.
+- `cf-start` owns workflow entry plus supported creation or refresh of `.cflow/refactor-brief.md`.
+- `cf-refine` does not create `.cflow/*` itself and must stay bounded to one local pass.
 - `.cflow/*` is Cflow-owned state in the target repository.
 - Internal skills are gated by required context, not by actor identity alone.
 - Internal skills being non-public does not mean they are explicit-only in Codex; routable Cflow workflow skills should remain implicitly invocable so Codex can enter the next step when the task matches the skill description.
-- If an internal skill is invoked directly and the required context is missing, it must stop and route back to `cf-start`.
+- If a skill is invoked without required architecture context, it must stop and route to `cf-architecture-map`.
+- If an internal skill is invoked directly and some earlier workflow context beyond architecture is missing, it must stop and route back to `cf-start` or the required earlier phase.
 - Existing repository docs may be used as evidence during analysis.
 - Files under `docs/` are maintainer documentation, not runtime instructions for models using the skills.
 - Do not assume anything under `docs/` is automatically visible to the model at runtime; if a rule must shape behavior, it must live in the relevant `skills/*/SKILL.md`.
@@ -178,18 +187,38 @@ Standalone labels:
 - `yes`: direct invocation is a supported user entrypoint
 - `no`: the skill is internal and is not a supported direct user entrypoint
 
-### Public Skill
+### Public Skills
 
 #### `cf-start`
 
-- Does: handles fresh assessment or artifact-backed resume and is the only supported user-facing entrypoint for the pack.
+- Does: handles fresh assessment or artifact-backed resume and is the main supported user-facing workflow entrypoint for the pack.
 - Use when: starting most cleanup or refactor work, resuming existing work, or re-entering the flow after review or verify needs.
 - Expects: repository state only; existing `.cflow/architecture.md` and `.cflow/refactor-brief.md` are optional.
 - Produces: a six-section fresh assessment ending at `Alignment checkpoint`, or a six-section resume or reassessment progress report.
 - Standalone: `yes`
-- Artifacts: full bootstrap and refresh; creates `.cflow/`, updates `.gitignore`, and creates or refreshes `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
+- Artifacts: creates or refreshes `.cflow/refactor-brief.md` when needed and routes through `cf-architecture-map` when `.cflow/architecture.md`, `.cflow/`, or `.gitignore` bootstrap work is needed.
 - Execution-state rule: when a bounded unit is completed and no next unit is selected yet, `current work unit` should be `none`; completed-unit history belongs in `Work units` and handoff sections, not in `current work unit`.
 - Typical next step: user simple confirmation into `cf-phase-work-unit-planning` or `cf-phase-target-shape`, depending on the proposed path, or `cf-phase-brainstorming` if the user gives any non-trivial reply at the alignment checkpoint.
+
+#### `cf-architecture-map`
+
+- Does: builds or refreshes `.cflow/architecture.md` from repository state without planning work units or implementing code.
+- Use when: the user wants standalone repository mapping, or another Cflow skill needs current architecture context before it can proceed safely.
+- Expects: repository state only; existing `.cflow/architecture.md` is optional.
+- Produces: a six-section repository map covering context, boundaries, current structure, fit, artifacts updated, and recommended next action.
+- Standalone: `yes`
+- Artifacts: creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and never creates or refreshes `.cflow/refactor-brief.md`.
+- Typical next step: stop after mapping, or continue into `cf-start` when the user wants assessment, planning, or resume.
+
+#### `cf-refine`
+
+- Does: applies one bounded local readability or shape cleanup pass without repo-level planning.
+- Use when: the user wants one local refinement step that should stay inside a clear touched area and not become a structural refactor workflow.
+- Expects: an explicit local scope, or a smallest clear local area inferable from the prompt and repository state; existing `.cflow/*` artifacts are optional.
+- Produces: a five-section refine report covering fit, changes, checks, escalations, and next action.
+- Standalone: `yes`
+- Artifacts: does not create `.cflow/*` itself; when extra confidence is needed it may route through `cf-architecture-map` and then use `cf-step-safety-net`, `cf-review`, or `cf-verify`.
+- Typical next step: stop after the local pass, escalate to `cf-start` when the work is really structural or multi-step, or use `cf-verify` when the pass needs stronger evidence.
 
 Mixed-path rule:
 
@@ -200,14 +229,14 @@ Mixed-path rule:
 
 ### Internal Skills
 
-#### `cf-phase-discovery`
+#### `cf-phase-assessment`
 
-- Does: performs repository-level discovery and intervention framing without implementing code.
-- Use when: `cf-start` needs a discovery pass before choosing or refining the next path.
-- Expects: repository state; existing `.cflow/architecture.md` and `.cflow/refactor-brief.md` are optional.
-- Produces: a seven-section discovery report covering context, architecture fit, premise check, candidate areas, plausible modes, artifact decision, and next action.
+- Does: performs repository-level assessment and intervention framing using current architecture context without implementing code.
+- Use when: `cf-start` needs a dedicated assessment pass before choosing or refining the next path.
+- Expects: existing `.cflow/architecture.md`; existing `.cflow/refactor-brief.md` is optional.
+- Produces: a five-section assessment report covering premise check, candidate areas, plausible modes, artifact decision, and next action.
 - Standalone: `no`
-- Artifacts: may create or refresh `.cflow/architecture.md` and `.cflow/refactor-brief.md`; if discovery finds candidate intervention areas worth carrying forward, it should not return without persisting them in the brief.
+- Artifacts: may create or refresh `.cflow/refactor-brief.md`; it must route to `cf-architecture-map` instead of creating or refreshing `.cflow/architecture.md`.
 - Typical next step: `cf-phase-brainstorming`, `cf-phase-work-unit-planning`, or `cf-phase-target-shape`.
 
 #### `cf-phase-brainstorming`
@@ -217,7 +246,7 @@ Mixed-path rule:
 - Expects: repository facts plus an assessed direction or live decision to resolve; existing artifacts may already exist depending on the path.
 - Produces: either one focused question when a decision is still open, or a four-section alignment report.
 - Standalone: `no`
-- Artifacts: may update `.cflow/architecture.md` and create or refresh `.cflow/refactor-brief.md` once enough decisions are aligned to route without another alignment pass.
+- Artifacts: may update existing `.cflow/architecture.md` guidance and create or refresh `.cflow/refactor-brief.md` once enough decisions are aligned to route without another alignment pass.
 - Typical next step: `cf-phase-work-unit-planning`, `cf-phase-target-shape`, or the chosen bounded execution path only when the next active unit and its immediate next phase are already explicit.
 
 #### `cf-phase-concentration-map`
@@ -351,11 +380,14 @@ These two scenarios are mandatory even when only one of them is officially suppo
 
 ### Scenario Contract
 
-- `cf-start` must work as the supported direct human entrypoint.
-- Every other skill is an internal workflow skill and is not a supported direct human entrypoint.
-- Internal skills must still remain readable when opened or invoked directly by a human, even when the correct next action is to route back to `cf-start`.
+- `cf-start` must work as the main supported direct human workflow entrypoint.
+- `cf-architecture-map` must work as the supported direct human repository-mapping entrypoint.
+- `cf-refine` must work as the supported direct human local-refinement entrypoint.
+- Every remaining skill is an internal workflow skill and is not a supported direct human entrypoint.
+- Internal skills must still remain readable when opened or invoked directly by a human, even when the correct next action is to route to `cf-architecture-map`, `cf-start`, or another earlier required phase.
 - Internal skills may still work when invoked directly if their required context already exists.
 - Internal skills must stop only on missing required context, not merely because the invoker is human.
+- If the only missing prerequisite is architecture context, the correct route is `cf-architecture-map`, not automatically `cf-start`.
 
 ### Validation Checklist
 
@@ -399,9 +431,10 @@ When changing the pack:
 - if a skill contract changes, update both its `SKILL.md` and the `Skill Reference` section in this document
 - if a skill contract changes, update [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md) too
 - if you add a new routable workflow skill, give it `agents/openai.yaml` metadata and keep `allow_implicit_invocation: true` unless there is a documented exception
-- if bootstrap behavior changes, update `skills/cf-start/SKILL.md` and this document
+- if architecture bootstrap behavior changes, update `skills/cf-architecture-map/SKILL.md`, `skills/cf-start/assets/architecture.template.md`, and this document
+- if brief bootstrap behavior changes, update `skills/cf-start/SKILL.md`, `skills/cf-start/assets/refactor-brief.template.md`, and this document
 - if the allowed execution modes or work-unit contract changes, update `skills/cf-start/SKILL.md`, `skills/cf-start/assets/refactor-brief.template.md`, and this document
-- if bootstrap artifact structure changes, update `skills/cf-start/assets/*`
+- if bootstrap artifact structure changes, update the relevant asset files and both bootstrap entrypoints
 - if install/remove behavior changes, update `src/` and the filesystem tests
 - keep `README.md` focused on user-facing install and usage, not maintainer detail
 
@@ -422,27 +455,36 @@ Current automated coverage checks:
 - structural checks for packaged skills
 - Codex implicit invocation policy for shipped Cflow skills
 - presence of `cf-start` bootstrap assets
+- public entrypoint bootstrap and routing ownership split
 
 ## Manual Smoke Checks
 
 The most important manual validation is still a real target-repo run:
 
 1. install the pack into a target repo
-2. invoke `$cf-start` as the standard first-use path
-3. confirm the target repo gets:
+2. invoke `$cf-start` as the standard workflow first-use path
+3. optionally invoke `$cf-architecture-map` as the standalone repository-mapping path
+4. optionally invoke `$cf-refine` as the standalone one-pass local refinement path
+5. confirm the target repo gets:
    - `.agents/skills/...`
    - `.cflow/`
    - `.cflow/architecture.md` when needed
    - `.cflow/refactor-brief.md` when needed
    - `.gitignore` updated with `.cflow/` when needed
-4. if you changed an internal skill contract, confirm that invoking it without the required artifacts routes back to `cf-start` instead of bootstrapping state on its own
+   - note: `cf-refine` may finish without creating `.cflow/*` when no internal Cflow skill was needed
+6. if you changed an internal skill contract, confirm that invoking it without the required architecture context routes to `cf-architecture-map`, and that invoking it without some earlier workflow context routes to `cf-start` or the required earlier phase instead of bootstrapping state on its own
 
 ## Related Files
 
 - `README.md`
 - `CHANGELOG.md`
+- `skills/cf-architecture-map/SKILL.md`
+- `skills/cf-architecture-map/agents/openai.yaml`
+- `skills/cf-refine/SKILL.md`
+- `skills/cf-refine/agents/openai.yaml`
 - `skills/cf-start/SKILL.md`
 - `skills/cf-start/assets/architecture.template.md`
 - `skills/cf-start/assets/refactor-brief.template.md`
 - `skills/cf-start/references/routing.md`
 - `skills/cf-start/references/artifacts.md`
+- `skills/cf-phase-assessment/SKILL.md`

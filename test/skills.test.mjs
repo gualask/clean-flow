@@ -54,3 +54,49 @@ test("cf-start ships bootstrap asset templates", async () => {
     true,
   );
 });
+
+test("public entrypoints keep bootstrap and routing ownership split", async () => {
+  const startBody = await readFile(path.join(SKILLS_ROOT, "cf-start", "SKILL.md"), "utf8");
+  const architectureMapBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-architecture-map", "SKILL.md"),
+    "utf8",
+  );
+  const refineBody = await readFile(path.join(SKILLS_ROOT, "cf-refine", "SKILL.md"), "utf8");
+
+  assert.match(
+    startBody,
+    /`cf-architecture-map` and `cf-refine` are also supported public entrypoints/,
+  );
+  assert.match(
+    startBody,
+    /Do not create or refresh `\.cflow\/architecture\.md` directly in this skill\./,
+  );
+  assert.match(
+    startBody,
+    /Use `cf-architecture-map` when the architecture map is missing or stale\./,
+  );
+
+  assert.match(
+    architectureMapBody,
+    /This is a supported public entrypoint for repository mapping\./,
+  );
+  assert.match(architectureMapBody, /Create or refresh `\.cflow\/architecture\.md` only\./);
+  assert.match(
+    architectureMapBody,
+    /never create or refresh `\.cflow\/refactor-brief\.md` in this skill/,
+  );
+
+  assert.match(
+    refineBody,
+    /This is a supported public entrypoint for bounded local refinement\./,
+  );
+  assert.match(refineBody, /You do not need `\.cflow\/\*` to start this skill\./);
+  assert.match(
+    refineBody,
+    /Do not create or refresh `\.cflow\/refactor-brief\.md` from this skill itself\./,
+  );
+  assert.match(
+    refineBody,
+    /When the task does not fit `cf-refine`, say so clearly in `Refine fit`, make no code edits, and route to `cf-start`\./,
+  );
+});

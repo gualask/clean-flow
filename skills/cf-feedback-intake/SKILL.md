@@ -10,7 +10,7 @@ Turn feedback into a verified next action instead of a reflex edit.
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
+- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
 - Read `.cflow/architecture.md`.
 - Read `.cflow/refactor-brief.md` if it exists.
 - If the feedback target or current path is too unclear to verify, stop and route to `cf-start` first.

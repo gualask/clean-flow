@@ -54,14 +54,3 @@ trap cleanup EXIT
 git clone --depth 1 https://github.com/gualask/clean-flow.git "$PACK_ROOT"
 node "$PACK_ROOT/bin/cflow-skills.mjs" remove --global
 ```
-
-## Verify Global Install Or Update
-
-Confirm these files now exist:
-
-- `$CODEX_HOME/skills/cf-start/SKILL.md` when `CODEX_HOME` is set
-- `~/.codex/skills/cf-start/SKILL.md` otherwise
-- `$CODEX_HOME/skills/cf-review/SKILL.md` when `CODEX_HOME` is set
-- `~/.codex/skills/cf-review/SKILL.md` otherwise
-
-If Codex was already running, start a new session so skill discovery reloads.

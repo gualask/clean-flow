@@ -4,13 +4,15 @@ Cflow is a skill pack for **behavior-preserving cleanup and refactor work**, wit
 
 ## Skills Available
 
-Supported user entrypoint:
+Supported public entrypoints:
 
 - `cf-start`
+- `cf-architecture-map`
+- `cf-refine`
 
 Internal workflow skills:
 
-- `cf-phase-discovery`
+- `cf-phase-assessment`
 - `cf-phase-brainstorming`
 - `cf-phase-concentration-map`
 - `cf-phase-fragmentation-map`
@@ -76,10 +78,19 @@ node ./bin/cflow-skills.mjs install /path/to/repo --dry-run
 Installing the pack only syncs `skills/` into the target location.
 It does not create `.cflow/` by itself.
 
-For supported first use and resume, always start with `cf-start`.
-`cf-start` is the only supported user-facing entrypoint and it handles bootstrap, assessment, resume, work-unit selection, and `.gitignore` updates for `.cflow/`.
+For supported workflow first use and resume, start with `cf-start`.
+`cf-start` is the main public workflow entrypoint for assessment, alignment, resume, and work-unit selection.
 
-All other skills are internal workflow skills.
+For standalone repository mapping, use `cf-architecture-map`.
+`cf-architecture-map` is the public entrypoint that bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and creates or refreshes `.cflow/architecture.md`.
+
+For one bounded local cleanup pass that should stay local, use `cf-refine`.
+`cf-refine` is the public entrypoint for local readability and shape cleanup without repo-level planning.
+It does not create `.cflow/*` by itself and must route to `cf-start` when the work becomes structural or multi-step.
+
+When `cf-start` needs architecture context, it routes through `cf-architecture-map` internally before continuing.
+
+All remaining skills are internal workflow skills.
 They are not meant to be invoked directly by users.
 
 For an end-to-end workflow view, see [docs/workflow-map.md](./docs/workflow-map.md).

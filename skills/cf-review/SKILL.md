@@ -6,7 +6,7 @@ Do review only. Do not introduce new structural changes in this skill unless the
 
 ## Preflight
 
-- If `.cflow/architecture.md` is missing, stop and route to `cf-start` first.
+- If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
 - Read `.cflow/architecture.md`.
 - Read `.cflow/refactor-brief.md` if it exists.
 - If the completed step or touched area is not clear enough to review, stop and route to `cf-start` first.

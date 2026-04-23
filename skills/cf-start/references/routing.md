@@ -23,8 +23,6 @@ Heuristics:
 
 Determine:
 
-- repository context and domain gravity
-- current boundary / packaging shape and architecture fit
 - whether intervention is justified
 - candidate intervention areas worth tracking in the brief
 - dominant pressure: concentration | fragmentation | mixed | neither
@@ -32,7 +30,8 @@ Determine:
 
 Rules:
 
-- Update or create `.cflow/architecture.md` whenever it is missing, stale, or materially incomplete.
+- Use `cf-architecture-map` whenever `.cflow/architecture.md` is missing, stale, or materially incomplete.
+- Use `cf-phase-assessment` when repository-level intervention framing is still needed after architecture context is current.
 - For non-trivial work, create or refresh `.cflow/refactor-brief.md`.
 - Treat `soft-mixed` as a repository-level outcome, not as one executable step.
 - In `soft-mixed`, break the work into bounded work units and assign each unit exactly one `mode`: `split` or `consolidate`.
@@ -45,7 +44,9 @@ Rules:
 
 Resume from the correct point:
 
+- if `.cflow/architecture.md` is missing, stale, or materially incomplete -> `cf-architecture-map`
 - if the brief is stale, or repository changes made the recorded path or work-unit state unreliable -> reassessment
+- if repository-level intervention framing is still unclear -> `cf-phase-assessment`
 - if hard-path direction is chosen but target shape is still unresolved -> `cf-phase-target-shape`
 - if hard-path direction is aligned but migration units are not yet planned -> `cf-phase-migration-unit-planning`
 - if `current work unit` is `none` and the next bounded unit is not yet selected and recorded -> `cf-phase-work-unit-planning`

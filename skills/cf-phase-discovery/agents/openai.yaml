@@ -1,5 +1,0 @@
-interface:
-  display_name: "Cflow:phase discovery"
-  short_description: "Repository-level discovery and intervention framing without implementation"
-policy:
-  allow_implicit_invocation: true
