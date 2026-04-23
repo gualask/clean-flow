@@ -1,5 +1,0 @@
-interface:
-  display_name: "Cflow:phase target shape"
-  short_description: "Define the target direction for a broader structural change"
-policy:
-  allow_implicit_invocation: true

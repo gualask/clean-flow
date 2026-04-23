@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:internal target shape"
+  short_description: "Define the target direction for a broader structural change"
+policy:
+  allow_implicit_invocation: true

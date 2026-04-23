@@ -5,8 +5,8 @@ description: Main public workflow entrypoint for Cflow. Use to start or resume c
 
 This is the main public workflow entrypoint for the pack.
 `cf-architecture-map` and `cf-refine` are also supported public entrypoints, but only for standalone repository mapping and bounded local refinement.
-Do not tell the user to invoke internal phase or step skills directly.
-Internal phase and step skills are still valid workflow steps when the repository state already fits them.
+Do not tell the user to invoke internal skills directly.
+Internal workflow skills are still valid workflow steps when the repository state already fits them.
 Do not behave like a router that only suggests another skill.
 When the next phase is already clear from repository state and Cflow artifacts, advance into it yourself instead of only suggesting it.
 
@@ -16,8 +16,8 @@ Handle fresh assessment, artifact-backed resume, or review/verify re-entry throu
 
 For non-trivial execution paths:
 
-- lightweight cleanup or refactor must enter `cf-phase-work-unit-planning` before local mapping or execution, unless the next active work unit is already clearly selected and recorded
-- hard-path restructuring must enter `cf-phase-target-shape` and then `cf-phase-migration-unit-planning` before implementation
+- lightweight cleanup or refactor must enter `cf-internal-work-unit-planning` before local mapping or execution, unless the next active work unit is already clearly selected and recorded
+- hard-path restructuring must enter `cf-internal-target-shape` and then `cf-internal-migration-unit-planning` before implementation
 
 ## Hard rule
 
@@ -89,12 +89,12 @@ Rules:
 
 - Keep assessment repository-level.
 - If `.cflow/architecture.md` is missing, stale, or materially incomplete, use `cf-architecture-map` before finalizing repository-level assessment.
-- Use `cf-phase-assessment` when repository-level intervention framing is still needed after architecture context is current.
+- Use `cf-internal-assessment` when repository-level intervention framing is still needed after architecture context is current.
 - For non-trivial work, create or refresh `.cflow/refactor-brief.md`.
 - Treat `soft-mixed` as a repository-level outcome, not as one executable step.
 - In `soft-mixed`, break the work into bounded work units and assign each unit exactly one `mode`: `split` or `consolidate`.
-- For lightweight paths, propose `cf-phase-work-unit-planning` as the next planning phase before local mapping or execution unless the next active unit is already clearly selected and recorded.
-- For hard restructure, propose `cf-phase-target-shape` first, then `cf-phase-migration-unit-planning`.
+- For lightweight paths, propose `cf-internal-work-unit-planning` as the next planning phase before local mapping or execution unless the next active unit is already clearly selected and recorded.
+- For hard restructure, propose `cf-internal-target-shape` first, then `cf-internal-migration-unit-planning`.
 - Do not implement yet.
 - Always end fresh assessment at the alignment checkpoint with exactly one focused question.
 
@@ -106,14 +106,14 @@ Rules:
 
 - If `.cflow/architecture.md` is missing, stale, or materially incomplete for the current repository state, use `cf-architecture-map` first.
 - If the brief is stale, or repository changes made the recorded path or work-unit state unreliable, reassess first.
-- If repository-level intervention framing is still unclear after architecture context is current, use `cf-phase-assessment`.
-- If hard-path direction is chosen but target shape is still unresolved, use `cf-phase-target-shape`.
-- If hard-path direction is aligned but migration units are not yet planned, use `cf-phase-migration-unit-planning`.
-- If `current work unit` is `none` and the next bounded unit is not yet selected and recorded, use `cf-phase-work-unit-planning`.
+- If repository-level intervention framing is still unclear after architecture context is current, use `cf-internal-assessment`.
+- If hard-path direction is chosen but target shape is still unresolved, use `cf-internal-target-shape`.
+- If hard-path direction is aligned but migration units are not yet planned, use `cf-internal-migration-unit-planning`.
+- If `current work unit` is `none` and the next bounded unit is not yet selected and recorded, use `cf-internal-work-unit-planning`.
 - If an active work unit exists and its seam still needs mapping, continue into the matching map skill.
-- If an active work unit exists and mapping is sufficient but behavior is not yet locked, continue into `cf-step-safety-net`.
+- If an active work unit exists and mapping is sufficient but behavior is not yet locked, continue into `cf-internal-safety-net`.
 - If an active work unit exists and it is ready for structural work, execute it by its declared mode.
-- If an active work unit's structural work is already complete, continue into `cf-review` or `cf-verify`.
+- If an active work unit's structural work is already complete, continue into `cf-internal-review` or `cf-internal-verify`.
 - Do not silently switch direction without updating the artifacts.
 - Do not execute more than one bounded work unit per invocation unless the user explicitly asked for a broader pass.
 

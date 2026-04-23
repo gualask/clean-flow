@@ -100,3 +100,17 @@ test("public entrypoints keep bootstrap and routing ownership split", async () =
     /When the task does not fit `cf-refine`, say so clearly in `Refine fit`, make no code edits, and route to `cf-start`\./,
   );
 });
+
+test("only public entrypoints omit the cf-internal prefix", async () => {
+  const skills = await listSkillDirectories(SKILLS_ROOT);
+  const publicSkillNames = new Set(["cf-start", "cf-architecture-map", "cf-refine"]);
+
+  for (const skill of skills) {
+    const isPublic = publicSkillNames.has(skill.name);
+    assert.equal(
+      isPublic || skill.name.startsWith("cf-internal-"),
+      true,
+      `${skill.name} should use the cf-internal- prefix unless it is a public entrypoint`,
+    );
+  }
+});

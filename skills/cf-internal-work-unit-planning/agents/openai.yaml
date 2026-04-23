@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:internal work unit planning"
+  short_description: "Order assessed work units and choose the recommended next unit"
+policy:
+  allow_implicit_invocation: true

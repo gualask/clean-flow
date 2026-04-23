@@ -1,5 +1,0 @@
-interface:
-  display_name: "Cflow:step boundary apply"
-  short_description: "Apply one bounded split-oriented structural step"
-policy:
-  allow_implicit_invocation: true

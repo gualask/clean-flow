@@ -19,7 +19,7 @@ test("remove deletes only Cflow-owned skills", async () => {
   await mkdir(destinationRoot, { recursive: true });
 
   const ownedStart = await writeSkill(destinationRoot, "cf-start");
-  const ownedReview = await writeSkill(destinationRoot, "cf-review");
+  const ownedReview = await writeSkill(destinationRoot, "cf-internal-review");
   await writeSkill(destinationRoot, "foreign-skill");
 
   await writeMarker(ownedStart, {
@@ -27,7 +27,7 @@ test("remove deletes only Cflow-owned skills", async () => {
     fingerprint: await computeSkillFingerprint(ownedStart),
   });
   await writeMarker(ownedReview, {
-    sourceSkill: "cf-review",
+    sourceSkill: "cf-internal-review",
     fingerprint: await computeSkillFingerprint(ownedReview),
   });
 

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:internal concentration map"
+  short_description: "Map concentration pressure and safe split direction for a seam"
+policy:
+  allow_implicit_invocation: true

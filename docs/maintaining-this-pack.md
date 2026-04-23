@@ -87,10 +87,10 @@ docs/     maintainer documentation
 - The installer distributes skills; it does not initialize repository state.
 - `soft-mixed` is a repository-level assessment outcome, not an execution mode for one step.
 - Every executable work unit must choose exactly one mode: `split` or `consolidate`.
-- `cf-phase-work-unit-planning` is the lightweight planning phase for ordering bounded work units without carrying hard-path structural context.
-- `cf-phase-target-shape` plus `cf-phase-migration-unit-planning` are reserved for broader hard-path restructuring where the target direction itself must be defined and then proved incrementally.
+- `cf-internal-work-unit-planning` is the lightweight planning phase for ordering bounded work units without carrying hard-path structural context.
+- `cf-internal-target-shape` plus `cf-internal-migration-unit-planning` are reserved for broader hard-path restructuring where the target direction itself must be defined and then proved incrementally.
 - After a non-trivial fresh assessment, `cf-start` must stop at an alignment checkpoint before execution.
-- After that checkpoint, simple confirmation may proceed; any non-trivial reply must enter `cf-phase-brainstorming` until the direction is clear enough.
+- After that checkpoint, simple confirmation may proceed; any non-trivial reply must enter `cf-internal-brainstorming` until the direction is clear enough.
 - In `.cflow/refactor-brief.md`, `current work unit` means the active selected unit only; after a completed safe stop with no new unit selected, it should be `none` rather than the last completed unit.
 
 For per-skill entry, gating, and routing decisions, use [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md).
@@ -198,7 +198,7 @@ Standalone labels:
 - Standalone: `yes`
 - Artifacts: creates or refreshes `.cflow/refactor-brief.md` when needed and routes through `cf-architecture-map` when `.cflow/architecture.md`, `.cflow/`, or `.gitignore` bootstrap work is needed.
 - Execution-state rule: when a bounded unit is completed and no next unit is selected yet, `current work unit` should be `none`; completed-unit history belongs in `Work units` and handoff sections, not in `current work unit`.
-- Typical next step: user simple confirmation into `cf-phase-work-unit-planning` or `cf-phase-target-shape`, depending on the proposed path, or `cf-phase-brainstorming` if the user gives any non-trivial reply at the alignment checkpoint.
+- Typical next step: user simple confirmation into `cf-internal-work-unit-planning` or `cf-internal-target-shape`, depending on the proposed path, or `cf-internal-brainstorming` if the user gives any non-trivial reply at the alignment checkpoint.
 
 #### `cf-architecture-map`
 
@@ -217,8 +217,8 @@ Standalone labels:
 - Expects: an explicit local scope, or a smallest clear local area inferable from the prompt and repository state; existing `.cflow/*` artifacts are optional.
 - Produces: a five-section refine report covering fit, changes, checks, escalations, and next action.
 - Standalone: `yes`
-- Artifacts: does not create `.cflow/*` itself; when extra confidence is needed it may route through `cf-architecture-map` and then use `cf-step-safety-net`, `cf-review`, or `cf-verify`.
-- Typical next step: stop after the local pass, escalate to `cf-start` when the work is really structural or multi-step, or use `cf-verify` when the pass needs stronger evidence.
+- Artifacts: does not create `.cflow/*` itself; when extra confidence is needed it may route through `cf-architecture-map` and then use `cf-internal-safety-net`, `cf-internal-review`, or `cf-internal-verify`.
+- Typical next step: stop after the local pass, escalate to `cf-start` when the work is really structural or multi-step, or use `cf-internal-verify` when the pass needs stronger evidence.
 
 Mixed-path rule:
 
@@ -229,7 +229,7 @@ Mixed-path rule:
 
 ### Internal Skills
 
-#### `cf-phase-assessment`
+#### `cf-internal-assessment`
 
 - Does: performs repository-level assessment and intervention framing using current architecture context without implementing code.
 - Use when: `cf-start` needs a dedicated assessment pass before choosing or refining the next path.
@@ -237,9 +237,9 @@ Mixed-path rule:
 - Produces: a five-section assessment report covering premise check, candidate areas, plausible modes, artifact decision, and next action.
 - Standalone: `no`
 - Artifacts: may create or refresh `.cflow/refactor-brief.md`; it must route to `cf-architecture-map` instead of creating or refreshing `.cflow/architecture.md`.
-- Typical next step: `cf-phase-brainstorming`, `cf-phase-work-unit-planning`, or `cf-phase-target-shape`.
+- Typical next step: `cf-internal-brainstorming`, `cf-internal-work-unit-planning`, or `cf-internal-target-shape`.
 
-#### `cf-phase-brainstorming`
+#### `cf-internal-brainstorming`
 
 - Does: resolves user decisions that materially change scope, exclusions, risk, or direction after assessment.
 - Use when: `cf-start` already assessed the repository and the user gave a non-trivial reply at the alignment checkpoint.
@@ -247,9 +247,9 @@ Mixed-path rule:
 - Produces: either one focused question when a decision is still open, or a four-section alignment report.
 - Standalone: `no`
 - Artifacts: may update existing `.cflow/architecture.md` guidance and create or refresh `.cflow/refactor-brief.md` once enough decisions are aligned to route without another alignment pass.
-- Typical next step: `cf-phase-work-unit-planning`, `cf-phase-target-shape`, or the chosen bounded execution path only when the next active unit and its immediate next phase are already explicit.
+- Typical next step: `cf-internal-work-unit-planning`, `cf-internal-target-shape`, or the chosen bounded execution path only when the next active unit and its immediate next phase are already explicit.
 
-#### `cf-phase-concentration-map`
+#### `cf-internal-concentration-map`
 
 - Does: maps concentration pressure in a repository area or local seam and identifies the safest split direction.
 - Use when: the current work unit or path points to a `split` move and the seam still needs mapping.
@@ -257,9 +257,9 @@ Mixed-path rule:
 - Produces: a seven-section seam map covering scope, dense seams, workflow map, role classification, split direction, risks, and next action.
 - Standalone: `no`
 - Artifacts: updates the brief when it exists or is created in the active flow.
-- Typical next step: `cf-step-safety-net` or `cf-step-boundary-apply`.
+- Typical next step: `cf-internal-safety-net` or `cf-internal-boundary-apply`.
 
-#### `cf-phase-fragmentation-map`
+#### `cf-internal-fragmentation-map`
 
 - Does: maps fragmentation pressure caused by pass-through wrappers, artificial boundaries, or excessive hop count.
 - Use when: the current work unit or path points to a `consolidate` move and the seam still needs boundary analysis.
@@ -267,39 +267,39 @@ Mixed-path rule:
 - Produces: a six-section fragmentation report covering scope, artificial boundaries, indirection cost, consolidation candidates, risks, and next action.
 - Standalone: `no`
 - Artifacts: updates the brief when it exists or is created in the active flow.
-- Typical next step: `cf-step-safety-net` or `cf-step-consolidate-seam`.
+- Typical next step: `cf-internal-safety-net` or `cf-internal-consolidate-seam`.
 
-#### `cf-phase-work-unit-planning`
+#### `cf-internal-work-unit-planning`
 
 - Does: turns assessed cleanup or refactor pressure into a lightweight ordered backlog of bounded work units before implementation.
 - Use when: assessment or alignment already surfaced multiple credible candidates and you need to choose or sequence the next unit without invoking hard-path planning.
-- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and either an assessed set of candidate areas or an explicit bounded scope to order. If assessment context is still missing, route to `cf-start`; if a broader boundary or packaging decision is still unresolved, route to `cf-phase-target-shape` instead.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and either an assessed set of candidate areas or an explicit bounded scope to order. If assessment context is still missing, route to `cf-start`; if a broader boundary or packaging decision is still unresolved, route to `cf-internal-target-shape` instead.
 - Produces: a six-section planning report covering scope, candidate units, ordering logic, recommended next unit, artifacts updated, and next action.
 - Standalone: `no`
 - Artifacts: may create or update `.cflow/refactor-brief.md` while ordering work units, recording dependencies, and setting either an active current work unit or exactly one recommended next unit.
-- Typical next step: `cf-phase-concentration-map`, `cf-phase-fragmentation-map`, or `cf-step-safety-net`.
+- Typical next step: `cf-internal-concentration-map`, `cf-internal-fragmentation-map`, or `cf-internal-safety-net`.
 
-#### `cf-phase-target-shape`
+#### `cf-internal-target-shape`
 
 - Does: defines the bounded target direction for a hard restructure when soft intervention is not enough.
 - Use when: assessment and alignment already justify a broader hard-path change and the repository needs a concrete target shape.
-- Expects: existing `.cflow/architecture.md`, existing `.cflow/refactor-brief.md`, and an already justified hard-path direction. If hard restructure is not justified, route to `cf-start`; if unresolved user steering still blocks target-shape decisions, route to `cf-phase-brainstorming`.
+- Expects: existing `.cflow/architecture.md`, existing `.cflow/refactor-brief.md`, and an already justified hard-path direction. If hard restructure is not justified, route to `cf-start`; if unresolved user steering still blocks target-shape decisions, route to `cf-internal-brainstorming`.
 - Produces: a six-section target-shape report covering rationale, boundary model, packaging direction, migration constraints, artifacts updated, and next action.
 - Standalone: `no`
 - Artifacts: updates existing artifacts and leaves one explicit target boundary model plus one explicit packaging direction for the current hard path.
-- Typical next step: `cf-phase-migration-unit-planning`.
+- Typical next step: `cf-internal-migration-unit-planning`.
 
-#### `cf-phase-migration-unit-planning`
+#### `cf-internal-migration-unit-planning`
 
 - Does: breaks a hard restructure into bounded, reviewable migration units before implementation.
 - Use when: the hard-path target direction is already aligned and you need concrete migration units instead of a big-bang rewrite.
-- Expects: existing `.cflow/architecture.md`, existing `.cflow/refactor-brief.md`, and an already aligned hard-path target. If hard-path planning is justified but the target direction is not aligned yet, route to `cf-phase-target-shape`; otherwise route to `cf-start`.
+- Expects: existing `.cflow/architecture.md`, existing `.cflow/refactor-brief.md`, and an already aligned hard-path target. If hard-path planning is justified but the target direction is not aligned yet, route to `cf-internal-target-shape`; otherwise route to `cf-start`.
 - Produces: a five-section migration plan covering strategy, migration units, what stays unchanged, artifacts updated, and next action.
 - Standalone: `no`
 - Artifacts: updates existing artifacts and leaves either an active current work unit or exactly one recommended next migration unit.
-- Typical next step: `cf-step-safety-net` for the first bounded migration unit.
+- Typical next step: `cf-internal-safety-net` for the first bounded migration unit.
 
-#### `cf-step-safety-net`
+#### `cf-internal-safety-net`
 
 - Does: establishes the smallest credible behavior lock before structural work.
 - Use when: the current work unit is clear and you need a go or no-go decision before editing code.
@@ -307,9 +307,9 @@ Mixed-path rule:
 - Produces: a six-section safety-net report covering refactoring surface, behavior to lock, protections, remaining gaps, and next action.
 - Standalone: `no`
 - Artifacts: updates the brief when it exists or is created in the active flow.
-- Typical next step: `cf-step-boundary-apply` or `cf-step-consolidate-seam`.
+- Typical next step: `cf-internal-boundary-apply` or `cf-internal-consolidate-seam`.
 
-#### `cf-step-boundary-apply`
+#### `cf-internal-boundary-apply`
 
 - Does: applies one bounded split-oriented structural refactor step while preserving behavior.
 - Use when: the active work unit is `mode: split`, the seam is mapped enough, and a credible safety net exists.
@@ -317,19 +317,19 @@ Mixed-path rule:
 - Produces: a six-section execution report covering current state, work executed, checks, artifacts, remaining work, and next action.
 - Standalone: `no`
 - Artifacts: updates the brief when it exists or is created in the active flow.
-- Typical next step: `cf-step-local-simplify`, `cf-review`, or `cf-verify`.
+- Typical next step: `cf-internal-local-simplify`, `cf-internal-review`, or `cf-internal-verify`.
 
-#### `cf-step-consolidate-seam`
+#### `cf-internal-consolidate-seam`
 
 - Does: applies one bounded consolidation-oriented step to reduce over-fragmentation while preserving behavior, avoids ownership moves with weak payoff, and surfaces discovered bugs separately instead of silently folding them into the same structural pass.
 - Use when: the active work unit is `mode: consolidate`, or the prompt already gives an explicit local seam where the artificial boundary is clear, and a credible safety net exists.
-- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and either a consolidation-ready seam or enough local clarity to tell that the current boundary is artificial. If that boundary is still unclear, route to `cf-phase-fragmentation-map` instead of guessing. In the normal flow, the active work unit should be `mode: consolidate`.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and either a consolidation-ready seam or enough local clarity to tell that the current boundary is artificial. If that boundary is still unclear, route to `cf-internal-fragmentation-map` instead of guessing. In the normal flow, the active work unit should be `mode: consolidate`.
 - Produces: a six-section execution report covering current state, work executed, checks, artifacts, remaining work, and next action.
 - Standalone: `no`
 - Artifacts: updates the brief when it exists or is created in the active flow.
-- Typical next step: `cf-step-local-simplify`, `cf-review`, or `cf-verify`.
+- Typical next step: `cf-internal-local-simplify`, `cf-internal-review`, or `cf-internal-verify`.
 
-#### `cf-step-local-simplify`
+#### `cf-internal-local-simplify`
 
 - Does: improves naming, control flow, and helper shape in the touched area without reopening architecture.
 - Use when: a bounded structural step is already done and local readability can still improve.
@@ -337,9 +337,9 @@ Mixed-path rule:
 - Produces: a six-section simplification report covering current state, simplifications applied, checks, artifacts, remaining work, and next action.
 - Standalone: `no`
 - Artifacts: updates existing artifacts when the brief exists.
-- Typical next step: `cf-review` or `cf-verify`.
+- Typical next step: `cf-internal-review` or `cf-internal-verify`.
 
-#### `cf-review`
+#### `cf-internal-review`
 
 - Does: reviews one completed bounded refactor step and judges whether it reduced pressure without over-engineering, including whether ownership moves simplified the caller, entry points stayed thin, and dead-weight wrappers were avoided.
 - Use when: structural work already happened and you want judgment before acceptance or final verification.
@@ -347,9 +347,9 @@ Mixed-path rule:
 - Produces: a seven-section review covering improvements, remaining mixing, over-engineering, boundary clarity, fragmentation, risk, and next action.
 - Standalone: `no`
 - Artifacts: updates existing artifacts when the brief exists.
-- Typical next step: `cf-verify`, one more bounded step, or `cf-feedback-intake`.
+- Typical next step: `cf-internal-verify`, one more bounded step, or `cf-internal-feedback-intake`.
 
-#### `cf-verify`
+#### `cf-internal-verify`
 
 - Does: collects factual evidence that a bounded unit still works after refactor.
 - Use when: a bounded cleanup or migration unit is finished and needs tests, lint, typecheck, build, smoke checks, or reference audits.
@@ -359,7 +359,7 @@ Mixed-path rule:
 - Artifacts: updates existing artifacts when the brief exists.
 - Typical next step: close the unit or route back to the last step skill if the evidence is not yet strong enough.
 
-#### `cf-feedback-intake`
+#### `cf-internal-feedback-intake`
 
 - Does: turns review feedback into a verified next action instead of implementing it blindly.
 - Use when: refactor feedback already exists and you need to validate it against the repository and current plan.
@@ -367,7 +367,7 @@ Mixed-path rule:
 - Produces: a five-section feedback assessment covering restatement, repository evidence, assessment, path impact, and next action.
 - Standalone: `no`
 - Artifacts: updates existing artifacts when the brief exists.
-- Typical next step: accept, narrow, reject, or route the feedback into `cf-review`, `cf-verify`, or a bounded execution skill.
+- Typical next step: accept, narrow, reject, or route the feedback into `cf-internal-review`, `cf-internal-verify`, or a bounded execution skill.
 
 ## Skill Change Validation
 
@@ -420,7 +420,7 @@ Use actor-based wording only when the actor identity changes the skill behavior.
 
 Example:
 
-- `cf-phase-brainstorming` may refer to the user because the trigger is specifically that the user is steering the direction instead of merely confirming it.
+- `cf-internal-brainstorming` may refer to the user because the trigger is specifically that the user is steering the direction instead of merely confirming it.
 
 ## Maintainer Workflow
 
@@ -487,4 +487,4 @@ The most important manual validation is still a real target-repo run:
 - `skills/cf-start/assets/refactor-brief.template.md`
 - `skills/cf-start/references/routing.md`
 - `skills/cf-start/references/artifacts.md`
-- `skills/cf-phase-assessment/SKILL.md`
+- `skills/cf-internal-assessment/SKILL.md`

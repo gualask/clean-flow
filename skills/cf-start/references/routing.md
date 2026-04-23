@@ -31,12 +31,12 @@ Determine:
 Rules:
 
 - Use `cf-architecture-map` whenever `.cflow/architecture.md` is missing, stale, or materially incomplete.
-- Use `cf-phase-assessment` when repository-level intervention framing is still needed after architecture context is current.
+- Use `cf-internal-assessment` when repository-level intervention framing is still needed after architecture context is current.
 - For non-trivial work, create or refresh `.cflow/refactor-brief.md`.
 - Treat `soft-mixed` as a repository-level outcome, not as one executable step.
 - In `soft-mixed`, break the work into bounded work units and assign each unit exactly one `mode`: `split` or `consolidate`.
-- For lightweight paths, propose `cf-phase-work-unit-planning` as the next planning phase before local mapping or execution unless the next active unit is already clearly selected and recorded.
-- For hard restructure, propose `cf-phase-target-shape` first, then `cf-phase-migration-unit-planning`.
+- For lightweight paths, propose `cf-internal-work-unit-planning` as the next planning phase before local mapping or execution unless the next active unit is already clearly selected and recorded.
+- For hard restructure, propose `cf-internal-target-shape` first, then `cf-internal-migration-unit-planning`.
 - Do not implement yet.
 - Always end fresh assessment at the alignment checkpoint with exactly one focused question.
 
@@ -46,10 +46,10 @@ Resume from the correct point:
 
 - if `.cflow/architecture.md` is missing, stale, or materially incomplete -> `cf-architecture-map`
 - if the brief is stale, or repository changes made the recorded path or work-unit state unreliable -> reassessment
-- if repository-level intervention framing is still unclear -> `cf-phase-assessment`
-- if hard-path direction is chosen but target shape is still unresolved -> `cf-phase-target-shape`
-- if hard-path direction is aligned but migration units are not yet planned -> `cf-phase-migration-unit-planning`
-- if `current work unit` is `none` and the next bounded unit is not yet selected and recorded -> `cf-phase-work-unit-planning`
+- if repository-level intervention framing is still unclear -> `cf-internal-assessment`
+- if hard-path direction is chosen but target shape is still unresolved -> `cf-internal-target-shape`
+- if hard-path direction is aligned but migration units are not yet planned -> `cf-internal-migration-unit-planning`
+- if `current work unit` is `none` and the next bounded unit is not yet selected and recorded -> `cf-internal-work-unit-planning`
 - if an active work unit is selected but not ready -> concentration or fragmentation mapping, or safety-net
 - if an active work unit is ready for structural work -> execute by its declared mode:
   - `split` -> split work

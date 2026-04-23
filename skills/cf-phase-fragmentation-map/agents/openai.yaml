@@ -1,5 +1,0 @@
-interface:
-  display_name: "Cflow:phase fragmentation map"
-  short_description: "Map fragmentation pressure and safe consolidation candidates"
-policy:
-  allow_implicit_invocation: true

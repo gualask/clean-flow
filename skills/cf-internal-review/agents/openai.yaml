@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:internal review"
+  short_description: "Judge whether one bounded refactor step reduced pressure without over-engineering"
+policy:
+  allow_implicit_invocation: true

@@ -20,7 +20,7 @@ test("install copies new skills and writes owned markers", async () => {
 
   await mkdir(sourceRoot, { recursive: true });
   await writeSkill(sourceRoot, "cf-start");
-  await writeSkill(sourceRoot, "cf-review");
+  await writeSkill(sourceRoot, "cf-internal-review");
 
   const result = await installSkills({ sourceRoot, destinationRoot });
 
@@ -29,7 +29,7 @@ test("install copies new skills and writes owned markers", async () => {
   assert.equal(result.pruned.length, 0);
   assert.equal(result.conflicts.length, 0);
   assert.equal(result.applied, true);
-  assert.deepEqual(await listDirectoryNames(destinationRoot), ["cf-review", "cf-start"]);
+  assert.deepEqual(await listDirectoryNames(destinationRoot), ["cf-internal-review", "cf-start"]);
 
   const marker = await readMarker(path.join(destinationRoot, "cf-start"));
   assert.equal(marker.owner, "clean-flow");
@@ -48,7 +48,7 @@ test("install updates owned skills, prunes removed owned skills, and keeps forei
   await writeSkill(sourceRoot, "cf-start", {
     "SKILL.md": `---\nname: "cf-start"\ndescription: "Updated"\n---\n\n# cf-start v2\n`,
   });
-  await writeSkill(sourceRoot, "cf-review");
+  await writeSkill(sourceRoot, "cf-internal-review");
 
   const ownedStart = await writeSkill(destinationRoot, "cf-start", {
     "SKILL.md": `---\nname: "cf-start"\ndescription: "Old"\n---\n\n# cf-start v1\n`,
@@ -74,7 +74,7 @@ test("install updates owned skills, prunes removed owned skills, and keeps forei
   assert.equal(result.pruned.length, 1);
   assert.equal(result.conflicts.length, 0);
   assert.deepEqual(await listDirectoryNames(destinationRoot), [
-    "cf-review",
+    "cf-internal-review",
     "cf-start",
     "foreign-skill",
   ]);

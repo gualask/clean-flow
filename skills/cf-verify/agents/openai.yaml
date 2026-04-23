@@ -1,5 +1,0 @@
-interface:
-  display_name: "Cflow:verify"
-  short_description: "Verify a bounded refactor step with factual evidence"
-policy:
-  allow_implicit_invocation: true

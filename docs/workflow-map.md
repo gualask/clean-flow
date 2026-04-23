@@ -30,12 +30,12 @@ flowchart TD
     B1 -- no --> B
     B1 -- yes --> B2{Need safety net before edits?}
     B2 -- yes --> B3[Ensure architecture context with cf-architecture-map]
-    B3 --> B4[cf-step-safety-net when confidence is needed]
+    B3 --> B4[cf-internal-safety-net when confidence is needed]
     B2 -- no --> B5[Local refine pass in cf-refine]
     B4 --> B5
     B5 --> B6{Need review or verify after edits?}
-    B6 -- review --> B7[Optional cf-review]
-    B6 -- verify --> B8[Optional cf-verify]
+    B6 -- review --> B7[Optional cf-internal-review]
+    B6 -- verify --> B8[Optional cf-internal-verify]
     B6 -- none --> B9[Stop after local pass]
     B7 --> B8
     B8 --> B9
@@ -48,7 +48,7 @@ flowchart TD
     D -- yes --> F{Resume target from brief}
 
     E --> E1{Dedicated assessment pass needed?}
-    E1 -- yes --> E2[cf-phase-assessment]
+    E1 -- yes --> E2[cf-internal-assessment]
     E1 -- no --> E3[Concentration lens]
     E2 --> E3
     E3 --> E4[Fragmentation lens]
@@ -56,37 +56,37 @@ flowchart TD
     E5 --> G[Alignment checkpoint]
 
     G -- simple confirmation --> H{Chosen direction}
-    G -- non-trivial steering --> I[cf-phase-brainstorming]
+    G -- non-trivial steering --> I[cf-internal-brainstorming]
     I --> H
 
-    H -- soft split --> J[cf-phase-work-unit-planning]
+    H -- soft split --> J[cf-internal-work-unit-planning]
     H -- soft consolidate --> J
     H -- soft mixed --> J
-    H -- hard restructure --> K[cf-phase-target-shape]
-    H -- review only --> R[cf-review]
-    H -- verify only --> S[cf-verify]
+    H -- hard restructure --> K[cf-internal-target-shape]
+    H -- review only --> R[cf-internal-review]
+    H -- verify only --> S[cf-internal-verify]
     H -- no structural refactor --> T[Stop with assessment result]
 
-    K --> L[cf-phase-migration-unit-planning]
+    K --> L[cf-internal-migration-unit-planning]
     J --> J1{Recommended next work unit}
-    J1 -- mode: split --> M[cf-phase-concentration-map when seam needs mapping]
-    J1 -- mode: consolidate --> N[cf-phase-fragmentation-map when seam needs mapping]
-    J1 -- ready for structural work --> O[cf-step-safety-net]
+    J1 -- mode: split --> M[cf-internal-concentration-map when seam needs mapping]
+    J1 -- mode: consolidate --> N[cf-internal-fragmentation-map when seam needs mapping]
+    J1 -- ready for structural work --> O[cf-internal-safety-net]
     M --> O
     N --> O
     L --> O
 
-    O -- mode: split --> P[cf-step-boundary-apply]
-    O -- mode: consolidate --> Q[cf-step-consolidate-seam]
+    O -- mode: split --> P[cf-internal-boundary-apply]
+    O -- mode: consolidate --> Q[cf-internal-consolidate-seam]
 
-    P --> U[Optional cf-step-local-simplify]
+    P --> U[Optional cf-internal-local-simplify]
     Q --> U
     P --> R
     Q --> R
     U --> R
 
     R --> S
-    R --> V[cf-feedback-intake when review feedback arrives]
+    R --> V[cf-internal-feedback-intake when review feedback arrives]
     V --> H
     S --> W[Close unit or continue with next bounded unit]
 
@@ -107,9 +107,9 @@ flowchart TD
 - `cf-architecture-map` can also be used standalone and stop cleanly after updating `.cflow/architecture.md`.
 - `cf-refine` is a separate public path for one bounded local pass. If the task becomes structural, multi-step, or architecture-shaping, it must route to `cf-start` instead of stretching the refine pass.
 - A short approval can continue directly from the checkpoint.
-- Any non-trivial steering after the checkpoint must go through `cf-phase-brainstorming` first.
-- Repository-level assessment framing may stay inside `cf-start` or use `cf-phase-assessment` when a dedicated pass is needed.
-- Lightweight work normally enters `cf-phase-work-unit-planning` before local mapping or execution so the brief records the ordered backlog and the recommended next unit.
+- Any non-trivial steering after the checkpoint must go through `cf-internal-brainstorming` first.
+- Repository-level assessment framing may stay inside `cf-start` or use `cf-internal-assessment` when a dedicated pass is needed.
+- Lightweight work normally enters `cf-internal-work-unit-planning` before local mapping or execution so the brief records the ordered backlog and the recommended next unit.
 - Hard-path work must define target shape and migration units before code edits.
 - Resume is not its own phase; `cf-start` re-enters the correct phase using the brief, the current architecture map, and repository state.
 
@@ -120,15 +120,15 @@ flowchart TD
 | Architecture mapping and bootstrap | `cf-architecture-map` | Creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and returns without planning work units. | No |
 | Local refine entry | `cf-refine` | Applies one bounded local cleanup pass, or routes to `cf-start` when the work is really structural, multi-step, or architecture-shaping. | Yes |
 | Workflow entry and resume | `cf-start` | Uses current artifacts, ensures architecture context is current, and decides whether this is fresh assessment, resume, review, or verify. | Indirectly, only by routing into execution later |
-| Repository assessment | `cf-start`, `cf-phase-assessment` | Checks whether intervention is justified, records candidate intervention areas, and frames plausible direction using the current architecture map. | No |
-| Alignment | `cf-start`, `cf-phase-brainstorming` | Stops after fresh assessment, then resolves user steering before execution continues. | No |
-| Work-unit planning | `cf-phase-work-unit-planning` | Orders credible bounded work units, records dependencies, and chooses the recommended next unit without invoking hard-path structural planning. | No |
-| Local mapping | `cf-phase-concentration-map`, `cf-phase-fragmentation-map` | Maps the active seam and clarifies whether the next bounded unit should split or consolidate. | No |
-| Hard-path planning | `cf-phase-target-shape`, `cf-phase-migration-unit-planning` | Defines a repository-fitting target direction and breaks it into bounded migration units that prove that direction incrementally. | No |
-| Safety lock | `cf-step-safety-net` | Chooses the smallest credible behavior lock before structural work. | No |
-| Structural execution | `cf-step-boundary-apply`, `cf-step-consolidate-seam` | Applies exactly one bounded structural unit, preserving behavior. | Yes |
-| Local cleanup | `cf-step-local-simplify` | Improves naming and local readability after a structural step without reopening architecture. | Yes |
-| Judgment and evidence | `cf-review`, `cf-verify`, `cf-feedback-intake` | Reviews structural quality, gathers factual verification, and turns feedback into a verified next action. | No |
+| Repository assessment | `cf-start`, `cf-internal-assessment` | Checks whether intervention is justified, records candidate intervention areas, and frames plausible direction using the current architecture map. | No |
+| Alignment | `cf-start`, `cf-internal-brainstorming` | Stops after fresh assessment, then resolves user steering before execution continues. | No |
+| Work-unit planning | `cf-internal-work-unit-planning` | Orders credible bounded work units, records dependencies, and chooses the recommended next unit without invoking hard-path structural planning. | No |
+| Local mapping | `cf-internal-concentration-map`, `cf-internal-fragmentation-map` | Maps the active seam and clarifies whether the next bounded unit should split or consolidate. | No |
+| Hard-path planning | `cf-internal-target-shape`, `cf-internal-migration-unit-planning` | Defines a repository-fitting target direction and breaks it into bounded migration units that prove that direction incrementally. | No |
+| Safety lock | `cf-internal-safety-net` | Chooses the smallest credible behavior lock before structural work. | No |
+| Structural execution | `cf-internal-boundary-apply`, `cf-internal-consolidate-seam` | Applies exactly one bounded structural unit, preserving behavior. | Yes |
+| Local cleanup | `cf-internal-local-simplify` | Improves naming and local readability after a structural step without reopening architecture. | Yes |
+| Judgment and evidence | `cf-internal-review`, `cf-internal-verify`, `cf-internal-feedback-intake` | Reviews structural quality, gathers factual verification, and turns feedback into a verified next action. | No |
 
 ## Typical Sequences
 
@@ -138,19 +138,19 @@ flowchart TD
 
 ### Local Refine
 
-`cf-refine` -> optional `cf-architecture-map` -> optional `cf-step-safety-net` -> local refine pass -> optional `cf-review` -> optional `cf-verify`
+`cf-refine` -> optional `cf-architecture-map` -> optional `cf-internal-safety-net` -> local refine pass -> optional `cf-internal-review` -> optional `cf-internal-verify`
 
 ### Soft Split
 
-`cf-start` -> alignment checkpoint -> `cf-phase-work-unit-planning` -> `cf-phase-concentration-map` -> `cf-step-safety-net` -> `cf-step-boundary-apply` -> optional `cf-step-local-simplify` -> `cf-review` -> `cf-verify`
+`cf-start` -> alignment checkpoint -> `cf-internal-work-unit-planning` -> `cf-internal-concentration-map` -> `cf-internal-safety-net` -> `cf-internal-boundary-apply` -> optional `cf-internal-local-simplify` -> `cf-internal-review` -> `cf-internal-verify`
 
 ### Soft Consolidate
 
-`cf-start` -> alignment checkpoint -> `cf-phase-work-unit-planning` -> `cf-phase-fragmentation-map` -> `cf-step-safety-net` -> `cf-step-consolidate-seam` -> optional `cf-step-local-simplify` -> `cf-review` -> `cf-verify`
+`cf-start` -> alignment checkpoint -> `cf-internal-work-unit-planning` -> `cf-internal-fragmentation-map` -> `cf-internal-safety-net` -> `cf-internal-consolidate-seam` -> optional `cf-internal-local-simplify` -> `cf-internal-review` -> `cf-internal-verify`
 
 ### Hard Restructure
 
-`cf-start` -> alignment checkpoint -> `cf-phase-target-shape` -> `cf-phase-migration-unit-planning` -> `cf-step-safety-net` -> one bounded execution unit -> `cf-review` -> `cf-verify`
+`cf-start` -> alignment checkpoint -> `cf-internal-target-shape` -> `cf-internal-migration-unit-planning` -> `cf-internal-safety-net` -> one bounded execution unit -> `cf-internal-review` -> `cf-internal-verify`
 
 ### Resume
 

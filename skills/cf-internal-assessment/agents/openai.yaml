@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cflow:internal assessment"
+  short_description: "Assess intervention need, candidate areas, and plausible modes"
+policy:
+  allow_implicit_invocation: true

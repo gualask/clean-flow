@@ -12,20 +12,20 @@ Supported public entrypoints:
 
 Internal workflow skills:
 
-- `cf-phase-assessment`
-- `cf-phase-brainstorming`
-- `cf-phase-concentration-map`
-- `cf-phase-fragmentation-map`
-- `cf-phase-work-unit-planning`
-- `cf-phase-target-shape`
-- `cf-phase-migration-unit-planning`
-- `cf-step-safety-net`
-- `cf-step-boundary-apply`
-- `cf-step-consolidate-seam`
-- `cf-step-local-simplify`
-- `cf-review`
-- `cf-verify`
-- `cf-feedback-intake`
+- `cf-internal-assessment`
+- `cf-internal-brainstorming`
+- `cf-internal-concentration-map`
+- `cf-internal-fragmentation-map`
+- `cf-internal-work-unit-planning`
+- `cf-internal-target-shape`
+- `cf-internal-migration-unit-planning`
+- `cf-internal-safety-net`
+- `cf-internal-boundary-apply`
+- `cf-internal-consolidate-seam`
+- `cf-internal-local-simplify`
+- `cf-internal-review`
+- `cf-internal-verify`
+- `cf-internal-feedback-intake`
 
 ## Install
 

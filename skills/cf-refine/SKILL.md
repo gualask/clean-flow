@@ -62,10 +62,10 @@ Ensure you have read these references in this invocation when their trigger cond
 - Prefer local edits in the touched area.
 - Prefer renaming, local extraction, local inlining, branch simplification, and import or export cleanup over new abstractions.
 - Prefer existing repository patterns over invented style fixes.
-- If the edit is behaviorally sensitive, coverage is weak, or the user wants higher confidence before edits, ensure architecture context exists with `cf-architecture-map` and then use `cf-step-safety-net` before risky changes.
+- If the edit is behaviorally sensitive, coverage is weak, or the user wants higher confidence before edits, ensure architecture context exists with `cf-architecture-map` and then use `cf-internal-safety-net` before risky changes.
 - After editing, run at least one lightweight relevant check when one is available.
-- If structural judgment is needed after the pass, ensure architecture context exists with `cf-architecture-map` and use `cf-review`.
-- If factual evidence is needed after the pass, ensure architecture context exists with `cf-architecture-map` and use `cf-verify`.
+- If structural judgment is needed after the pass, ensure architecture context exists with `cf-architecture-map` and use `cf-internal-review`.
+- If factual evidence is needed after the pass, ensure architecture context exists with `cf-architecture-map` and use `cf-internal-verify`.
 - Do not create or refresh `.cflow/refactor-brief.md` from this skill itself.
 - If escalation into internal Cflow skills becomes the real work, stop treating this as a pure refine pass.
 

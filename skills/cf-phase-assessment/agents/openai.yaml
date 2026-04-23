@@ -1,5 +1,0 @@
-interface:
-  display_name: "Cflow:phase assessment"
-  short_description: "Assess intervention need, candidate areas, and plausible modes"
-policy:
-  allow_implicit_invocation: true
