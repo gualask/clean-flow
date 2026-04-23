@@ -32,6 +32,8 @@ Use this when the next step is not "design a new repository shape", but "choose 
 - Keep each work unit explicitly `mode: split` or `mode: consolidate`.
 - Choose exactly one `recommended-next` unit.
 - Do not activate multiple work units at once.
+- If the next unit is clear enough to continue into local mapping, safety-net, or execution, mark it as the active current work unit.
+- If planning stops before activation, leave `current work unit` as `none` and record exactly one `recommended next work unit`.
 - Do not invent a repo-wide target shape in this skill.
 - Do not freeze brittle file lists when the unit can be named more stably in workflow or seam terms.
 
@@ -54,6 +56,9 @@ If a brief exists or is created, update:
 - `Execution state`
 - `Handoff notes`
 - `Unknowns to re-check`
+
+- In `Execution state`, set `current work unit` to the active selected unit when one is ready to continue.
+- Otherwise set `current work unit` to `none` and set `recommended next work unit` to the best next candidate.
 
 If planning clarifies the near-term path, also update:
 

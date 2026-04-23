@@ -7,11 +7,16 @@ This is the only supported user-facing entrypoint for the pack.
 Do not tell the user to invoke internal phase or step skills directly.
 Internal phase and step skills are still valid workflow steps when the repository state already fits them.
 Do not behave like a router that only suggests another skill.
-Advance the workflow yourself whenever the correct next phase is clear.
+When the next phase is already clear from repository state and Cflow artifacts, advance into it yourself instead of only suggesting it.
 
 ## Goal
 
 Handle fresh assessment, artifact-backed resume, or review/verify re-entry through `cf-start`.
+
+For non-trivial execution paths:
+
+- lightweight cleanup or refactor must enter `cf-phase-work-unit-planning` before local mapping or execution, unless the next active work unit is already clearly selected and recorded
+- hard-path restructuring must enter `cf-phase-target-shape` and then `cf-phase-migration-unit-planning` before implementation
 
 ## Hard rule
 
@@ -39,20 +44,18 @@ Any doubt, question, reassurance request, scope change, risk concern, or directi
 3. Re-check the repository state.
 4. Treat the repository as the source of truth.
 
-## Bootstrap
+## Reference map
 
-Use `assets/architecture.template.md` and `assets/refactor-brief.template.md` as the source templates for Cflow artifacts.
+Ensure you have read these references in this invocation when their trigger condition is met:
 
-When bootstrapping or refreshing Cflow artifacts:
+- Ensure you have read [references/routing.md](references/routing.md) before choosing the entry mode when assessment vs resume vs review-or-verify is not trivially obvious from the prompt and repository state.
+- Ensure you have read [references/routing.md](references/routing.md) before finalizing the proposed path for any non-trivial fresh assessment.
+- Ensure you have read [references/routing.md](references/routing.md) before resume routing whenever the next phase is not already obvious from an active current work unit.
+- Ensure you have read [references/artifacts.md](references/artifacts.md) before creating `.cflow/`, touching `.gitignore`, creating or refreshing `.cflow/*`, or deciding which brief fields must be updated.
 
-- create `.cflow/` if it does not exist
-- add `.cflow/` to the repository `.gitignore` if the entry is missing
-- create `.cflow/architecture.md` from `assets/architecture.template.md` when a repository map is needed and the file is missing
-- create `.cflow/refactor-brief.md` from `assets/refactor-brief.template.md` when the work is non-trivial, risky, multi-step, or likely to resume later and the file is missing
-- never create root-level `architecture.md` or `refactor-brief.md` for Cflow
-- when a Cflow artifact already exists, update it in place instead of re-copying the template blindly
+Use `assets/architecture.template.md` and `assets/refactor-brief.template.md` as the source templates whenever artifact bootstrap is required.
 
-## Intent inference
+## Intent modes
 
 Infer the current intent from the user's prompt.
 
@@ -63,14 +66,7 @@ Use these modes:
 - **resume-existing-work**
 - **review-or-verify**
 
-Heuristics:
-
-- If there is no live brief or the task looks new, start with assessment.
-- If there is a live brief and the user says resume / continue / proceed, resume from the correct phase.
-- If the user explicitly asks only for review or verification, bootstrap or refresh prerequisites first and then route internally to that mode.
-- For non-trivial fresh work, default to **assessment-then-alignment**.
-
-## Fresh assessment responsibilities
+## Fresh assessment
 
 Internally perform:
 
@@ -86,35 +82,35 @@ Determine:
 - repository context and domain gravity
 - current boundary / packaging shape and architecture fit
 - whether intervention is justified
+- candidate intervention areas worth tracking in the brief
 - dominant pressure: concentration | fragmentation | mixed | neither
 - intervention mode: soft-split | soft-consolidate | soft-mixed | hard-restructure | no-structural-refactor
 
 Rules:
 
 - Keep assessment repository-level.
-- Update or create `.cflow/architecture.md` whenever it is missing, stale, or materially incomplete.
 - For non-trivial work, create or refresh `.cflow/refactor-brief.md`.
 - Treat `soft-mixed` as a repository-level outcome, not as one executable step.
 - In `soft-mixed`, break the work into bounded work units and assign each unit exactly one `mode`: `split` or `consolidate`.
+- For lightweight paths, propose `cf-phase-work-unit-planning` as the next planning phase before local mapping or execution unless the next active unit is already clearly selected and recorded.
+- For hard restructure, propose `cf-phase-target-shape` first, then `cf-phase-migration-unit-planning`.
 - Do not implement yet.
 - Always end fresh assessment at the alignment checkpoint with exactly one focused question.
 
-## Resume responsibilities
+## Resume
 
 Resume is not a phase. Re-enter the correct phase using the brief and the repository.
 
-Resume from the correct point:
-
-- if the brief is stale, the seam changed materially, or `current work unit` is `none` -> reassessment or next-unit selection
-- if an active work unit is selected but not ready -> concentration or fragmentation mapping, or safety-net
-- if an active work unit is ready for structural work -> execute by its declared mode:
-  - `split` -> split work
-  - `consolidate` -> consolidate work
-- if structural work is already done -> review or verify based on whether judgment or factual closure is needed
-
 Rules:
 
-- In `soft-mixed`, select the next work unit by local dominant pressure and use that unit's declared mode.
+- If the brief is stale, or repository changes made the recorded path or work-unit state unreliable, reassess first.
+- If hard-path direction is chosen but target shape is still unresolved, use `cf-phase-target-shape`.
+- If hard-path direction is aligned but migration units are not yet planned, use `cf-phase-migration-unit-planning`.
+- If `current work unit` is `none` and the next bounded unit is not yet selected and recorded, use `cf-phase-work-unit-planning`.
+- If an active work unit exists and its seam still needs mapping, continue into the matching map skill.
+- If an active work unit exists and mapping is sufficient but behavior is not yet locked, continue into `cf-step-safety-net`.
+- If an active work unit exists and it is ready for structural work, execute it by its declared mode.
+- If an active work unit's structural work is already complete, continue into `cf-review` or `cf-verify`.
 - Do not silently switch direction without updating the artifacts.
 - Do not execute more than one bounded work unit per invocation unless the user explicitly asked for a broader pass.
 
@@ -152,27 +148,11 @@ Provide exactly these sections:
 5. **What remains**
 6. **Next action**
 
-## Artifact update requirements
+## Artifact update baseline
 
-If `.cflow/architecture.md` exists or is created, update it when repository understanding or guidance materially changed.
+If `.cflow/architecture.md` exists or is created, update it whenever current repository understanding or guidance in the file would otherwise be stale.
 
-If `.cflow/refactor-brief.md` exists or is created, update at least:
+If `.cflow/refactor-brief.md` exists or is created, update the fields required by [references/artifacts.md](references/artifacts.md).
 
-- `Context`
-- `Assessment summary`
-- `Concentration pressure`
-- `Fragmentation pressure`
-- `Alignment notes`
-- `Execution state`
-- `Handoff notes`
-
-- In `Execution state`, set `current work unit` to the active selected unit, or `none` at a safe stopping point with no next unit selected.
-
-Update these too when they changed:
-
-- `Target direction`
-- `Work units`
-- `Safety net`
-- `Verification`
-- `Review notes`
-- `Unknowns to re-check`
+- In `Execution state`, keep `current work unit` as the active selected unit only; use `none` at a safe stopping point with no next unit selected.
+- In `Execution state`, set `recommended next work unit` whenever the near-term next unit is known but not yet completed.

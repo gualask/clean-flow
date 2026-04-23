@@ -71,6 +71,8 @@ Once enough decisions are aligned:
 - keep work units concise
 - do not write pseudo-code
 - do not freeze brittle file lists
+- for lightweight paths, recommend `cf-phase-work-unit-planning` unless the next active work unit is already clear and recorded
+- for hard-path restructuring, recommend `cf-phase-target-shape` before migration-unit planning
 
 ## Output rules
 
@@ -84,3 +86,4 @@ If alignment is now sufficient, provide exactly these sections:
 4. **Recommended next action**
 
 Do not resume execution from this skill while a material decision is still open.
+Do not skip `cf-phase-work-unit-planning` on lightweight paths unless the next active work unit is already explicitly selected and ready to continue.

@@ -92,6 +92,82 @@ That document defines the user plus LLM trial loop and should stay separate from
 
 For the shortest runtime-oriented walkthrough of the flow, see [workflow-map.md](./workflow-map.md).
 
+## Using `references/` In Skills
+
+Use `references/` to keep a skill lean without hiding its core contract.
+
+The rule is:
+
+- keep the runtime contract and core workflow in `SKILL.md`
+- move detailed reference material into `references/`
+
+Keep in `SKILL.md`:
+
+- what the skill is for
+- when it should be used
+- the core workflow or phase role
+- hard gates and routing rules
+- the required output contract
+- the minimum artifact behavior the skill must enforce
+
+Move to `references/` only when the content is supportive rather than foundational, for example:
+
+- detailed decision tables
+- field-by-field artifact update lists
+- long heuristic sets
+- large schemas or API-like reference material
+- examples or variant-specific guidance
+
+Do not move a rule into `references/` if that rule is required to understand the skill's basic role in the flow.
+If removing a paragraph from `SKILL.md` would make the skill's core behavior unclear, that paragraph probably belongs in `SKILL.md`, not in `references/`.
+
+### When To Use `references/`
+
+Add `references/` when one of these is true:
+
+- the skill is becoming dense because of conditional detail rather than true workflow complexity
+- the same skill needs a compact main contract plus deeper material that is only relevant in some invocations
+- the extracted content is reference-like and can be read on demand without changing the meaning of the main skill
+
+Do not add `references/` just to make a skill shorter on paper.
+If the extracted material is always required to understand the core workflow, keep it in `SKILL.md`.
+
+### How To Link `references/` Correctly
+
+Every reference file must be linked directly from `SKILL.md`.
+Keep references one level deep from `SKILL.md`; do not rely on nested reference chains.
+
+When linking a reference from `SKILL.md`:
+
+- name the file by role, not by vague topic
+- state exactly when it must be read
+- prefer trigger-based wording over generic wording
+- make the trigger idempotent when repeated passes are likely in one invocation
+
+Good patterns:
+
+- `Ensure you have read references/routing.md in this invocation before finalizing any non-trivial fresh assessment path.`
+- `Ensure you have read references/artifacts.md in this invocation before creating .cflow/, touching .gitignore, or deciding required brief updates.`
+
+Weak patterns to avoid:
+
+- `Read this when needed.`
+- `See references for more details.`
+- `Read this before X.` when the same invocation may pass through `X` multiple times and the wording would encourage unnecessary rereads
+
+If a reference is large:
+
+- add a table of contents when it grows beyond roughly 100 lines
+- add grep or search hints from `SKILL.md` when it becomes very large
+
+### `references/` Versus `docs/`
+
+Use `references/` for runtime-adjacent material that the model may need during skill execution.
+Use `docs/` for maintainer documentation only.
+
+Do not assume anything under `docs/` is available to the model at runtime.
+If a runtime behavior depends on it, that rule must live in `SKILL.md` or in a reference file directly linked from `SKILL.md`.
+
 ## Skill Reference
 
 This section is a maintainer-facing quick reference.
@@ -368,3 +444,5 @@ The most important manual validation is still a real target-repo run:
 - `skills/cf-start/SKILL.md`
 - `skills/cf-start/assets/architecture.template.md`
 - `skills/cf-start/assets/refactor-brief.template.md`
+- `skills/cf-start/references/routing.md`
+- `skills/cf-start/references/artifacts.md`
