@@ -19,18 +19,16 @@ Do not reopen repository architecture in this skill.
 
 Improve local readability without changing the chosen structural direction.
 
+Before editing code, ensure you have read [../_shared/references/local-refactor-rules.md](../_shared/references/local-refactor-rules.md) in this invocation.
+
 ## Rules
 
 - Preserve behavior.
 - Keep the simplification local to the touched area.
 - Improve local readability, not architecture labels.
-- Prefer intention-revealing names.
-- Flatten control flow when it improves readability.
-- Keep helpers single-purpose.
-- Prefer small local helpers over new shared modules.
+- Apply the shared local refactor rules for naming, control flow, helper shape, and hot-path caution.
 - Do not create new files or abstractions unless they clearly reduce local complexity.
 - Do not split files just to make them shorter.
-- Avoid vague names like `manager`, `processor`, `util`, `helper`, or `common` unless the role is genuinely narrow and explicit.
 - Stop if the simplification would reopen structural choices.
 - After editing code, run at least one lightweight relevant check when one is available.
 

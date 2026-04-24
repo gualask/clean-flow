@@ -22,6 +22,21 @@ export async function writeSkill(root, name, files = {}) {
   return skillDir;
 }
 
+export async function writeSupportDirectory(root, name = "_shared", files = {}) {
+  const supportDir = path.join(root, name);
+  const defaultFiles = {
+    "references/example.md": "# Example\n",
+  };
+
+  for (const [relativePath, content] of Object.entries({ ...defaultFiles, ...files })) {
+    const absolutePath = path.join(supportDir, relativePath);
+    await mkdir(path.dirname(absolutePath), { recursive: true });
+    await writeFile(absolutePath, content, "utf8");
+  }
+
+  return supportDir;
+}
+
 export async function listDirectoryNames(root) {
   try {
     const entries = await readdir(root, { withFileTypes: true });

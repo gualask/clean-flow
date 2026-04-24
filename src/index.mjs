@@ -15,9 +15,9 @@ const HELP_TEXT = `Usage:
   cflow-skills remove --global [--dry-run]
 
 Notes:
-  - install syncs skills/ into <repo>/.agents/skills
+  - install syncs packaged skills and support resources into <repo>/.agents/skills
   - --global targets $CODEX_HOME/skills or ~/.codex/skills
-  - remove deletes only Cflow-owned skills
+  - remove deletes only Cflow-owned skill and support directories
 `;
 
 export async function main(argv, io = { stdout: process.stdout, stderr: process.stderr }) {
@@ -136,9 +136,9 @@ function writeSummary(stream, result) {
     stream.write(`Pruned: ${result.pruned.length}\n`);
     stream.write(`Conflicts: ${result.conflicts.length}\n`);
     stream.write(`Applied: ${result.applied ? "yes" : "no"}\n`);
-    writeEntries(stream, "Added skills", result.added);
-    writeEntries(stream, "Updated skills", result.updated);
-    writeEntries(stream, "Pruned skills", result.pruned);
+    writeEntries(stream, "Added entries", result.added);
+    writeEntries(stream, "Updated entries", result.updated);
+    writeEntries(stream, "Pruned entries", result.pruned);
     writeConflicts(stream, result.conflicts);
     return;
   }
@@ -148,7 +148,7 @@ function writeSummary(stream, result) {
   stream.write(`Dry run: ${result.dryRun ? "yes" : "no"}\n`);
   stream.write(`Removed: ${result.removed.length}\n`);
   stream.write(`Kept: ${result.kept.length}\n`);
-  writeEntries(stream, "Removed skills", result.removed);
+  writeEntries(stream, "Removed entries", result.removed);
 }
 
 function writeEntries(stream, label, entries) {

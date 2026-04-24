@@ -11,30 +11,42 @@ import {
   makeTempWorkspace,
   readText,
   writeSkill,
+  writeSupportDirectory,
 } from "./support/helpers.mjs";
 
-test("install copies new skills and writes owned markers", async () => {
+test("install copies new skills and support directories with owned markers", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
   const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
 
   await mkdir(sourceRoot, { recursive: true });
+  await writeSupportDirectory(sourceRoot);
+  await writeSupportDirectory(sourceRoot, "_draft");
   await writeSkill(sourceRoot, "cf-start");
   await writeSkill(sourceRoot, "cf-internal-review");
 
   const result = await installSkills({ sourceRoot, destinationRoot });
 
-  assert.equal(result.added.length, 2);
+  assert.equal(result.added.length, 3);
   assert.equal(result.updated.length, 0);
   assert.equal(result.pruned.length, 0);
   assert.equal(result.conflicts.length, 0);
   assert.equal(result.applied, true);
-  assert.deepEqual(await listDirectoryNames(destinationRoot), ["cf-internal-review", "cf-start"]);
+  assert.deepEqual(await listDirectoryNames(destinationRoot), [
+    "_shared",
+    "cf-internal-review",
+    "cf-start",
+  ]);
 
   const marker = await readMarker(path.join(destinationRoot, "cf-start"));
   assert.equal(marker.owner, "clean-flow");
   assert.equal(marker.pack, "cflow");
   assert.match(marker.fingerprint, /^sha256:/);
+
+  const supportMarker = await readMarker(path.join(destinationRoot, "_shared"));
+  assert.equal(supportMarker.owner, "clean-flow");
+  assert.equal(supportMarker.pack, "cflow");
+  assert.equal(supportMarker.sourceKind, "support");
 });
 
 test("install updates owned skills, prunes removed owned skills, and keeps foreign skills", async () => {
@@ -45,11 +57,17 @@ test("install updates owned skills, prunes removed owned skills, and keeps forei
   await mkdir(sourceRoot, { recursive: true });
   await mkdir(destinationRoot, { recursive: true });
 
+  await writeSupportDirectory(sourceRoot, "_shared", {
+    "references/example.md": "# Updated shared reference\n",
+  });
   await writeSkill(sourceRoot, "cf-start", {
     "SKILL.md": `---\nname: "cf-start"\ndescription: "Updated"\n---\n\n# cf-start v2\n`,
   });
   await writeSkill(sourceRoot, "cf-internal-review");
 
+  const ownedShared = await writeSupportDirectory(destinationRoot, "_shared", {
+    "references/example.md": "# Old shared reference\n",
+  });
   const ownedStart = await writeSkill(destinationRoot, "cf-start", {
     "SKILL.md": `---\nname: "cf-start"\ndescription: "Old"\n---\n\n# cf-start v1\n`,
   });
@@ -58,6 +76,11 @@ test("install updates owned skills, prunes removed owned skills, and keeps forei
     "SKILL.md": `---\nname: "foreign-skill"\ndescription: "Foreign"\n---\n\n# foreign\n`,
   });
 
+  await writeMarker(ownedShared, {
+    sourceSkill: "_shared",
+    sourceKind: "support",
+    fingerprint: await computeSkillFingerprint(ownedShared),
+  });
   await writeMarker(ownedStart, {
     sourceSkill: "cf-start",
     fingerprint: await computeSkillFingerprint(ownedStart),
@@ -69,15 +92,21 @@ test("install updates owned skills, prunes removed owned skills, and keeps forei
 
   const result = await installSkills({ sourceRoot, destinationRoot });
 
-  assert.equal(result.updated.length, 1);
+  assert.equal(result.updated.length, 2);
   assert.equal(result.added.length, 1);
   assert.equal(result.pruned.length, 1);
   assert.equal(result.conflicts.length, 0);
   assert.deepEqual(await listDirectoryNames(destinationRoot), [
+    "_shared",
     "cf-internal-review",
     "cf-start",
     "foreign-skill",
   ]);
+
+  const updatedSharedBody = await readText(
+    path.join(destinationRoot, "_shared", "references", "example.md"),
+  );
+  assert.match(updatedSharedBody, /Updated shared reference/);
 
   const updatedBody = await readText(path.join(destinationRoot, "cf-start", "SKILL.md"));
   assert.match(updatedBody, /Updated/);

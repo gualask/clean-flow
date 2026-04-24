@@ -17,7 +17,7 @@ At runtime:
 Cflow has three distinct runtime pieces:
 
 1. distribution
-   - `cflow-skills install` copies the skill directories
+   - `cflow-skills install` copies skill directories plus `_shared` support resources
    - install does not bootstrap `.cflow/`
 2. bootstrap
    - `cf-start` is the main supported user-facing workflow entrypoint
@@ -46,6 +46,7 @@ Target repositories use these canonical paths:
 ## Source Of Truth
 
 The canonical skill definitions live in `skills/`.
+Shared runtime references live in `skills/_shared/` and are copied with the pack, but they are not skills.
 
 Agent-specific install entrypoints live in `install/<agent>/`, for example `install/codex/GLOBAL.md` and `install/codex/LOCAL.md`.
 
@@ -61,11 +62,12 @@ Keep `cf-architecture-map`, `cf-start`, and these asset files aligned.
 ## Repository Layout
 
 ```text
-skills/   canonical skill source
-src/      sync and fingerprint logic
-bin/      CLI entrypoint
-test/     filesystem and structure tests
-docs/     maintainer documentation
+skills/          canonical skill source
+skills/_shared/  shared runtime references used by multiple skills
+src/             sync and fingerprint logic
+bin/             CLI entrypoint
+test/            filesystem and structure tests
+docs/            maintainer documentation
 ```
 
 ## Key Design Decisions
@@ -86,6 +88,7 @@ docs/     maintainer documentation
 - Files under `docs/` are maintainer documentation, not runtime instructions for models using the skills.
 - Do not assume anything under `docs/` is automatically visible to the model at runtime; if a rule must shape behavior, it must live in the relevant `skills/*/SKILL.md`.
 - The installer distributes skills; it does not initialize repository state.
+- `_shared` is a Cflow pack convention for shared support references, not a standalone skill or an automatic import mechanism.
 - `soft-mixed` is a repository-level assessment outcome, not an execution mode for one step.
 - Every executable work unit must choose exactly one mode: `split` or `consolidate`.
 - A local fast lane may skip work-unit planning when one explicit, local, low-risk, behavior-preserving cohesive unit is already clear enough to map, lock, or execute.
@@ -179,6 +182,22 @@ Use `docs/` for maintainer documentation only.
 
 Do not assume anything under `docs/` is available to the model at runtime.
 If a runtime behavior depends on it, that rule must live in `SKILL.md` or in a reference file directly linked from `SKILL.md`.
+
+## Shared Support References
+
+Use `skills/_shared/references/` only for runtime rules that are consumed by multiple skills.
+
+This is a Cflow pack convention, not a native skill import feature.
+The installer copies `_shared` next to the installed skill directories, but the model reads shared files only when a consuming `SKILL.md` links them explicitly.
+Shared references are the only intentional exception to the per-skill `references/` layout.
+
+Rules:
+
+- `_shared` must not contain `SKILL.md`.
+- Shared references must be linked directly from every consuming `SKILL.md`.
+- Keep skill-specific workflow, gating, and output contracts inside the consuming skill.
+- Do not move a rule into `_shared` unless at least two skills genuinely use the same rule.
+- If a skill must work when installed alone outside this pack, keep its required reference material inside that skill instead.
 
 ## Skill Reference
 
@@ -454,7 +473,7 @@ Current automated coverage checks:
 - install on empty target
 - update + prune + preserve foreign skills
 - conflict detection on foreign same-name skills
-- remove of Cflow-owned skills only
+- remove of Cflow-owned skill and support directories only
 - structural checks for packaged skills
 - Codex implicit invocation policy for shipped Cflow skills
 - presence of `cf-start` bootstrap assets

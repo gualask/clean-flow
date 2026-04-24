@@ -12,7 +12,7 @@ The phase index below is the text fallback if the diagram is not rendered.
 - `cf-start` is the main supported direct user entrypoint for workflow execution and resume.
 - `cf-architecture-map` is also a supported direct user entrypoint, but only for standalone repository mapping.
 - `cf-cognitive` is a supported direct user entrypoint for local file-level cognitive complexity refactors; it can use explicit files or discover up to three justified candidates, and it does not require `.cflow/`.
-- `cflow-skills install` only syncs `skills/`; it does not create `.cflow/`.
+- `cflow-skills install` syncs packaged skills plus shared support resources; it does not create `.cflow/`.
 - All remaining skills are internal workflow steps, not supported user-facing entrypoints.
 - Internal workflow skills should still be implicitly invocable in Codex when their descriptions match the current step.
 - If an internal workflow skill is reached without required architecture context, it should stop and route to `cf-architecture-map`.
@@ -157,6 +157,7 @@ flowchart TD
 ## Artifacts Through The Flow
 
 - Installer output lives in the target skill directory: `.agents/skills/` for local install, or `$CODEX_HOME/skills` / `~/.codex/skills` for global install.
+- Shared support references live under `_shared/`; they are linked explicitly by consuming skills and are not standalone skills.
 - Runtime state lives in the target repository under `.cflow/`.
 - The canonical runtime artifacts are:
   - `.cflow/architecture.md`

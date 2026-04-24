@@ -4,7 +4,7 @@ import { computeSkillFingerprint } from "../lib/fingerprint.mjs";
 import {
   ensureDirectory,
   listDirectories,
-  listSkillDirectories,
+  listPackageDirectories,
   removeDirectory,
   removeTempDirectories,
   replaceDirectoryFromSource,
@@ -12,14 +12,15 @@ import {
 import { isOwnedMarker, readMarker, writeMarker } from "../lib/marker.mjs";
 
 export async function installSkills({ sourceRoot, destinationRoot, dryRun = false }) {
-  const sourceSkills = await listSkillDirectories(sourceRoot);
+  const sourcePackages = await listPackageDirectories(sourceRoot);
+  const sourceSkills = sourcePackages.filter((entry) => entry.kind === "skill");
   if (sourceSkills.length === 0) {
     throw new Error(`No skills found in source root: ${sourceRoot}`);
   }
 
   const targetDirectories = await listDirectories(destinationRoot);
   const targetByName = new Map(targetDirectories.map((entry) => [entry.name, entry.path]));
-  const sourceByName = new Map(sourceSkills.map((entry) => [entry.name, entry.path]));
+  const sourceByName = new Map(sourcePackages.map((entry) => [entry.name, entry.path]));
 
   const result = {
     command: "install",
@@ -36,15 +37,16 @@ export async function installSkills({ sourceRoot, destinationRoot, dryRun = fals
 
   await removeTempDirectories(destinationRoot);
 
-  for (const sourceSkill of sourceSkills) {
-    const sourceFingerprint = await computeSkillFingerprint(sourceSkill.path);
-    const targetDir = targetByName.get(sourceSkill.name);
+  for (const sourcePackage of sourcePackages) {
+    const sourceFingerprint = await computeSkillFingerprint(sourcePackage.path);
+    const targetDir = targetByName.get(sourcePackage.name);
 
     if (!targetDir) {
       result.added.push({
-        name: sourceSkill.name,
-        sourceDir: sourceSkill.path,
-        targetDir: path.join(destinationRoot, sourceSkill.name),
+        name: sourcePackage.name,
+        kind: sourcePackage.kind,
+        sourceDir: sourcePackage.path,
+        targetDir: path.join(destinationRoot, sourcePackage.name),
         fingerprint: sourceFingerprint,
       });
       continue;
@@ -53,7 +55,8 @@ export async function installSkills({ sourceRoot, destinationRoot, dryRun = fals
     const marker = await readMarker(targetDir);
     if (!isOwnedMarker(marker)) {
       result.conflicts.push({
-        name: sourceSkill.name,
+        name: sourcePackage.name,
+        kind: sourcePackage.kind,
         targetDir,
         reason: "destination exists but is not owned by Cflow",
       });
@@ -63,7 +66,8 @@ export async function installSkills({ sourceRoot, destinationRoot, dryRun = fals
     const targetFingerprint = await computeSkillFingerprint(targetDir);
     if (targetFingerprint === sourceFingerprint) {
       result.unchanged.push({
-        name: sourceSkill.name,
+        name: sourcePackage.name,
+        kind: sourcePackage.kind,
         targetDir,
         fingerprint: sourceFingerprint,
       });
@@ -71,8 +75,9 @@ export async function installSkills({ sourceRoot, destinationRoot, dryRun = fals
     }
 
     result.updated.push({
-      name: sourceSkill.name,
-      sourceDir: sourceSkill.path,
+      name: sourcePackage.name,
+      kind: sourcePackage.kind,
+      sourceDir: sourcePackage.path,
       targetDir,
       fingerprint: sourceFingerprint,
       previousFingerprint: targetFingerprint,
@@ -101,6 +106,7 @@ export async function installSkills({ sourceRoot, destinationRoot, dryRun = fals
     await replaceDirectoryFromSource(entry.sourceDir, entry.targetDir, async (stagedDir) => {
       await writeMarker(stagedDir, {
         sourceSkill: entry.name,
+        sourceKind: entry.kind,
         fingerprint: entry.fingerprint,
       });
     });

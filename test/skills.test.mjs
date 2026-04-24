@@ -124,6 +124,50 @@ test("cf-cognitive stays standalone and local", async () => {
   );
 });
 
+test("shared support references are not packaged as public skills", async () => {
+  const skills = await listSkillDirectories(SKILLS_ROOT);
+  const skillNames = skills.map((skill) => skill.name);
+
+  assert.equal(skillNames.includes("_shared"), false);
+  assert.equal(
+    await pathExists(
+      path.join(SKILLS_ROOT, "_shared", "references", "local-refactor-rules.md"),
+    ),
+    true,
+  );
+  assert.equal(
+    await pathExists(path.join(SKILLS_ROOT, "_shared", "references", "reference-audit.md")),
+    true,
+  );
+
+  const cognitiveBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
+    "utf8",
+  );
+  const localSimplifyBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-internal-local-simplify", "SKILL.md"),
+    "utf8",
+  );
+  const boundaryBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-internal-boundary-apply", "SKILL.md"),
+    "utf8",
+  );
+  const consolidateBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-internal-consolidate-seam", "SKILL.md"),
+    "utf8",
+  );
+  const verifyBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-internal-verify", "SKILL.md"),
+    "utf8",
+  );
+
+  assert.match(cognitiveBody, /\.\.\/_shared\/references\/local-refactor-rules\.md/);
+  assert.match(localSimplifyBody, /\.\.\/_shared\/references\/local-refactor-rules\.md/);
+  assert.match(boundaryBody, /\.\.\/_shared\/references\/reference-audit\.md/);
+  assert.match(consolidateBody, /\.\.\/_shared\/references\/reference-audit\.md/);
+  assert.match(verifyBody, /\.\.\/_shared\/references\/reference-audit\.md/);
+});
+
 test("only public entrypoints omit the cf-internal prefix", async () => {
   const skills = await listSkillDirectories(SKILLS_ROOT);
   const publicSkillNames = new Set(["cf-start", "cf-architecture-map", "cf-cognitive"]);

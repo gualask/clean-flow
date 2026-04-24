@@ -39,13 +39,7 @@ Use whichever are relevant and available:
 - diff inspection for obviously dangerous drift
 - reference audit when names or files moved
 
-If a move, rename, split, merge, or re-export happened, run an explicit reference audit and search these categories separately when relevant rather than relying on one broad search:
-
-- direct calls and type references
-- string literals containing old names or paths
-- dynamic imports and `require()` paths
-- re-exports and barrel files
-- tests, fixtures, mocks, and helpers
+If a move, rename, split, merge, or re-export happened, ensure you have read [../_shared/references/reference-audit.md](../_shared/references/reference-audit.md) in this invocation, then run that audit for the touched names and paths.
 
 ## Output format
 

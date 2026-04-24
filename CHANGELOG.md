@@ -2,6 +2,7 @@
 
 ## 2026-04-24
 
+- Added `_shared` support references and installer support for Cflow-owned support directories.
 - Added `cf-cognitive` as a standalone public skill for sequential cognitive complexity refactors, including no-file discovery of up to three justified candidates.
 - Updated workflow docs, contract matrix, trial rules, and maintainer notes for `cf-cognitive`, the local fast lane, and less forced work-unit splitting.
 - Added default prompts for packaged skills and test coverage for public entrypoint contracts.

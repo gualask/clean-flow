@@ -27,11 +27,12 @@ export function isOwnedMarker(marker) {
     marker.pack === MARKER_PACK;
 }
 
-export async function writeMarker(skillDir, { sourceSkill, fingerprint }) {
+export async function writeMarker(skillDir, { sourceSkill, sourceKind = "skill", fingerprint }) {
   const payload = {
     owner: MARKER_OWNER,
     pack: MARKER_PACK,
     sourceSkill,
+    sourceKind,
     fingerprint,
   };
 

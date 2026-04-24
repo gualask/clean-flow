@@ -51,14 +51,7 @@ Run at least one relevant verification from this list when one is available:
 
 If no relevant verification is available, say that explicitly in `Checks run` or `What remains`.
 
-If you moved, renamed, split, or re-exported symbols, also run an explicit **reference audit** for the touched names and paths.
-Search categories separately when relevant:
-
-- direct calls and type references
-- string literals containing old names or paths
-- dynamic imports and `require()` paths
-- re-exports and barrel files
-- tests, fixtures, mocks, and helpers
+If you moved, renamed, split, or re-exported symbols, ensure you have read [../_shared/references/reference-audit.md](../_shared/references/reference-audit.md) in this invocation, then run that audit for the touched names and paths.
 
 ## Output format
 

@@ -82,16 +82,37 @@ Do not execute more than one cohesive bounded unit per invocation unless the use
 
 ## Output rules
 
+User-facing output is a progress summary, not a brief mirror.
+Keep durable state in `.cflow/refactor-brief.md`.
+Return only the relevant format below.
+
 ### For fresh assessment
-Return sections: **Repository assessment**, **Concentration pressure**, **Fragmentation pressure**, **Proposed path**, **Artifacts updated**, **Alignment checkpoint**.
+Return only:
+
+- **Repository assessment**: the intervention decision and the evidence that matters.
+- **Pressure**: concentration, fragmentation, mixed, or none.
+- **Proposed path**: the recommended path and why.
+- **Artifacts**: created or updated files, one line.
+- **Alignment checkpoint**: exactly one focused question.
 
 End with exactly one focused question.
 
 ### For execution or resume progress
-Return sections: **Current state**, **Work unit executed**, **Checks run**, **Artifacts updated**, **What remains**, **Next action**.
+Return only:
+
+- **Done**: what changed in code or assessment.
+- **Checks**: commands run and pass/fail result.
+- **Artifacts**: created or updated files, one line.
+- **Remaining**: only blockers, risks, or real follow-up work.
+- **Next action**: one immediate action or `none`.
 
 ### For reassessment without code changes
-Return sections: **Current state**, **Reassessment result**, **Checks run**, **Artifacts updated**, **What remains**, **Next action**.
+Return only:
+
+- **Current state**: one sentence.
+- **Reassessment result**: the decision and why.
+- **Artifacts**: created or updated files, one line.
+- **Next action**: one immediate action or `none`.
 
 ## Artifact update baseline
 

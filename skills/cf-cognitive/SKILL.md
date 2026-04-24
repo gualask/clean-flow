@@ -36,48 +36,15 @@ Refactor only when the target has clear local cognitive pressure:
 - complex boolean expressions, regex construction, parsing, or small algorithms that are hard to read inline
 - repeated non-trivial local logic
 
-## Rules
+## Local Refactor Rules
 
-Prefer the smallest change that makes the main flow easier to read.
-Readability is the goal; the complexity metric is only a guardrail.
+Before editing any target file, ensure you have read [../_shared/references/local-refactor-rules.md](../_shared/references/local-refactor-rules.md) in this invocation.
 
-Allowed moves:
+Apply that reference with these extra constraints:
 
-- reduce indentation with guard clauses when behavior stays the same
-- extract validation, error creation, difficult local algorithms, parser or regex setup, domain calculations, long try/catch bodies, long loop bodies, or case-specific handling from a long branch or switch
-- rename local variables or helpers when that clarifies intent
-- keep extracted functions file-local and near callers unless local convention says otherwise
-- prefer a shallow orchestrator: caller shows the main sequence, helpers are understandable without following a deep call chain
-
-Naming:
-
-- prefer intention-revealing names that describe the result or domain action, not every algorithm step
-- avoid `And` / `Or` glued names; split separate responsibilities instead
-- keep helper names short and domain-first when the language style allows it
-
-Do not:
-
-- change exported API, errors, side effects, return values, evaluation order, or async behavior unless the user explicitly asks
-- move responsibilities to new files or shared utilities
-- extract from a hot path when the extra call boundary or allocation could plausibly affect performance; prefer inline simplification there
-- extract only because code can be extracted
-- continue past the shortlisted files or past three files in one session
-- fix discovered behavior bugs unless the user explicitly asks
-
-Avoid:
-
-- one-line helpers whose name merely restates the code
-- pass-through wrappers
-- generic `process`, `handle`, `helper`, or `util` methods
-- todo-list names like `promoteAndFinalizeCreate` or `loadOrCleanupIfMissing`
-- many tiny helpers
-- single-use helpers that only unpack a regex or match result
-- single-use helpers that only loop over a range to push or add into a caller-owned collection
-- helpers that hide important side effects
-- splits that make the call flow harder to follow
-- extractions that force several layers to understand one local behavior
-
-After editing, do one cleanup pass. Inline any extracted helper that does not make the caller easier to read.
+- keep changes inside the target file unless the user explicitly asks otherwise
+- do not move responsibilities to new files or shared utilities
+- do not continue past the shortlisted files or past three files in one session
 
 ## Verification
 

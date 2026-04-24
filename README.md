@@ -57,7 +57,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/gualask/cle
 node ./bin/cflow-skills.mjs install /path/to/repo
 ```
 
-The CLI syncs `skills/` into `/path/to/repo/.agents/skills`.
+The CLI syncs packaged skills plus shared support resources from `skills/` into `/path/to/repo/.agents/skills`.
 
 Global install:
 
@@ -75,7 +75,7 @@ node ./bin/cflow-skills.mjs install /path/to/repo --dry-run
 
 ## First Use
 
-Installing the pack only syncs `skills/` into the target location.
+Installing the pack only syncs packaged skills and shared support resources into the target location.
 It does not create `.cflow/` by itself.
 
 For supported workflow first use and resume, start with `cf-start`.
@@ -96,7 +96,7 @@ For an end-to-end workflow view, see [docs/workflow-map.md](./docs/workflow-map.
 
 ## Uninstall
 
-Remove only Cflow-owned skills from a target:
+Remove only Cflow-owned skill and support directories from a target:
 
 For Codex, you can say:
 

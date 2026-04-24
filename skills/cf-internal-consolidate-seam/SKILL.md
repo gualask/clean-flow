@@ -52,12 +52,7 @@ Run at least one relevant verification from this list when one is available:
 
 If no relevant verification is available, say that explicitly in `Checks run` or `What remains`.
 
-If you merged, renamed, removed, or relocated files or symbols, run an explicit **reference audit** for:
-
-- old file paths
-- old symbol names
-- stale imports / requires / re-exports
-- tests, mocks, fixtures, and helpers
+If you merged, renamed, removed, or relocated files or symbols, ensure you have read [../_shared/references/reference-audit.md](../_shared/references/reference-audit.md) in this invocation, then run that audit for the touched names and paths.
 
 ## Output format
 
