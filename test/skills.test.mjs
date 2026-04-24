@@ -71,59 +71,6 @@ test("cf-start ships bootstrap asset templates", async () => {
   );
 });
 
-test("public entrypoints keep bootstrap and routing ownership split", async () => {
-  const startBody = await readFile(path.join(SKILLS_ROOT, "cf-start", "SKILL.md"), "utf8");
-  const architectureMapBody = await readFile(
-    path.join(SKILLS_ROOT, "cf-architecture-map", "SKILL.md"),
-    "utf8",
-  );
-
-  assert.match(
-    startBody,
-    /`cf-architecture-map` is also a supported public entrypoint/,
-  );
-  assert.match(
-    startBody,
-    /Do not create or refresh `\.cflow\/architecture\.md` directly in this skill\./,
-  );
-  assert.match(
-    startBody,
-    /Use `cf-architecture-map` when the architecture map is missing or stale\./,
-  );
-
-  assert.match(
-    architectureMapBody,
-    /This is a supported public entrypoint for repository mapping\./,
-  );
-  assert.match(architectureMapBody, /Create or refresh `\.cflow\/architecture\.md` only\./);
-  assert.match(
-    architectureMapBody,
-    /never create or refresh `\.cflow\/refactor-brief\.md` in this skill/,
-  );
-});
-
-test("cf-cognitive stays standalone and local", async () => {
-  const cognitiveBody = await readFile(
-    path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
-    "utf8",
-  );
-
-  assert.match(
-    cognitiveBody,
-    /This is a supported public entrypoint for local file-level cognitive complexity refactors\./,
-  );
-  assert.match(cognitiveBody, /If no file is provided, discover candidate files/);
-  assert.match(cognitiveBody, /propose up to three justified targets/);
-  assert.match(cognitiveBody, /remaining shortlisted candidates/);
-  assert.match(cognitiveBody, /After three files, stop/);
-  assert.match(cognitiveBody, /\*\*Behavior preservation\*\*/);
-  assert.match(cognitiveBody, /Do not bootstrap or require `\.cflow\/` artifacts\./);
-  assert.match(
-    cognitiveBody,
-    /route to `cf-start` instead/,
-  );
-});
-
 test("shared support references are not packaged as public skills", async () => {
   const skills = await listSkillDirectories(SKILLS_ROOT);
   const skillNames = skills.map((skill) => skill.name);

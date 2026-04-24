@@ -65,6 +65,10 @@ function parseArgs(argv) {
     return { help: true };
   }
 
+  if (args[0] === "--help" || args[0] === "-h") {
+    return { help: true };
+  }
+
   const command = args.shift();
   if (!["install", "remove"].includes(command)) {
     throw new Error(`Unknown command: ${command}`);
