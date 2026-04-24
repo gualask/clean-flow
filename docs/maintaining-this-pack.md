@@ -22,7 +22,7 @@ Cflow has three distinct runtime pieces:
 2. bootstrap
    - `cf-start` is the main supported user-facing workflow entrypoint
    - `cf-architecture-map` is the supported user-facing repository-mapping entrypoint
-   - `cf-cognitive` is the supported user-facing file-level cognitive complexity refactor entrypoint, with optional candidate discovery
+   - `cf-cognitive` is the supported user-facing file-level cognitive complexity refactor entrypoint, with optional discovery of up to three justified candidates
    - `cf-architecture-map` creates `.cflow/` when needed
    - `cf-architecture-map` adds `.cflow/` to `.gitignore` when needed
    - `cf-architecture-map` creates or refreshes `.cflow/architecture.md` from the shared asset template when needed
@@ -30,7 +30,7 @@ Cflow has three distinct runtime pieces:
 3. execution
    - `cf-start` handles assessment, alignment, and resume
    - `cf-architecture-map` may be reached directly or internally from other skills that need current architecture context
-   - `cf-cognitive` discovers candidates when needed and performs one local source-file refactor without requiring Cflow artifacts
+   - `cf-cognitive` discovers up to three justified candidates when needed and performs local source-file refactors sequentially without requiring Cflow artifacts
    - all remaining skills are internal workflow skills
    - internal skills are normally reached from `cf-start`, with context prepared according to each skill contract
 
@@ -73,7 +73,7 @@ docs/     maintainer documentation
 - Cflow does not depend on `AGENTS.md` for manual start or artifact-backed resume.
 - `cf-start` is the main supported user-facing workflow entrypoint.
 - `cf-architecture-map` is the supported standalone repository-mapping entrypoint.
-- `cf-cognitive` is the supported standalone file-level cognitive complexity refactor entrypoint, with optional candidate discovery.
+- `cf-cognitive` is the supported standalone file-level cognitive complexity refactor entrypoint, with optional discovery of up to three justified candidates.
 - `cf-architecture-map` owns the supported bootstrap of `.cflow/`, `.gitignore` for `.cflow/`, and `.cflow/architecture.md`.
 - `cf-start` owns workflow entry plus supported creation or refresh of `.cflow/refactor-brief.md`.
 - `cf-cognitive` does not create or require `.cflow/*` artifacts.
@@ -215,13 +215,13 @@ Standalone labels:
 
 #### `cf-cognitive`
 
-- Does: finds or refactors one source file at a time to reduce cognitive complexity by simplifying tangled local flow and extracting cohesive file-local helpers while preserving behavior.
-- Use when: the user asks for local cognitive complexity reduction, with or without an explicit file path.
-- Expects: repository state; an explicit source file target is optional. `.cflow/architecture.md` and `.cflow/refactor-brief.md` are not required.
-- Produces: a seven-section report covering candidate selection, target file, complexity hotspots, refactor applied, behavior preservation, checks run, and complexity result plus remaining risk.
+- Does: finds or refactors up to three source files sequentially to reduce real cognitive complexity while preserving behavior.
+- Use when: the user asks for local cognitive complexity reduction, with or without explicit file paths.
+- Expects: repository state; up to three explicit source file targets are optional. `.cflow/architecture.md` and `.cflow/refactor-brief.md` are not required.
+- Produces: a seven-section report covering candidate selection, target file(s), complexity hotspots, refactor applied, behavior preservation, checks run, and complexity result plus remaining risk.
 - Standalone: `yes`
 - Artifacts: does not create or update `.cflow/*`.
-- Typical next step: stop after the local refactor and relevant verification, recommend the next discovered candidate if useful, or route to `cf-start` if the work grows beyond local file-by-file cleanup.
+- Typical next step: continue through the shortlisted candidates, stop after file three, or route to `cf-start` if the work grows beyond local file-by-file cleanup.
 
 Mixed-path rule:
 
@@ -385,7 +385,7 @@ These two scenarios are mandatory even when only one of them is officially suppo
 
 - `cf-start` must work as the main supported direct human workflow entrypoint.
 - `cf-architecture-map` must work as the supported direct human repository-mapping entrypoint.
-- `cf-cognitive` must work as the supported direct human file-level cognitive complexity refactor entrypoint, including no-file discovery mode.
+- `cf-cognitive` must work as the supported direct human file-level cognitive complexity refactor entrypoint, including no-file discovery mode with up to three justified candidates.
 - Every remaining skill is an internal workflow skill and is not a supported direct human entrypoint.
 - Internal skills must still remain readable when opened or invoked directly by a human, even when the correct next action is to route to `cf-architecture-map`, `cf-start`, or another earlier required phase.
 - Internal skills may still work when invoked directly if their required context already exists.
@@ -467,7 +467,7 @@ The most important manual validation is still a real target-repo run:
 1. install the pack into a target repo
 2. invoke `$cf-start` as the standard workflow first-use path
 3. optionally invoke `$cf-architecture-map` as the standalone repository-mapping path
-4. optionally invoke `$cf-cognitive` with one explicit source file target and once without a file target in a disposable target repo
+4. optionally invoke `$cf-cognitive` with explicit source file targets and once without a file target in a disposable target repo
 5. confirm the target repo gets:
    - `.agents/skills/...`
    - `.cflow/`

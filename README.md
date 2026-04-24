@@ -85,7 +85,7 @@ For standalone repository mapping, use `cf-architecture-map`.
 `cf-architecture-map` is the public entrypoint that bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and creates or refreshes `.cflow/architecture.md`.
 
 For local cognitive complexity reduction, use `cf-cognitive`.
-It can use an explicit file or discover candidate files itself, then works one file at a time without requiring `.cflow/` artifacts.
+It can use explicit files or discover up to three justified candidate files, then works sequentially without requiring `.cflow/` artifacts.
 
 When `cf-start` needs architecture context, it routes through `cf-architecture-map` internally before continuing.
 

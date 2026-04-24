@@ -1,117 +1,91 @@
 ---
 name: cf-cognitive
-description: Find or refactor one source file at a time to reduce cognitive complexity by simplifying tangled local flow and extracting cohesive file-local helpers while preserving behavior. Use when the user asks for local cognitive-complexity cleanup, with or without an explicit file target.
+description: Find or refactor up to three source files per session, one file at a time, to reduce real cognitive complexity from long functions, deep nesting, nested or oversized try/catch blocks, long loops, or hard-to-read local logic while preserving behavior. Use with or without explicit file targets.
 ---
 This is a supported public entrypoint for local file-level cognitive complexity refactors.
 
-Use this for one source file at a time.
+Use this for up to three source files per session, processed one file at a time.
 Do not bootstrap or require `.cflow/` artifacts.
-If no file is provided, discover candidate files from repository evidence, choose the best first file, and refactor only that file in the current invocation.
-If the request is really about repository structure, module boundaries, ownership moves, or a broad multi-file refactor, route to `cf-start` instead.
+If no file is provided, discover candidate files, propose up to three justified targets, and start with the best first file unless the user asked only for recommendations.
+For repository structure, module boundaries, ownership moves, or broad multi-file refactors, route to `cf-start` instead.
 
-Reduce cognitive complexity in one target file while preserving behavior.
+Reduce real cognitive complexity in each target file while preserving behavior.
+Use numeric thresholds only when native tooling can measure them; otherwise report qualitatively.
 
-If the user provides a numeric complexity threshold, treat it as the goal when the repository has a native tool that can measure it.
-If no metric tooling exists, reduce the obvious complexity drivers and report the result qualitatively instead of pretending to prove a number.
+## Target Selection
 
-## Preflight
+- Use explicit file targets when provided, up to three per session.
+- Otherwise rank candidates from evidence: long functions, deep nesting, long loops, nested or oversized try/catch blocks, complexity reports, recent user-mentioned or changed files, and nearby test coverage.
+- In discovery mode, keep a ranked shortlist of at most three files; do not add weak candidates just to reach three.
+- Process shortlisted files sequentially, best first, and verify after each file.
+- If only one file is fixed in this invocation, report remaining shortlisted candidates so the user can continue without rediscovery.
+- After three files, stop and let the user decide whether to start a new session.
+- If selection is ambiguous between similarly safe files, ask one focused question.
+- Read the whole target file, relevant tests/call sites, and local helper/error/async/performance conventions before editing.
+- If there is no real hotspot, stop and report that no good local candidate was found.
 
-1. Use the explicit file target when provided; otherwise discover and rank candidate files from repository evidence.
-2. Select exactly one target file for this invocation.
-3. If candidate selection is ambiguous between similarly safe files, ask one focused question before editing.
-4. Read the whole target file, nearby tests, and relevant call sites when they clarify behavior.
-5. Check local conventions for helper placement, naming, static/private/local functions, async style, and error handling.
-6. Identify the dominant complexity hotspots before editing.
-7. If no file can be safely improved as one local unit, stop and route to `cf-start` or report that no good local candidate was found.
+## Refactor Triggers
 
-## Discovery Mode
+Refactor only when the target has clear local cognitive pressure:
 
-Use discovery mode when the user asks for cognitive cleanup without naming a file.
+- functions or methods that are hard to scan, roughly more than 20-30 logical lines
+- nesting deeper than function -> block -> block
+- nested try/catch blocks; prohibit unless language or framework constraints force them
+- try/catch blocks or loop bodies long enough to hide their main purpose
+- branching that makes the main path hard to see
+- complex boolean expressions, regex construction, parsing, or small algorithms that are hard to read inline
+- repeated non-trivial local logic
 
-Find candidates with cheap repository checks:
+## Rules
 
-- source file size, dense functions, and repeated branching clusters
-- lint or complexity reports when the repository already provides them
-- recent user-mentioned areas, failing checks, or changed files when relevant
-- nearby tests or smoke-checkable behavior
+Prefer the smallest change that makes the main flow easier to read.
+Readability is the goal; the complexity metric is only a guardrail.
 
-When discovery finds several good candidates:
+Allowed moves:
 
-- keep a short ordered candidate list in the output
-- edit only the best first file in the current invocation
-- recommend the next candidate as follow-up only after verification
+- reduce indentation with guard clauses when behavior stays the same
+- extract validation, error creation, difficult local algorithms, parser or regex setup, domain calculations, long try/catch bodies, long loop bodies, or case-specific handling from a long branch or switch
+- rename local variables or helpers when that clarifies intent
+- keep extracted functions file-local and near callers unless local convention says otherwise
+- prefer a shallow orchestrator: caller shows the main sequence, helpers are understandable without following a deep call chain
 
-Do not edit multiple files just because discovery found a group.
-Touch other files only for minimal import/export or test adjustments required by the selected file's behavior-preserving refactor.
+Naming:
 
-## Complexity Pressure
+- prefer intention-revealing names that describe the result or domain action, not every algorithm step
+- avoid `And` / `Or` glued names; split separate responsibilities instead
+- keep helper names short and domain-first when the language style allows it
 
-Look for:
+Do not:
 
-- deeply nested conditionals
-- long `if` / `else if` or `switch` chains
-- complex boolean expressions
-- loops with embedded branching or repeated code blocks
-- validation, type-specific handling, transformations, or calculations mixed into orchestration
-- several functions repeating the same local decision pattern
+- change exported API, errors, side effects, return values, evaluation order, or async behavior unless the user explicitly asks
+- move responsibilities to new files or shared utilities
+- extract from a hot path when the extra call boundary or allocation could plausibly affect performance; prefer inline simplification there
+- extract only because code can be extracted
+- continue past the shortlisted files or past three files in one session
+- fix discovered behavior bugs unless the user explicitly asks
 
-## Refactor Rules
+Avoid:
 
-- Preserve exported API and observable behavior unless the user explicitly asks to change them.
-- Preserve validation behavior, exception types, exception messages, return values, side effects, and evaluation order.
-- Keep the refactor scoped to the target file unless a minimal import/export update is required by a behavior-preserving local change.
-- Do not move responsibilities to new files or shared utilities in this skill.
-- Reduce nesting with guard clauses only when that preserves behavior and improves readability.
-- Extract helpers only when they name a real responsibility, such as validation, predicates, case-specific handling, repeated transformations, or calculations.
-- Prefer cohesive file-local helpers over many tiny wrappers.
-- Keep helpers near the code that uses them unless the repository already has a stronger local convention.
-- Use `private`, `static`, local functions, or module-private helpers according to the language and surrounding style.
-- Keep async behavior intact; do not add or remove `async` unless the implementation requires it.
-- Avoid helpers with large parameter lists; if extraction requires too much context, the split is probably wrong.
-- Do not chase every small issue in the file. Prefer one coherent pass over the dominant hotspots.
-- Do not continue into a second file in the same invocation unless the user explicitly asks and the next file is independently safe.
-- Do not fix discovered behavior bugs as part of this refactor unless the user explicitly asks.
-
-Bad extraction candidates:
-
-- a one-line condition whose helper name merely restates the code
+- one-line helpers whose name merely restates the code
 - pass-through wrappers
 - generic `process`, `handle`, `helper`, or `util` methods
+- todo-list names like `promoteAndFinalizeCreate` or `loadOrCleanupIfMissing`
+- many tiny helpers
+- single-use helpers that only unpack a regex or match result
+- single-use helpers that only loop over a range to push or add into a caller-owned collection
 - helpers that hide important side effects
 - splits that make the call flow harder to follow
-- new abstractions created only to satisfy a metric
+- extractions that force several layers to understand one local behavior
 
-## File Shape
-
-After refactoring, the target file should be easier to scan:
-
-1. public/exported entry points remain recognizable
-2. complex local decisions have intention-revealing names
-3. repeated local patterns are consolidated without creating indirection
-4. helper order follows the file's existing convention when one exists
-
-Do not force a new layout if the existing domain flow is clearer another way.
+After editing, do one cleanup pass. Inline any extracted helper that does not make the caller easier to read.
 
 ## Verification
 
-Run the smallest relevant verification available:
-
-- targeted tests for the file or surrounding feature
-- typecheck or compile
-- lint when it is meaningful for the touched code
-- a narrow smoke check if no automated test exists
-
-Use the repository's native success criteria: command exit status, compiler output, test runner output, or explicit failure messages.
-Do not require a specific `failed=0` style summary unless that is how the repository's test runner reports results.
-
-If a relevant check fails:
-
-- decide whether the failure is caused by the refactor
-- fix refactor-caused failures and re-run the relevant check
-- report unrelated or pre-existing failures clearly
-
+Run the smallest relevant check: targeted tests, typecheck or compile, lint, or a narrow smoke check.
+Use native success criteria; do not require `failed=0` unless that is how the runner reports results.
+If a relevant check fails, decide whether the refactor caused it, fix refactor-caused failures, and re-run the check.
 If no relevant check can be run, say that explicitly.
 
 ## Output Format
 
-Return sections: **Candidate selection**, **Target file**, **Complexity hotspots**, **Refactor applied**, **Behavior preservation**, **Checks run**, **Complexity result and remaining risk**.
+Return sections: **Candidate selection**, **Target file(s)**, **Complexity hotspots**, **Refactor applied**, **Behavior preservation**, **Checks run**, **Complexity result and remaining risk**.

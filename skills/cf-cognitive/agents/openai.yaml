@@ -1,6 +1,6 @@
 interface:
   display_name: "Cflow:cognitive"
-  short_description: "Find or refactor one file to reduce cognitive complexity"
-  default_prompt: "Use $cf-cognitive to find or refactor one file for cognitive complexity."
+  short_description: "Find or refactor up to three files to reduce cognitive complexity"
+  default_prompt: "Use $cf-cognitive to find or refactor up to three files for cognitive complexity."
 policy:
   allow_implicit_invocation: true

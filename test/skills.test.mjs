@@ -113,7 +113,9 @@ test("cf-cognitive stays standalone and local", async () => {
     /This is a supported public entrypoint for local file-level cognitive complexity refactors\./,
   );
   assert.match(cognitiveBody, /If no file is provided, discover candidate files/);
-  assert.match(cognitiveBody, /edit only the best first file in the current invocation/);
+  assert.match(cognitiveBody, /propose up to three justified targets/);
+  assert.match(cognitiveBody, /remaining shortlisted candidates/);
+  assert.match(cognitiveBody, /After three files, stop/);
   assert.match(cognitiveBody, /\*\*Behavior preservation\*\*/);
   assert.match(cognitiveBody, /Do not bootstrap or require `\.cflow\/` artifacts\./);
   assert.match(
