@@ -17,6 +17,8 @@ Judge whether the refactor improved structure in a proportionate way.
 
 ## Review lens
 
+Ensure you have read [../_shared/references/local-readability-review.md](../_shared/references/local-readability-review.md) in this invocation before judging local readability.
+
 Judge the result on four questions:
 
 - Did it reduce the pressure it was meant to reduce?

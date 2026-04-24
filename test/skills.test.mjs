@@ -139,6 +139,12 @@ test("shared support references are not packaged as public skills", async () => 
     await pathExists(path.join(SKILLS_ROOT, "_shared", "references", "reference-audit.md")),
     true,
   );
+  assert.equal(
+    await pathExists(
+      path.join(SKILLS_ROOT, "_shared", "references", "local-readability-review.md"),
+    ),
+    true,
+  );
 
   const cognitiveBody = await readFile(
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
@@ -160,12 +166,18 @@ test("shared support references are not packaged as public skills", async () => 
     path.join(SKILLS_ROOT, "cf-internal-verify", "SKILL.md"),
     "utf8",
   );
+  const reviewBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-internal-review", "SKILL.md"),
+    "utf8",
+  );
 
   assert.match(cognitiveBody, /\.\.\/_shared\/references\/local-refactor-rules\.md/);
   assert.match(localSimplifyBody, /\.\.\/_shared\/references\/local-refactor-rules\.md/);
+  assert.match(localSimplifyBody, /\.\.\/_shared\/references\/local-readability-review\.md/);
   assert.match(boundaryBody, /\.\.\/_shared\/references\/reference-audit\.md/);
   assert.match(consolidateBody, /\.\.\/_shared\/references\/reference-audit\.md/);
   assert.match(verifyBody, /\.\.\/_shared\/references\/reference-audit\.md/);
+  assert.match(reviewBody, /\.\.\/_shared\/references\/local-readability-review\.md/);
 });
 
 test("only public entrypoints omit the cf-internal prefix", async () => {

@@ -19,6 +19,7 @@ Do not reopen repository architecture in this skill.
 
 Improve local readability without changing the chosen structural direction.
 
+When deciding whether simplification is warranted, use [../_shared/references/local-readability-review.md](../_shared/references/local-readability-review.md).
 Before editing code, ensure you have read [../_shared/references/local-refactor-rules.md](../_shared/references/local-refactor-rules.md) in this invocation.
 
 ## Rules
