@@ -79,6 +79,7 @@ docs/            maintainer documentation
 - `cf-architecture-map` owns the supported bootstrap of `.cflow/`, `.gitignore` for `.cflow/`, and `.cflow/architecture.md`.
 - `cf-start` owns workflow entry plus supported creation or refresh of `.cflow/refactor-brief.md`.
 - `cf-cognitive` does not create or require `.cflow/*` artifacts.
+- `cf-cognitive` may report file-level extraction candidates discovered after local cleanup, but it must not perform those extractions; structural split execution belongs to the Cflow structural flow.
 - `.cflow/*` is Cflow-owned state in the target repository.
 - Internal skills are gated by required context, not by actor identity alone.
 - Internal skills being non-public does not mean they are explicit-only in Codex; routable Cflow workflow skills should remain implicitly invocable so Codex can enter the next step when the task matches the skill description.
@@ -237,10 +238,10 @@ Standalone labels:
 - Does: finds or refactors up to three source files sequentially to reduce real cognitive complexity while preserving behavior.
 - Use when: the user asks for local cognitive complexity reduction, with or without explicit file paths.
 - Expects: repository state; up to three explicit source file targets are optional. `.cflow/architecture.md` and `.cflow/refactor-brief.md` are not required.
-- Produces: a seven-section report covering candidate selection, target file(s), complexity hotspots, refactor applied, behavior preservation, checks run, and complexity result plus remaining risk.
+- Produces: a four-section report covering files, changes, checks, and result, including file-level extraction candidates when local cleanup reveals them.
 - Standalone: `yes`
 - Artifacts: does not create or update `.cflow/*`.
-- Typical next step: continue through the shortlisted candidates, stop after file three, or route to `cf-start` if the work grows beyond local file-by-file cleanup.
+- Typical next step: continue through the shortlisted candidates, stop after file three, or route to `cf-start` if the work grows beyond local file-by-file cleanup or the user asks to execute a reported file-level extraction.
 
 Mixed-path rule:
 
@@ -335,7 +336,7 @@ Mixed-path rule:
 
 - Does: applies one bounded split-oriented structural refactor step while preserving behavior.
 - Use when: the active work unit is `mode: split`, or the local fast lane has one cohesive split-oriented unit, the seam is mapped enough, and a credible safety net exists.
-- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and enough seam mapping to name workflows and safe split direction. In the normal planned flow, the active work unit should be `mode: split`; in the local fast lane, the prompt or brief must make the cohesive local unit explicit.
+- Expects: `.cflow/architecture.md`, optional `.cflow/refactor-brief.md`, and enough seam mapping to name workflows, safe split direction, and file placement. In the normal planned flow, the active work unit should be `mode: split`; in the local fast lane, the prompt or brief must make the cohesive local unit explicit.
 - Produces: a six-section execution report covering current state, work executed, checks, artifacts, remaining work, and next action.
 - Standalone: `no`
 - Artifacts: updates the brief when it exists or is created in the active flow.

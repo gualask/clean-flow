@@ -46,6 +46,23 @@ Apply that reference with these extra constraints:
 - do not move responsibilities to new files or shared utilities
 - do not continue past the shortlisted files or past three files in one session
 
+## Post-refactor extraction candidates
+
+After each local refactor, report file-level extraction candidates as follow-up only.
+Do not perform the extraction in this skill.
+Report a candidate only when it has clear ownership, for example:
+
+- a custom hook
+- a dialog or modal
+- an adapter
+- a parser or formatter
+- a substantial self-contained subcomponent
+
+Do not recommend extraction just because the file is long or because a small helper exists.
+Name what should stay local.
+If the user asks whether extraction is worthwhile, evaluate and recommend first; do not execute the split.
+If the user asks to perform the extraction, route to the structural split flow.
+
 ## Verification
 
 Run the smallest relevant check: targeted tests, typecheck or compile, lint, or a narrow smoke check.
@@ -55,4 +72,9 @@ If no relevant check can be run, say that explicitly.
 
 ## Output Format
 
-Return sections: **Candidate selection**, **Target file(s)**, **Complexity hotspots**, **Refactor applied**, **Behavior preservation**, **Checks run**, **Complexity result and remaining risk**.
+Return only:
+
+- **Files**: target files touched, plus remaining shortlist when relevant.
+- **Changes**: hotspots addressed and refactor applied.
+- **Checks**: commands run and pass/fail result, or why no check ran.
+- **Result**: behavior preservation, remaining risk, and file-level extraction candidates or `none`.
