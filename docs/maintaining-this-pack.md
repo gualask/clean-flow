@@ -23,6 +23,7 @@ Cflow has three distinct runtime pieces:
    - `cf-start` is the main supported user-facing workflow entrypoint
    - `cf-architecture-map` is the supported user-facing repository-mapping entrypoint
    - `cf-cognitive` is the supported user-facing file-level cognitive complexity refactor entrypoint, with optional discovery of up to three justified candidates
+   - `cf-file-split` is the supported user-facing local file-level split entrypoint, for split evaluation or one scoped behavior-preserving file extraction
    - `cf-architecture-map` creates `.cflow/` when needed
    - `cf-architecture-map` adds `.cflow/` to `.gitignore` when needed
    - `cf-architecture-map` creates or refreshes `.cflow/architecture.md` from the shared asset template when needed
@@ -31,6 +32,7 @@ Cflow has three distinct runtime pieces:
    - `cf-start` handles assessment, alignment, and resume
    - `cf-architecture-map` may be reached directly or internally from other skills that need current architecture context
    - `cf-cognitive` discovers up to three justified candidates when needed and performs local source-file refactors sequentially without requiring Cflow artifacts
+   - `cf-file-split` evaluates or executes one local file-level split without requiring Cflow artifacts
    - all remaining skills are internal workflow skills
    - internal skills are normally reached from `cf-start`, with context prepared according to each skill contract
 
@@ -76,10 +78,12 @@ docs/            maintainer documentation
 - `cf-start` is the main supported user-facing workflow entrypoint.
 - `cf-architecture-map` is the supported standalone repository-mapping entrypoint.
 - `cf-cognitive` is the supported standalone file-level cognitive complexity refactor entrypoint, with optional discovery of up to three justified candidates.
+- `cf-file-split` is the supported standalone file-level split entrypoint for local behavior-preserving extraction into nearby owned files.
 - `cf-architecture-map` owns the supported bootstrap of `.cflow/`, `.gitignore` for `.cflow/`, and `.cflow/architecture.md`.
 - `cf-start` owns workflow entry plus supported creation or refresh of `.cflow/refactor-brief.md`.
 - `cf-cognitive` does not create or require `.cflow/*` artifacts.
-- `cf-cognitive` may report file-level extraction candidates discovered after local cleanup, but it must not perform those extractions; structural split execution belongs to the Cflow structural flow.
+- `cf-cognitive` should route file-level split review or extraction to `cf-file-split` instead of trying to handle it as cognitive cleanup.
+- `cf-file-split` does not create or require `.cflow/*` artifacts; broader structural or cross-feature ownership moves still route to `cf-start`.
 - `.cflow/*` is Cflow-owned state in the target repository.
 - Internal skills are gated by required context, not by actor identity alone.
 - Internal skills being non-public does not mean they are explicit-only in Codex; routable Cflow workflow skills should remain implicitly invocable so Codex can enter the next step when the task matches the skill description.
@@ -238,10 +242,20 @@ Standalone labels:
 - Does: finds or refactors up to three source files sequentially to reduce real cognitive complexity while preserving behavior.
 - Use when: the user asks for local cognitive complexity reduction, with or without explicit file paths.
 - Expects: repository state; up to three explicit source file targets are optional. `.cflow/architecture.md` and `.cflow/refactor-brief.md` are not required.
-- Produces: a four-section report covering files, changes, checks, and result, including file-level extraction review when local cleanup reveals natural file boundaries.
+- Produces: a four-section report covering files, changes, checks, and result.
 - Standalone: `yes`
 - Artifacts: does not create or update `.cflow/*`.
-- Typical next step: continue through the shortlisted candidates, stop after file three, or route to `cf-start` if the work grows beyond local file-by-file cleanup or the user asks to execute a reported file-level extraction.
+- Typical next step: continue through the shortlisted candidates, stop after file three, route to `cf-file-split` for file-level split review or extraction, or route to `cf-start` if the work grows beyond local file-by-file cleanup.
+
+#### `cf-file-split`
+
+- Does: evaluates or executes one local behavior-preserving file-level split from a source file into nearby owned files.
+- Use when: the user asks whether a file should be split into files, or asks to perform a scoped local file extraction.
+- Expects: repository state and one explicit or inferable target source file. `.cflow/architecture.md` and `.cflow/refactor-brief.md` are not required.
+- Produces: a four-section report covering scope, decision, checks, and result.
+- Standalone: `yes`
+- Artifacts: does not create or update `.cflow/*`.
+- Typical next step: stop after evaluation, execute the selected split when explicitly asked, or route to `cf-start` if the split becomes broader than a local file-level extraction.
 
 Mixed-path rule:
 
@@ -406,6 +420,7 @@ These two scenarios are mandatory even when only one of them is officially suppo
 - `cf-start` must work as the main supported direct human workflow entrypoint.
 - `cf-architecture-map` must work as the supported direct human repository-mapping entrypoint.
 - `cf-cognitive` must work as the supported direct human file-level cognitive complexity refactor entrypoint, including no-file discovery mode with up to three justified candidates.
+- `cf-file-split` must work as the supported direct human file-level split entrypoint, including evaluation-only and execution modes.
 - Every remaining skill is an internal workflow skill and is not a supported direct human entrypoint.
 - Internal skills must still remain readable when opened or invoked directly by a human, even when the correct next action is to route to `cf-architecture-map`, `cf-start`, or another earlier required phase.
 - Internal skills may still work when invoked directly if their required context already exists.
@@ -488,13 +503,14 @@ The most important manual validation is still a real target-repo run:
 2. invoke `$cf-start` as the standard workflow first-use path
 3. optionally invoke `$cf-architecture-map` as the standalone repository-mapping path
 4. optionally invoke `$cf-cognitive` with explicit source file targets and once without a file target in a disposable target repo
-5. confirm the target repo gets:
+5. optionally invoke `$cf-file-split` once in evaluation mode and once with an explicit local split in a disposable target repo
+6. confirm the target repo gets:
    - `.agents/skills/...`
    - `.cflow/`
    - `.cflow/architecture.md` when needed
    - `.cflow/refactor-brief.md` when needed
    - `.gitignore` updated with `.cflow/` when needed
-6. if you changed an internal skill contract, confirm that invoking it without the required architecture context routes to `cf-architecture-map`, and that invoking it without some earlier workflow context routes to `cf-start` or the required earlier phase instead of bootstrapping state on its own
+7. if you changed an internal skill contract, confirm that invoking it without the required architecture context routes to `cf-architecture-map`, and that invoking it without some earlier workflow context routes to `cf-start` or the required earlier phase instead of bootstrapping state on its own
 
 ## Related Files
 
@@ -504,6 +520,8 @@ The most important manual validation is still a real target-repo run:
 - `skills/cf-architecture-map/agents/openai.yaml`
 - `skills/cf-cognitive/SKILL.md`
 - `skills/cf-cognitive/agents/openai.yaml`
+- `skills/cf-file-split/SKILL.md`
+- `skills/cf-file-split/agents/openai.yaml`
 - `skills/cf-start/SKILL.md`
 - `skills/cf-start/assets/architecture.template.md`
 - `skills/cf-start/assets/refactor-brief.template.md`

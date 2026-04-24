@@ -12,6 +12,7 @@ The phase index below is the text fallback if the diagram is not rendered.
 - `cf-start` is the main supported direct user entrypoint for workflow execution and resume.
 - `cf-architecture-map` is also a supported direct user entrypoint, but only for standalone repository mapping.
 - `cf-cognitive` is a supported direct user entrypoint for local file-level cognitive complexity refactors; it can use explicit files or discover up to three justified candidates, and it does not require `.cflow/`.
+- `cf-file-split` is a supported direct user entrypoint for evaluating or executing one local behavior-preserving file-level split, and it does not require `.cflow/`.
 - `cflow-skills install` syncs packaged skills plus shared support resources; it does not create `.cflow/`.
 - All remaining skills are internal workflow steps, not supported user-facing entrypoints.
 - Internal workflow skills should still be implicitly invocable in Codex when their descriptions match the current step.
@@ -30,6 +31,12 @@ flowchart TD
     X0 -- no --> X3[Discover up to three justified candidate files]
     X3 --> X1
     X1 --> X2[Run smallest relevant checks after each file and stop by file three]
+
+    Y[User invokes cf-file-split] --> Y0{Asking whether to split?}
+    Y0 -- yes --> Y1[Evaluate file-level extraction candidates]
+    Y0 -- no, execute split --> Y2[Execute one scoped behavior-preserving file split]
+    Y1 --> Y3[Return recommendation and stop unless user asks to execute]
+    Y2 --> Y4[Run smallest relevant checks]
 
     A[User invokes cf-architecture-map] --> A1[Build or refresh .cflow/architecture.md]
     A1 --> A2[Return map and recommend stop or continue with cf-start]
@@ -117,6 +124,7 @@ flowchart TD
 | --- | --- | --- | --- |
 | Architecture mapping and bootstrap | `cf-architecture-map` | Creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and returns without planning work units. | No |
 | Local cognitive complexity | `cf-cognitive` | Finds or refactors up to three source files sequentially to reduce cognitive complexity without bootstrapping Cflow artifacts. | Yes |
+| Local file-level split | `cf-file-split` | Evaluates or executes one local behavior-preserving split from a source file into nearby owned files without bootstrapping Cflow artifacts. | Yes |
 | Workflow entry and resume | `cf-start` | Uses current artifacts, ensures architecture context is current, and decides whether this is fresh assessment, resume, review, or verify. | Indirectly, only by routing into execution later |
 | Repository assessment | `cf-start`, `cf-internal-assessment` | Checks whether intervention is justified, records candidate intervention areas, and frames plausible direction using the current architecture map. | No |
 | Alignment | `cf-start`, `cf-internal-brainstorming` | Stops after fresh assessment, then resolves user steering before execution continues. | No |
@@ -137,6 +145,10 @@ flowchart TD
 ### Local Cognitive Complexity
 
 `cf-cognitive` -> use explicit files or discover up to three justified candidates -> refactor sequentially -> run smallest relevant checks after each file -> stop by file three
+
+### Local File Split
+
+`cf-file-split` -> evaluate candidates or execute one scoped split -> run smallest relevant checks when code changes -> stop
 
 ### Soft Split
 

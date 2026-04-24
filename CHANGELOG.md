@@ -4,7 +4,9 @@
 
 - Added `_shared` support references and installer support for Cflow-owned support directories.
 - Added `cf-cognitive` as a standalone public skill for sequential cognitive complexity refactors, including no-file discovery of up to three justified candidates.
+- Added `cf-file-split` as a standalone public skill for local file-level split evaluation and scoped behavior-preserving extraction.
 - Added a shared local readability review lens for touched-code review and simplification.
+- Added shared file split rules for candidate review and placement decisions.
 - Slimmed operational internal skill wording to emphasize intervention criteria over procedural checklists.
 - Updated workflow docs, contract matrix, trial rules, and maintainer notes for `cf-cognitive`, the local fast lane, and less forced work-unit splitting.
 - Added default prompts for packaged skills and test coverage for public entrypoint contracts.

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Cflow:file split"
+  short_description: "Evaluate or execute one local behavior-preserving file split"
+  default_prompt: "Use $cf-file-split to evaluate or perform a scoped file-level split."
+policy:
+  allow_implicit_invocation: true

@@ -7,6 +7,7 @@ This is a supported public entrypoint for local file-level cognitive complexity 
 Use this for up to three source files per session, processed one file at a time.
 Do not bootstrap or require `.cflow/` artifacts.
 If no file is provided, discover candidate files, propose up to three justified targets, and start with the best first file unless the user asked only for recommendations.
+For file-level split review or extraction from one source file, route to `cf-file-split` instead.
 For repository structure, module boundaries, ownership moves, or broad multi-file refactors, route to `cf-start` instead.
 
 Reduce real cognitive complexity in each target file while preserving behavior.
@@ -48,29 +49,8 @@ Apply that reference with these extra constraints:
 
 ## Post-refactor extraction candidates
 
-After each local refactor, report file-level extraction candidates as follow-up only.
-Do not perform the extraction in this skill.
-Treat a candidate as a natural file boundary that the cleanup revealed, not as a decision to extract it immediately.
-Report clear candidates even when your recommendation is to keep them local for now.
-
-Report a candidate when it has clear ownership, for example:
-
-- a custom hook
-- a dialog or modal
-- an adapter
-- a parser or formatter
-- a substantial self-contained subcomponent
-
-Do not recommend extraction just because the file is long or because a small helper exists.
-For each candidate, mark one recommendation:
-
-- `recommended`: extraction would make the file easier to scan now
-- `optional`: ownership is clear, but keeping it local is also reasonable
-- `keep local`: the boundary is visible but too small, too coupled, or not worth a file yet
-
-Name what has no file-level boundary and should stay local.
-If the user asks whether extraction is worthwhile, evaluate and recommend first; do not execute the split.
-If the user asks to perform the extraction, route to the structural split flow.
+If local cleanup reveals possible file-level extraction, report `cf-file-split` as the next step with the target file and obvious candidate names.
+Do not evaluate placement or execute extraction in this skill.
 
 ## Verification
 
@@ -86,4 +66,4 @@ Return only:
 - **Files**: target files touched, plus remaining shortlist when relevant.
 - **Changes**: hotspots addressed and refactor applied.
 - **Checks**: commands run and pass/fail result, or why no check ran.
-- **Result**: behavior preservation, remaining risk, and file-level extraction review with `recommended`, `optional`, `keep local`, or `none`.
+- **Result**: behavior preservation, remaining risk, and `cf-file-split` next step when file-level extraction should be reviewed.

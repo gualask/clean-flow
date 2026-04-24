@@ -34,20 +34,8 @@ Do not split just because a file is large. If the new boundary would be generic,
 
 ## Placement criteria
 
-When creating files, place them by nearest existing ownership and repository convention, not by generic type.
-
-Choose placement in this order:
-
-- an existing local path or subfolder when it already owns the same seam
-- flat next to the caller when creating one local extracted file
-- a new local subfolder when the split creates at least two related files that should stay together
-- shared locations only when reuse already exists or the extracted owner is truly cross-feature
-
-Do not create a new top-level architectural folder during a local split.
-Do not move to `shared`, `common`, or `utils` because reuse is only theoretical.
-
-If more than one placement is plausible, ask one focused question before editing.
-Offer only applicable options: flat next to the caller, an existing subfolder, or a new subfolder, with a recommendation.
+When this step creates or relocates files, ensure you have read [../_shared/references/file-split-rules.md](../_shared/references/file-split-rules.md) in this invocation before choosing placement.
+If placement is still not obvious, ask one focused question before editing.
 
 ## Execution rules
 

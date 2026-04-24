@@ -9,6 +9,7 @@ Supported public entrypoints:
 - `cf-start`
 - `cf-architecture-map`
 - `cf-cognitive`
+- `cf-file-split`
 
 Internal workflow skills:
 
@@ -86,6 +87,9 @@ For standalone repository mapping, use `cf-architecture-map`.
 
 For local cognitive complexity reduction, use `cf-cognitive`.
 It can use explicit files or discover up to three justified candidate files, then works sequentially without requiring `.cflow/` artifacts.
+
+For local file-level split review or execution, use `cf-file-split`.
+It evaluates whether one source file has natural extraction boundaries, or executes one scoped behavior-preserving file split.
 
 When `cf-start` needs architecture context, it routes through `cf-architecture-map` internally before continuing.
 

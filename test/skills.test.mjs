@@ -92,6 +92,10 @@ test("shared support references are not packaged as public skills", async () => 
     ),
     true,
   );
+  assert.equal(
+    await pathExists(path.join(SKILLS_ROOT, "_shared", "references", "file-split-rules.md")),
+    true,
+  );
 
   const cognitiveBody = await readFile(
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
@@ -103,6 +107,10 @@ test("shared support references are not packaged as public skills", async () => 
   );
   const boundaryBody = await readFile(
     path.join(SKILLS_ROOT, "cf-internal-boundary-apply", "SKILL.md"),
+    "utf8",
+  );
+  const fileSplitBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-file-split", "SKILL.md"),
     "utf8",
   );
   const consolidateBody = await readFile(
@@ -121,6 +129,9 @@ test("shared support references are not packaged as public skills", async () => 
   assert.match(cognitiveBody, /\.\.\/_shared\/references\/local-refactor-rules\.md/);
   assert.match(localSimplifyBody, /\.\.\/_shared\/references\/local-refactor-rules\.md/);
   assert.match(localSimplifyBody, /\.\.\/_shared\/references\/local-readability-review\.md/);
+  assert.match(fileSplitBody, /\.\.\/_shared\/references\/file-split-rules\.md/);
+  assert.match(fileSplitBody, /\.\.\/_shared\/references\/reference-audit\.md/);
+  assert.match(boundaryBody, /\.\.\/_shared\/references\/file-split-rules\.md/);
   assert.match(boundaryBody, /\.\.\/_shared\/references\/reference-audit\.md/);
   assert.match(consolidateBody, /\.\.\/_shared\/references\/reference-audit\.md/);
   assert.match(verifyBody, /\.\.\/_shared\/references\/reference-audit\.md/);
@@ -129,7 +140,12 @@ test("shared support references are not packaged as public skills", async () => 
 
 test("only public entrypoints omit the cf-internal prefix", async () => {
   const skills = await listSkillDirectories(SKILLS_ROOT);
-  const publicSkillNames = new Set(["cf-start", "cf-architecture-map", "cf-cognitive"]);
+  const publicSkillNames = new Set([
+    "cf-start",
+    "cf-architecture-map",
+    "cf-cognitive",
+    "cf-file-split",
+  ]);
 
   for (const skill of skills) {
     const isPublic = publicSkillNames.has(skill.name);
