@@ -20,26 +20,22 @@ Do not use this skill just to split one clear local cleanup into smaller pieces.
 4. If a broader boundary or packaging decision is unresolved, route to `cf-internal-target-shape` instead of faking lightweight planning.
 5. Re-check candidate areas and treat repository state as the source of truth.
 
-## Rules
+## Planning rules
 
-- Keep planning lightweight and tied to the current assessed scope.
-- Turn only credible, evidenced candidates into work units.
-- If a candidate is plausible but not evidenced enough yet, record it under `Unknowns to re-check` instead of pretending it is ready.
-- Prefer the smallest cohesive next unit that either reduces real pressure now or makes later units easier.
-- A cohesive unit may touch several nearby files when they are part of one behavior-preserving structural move with one clear stop condition.
-- Do not split one coherent local cleanup into multiple work units only to reduce size.
+- Keep planning lightweight and tied to the assessed scope.
+- Promote only credible, evidenced candidates into work units; put plausible but unproven candidates in `Unknowns to re-check`.
+- Prefer the smallest cohesive unit that reduces real pressure now or makes later units easier.
+- A unit may touch several nearby files when they are part of one behavior-preserving structural move with one clear stop condition.
 - Split units only when ordering, ownership, risk, verification, or reviewability would materially improve.
-- Record why a deferred unit is not first.
-- Record when one unit depends on another.
-- Record when one unit may simplify or complicate another.
-- Keep each work unit explicitly `mode: split` or `mode: consolidate`.
-- Choose exactly one `recommended-next` unit.
-- Do not activate multiple work units at once.
-- Mark a unit as the active current work unit only when its goal, mode, dependency order, and immediate next phase are explicit enough to continue without another planning pass.
-- If no unit meets that activation threshold, leave `current work unit` as `none` and record exactly one `recommended next work unit`.
-- Never finish planning with both `current work unit` and `recommended next work unit` unset.
 - Do not invent a repo-wide target shape in this skill.
-- Do not freeze brittle file lists when the unit can be named more stably in workflow or seam terms.
+
+## Selection rules
+
+- Keep each work unit explicitly `mode: split` or `mode: consolidate`.
+- Choose exactly one next unit: active `current work unit` when ready to continue, otherwise `recommended next work unit`.
+- Activate a unit only when its goal, mode, dependency order, and immediate next phase are explicit enough to proceed without another planning pass.
+- Never finish planning with both `current work unit` and `recommended next work unit` unset.
+- Name units by workflow or seam when that is more stable than a brittle file list.
 
 ## Output format
 

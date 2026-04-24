@@ -16,46 +16,35 @@ Use this before a structural move, not before discovery.
 
 Lock the smallest credible amount of behavior before structural changes.
 
-Use the narrowest believable protection that materially reduces refactor risk.
+Use the narrowest believable protection that materially reduces refactor risk. This skill should decide whether the next structural move is safe enough, not design a broad test strategy.
 
-## Phase 1: identify the refactoring surface
+## Refactoring surface
 
-Identify exactly what is about to change:
+Name exactly what the next move may disturb:
 
 - current work unit if a brief exists
 - cohesive local unit if using the local fast lane
 - touched workflow, module, or feature area
-- relevant boundaries that could be disturbed
-- behavior that must remain stable
+- observable behavior that must remain stable
 
 If you cannot describe the refactoring surface clearly, route back instead of guessing.
 
-## Phase 2: prefer existing protection first
+## Choose the lock
 
-Use this preference order:
+Prefer existing protection before adding anything:
 
 1. existing targeted tests
 2. existing broader tests that already lock the relevant behavior
 3. targeted characterization tests
 4. narrow smoke checks or explicit invariants when automated tests are not practical
 
-Rules:
+Characterization tests lock current behavior, not ideal behavior. Do not weaken or rewrite tests just to make a refactor pass.
 
-- Prefer the smallest credible lock.
-- Do not broaden into full test design work.
-- Characterization tests lock current behavior, not ideal behavior.
-- Do not weaken or rewrite tests just to make a refactor pass.
-- If the area has no credible lock and cannot be checked reasonably, say so explicitly.
-- If remaining gaps make the structural move too risky, return a `no-go` outcome and do not route directly into execution.
+## Go / no-go
 
-## Phase 3: coverage audit
-
-For each part of the refactoring surface, ask:
-
-- What observable behavior is already locked?
-- What behavior is still uncovered?
-- Is unit-level locking realistic here, or is an integration-level lock safer?
-- Which gaps are acceptable for now, and which make the structural move too risky?
+Return `go` only when the lock is credible for the planned move.
+Return `no-go` when behavior cannot be checked reasonably or the uncovered surface is too risky for structural execution.
+If the gap is acceptable, name it plainly instead of expanding into unrelated test work.
 
 ## Required output
 

@@ -17,27 +17,26 @@ Use this to apply one bounded **split-oriented** cleanup step.
 
 Apply the current bounded work unit or cohesive local unit without widening scope.
 
-This step is for seams where **concentration pressure** dominates.
+Use this when **concentration pressure** has a clear split direction:
 
-## Core rules
+- one place hides multiple workflows or roles
+- orchestration, integration, policy, or pure logic are tangled enough to slow reading
+- a caller must understand too much local detail to follow the main behavior
+- the seam is mapped well enough to name what moves and what stays
+
+Do not split just because a file is large. If the new boundary would be generic, speculative, or harder to follow than the current code, leave it alone or route back to mapping.
+
+## Execution rules
 
 - Preserve behavior unless behavior change is explicitly requested.
-- Reduce pressure by separating responsibilities, not by mechanically splitting files.
-- Do not invent fake layers or abstractions with no concrete job.
-- Do not leave external-system access scattered through orchestration code.
-- Extract pure logic only when it is genuinely autonomous.
-- Prefer local, clear helpers over generic utilities.
-- Preserve existing dataflow and avoid unnecessary allocations, clones, or passes over the same data unless they clearly reduce complexity.
-- Add a new file, module, or type only if it reduces real complexity.
-- Avoid dead code, workaround logic, and speculative abstractions.
-
-## Structural step discipline
-
 - Stay within one bounded work unit or cohesive local unit unless the user explicitly broadens scope.
-- Record meaningful drift between the brief and the codebase.
-- Prefer one meaningful structural move at a time when practical.
+- Make the smallest structural move that gives a responsibility a clearer home.
+- Add a file, module, type, or helper only when it reduces real complexity.
+- Preserve existing dataflow and avoid extra allocations, clones, or passes unless they clearly improve the seam.
+- Prefer local, named ownership over generic utilities or fake layers.
 - If the safety lock breaks after a move, stop and investigate before stacking more changes on top.
-- If you discover a bug while refactoring, do not silently fold a behavior fix into the same structural change unless the user explicitly asked for it.
+- If the implementation changes what the brief assumed, record the drift.
+- Report discovered bugs separately unless the user explicitly asked for a behavior fix.
 
 ## Before finishing
 
