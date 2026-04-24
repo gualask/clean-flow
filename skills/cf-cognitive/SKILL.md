@@ -50,7 +50,10 @@ Apply that reference with these extra constraints:
 
 After each local refactor, report file-level extraction candidates as follow-up only.
 Do not perform the extraction in this skill.
-Report a candidate only when it has clear ownership, for example:
+Treat a candidate as a natural file boundary that the cleanup revealed, not as a decision to extract it immediately.
+Report clear candidates even when your recommendation is to keep them local for now.
+
+Report a candidate when it has clear ownership, for example:
 
 - a custom hook
 - a dialog or modal
@@ -59,7 +62,13 @@ Report a candidate only when it has clear ownership, for example:
 - a substantial self-contained subcomponent
 
 Do not recommend extraction just because the file is long or because a small helper exists.
-Name what should stay local.
+For each candidate, mark one recommendation:
+
+- `recommended`: extraction would make the file easier to scan now
+- `optional`: ownership is clear, but keeping it local is also reasonable
+- `keep local`: the boundary is visible but too small, too coupled, or not worth a file yet
+
+Name what has no file-level boundary and should stay local.
 If the user asks whether extraction is worthwhile, evaluate and recommend first; do not execute the split.
 If the user asks to perform the extraction, route to the structural split flow.
 
@@ -77,4 +86,4 @@ Return only:
 - **Files**: target files touched, plus remaining shortlist when relevant.
 - **Changes**: hotspots addressed and refactor applied.
 - **Checks**: commands run and pass/fail result, or why no check ran.
-- **Result**: behavior preservation, remaining risk, and file-level extraction candidates or `none`.
+- **Result**: behavior preservation, remaining risk, and file-level extraction review with `recommended`, `optional`, `keep local`, or `none`.

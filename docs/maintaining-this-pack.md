@@ -238,7 +238,7 @@ Standalone labels:
 - Does: finds or refactors up to three source files sequentially to reduce real cognitive complexity while preserving behavior.
 - Use when: the user asks for local cognitive complexity reduction, with or without explicit file paths.
 - Expects: repository state; up to three explicit source file targets are optional. `.cflow/architecture.md` and `.cflow/refactor-brief.md` are not required.
-- Produces: a four-section report covering files, changes, checks, and result, including file-level extraction candidates when local cleanup reveals them.
+- Produces: a four-section report covering files, changes, checks, and result, including file-level extraction review when local cleanup reveals natural file boundaries.
 - Standalone: `yes`
 - Artifacts: does not create or update `.cflow/*`.
 - Typical next step: continue through the shortlisted candidates, stop after file three, or route to `cf-start` if the work grows beyond local file-by-file cleanup or the user asks to execute a reported file-level extraction.
