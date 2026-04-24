@@ -24,7 +24,13 @@ Use this when **fragmentation pressure** has a clear consolidation direction:
 - a boundary exists for style rather than responsibility
 - callers still perform nearly the same branching or mapping after crossing the boundary
 
-Do not consolidate just because files are small. Keep a boundary when it carries a real domain, infrastructure, lifecycle, or dependency meaning.
+Do not consolidate just because files are small. Keep a boundary when it carries real domain vocabulary, integration or lifecycle ownership, dependency direction, or test isolation.
+
+## Consolidation criteria
+
+- Before consolidating, name the workflow that currently takes too many jumps to understand and the artificial boundary to collapse.
+- Consolidate only when at least one reader-visible hop disappears, or when caller-side branching, mapping, or pass-through code becomes simpler.
+- After consolidation, the resulting file or module must still have one readable primary reason to exist.
 
 ## Execution rules
 

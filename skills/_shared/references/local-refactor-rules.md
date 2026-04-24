@@ -29,7 +29,14 @@ Avoid edits when the code is merely imperfect but still easy to follow.
 - Prefer a shallow orchestrator: the caller shows the main sequence, and helpers are understandable without following a deep call chain.
 - Keep extracted functions file-local and near callers unless local convention says otherwise.
 - Extract from hot paths only when the readability gain clearly outweighs call-boundary, allocation, or extra-pass costs.
-- After editing, inline helpers that do not make the caller easier to read.
+- After editing, re-read the caller or target function first; inline or narrow helpers that do not make it easier to read.
+
+## Operational Checks
+
+- Before extracting, name the branch, loop, try/catch body, policy decision, or invariant that the extraction will make easier to see.
+- Prefer guard clauses, clearer names, or local reshaping before adding helpers when those make the main path clear enough.
+- A helper is justified only when its name carries useful intent that the code did not already express.
+- Keep important side effects visible at the level where ordering matters.
 
 ## Naming
 

@@ -26,6 +26,12 @@ Use this when **concentration pressure** has a clear split direction:
 
 Do not split just because a file is large. If the new boundary would be generic, speculative, or harder to follow than the current code, leave it alone or route back to mapping.
 
+## Split criteria
+
+- Before splitting, name the workflow that should stay visible and the responsibility currently hiding it.
+- Split only when the caller, entry point, or main workflow becomes visibly simpler, or when the moved responsibility gets a real local owner.
+- If callers still need the same branching, mapping, or integration detail after the split, the boundary did not reduce pressure.
+
 ## Execution rules
 
 - Preserve behavior unless behavior change is explicitly requested.
@@ -33,7 +39,7 @@ Do not split just because a file is large. If the new boundary would be generic,
 - Make the smallest structural move that gives a responsibility a clearer home.
 - Add a file, module, type, or helper only when it reduces real complexity.
 - Preserve existing dataflow and avoid extra allocations, clones, or passes unless they clearly improve the seam.
-- Prefer local, named ownership over generic utilities or fake layers.
+- Prefer local, named ownership over generic utilities or fake layers; avoid names like `helper`, `utils`, `common`, `shared`, `manager`, or `service` unless local convention gives them clear meaning.
 - If the safety lock breaks after a move, stop and investigate before stacking more changes on top.
 - If the implementation changes what the brief assumed, record the drift.
 - Report discovered bugs separately unless the user explicitly asked for a behavior fix.
