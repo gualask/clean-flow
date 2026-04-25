@@ -7,6 +7,10 @@
 - Restored the former internal skill contracts as granular `cf-start` phase playbooks instead of compressed phase summaries.
 - Added DOT routing and lifecycle diagrams to `cf-start`.
 - Added read-only clean-context reconnaissance subagent protocol to `cf-architecture-map`.
+- Added the `cflow_architecture_recon` Codex custom agent source under `skills/_codex_agents` using `gpt-5.4-mini` for read-only architecture reconnaissance.
+- Extended install/remove to sync Cflow-owned Codex custom agents alongside packaged skills.
+- Tightened `cf-architecture-map` so the controller does not duplicate the reconnaissance scan while the subagent runs.
+- Changed `.cflow/architecture.md` output from refactor guidance to observed repository invariants.
 - Updated docs and tests for the four-public-skill package shape.
 
 ## 2026-04-24

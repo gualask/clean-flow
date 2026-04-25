@@ -10,6 +10,8 @@ Support these actions:
 - update globally
 - uninstall globally
 
+Global install syncs Cflow skills into `$CODEX_HOME/skills` or `~/.codex/skills`, and Cflow Codex custom agents into `$CODEX_HOME/agents` or `~/.codex/agents`.
+
 ## Prerequisites
 
 - `git` available

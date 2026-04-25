@@ -10,6 +10,8 @@ Support these actions:
 - update into a specific repository
 - uninstall from a specific repository
 
+Local install syncs Cflow skills into `.agents/skills` and Cflow Codex custom agents into `.codex/agents`.
+
 ## Prerequisites
 
 - `git` available

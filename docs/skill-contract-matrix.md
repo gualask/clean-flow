@@ -17,12 +17,16 @@ Cflow now ships four public skill entrypoints:
 The former internal workflow skills are not packaged as separate skill entrypoints.
 Their contracts live as granular phase references under `skills/cf-start/references/`.
 
+Cflow also ships one Codex custom agent:
+
+- `cflow_architecture_recon`, sourced from `skills/_codex_agents/cflow_architecture_recon.toml` and installed into `.codex/agents/` or `$CODEX_HOME/agents`, configured as read-only `gpt-5.4-mini` reconnaissance for `cf-architecture-map`.
+
 ## Skill Entrypoints
 
 | Skill | Role | Supported direct human entrypoint | Minimum context to proceed | Artifact behavior | May edit code |
 | --- | --- | --- | --- | --- | --- |
 | `cf-start` | workflow controller | yes | repository state only; existing `.cflow/*` artifacts are optional | owns workflow entry plus creation or refresh of `.cflow/refactor-brief.md`; routes to `cf-architecture-map` when architecture bootstrap or refresh is needed | yes, through execution phase |
-| `cf-architecture-map` | repository map | yes | repository state only; existing `.cflow/architecture.md` is optional | uses one read-only clean-context reconnaissance subagent before artifact writes; creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, never creates `.cflow/refactor-brief.md` | no |
+| `cf-architecture-map` | repository map | yes | repository state only; existing `.cflow/architecture.md` is optional | uses the read-only `cflow_architecture_recon` custom agent before artifact writes when available; while it runs, the controller only checks artifacts, `.gitignore`, template, and worktree status; creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, never creates `.cflow/refactor-brief.md` | no |
 | `cf-cognitive` | local cognitive cleanup | yes | repository state plus up to three optional source file targets | does not create or update `.cflow/*`; discovers up to three justified candidates when needed | yes |
 | `cf-file-split` | local file split | yes | repository state plus one explicit or inferable target source file | does not create or update `.cflow/*`; evaluates or executes one scoped file-level split | yes |
 

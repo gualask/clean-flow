@@ -60,21 +60,11 @@ State how code is mainly organized:
 
 ## Dependency direction
 
-Describe the important dependency direction rules in a few lines.
+Describe the dependency directions that are visible in the current repository.
 
-## Stable invariants
+## Observed invariants
 
-Record the flows or constraints that future refactors should keep easy to reason about, for example:
-- critical workflows that must stay legible
-- areas that should remain thin
-- areas that should stay local, and areas with real shared ownership
-
-## Refactor guidance
-
-Record the stable rules future refactors should follow here, for example:
-- preserve workspace shape unless a recurring friction justifies change
-- keep CLI thin and orchestration readable
-- avoid fake shared utilities
-- prefer local helpers until reuse is real
+Record existing flows, contracts, and constraints visible in the repository.
+Keep this section descriptive; do not add refactor recommendations.
 
 Keep this document stable and short.

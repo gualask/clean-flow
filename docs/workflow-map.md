@@ -10,7 +10,7 @@ Use [maintaining-this-pack.md](./maintaining-this-pack.md) and [skill-contract-m
 - `cf-architecture-map` is the supported direct repository-mapping entrypoint.
 - `cf-cognitive` is the supported direct local cognitive complexity entrypoint and does not require `.cflow/`.
 - `cf-file-split` is the supported direct local file-level split entrypoint and does not require `.cflow/`.
-- `cflow-skills install` syncs packaged skills plus shared support resources; it does not create `.cflow/`.
+- `cflow-skills install` syncs packaged skills, shared support resources, and Cflow-owned Codex custom agents; it does not create `.cflow/`.
 - If a workflow phase lacks required architecture context, `cf-start` routes to `cf-architecture-map`.
 - `soft-mixed` is allowed only as a repository-level assessment outcome; each executable work unit must still declare exactly one mode: `split` or `consolidate`.
 - A local fast lane may skip work-unit planning only when one explicit, local, low-risk, behavior-preserving cohesive unit is already clear enough to map, lock, or execute.
@@ -32,7 +32,7 @@ flowchart TD
     Y1 --> Y3[Return recommendation and stop unless user asks to execute]
     Y2 --> Y4[Run smallest relevant checks]
 
-    A[User invokes cf-architecture-map] --> A0[Read-only clean-context reconnaissance]
+    A[User invokes cf-architecture-map] --> A0[cflow_architecture_recon read-only reconnaissance]
     A0 --> A1[Build or refresh .cflow/architecture.md]
     A1 --> A2[Return map and recommend stop or continue with cf-start]
 
@@ -89,7 +89,7 @@ flowchart TD
 
 | Stage | Runtime owner | What happens | May edit code |
 | --- | --- | --- | --- |
-| Architecture mapping and bootstrap | `cf-architecture-map` | Uses read-only clean-context reconnaissance, creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, and updates `.gitignore` for `.cflow/`. | No |
+| Architecture mapping and bootstrap | `cf-architecture-map` | Uses the read-only `cflow_architecture_recon` custom agent when available; the controller avoids parallel repo scanning, then creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, and updates `.gitignore` for `.cflow/`. | No |
 | Local cognitive complexity | `cf-cognitive` | Finds or refactors up to three source files sequentially without bootstrapping Cflow artifacts. | Yes |
 | Local file-level split | `cf-file-split` | Evaluates or executes one behavior-preserving file-level split without bootstrapping Cflow artifacts. | Yes |
 | Workflow entry and resume | `cf-start` + `routing.md` | Uses current artifacts, ensures architecture context, and chooses fresh assessment, resume, review, or verify. | Indirectly |
@@ -131,7 +131,8 @@ Resume:
 
 ## Artifacts Through The Flow
 
-- Installer output lives in `.agents/skills/` for local install, or `$CODEX_HOME/skills` / `~/.codex/skills` for global install.
+- Installer skill output lives in `.agents/skills/` for local install, or `$CODEX_HOME/skills` / `~/.codex/skills` for global install.
+- Installer Codex custom agent output lives in `.codex/agents/` for local install, or `$CODEX_HOME/agents` / `~/.codex/agents` for global install.
 - Shared support references live under `_shared/`; they are linked explicitly by consuming skills and are not standalone skills.
 - Runtime state lives in the target repository under `.cflow/`.
 - The canonical runtime artifacts are `.cflow/architecture.md` and `.cflow/refactor-brief.md`.

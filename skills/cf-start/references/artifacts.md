@@ -16,7 +16,7 @@ When bootstrapping or refreshing the refactor brief:
 Use `cf-architecture-map` to bootstrap `.cflow/`, update `.gitignore`, and create or refresh `.cflow/architecture.md`.
 
 Do not create or refresh `.cflow/architecture.md` from `cf-start` phases.
-If architectural guidance materially changed, route to `cf-architecture-map` for a refresh or record the decision in `.cflow/refactor-brief.md` until the next architecture-map pass.
+If architecture observations materially changed, route to `cf-architecture-map` for a refresh or record the decision in `.cflow/refactor-brief.md` until the next architecture-map pass.
 
 ## Required brief updates
 

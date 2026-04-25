@@ -71,6 +71,18 @@ test("cf-start ships bootstrap asset templates", async () => {
   );
 });
 
+test("architecture artifact template stays observational", async () => {
+  const body = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "assets", "architecture.template.md"),
+    "utf8",
+  );
+
+  assert.doesNotMatch(body, /Refactor guidance/i);
+  assert.doesNotMatch(body, /future refactors should/i);
+  assert.match(body, /## Observed invariants/);
+  assert.match(body, /Keep this section descriptive; do not add refactor recommendations/);
+});
+
 test("cf-start ships workflow phase references", async () => {
   for (const referenceName of [
     "routing.md",
@@ -105,11 +117,37 @@ test("cf-architecture-map requires read-only clean-context reconnaissance", asyn
   );
 
   assert.match(body, /Clean-Context Reconnaissance/);
-  assert.match(body, /use one clean-context reconnaissance subagent/);
+  assert.match(body, /use the `cflow_architecture_recon` custom agent when available/);
+  assert.match(body, /use one equivalent clean-context reconnaissance subagent/);
+  assert.match(body, /## Observed Invariants/);
+  assert.match(body, /Keep `\.cflow\/architecture\.md` observational/);
+  assert.match(body, /do not add refactor recommendations, target shapes, or prescriptive guidance/);
+  assert.doesNotMatch(body, /Refactor Guidance/);
   assert.match(body, /must not:\n\n- edit files\n- create `\.cflow\/\*`\n- update `\.gitignore`/);
   assert.match(body, /Treat the subagent report as the primary repository scan/);
+  assert.match(body, /While the subagent is running, do not read manifests, source directories, docs, or implementation files/);
+  assert.match(body, /the controller may only inspect Cflow artifacts, `\.gitignore`, the architecture template, and worktree status/);
   assert.match(body, /Do not repeat full reconnaissance/);
+  assert.match(body, /If a full controller-side scan becomes necessary, say why before doing it/);
   assert.match(body, /You still own artifact writes, `\.gitignore`, final interpretation/);
+});
+
+test("cf-architecture-map ships a low-cost read-only Codex custom agent", async () => {
+  const body = await readFile(
+    path.join(SKILLS_ROOT, "_codex_agents", "cflow_architecture_recon.toml"),
+    "utf8",
+  );
+
+  assert.match(body, /^name = "cflow_architecture_recon"$/m);
+  assert.match(body, /^model = "gpt-5\.4-mini"$/m);
+  assert.match(body, /^model_reasoning_effort = "medium"$/m);
+  assert.match(body, /^sandbox_mode = "read-only"$/m);
+  assert.match(body, /Do not edit files, create \.cflow\/\*/);
+  assert.match(body, /Cite enough concrete file evidence/);
+  assert.match(body, /## Observed Invariants/);
+  assert.doesNotMatch(body, /Refactor Guidance/);
+  assert.match(body, /## Evidence/);
+  assert.match(body, /## Unknowns/);
 });
 
 test("cf-start phase references preserve internal-skill guardrails", async () => {

@@ -2,11 +2,14 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { installCodexAgents } from "./commands/install-agents.mjs";
 import { installSkills } from "./commands/install.mjs";
+import { removeCodexAgents } from "./commands/remove-agents.mjs";
 import { removeSkills } from "./commands/remove.mjs";
 
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SOURCE_ROOT = path.join(PACKAGE_ROOT, "skills");
+const SKILLS_SOURCE_ROOT = path.join(PACKAGE_ROOT, "skills");
+const CODEX_AGENTS_SOURCE_ROOT = path.join(PACKAGE_ROOT, "skills", "_codex_agents");
 
 const HELP_TEXT = `Usage:
   cflow-skills install <repo-path> [--dry-run]
@@ -15,9 +18,10 @@ const HELP_TEXT = `Usage:
   cflow-skills remove --global [--dry-run]
 
 Notes:
-  - install syncs packaged skills and support resources into <repo>/.agents/skills
-  - --global targets $CODEX_HOME/skills or ~/.codex/skills
-  - remove deletes only Cflow-owned skill and support directories
+  - install syncs packaged skills/support resources into <repo>/.agents/skills
+  - install syncs packaged Codex custom agents into <repo>/.codex/agents
+  - --global targets $CODEX_HOME/skills and $CODEX_HOME/agents, or ~/.codex/*
+  - remove deletes only Cflow-owned skills, support directories, and Codex custom agents
 `;
 
 export async function main(argv, io = { stdout: process.stdout, stderr: process.stderr }) {
@@ -35,18 +39,19 @@ export async function main(argv, io = { stdout: process.stdout, stderr: process.
     return 0;
   }
 
-  const destinationRoot = resolveDestinationRoot(options);
+  const destinations = resolveDestinations(options);
 
   try {
     const result =
       options.command === "install"
-        ? await installSkills({
-            sourceRoot: SOURCE_ROOT,
-            destinationRoot,
+        ? await installAll({
+            skillsDestinationRoot: destinations.skillsRoot,
+            codexAgentsDestinationRoot: destinations.codexAgentsRoot,
             dryRun: options.dryRun,
           })
-        : await removeSkills({
-            destinationRoot,
+        : await removeAll({
+            skillsDestinationRoot: destinations.skillsRoot,
+            codexAgentsDestinationRoot: destinations.codexAgentsRoot,
             dryRun: options.dryRun,
           });
 
@@ -119,20 +124,106 @@ function parseArgs(argv) {
   };
 }
 
-function resolveDestinationRoot(options) {
-  if (options.global) {
-    const codexHome = process.env.CODEX_HOME || path.join(os.homedir(), ".codex");
-    return path.resolve(codexHome, "skills");
+async function installAll({ skillsDestinationRoot, codexAgentsDestinationRoot, dryRun }) {
+  const skillsPlan = await installSkills({
+    sourceRoot: SKILLS_SOURCE_ROOT,
+    destinationRoot: skillsDestinationRoot,
+    dryRun: true,
+  });
+  const agentsPlan = await installCodexAgents({
+    sourceRoot: CODEX_AGENTS_SOURCE_ROOT,
+    destinationRoot: codexAgentsDestinationRoot,
+    dryRun: true,
+  });
+
+  if (dryRun || skillsPlan.conflicts.length > 0 || agentsPlan.conflicts.length > 0) {
+    return combineInstallResults(skillsPlan, agentsPlan, dryRun, false);
   }
 
-  return path.resolve(options.targetPath, ".agents", "skills");
+  const skillsResult = await installSkills({
+    sourceRoot: SKILLS_SOURCE_ROOT,
+    destinationRoot: skillsDestinationRoot,
+    dryRun: false,
+  });
+  const agentsResult = await installCodexAgents({
+    sourceRoot: CODEX_AGENTS_SOURCE_ROOT,
+    destinationRoot: codexAgentsDestinationRoot,
+    dryRun: false,
+  });
+
+  return combineInstallResults(
+    skillsResult,
+    agentsResult,
+    dryRun,
+    skillsResult.applied && agentsResult.applied,
+  );
+}
+
+async function removeAll({ skillsDestinationRoot, codexAgentsDestinationRoot, dryRun }) {
+  const skillsResult = await removeSkills({
+    destinationRoot: skillsDestinationRoot,
+    dryRun,
+  });
+  const agentsResult = await removeCodexAgents({
+    destinationRoot: codexAgentsDestinationRoot,
+    dryRun,
+  });
+
+  return {
+    command: "remove",
+    destinationRoot: skillsDestinationRoot,
+    skillsDestinationRoot,
+    codexAgentsDestinationRoot,
+    dryRun,
+    removed: [...skillsResult.removed, ...agentsResult.removed],
+    kept: [...skillsResult.kept, ...agentsResult.kept],
+    conflicts: [],
+    applied: skillsResult.applied && agentsResult.applied,
+  };
+}
+
+function combineInstallResults(skillsResult, agentsResult, dryRun, applied) {
+  return {
+    command: "install",
+    sourceRoot: skillsResult.sourceRoot,
+    destinationRoot: skillsResult.destinationRoot,
+    skillsSourceRoot: skillsResult.sourceRoot,
+    skillsDestinationRoot: skillsResult.destinationRoot,
+    codexAgentsSourceRoot: agentsResult.sourceRoot,
+    codexAgentsDestinationRoot: agentsResult.destinationRoot,
+    dryRun,
+    added: [...skillsResult.added, ...agentsResult.added],
+    updated: [...skillsResult.updated, ...agentsResult.updated],
+    unchanged: [...skillsResult.unchanged, ...agentsResult.unchanged],
+    pruned: [...skillsResult.pruned, ...agentsResult.pruned],
+    conflicts: [...skillsResult.conflicts, ...agentsResult.conflicts],
+    applied,
+  };
+}
+
+function resolveDestinations(options) {
+  if (options.global) {
+    const codexHome = process.env.CODEX_HOME || path.join(os.homedir(), ".codex");
+    return {
+      skillsRoot: path.resolve(codexHome, "skills"),
+      codexAgentsRoot: path.resolve(codexHome, "agents"),
+    };
+  }
+
+  const targetRoot = path.resolve(options.targetPath);
+  return {
+    skillsRoot: path.resolve(targetRoot, ".agents", "skills"),
+    codexAgentsRoot: path.resolve(targetRoot, ".codex", "agents"),
+  };
 }
 
 function writeSummary(stream, result) {
   if (result.command === "install") {
     stream.write(`Command: install\n`);
-    stream.write(`Source: ${result.sourceRoot}\n`);
-    stream.write(`Destination: ${result.destinationRoot}\n`);
+    stream.write(`Skills source: ${result.skillsSourceRoot}\n`);
+    stream.write(`Skills destination: ${result.skillsDestinationRoot}\n`);
+    stream.write(`Codex agents source: ${result.codexAgentsSourceRoot}\n`);
+    stream.write(`Codex agents destination: ${result.codexAgentsDestinationRoot}\n`);
     stream.write(`Dry run: ${result.dryRun ? "yes" : "no"}\n`);
     stream.write(`Added: ${result.added.length}\n`);
     stream.write(`Updated: ${result.updated.length}\n`);
@@ -148,7 +239,8 @@ function writeSummary(stream, result) {
   }
 
   stream.write(`Command: remove\n`);
-  stream.write(`Destination: ${result.destinationRoot}\n`);
+  stream.write(`Skills destination: ${result.skillsDestinationRoot}\n`);
+  stream.write(`Codex agents destination: ${result.codexAgentsDestinationRoot}\n`);
   stream.write(`Dry run: ${result.dryRun ? "yes" : "no"}\n`);
   stream.write(`Removed: ${result.removed.length}\n`);
   stream.write(`Kept: ${result.kept.length}\n`);
@@ -162,7 +254,7 @@ function writeEntries(stream, label, entries) {
 
   stream.write(`${label}:\n`);
   for (const entry of entries) {
-    stream.write(`- ${entry.name}\n`);
+    stream.write(`- ${entry.kind ? `${entry.kind}: ` : ""}${entry.name}\n`);
   }
 }
 
@@ -173,6 +265,8 @@ function writeConflicts(stream, conflicts) {
 
   stream.write(`Conflicts:\n`);
   for (const conflict of conflicts) {
-    stream.write(`- ${conflict.name}: ${conflict.reason} (${conflict.targetDir})\n`);
+    stream.write(
+      `- ${conflict.kind ? `${conflict.kind}: ` : ""}${conflict.name}: ${conflict.reason} (${conflict.targetDir || conflict.targetFile})\n`,
+    );
   }
 }

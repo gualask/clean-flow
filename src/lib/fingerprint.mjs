@@ -20,6 +20,17 @@ export async function computeSkillFingerprint(skillDir) {
   return `sha256:${hash.digest("hex")}`;
 }
 
+export async function computeFileFingerprint(filePath) {
+  const hash = createHash("sha256");
+
+  hash.update(path.basename(filePath));
+  hash.update("\0");
+  hash.update(await readFile(filePath));
+  hash.update("\0");
+
+  return `sha256:${hash.digest("hex")}`;
+}
+
 async function collectFiles(rootDir, currentDir) {
   const entries = await readdir(currentDir, { withFileTypes: true });
   const files = [];

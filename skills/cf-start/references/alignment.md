@@ -67,7 +67,7 @@ Rules:
 
 Once enough decisions are aligned:
 
-- update `.cflow/architecture.md` if repository guidance became clearer
+- update `.cflow/architecture.md` if repository observations became clearer
 - create or refresh `.cflow/refactor-brief.md` if the work is non-trivial or the aligned decisions now create resumable handoff state
 - keep work units concise
 - do not write pseudo-code

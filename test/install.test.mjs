@@ -3,13 +3,16 @@ import path from "node:path";
 import test from "node:test";
 import { mkdir } from "node:fs/promises";
 
+import { installCodexAgents } from "../src/commands/install-agents.mjs";
 import { installSkills } from "../src/commands/install.mjs";
 import { computeSkillFingerprint } from "../src/lib/fingerprint.mjs";
-import { readMarker, writeMarker } from "../src/lib/marker.mjs";
+import { readFileMarker, readMarker, writeFileMarker, writeMarker } from "../src/lib/marker.mjs";
 import {
+  listFileNames,
   listDirectoryNames,
   makeTempWorkspace,
   readText,
+  writeCodexAgent,
   writeSkill,
   writeSupportDirectory,
 } from "./support/helpers.mjs";
@@ -149,4 +152,92 @@ test("install dry-run computes the plan without mutating the target", async () =
   assert.equal(result.added.length, 1);
   assert.equal(result.applied, false);
   assert.deepEqual(await listDirectoryNames(destinationRoot), []);
+});
+
+test("install copies Codex custom agents with owned markers", async () => {
+  const workspace = await makeTempWorkspace();
+  const sourceRoot = path.join(workspace, "source", ".codex", "agents");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "agents");
+
+  await writeCodexAgent(sourceRoot);
+  await writeCodexAgent(sourceRoot, "notes.md", "# Ignored\n");
+
+  const result = await installCodexAgents({ sourceRoot, destinationRoot });
+
+  assert.equal(result.added.length, 1);
+  assert.equal(result.updated.length, 0);
+  assert.equal(result.pruned.length, 0);
+  assert.equal(result.conflicts.length, 0);
+  assert.equal(result.applied, true);
+  assert.deepEqual(await listFileNames(destinationRoot), ["cflow_architecture_recon.toml"]);
+
+  const marker = await readFileMarker(destinationRoot, "cflow_architecture_recon.toml");
+  assert.equal(marker.owner, "clean-flow");
+  assert.equal(marker.pack, "cflow");
+  assert.equal(marker.sourceKind, "codex-agent");
+  assert.match(marker.fingerprint, /^sha256:/);
+});
+
+test("install updates owned Codex agents, prunes removed agents, and keeps foreign agents", async () => {
+  const workspace = await makeTempWorkspace();
+  const sourceRoot = path.join(workspace, "source", ".codex", "agents");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "agents");
+
+  await writeCodexAgent(
+    sourceRoot,
+    "cflow_architecture_recon.toml",
+    `name = "cflow_architecture_recon"\ndescription = "Updated"\ndeveloper_instructions = "Updated."\n`,
+  );
+  await writeCodexAgent(destinationRoot, "cflow_architecture_recon.toml");
+  await writeCodexAgent(destinationRoot, "old_cflow_agent.toml");
+  await writeCodexAgent(destinationRoot, "foreign_agent.toml");
+
+  await writeFileMarker(destinationRoot, "cflow_architecture_recon.toml", {
+    sourceSkill: "cflow_architecture_recon.toml",
+    fingerprint: "sha256:old",
+  });
+  await writeFileMarker(destinationRoot, "old_cflow_agent.toml", {
+    sourceSkill: "old_cflow_agent.toml",
+    fingerprint: "sha256:old",
+  });
+
+  const result = await installCodexAgents({ sourceRoot, destinationRoot });
+
+  assert.equal(result.updated.length, 1);
+  assert.equal(result.added.length, 0);
+  assert.equal(result.pruned.length, 1);
+  assert.equal(result.conflicts.length, 0);
+  assert.deepEqual(await listFileNames(destinationRoot), [
+    "cflow_architecture_recon.toml",
+    "foreign_agent.toml",
+  ]);
+
+  const updatedBody = await readText(
+    path.join(destinationRoot, "cflow_architecture_recon.toml"),
+  );
+  assert.match(updatedBody, /Updated/);
+
+  const foreignBody = await readText(path.join(destinationRoot, "foreign_agent.toml"));
+  assert.match(foreignBody, /Test Codex agent/);
+});
+
+test("install reports Codex agent conflicts and leaves foreign same-name agents untouched", async () => {
+  const workspace = await makeTempWorkspace();
+  const sourceRoot = path.join(workspace, "source", ".codex", "agents");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "agents");
+
+  await writeCodexAgent(sourceRoot, "cflow_architecture_recon.toml");
+  await writeCodexAgent(
+    destinationRoot,
+    "cflow_architecture_recon.toml",
+    `name = "cflow_architecture_recon"\ndescription = "Foreign"\ndeveloper_instructions = "Foreign."\n`,
+  );
+
+  const before = await readText(path.join(destinationRoot, "cflow_architecture_recon.toml"));
+  const result = await installCodexAgents({ sourceRoot, destinationRoot });
+  const after = await readText(path.join(destinationRoot, "cflow_architecture_recon.toml"));
+
+  assert.equal(result.conflicts.length, 1);
+  assert.equal(result.applied, false);
+  assert.equal(before, after);
 });

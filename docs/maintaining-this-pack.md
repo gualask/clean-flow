@@ -8,6 +8,7 @@ It is not a target repository that uses Cflow at runtime.
 At runtime:
 
 - skills are installed into `.agents/skills` in the target repository, or into `$CODEX_HOME/skills` / `~/.codex/skills` for global install
+- Codex custom agents are installed into `.codex/agents` in the target repository, or into `$CODEX_HOME/agents` / `~/.codex/agents` for global install
 - Cflow artifacts live in the target repository under `.cflow/`
 - this source repository does not need `.cflow/architecture.md` or `.cflow/refactor-brief.md`
 
@@ -17,9 +18,11 @@ Cflow has three runtime pieces:
 
 1. distribution
    - `cflow-skills install` copies public skill directories plus `_shared` support resources
+   - `cflow-skills install` copies Cflow-owned Codex custom agents from `.codex/agents`
    - install does not bootstrap `.cflow/`
 2. bootstrap
-   - `cf-architecture-map` uses a read-only clean-context reconnaissance subagent before creating or refreshing `.cflow/architecture.md`
+   - `cf-architecture-map` uses the read-only `cflow_architecture_recon` custom agent before creating or refreshing `.cflow/architecture.md` when available
+   - while that agent runs, the controller only checks artifacts, `.gitignore`, template, and worktree status; it does not build a parallel architecture map
    - `cf-architecture-map` creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, and updates `.gitignore`
    - `cf-start` creates or refreshes `.cflow/refactor-brief.md` when the workflow needs resumable handoff state
 3. execution
@@ -33,7 +36,9 @@ They are not packaged as separate skill entrypoints.
 ## Repository Layout
 
 ```text
-skills/          canonical skill source
+skills/          canonical runtime source, including skill dirs and installable support files
+skills/_codex_agents/
+                 canonical Codex custom agent source
 skills/_shared/  shared runtime references used by multiple skills
 src/             sync and fingerprint logic
 bin/             CLI entrypoint
@@ -76,6 +81,10 @@ Shared support references:
 - `skills/_shared/references/file-split-rules.md`
 - `skills/_shared/references/reference-audit.md`
 
+Codex custom agents:
+
+- `skills/_codex_agents/cflow_architecture_recon.toml`
+
 ## Golden Rules
 
 - Keep runtime behavior in the relevant `SKILL.md` or a reference file directly linked from that skill.
@@ -84,6 +93,7 @@ Shared support references:
 - Keep `cf-start/SKILL.md` as the controller: identity, hard gates, DOT flow diagrams, reference map, and output contracts.
 - Put phase-specific operational detail in `cf-start/references/*.md`.
 - Keep `_shared` only for runtime rules consumed by multiple public skills or phase references.
+- Keep `skills/_codex_agents` only for real Codex custom agents that should be installed, not for notes or examples.
 - Do not create separate internal skills unless a phase needs independent triggering as a real user-facing entrypoint.
 - Be strict only when the failure mode is concrete and costly.
 - Otherwise state the preferred direction plus the conditions that justify exceptions.
@@ -94,6 +104,7 @@ Shared support references:
 - `cf-start` phase contracts live in `skills/cf-start/references/*.md`.
 - Shared runtime rules live in `skills/_shared/references/`.
 - Bootstrap templates live in `skills/cf-start/assets/`.
+- Codex custom agent sources live in `skills/_codex_agents/`.
 - Agent-specific install instructions live in `install/<agent>/`.
 
 For per-entrypoint and per-phase contracts, use [skill-contract-matrix.md](./skill-contract-matrix.md).
@@ -130,7 +141,8 @@ Do not duplicate the same rule in both `SKILL.md` and a reference unless `SKILL.
 - Cflow does not depend on `AGENTS.md` for manual start or artifact-backed resume.
 - `cf-start` is the only workflow controller.
 - `cf-architecture-map` owns `.cflow/` bootstrap, `.gitignore` updates, and `.cflow/architecture.md`.
-- `cf-architecture-map` keeps subagent reconnaissance read-only; the main controller owns final interpretation and artifact writes.
+- `cf-architecture-map` keeps `cflow_architecture_recon` reconnaissance read-only and lower-cost; the main controller owns final interpretation and artifact writes.
+- `cf-architecture-map` must not duplicate the subagent scan unless the report is missing, incomplete, contradictory, or unsupported by evidence.
 - `cf-start` owns workflow entry, phase routing, and `.cflow/refactor-brief.md`.
 - `cf-cognitive` and `cf-file-split` do not create or require `.cflow/*` artifacts.
 - `soft-mixed` is a repository-level assessment outcome, not an execution mode.
@@ -170,6 +182,7 @@ When changing the pack:
 - update this document when maintainer rules change
 - if bootstrap artifact structure changes, update `skills/cf-start/assets/*.template.md`
 - if install/remove behavior changes, update `src/` and filesystem tests
+- if Codex custom agent behavior changes, update `skills/_codex_agents/*.toml`, the consuming `SKILL.md`, docs, and tests together
 - keep `README.md` focused on user-facing install and usage
 
 ## Testing
@@ -186,6 +199,7 @@ Current automated coverage checks:
 - update + prune + preserve foreign skills
 - conflict detection on foreign same-name skills
 - remove of Cflow-owned skill and support directories only
+- install, update, prune, and remove behavior for Cflow-owned Codex custom agents
 - structural checks for packaged public skills
 - Codex implicit invocation policy for shipped public skills
 - presence of `cf-start` bootstrap assets and phase references
@@ -201,4 +215,5 @@ The most important manual validation is a real target-repo run:
 4. invoke `$cf-cognitive` with explicit files and once without a file target
 5. invoke `$cf-file-split` once in evaluation mode and once with an explicit local split
 6. confirm the target repo gets `.agents/skills/...`
-7. confirm `.cflow/`, `.cflow/architecture.md`, `.cflow/refactor-brief.md`, and `.gitignore` are created only by runtime workflow when needed
+7. confirm the target repo gets `.codex/agents/cflow_architecture_recon.toml`
+8. confirm `.cflow/`, `.cflow/architecture.md`, `.cflow/refactor-brief.md`, and `.gitignore` are created only by runtime workflow when needed

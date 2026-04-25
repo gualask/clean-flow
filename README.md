@@ -45,6 +45,7 @@ node ./bin/cflow-skills.mjs install /path/to/repo
 ```
 
 The CLI syncs packaged skills plus shared support resources from `skills/` into `/path/to/repo/.agents/skills`.
+It also syncs packaged Codex custom agents into `/path/to/repo/.codex/agents`.
 
 Global install:
 
@@ -52,7 +53,7 @@ Global install:
 node ./bin/cflow-skills.mjs install --global
 ```
 
-By default `--global` installs into `$CODEX_HOME/skills` or `~/.codex/skills`.
+By default `--global` installs skills into `$CODEX_HOME/skills` or `~/.codex/skills`, and Codex custom agents into `$CODEX_HOME/agents` or `~/.codex/agents`.
 
 Dry run:
 
@@ -62,7 +63,7 @@ node ./bin/cflow-skills.mjs install /path/to/repo --dry-run
 
 ## First Use
 
-Installing the pack only syncs packaged skills and shared support resources into the target location.
+Installing the pack only syncs packaged skills, shared support resources, and Cflow-owned Codex custom agents into the target location.
 It does not create `.cflow/` by itself.
 
 For supported workflow first use and resume, start with `cf-start`.
@@ -70,6 +71,7 @@ For supported workflow first use and resume, start with `cf-start`.
 
 For standalone repository mapping, use `cf-architecture-map`.
 `cf-architecture-map` is the public entrypoint that bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and creates or refreshes `.cflow/architecture.md`.
+It uses the packaged `cflow_architecture_recon` Codex custom agent for read-only repository reconnaissance when available.
 
 For local cognitive complexity reduction, use `cf-cognitive`.
 It can use explicit files or discover up to three justified candidate files, then works sequentially without requiring `.cflow/` artifacts.
