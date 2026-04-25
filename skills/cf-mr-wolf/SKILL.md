@@ -24,6 +24,7 @@ At the start of every invocation with a concrete problem:
 
 The notes file is a compact source of truth for discovery evidence, not an execution plan or refactor backlog.
 Format notes for later machine reading: use one finding or candidate per bullet, and do not pack multiple candidates into one long line.
+In `evidence tools used`, list only tools and scripts that produced evidence; do not include tools used only to create or update `.cflow/mr-wolf-notes.md`.
 Use `Findings` as:
 
 - `confirmed candidates`: evidenced candidates worth carrying forward
@@ -144,7 +145,7 @@ When the evidence points to behavior-preserving cleanup, refactor, file splittin
 Stop at an evidence-backed handoff:
 
 - summarize the problem frame
-- list the evidence gathered and the tools used
+- list the evidence gathered and the evidence-producing tools used
 - name candidate areas or files with short rationale
 - separate confirmed candidates from uncertain ones
 - include the investigation confidence percentage

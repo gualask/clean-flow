@@ -17,7 +17,7 @@
 ## Evidence
 
 - evidence channels:
-- tools used:
+- evidence tools used:
 - sources checked:
 - key findings:
 - excluded noise:

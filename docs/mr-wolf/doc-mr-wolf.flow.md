@@ -20,15 +20,16 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 5. Frame the apparent goal, uncertainty, likely scope, and success criteria.
 6. Choose the smallest context slice that can confirm or reject the frame.
 7. Choose the relevant evidence channels: MCP resources/tools, relevant skills, system commands, and deterministic `/tmp` scripts; use the high-value channels that apply and record why skipped channels are not applicable.
-8. For repo-wide or multi-candidate work, run broad inventory, narrowing pass, and false-positive check before calling the context sufficient.
-9. Inspect only the selected evidence, then separate signal from noise and update the notes.
-10. Assign an investigation confidence percentage and record the basis.
-11. Recap whether the context is sufficient to continue; `sufficient` requires at least 80% confidence unless the user explicitly accepts the risk, and repo-wide or multi-candidate work stays below 80% if deterministic inventory, focused verification, false-positive checks, or evidence-channel decisions are missing.
-12. If context is insufficient, ask one focused question or inspect the next smallest justified slice.
-13. If the evidence points to cleanup/refactor candidates, stop at evidence-backed handoff and recommend `cf-start` instead of jumping directly to execution skills.
-14. Once clear enough, recommend a direction or present 2-3 options with trade-offs.
-15. Return a concise implementation handoff in chat.
-16. For Cflow cleanup/refactor work, ask whether to preserve the discovery through `.cflow/refactor-brief.md` and continue with `cf-start`; do not create that brief directly from `cf-mr-wolf`.
+8. Record only evidence-producing tools in `evidence tools used`; do not list note-writing/editing tools as evidence.
+9. For repo-wide or multi-candidate work, run broad inventory, narrowing pass, and false-positive check before calling the context sufficient.
+10. Inspect only the selected evidence, then separate signal from noise and update the notes.
+11. Assign an investigation confidence percentage and record the basis.
+12. Recap whether the context is sufficient to continue; `sufficient` requires at least 80% confidence unless the user explicitly accepts the risk, and repo-wide or multi-candidate work stays below 80% if deterministic inventory, focused verification, false-positive checks, or evidence-channel decisions are missing.
+13. If context is insufficient, ask one focused question or inspect the next smallest justified slice.
+14. If the evidence points to cleanup/refactor candidates, stop at evidence-backed handoff and recommend `cf-start` instead of jumping directly to execution skills.
+15. Once clear enough, recommend a direction or present 2-3 options with trade-offs.
+16. Return a concise implementation handoff in chat.
+17. For Cflow cleanup/refactor work, ask whether to preserve the discovery through `.cflow/refactor-brief.md` and continue with `cf-start`; do not create that brief directly from `cf-mr-wolf`.
 
 ## Contracts
 

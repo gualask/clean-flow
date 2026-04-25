@@ -399,6 +399,8 @@ test("cf-mr-wolf maintains compact investigation notes under .cflow", async () =
   assert.match(body, /Do not list every non-candidate file/);
   assert.match(body, /Do not add handoff, next skill, or workflow-decision sections/);
   assert.match(body, /one finding or candidate per bullet/);
+  assert.match(body, /list only tools and scripts that produced evidence/);
+  assert.match(body, /do not include tools used only to create or update `\.cflow\/mr-wolf-notes\.md`/);
   assert.doesNotMatch(body, /docs\/mr-wolf/);
   assert.doesNotMatch(body, /\.cflow\/mr-wolf-brief\.md/);
 
@@ -414,6 +416,7 @@ test("cf-mr-wolf maintains compact investigation notes under .cflow", async () =
   assert.match(templateBody, /confidence:/);
   assert.match(templateBody, /confidence basis/);
   assert.match(templateBody, /evidence channels/);
+  assert.match(templateBody, /evidence tools used/);
   assert.match(templateBody, /confirmed candidates/);
   assert.match(templateBody, /candidates to verify/);
   assert.match(templateBody, /excluded false positives/);
