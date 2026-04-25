@@ -19,14 +19,16 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 4. Decide whether existing notes are relevant to the current request and repository state; reuse relevant notes or overwrite stale/unrelated notes.
 5. Frame the apparent goal, uncertainty, likely scope, and success criteria.
 6. Choose the smallest context slice that can confirm or reject the frame.
-7. Use available MCP resources, relevant skills, system commands, or deterministic `/tmp` scripts when they can gather evidence more reliably than model-only analysis.
-8. Inspect only the selected evidence, then separate signal from noise and update the notes.
-9. Recap whether the context is sufficient to continue.
-10. If context is insufficient, ask one focused question or inspect the next smallest justified slice.
-11. If the evidence points to cleanup/refactor candidates, stop at evidence-backed handoff and recommend `cf-start` instead of jumping directly to execution skills.
-12. Once clear enough, recommend a direction or present 2-3 options with trade-offs.
-13. Return a concise implementation handoff in chat.
-14. For Cflow cleanup/refactor work, ask whether to preserve the discovery through `.cflow/refactor-brief.md` and continue with `cf-start`; do not create that brief directly from `cf-mr-wolf`.
+7. Choose the relevant evidence channels: MCP resources/tools, relevant skills, system commands, and deterministic `/tmp` scripts; use the high-value channels that apply and record why skipped channels are not applicable.
+8. For repo-wide or multi-candidate work, run broad inventory, narrowing pass, and false-positive check before calling the context sufficient.
+9. Inspect only the selected evidence, then separate signal from noise and update the notes.
+10. Assign an investigation confidence percentage and record the basis.
+11. Recap whether the context is sufficient to continue; `sufficient` requires at least 80% confidence unless the user explicitly accepts the risk, and repo-wide or multi-candidate work stays below 80% if deterministic inventory, focused verification, false-positive checks, or evidence-channel decisions are missing.
+12. If context is insufficient, ask one focused question or inspect the next smallest justified slice.
+13. If the evidence points to cleanup/refactor candidates, stop at evidence-backed handoff and recommend `cf-start` instead of jumping directly to execution skills.
+14. Once clear enough, recommend a direction or present 2-3 options with trade-offs.
+15. Return a concise implementation handoff in chat.
+16. For Cflow cleanup/refactor work, ask whether to preserve the discovery through `.cflow/refactor-brief.md` and continue with `cf-start`; do not create that brief directly from `cf-mr-wolf`.
 
 ## Contracts
 
@@ -35,7 +37,8 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 | invoked without a problem | ask what problem must be solved before inspecting repository context | no |
 | invoked with a problem | read or create `.cflow/mr-wolf-notes.md`, then reuse or reset it based on relevance | no |
 | ambiguous problem | inspect only the smallest relevant context slice, recap sufficiency, ask one focused question if needed | no |
-| many deterministic inputs | use tools or temporary `/tmp` scripts for mechanical analysis, then interpret the compact output | no |
+| many deterministic inputs | use commands or temporary `/tmp` scripts for mechanical analysis, then interpret the compact output | no |
+| repo-wide or multi-candidate discovery | run broad inventory, narrowing pass, false-positive check, and record confidence before declaring sufficiency | no |
 | cleanup/refactor candidate list | summarize evidence and hand off to `cf-start`; do not route straight to `cf-file-split` or `cf-cognitive` unless the user requested one explicit local action | no |
 | clear enough for options | present recommended direction first, with only real alternatives and trade-offs | no |
 | false positives | record only important excluded false positives, not every non-candidate file | no |
@@ -48,6 +51,8 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 - It asks for the problem first when invoked without instructions.
 - It narrows context before reading, and avoids whole-repository scans by default.
 - It uses available tools and deterministic temporary scripts instead of making the model do mechanical analysis.
+- It does not declare discovery sufficient below 80% confidence unless the user accepts the risk.
+- It narrows repo-wide investigations through broad inventory, candidate verification, and false-positive checks.
 - It keeps `.cflow/mr-wolf-notes.md` as compact investigation notes, not an execution plan.
 - It records `confirmed candidates`, `candidates to verify`, and `excluded false positives`, not exhaustive rejected lists.
 - It states what context was excluded as noise and why.

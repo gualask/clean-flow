@@ -398,6 +398,7 @@ test("cf-mr-wolf maintains compact investigation notes under .cflow", async () =
   assert.match(body, /Overwrite stale or unrelated notes/);
   assert.match(body, /Do not list every non-candidate file/);
   assert.match(body, /Do not add handoff, next skill, or workflow-decision sections/);
+  assert.match(body, /one finding or candidate per bullet/);
   assert.doesNotMatch(body, /docs\/mr-wolf/);
   assert.doesNotMatch(body, /\.cflow\/mr-wolf-brief\.md/);
 
@@ -410,6 +411,9 @@ test("cf-mr-wolf maintains compact investigation notes under .cflow", async () =
   assert.doesNotMatch(flowBody, /docs\/mr-wolf\/YYYY-MM-DD/);
 
   assert.match(templateBody, /## Findings/);
+  assert.match(templateBody, /confidence:/);
+  assert.match(templateBody, /confidence basis/);
+  assert.match(templateBody, /evidence channels/);
   assert.match(templateBody, /confirmed candidates/);
   assert.match(templateBody, /candidates to verify/);
   assert.match(templateBody, /excluded false positives/);
@@ -429,12 +433,40 @@ test("cf-mr-wolf uses tools and deterministic temp scripts for evidence gatherin
   assert.match(body, /system commands/);
   assert.match(body, /temporary scripts/);
   assert.match(body, /under `\/tmp`/);
+  assert.match(body, /For repo-wide or many-input analysis, use deterministic commands or a temporary script/);
+  assert.match(body, /When MCP tools are available and the question depends on code structure/);
+  assert.match(body, /Use a temporary script when the task requires comparing, scoring, grouping/);
+  assert.match(body, /record why that high-value channel was not applicable/);
   assert.match(body, /Scripts should produce evidence/);
   assert.match(body, /skill still owns interpretation/);
 
   assert.match(flowBody, /MCP resources/);
   assert.match(flowBody, /deterministic `\/tmp` scripts/);
+  assert.match(flowBody, /record why skipped channels are not applicable/);
   assert.match(flowBody, /mechanical analysis/);
+});
+
+test("cf-mr-wolf requires confidence-gated narrowing before sufficiency", async () => {
+  const body = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
+  const flowBody = await readFile(
+    path.join(REPO_ROOT, "docs", "mr-wolf", "doc-mr-wolf.flow.md"),
+    "utf8",
+  );
+
+  assert.match(body, /Investigation Confidence/);
+  assert.match(body, /assign an investigation confidence percentage/);
+  assert.match(body, /broad inventory/);
+  assert.match(body, /narrowing pass/);
+  assert.match(body, /false-positive check/);
+  assert.match(body, /Keep confidence below 80% unless the evidence includes/);
+  assert.match(body, /recorded decision for each high-value evidence channel/);
+  assert.match(body, /Use `sufficient` only at 80% confidence or higher/);
+  assert.match(body, /Below 80%, continue the context loop or ask one focused question/);
+
+  assert.match(flowBody, /broad inventory, narrowing pass, and false-positive check/);
+  assert.match(flowBody, /investigation confidence percentage/);
+  assert.match(flowBody, /at least 80% confidence/);
+  assert.match(flowBody, /repo-wide or multi-candidate work stays below 80%/);
 });
 
 test("cf-mr-wolf hands cleanup discovery to cf-start before execution skills", async () => {
@@ -450,6 +482,7 @@ test("cf-mr-wolf hands cleanup discovery to cf-start before execution skills", a
   assert.match(body, /cf-cognitive/);
   assert.match(body, /preserve the discovery in `\.cflow\/refactor-brief\.md`/);
   assert.match(body, /cf-start` owns that brief/);
+  assert.match(body, /cf-start` should read `\.cflow\/mr-wolf-notes\.md` as discovery input/);
   assert.match(body, /not an execution plan or refactor backlog/);
 
   assert.match(flowBody, /recommend `cf-start`/);

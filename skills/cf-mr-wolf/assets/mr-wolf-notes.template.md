@@ -5,6 +5,7 @@
 - request:
 - current understanding:
 - status: investigating | sufficient | stale
+- confidence: 0-100%
 
 ## Relevance check
 
@@ -15,10 +16,12 @@
 
 ## Evidence
 
+- evidence channels:
 - tools used:
 - sources checked:
 - key findings:
 - excluded noise:
+- confidence basis:
 
 ## Findings
 

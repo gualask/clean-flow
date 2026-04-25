@@ -23,6 +23,7 @@ At the start of every invocation with a concrete problem:
 4. Overwrite stale or unrelated notes with a fresh investigation from the template.
 
 The notes file is a compact source of truth for discovery evidence, not an execution plan or refactor backlog.
+Format notes for later machine reading: use one finding or candidate per bullet, and do not pack multiple candidates into one long line.
 Use `Findings` as:
 
 - `confirmed candidates`: evidenced candidates worth carrying forward
@@ -39,7 +40,8 @@ If the invocation includes a concrete problem or task, start with problem intake
 If the invocation is empty, generic, or only says to use this skill, do not inspect the repository yet.
 Ask exactly one question: what problem should be solved?
 
-If the user explicitly asks to skip planning, respect that, but first call out the biggest missing requirement or risk in one short note.
+If the user explicitly asks to skip planning, respect that, but first call out the biggest missing requirement or risk in one short note and stop.
+Do not use this skill to implement the task.
 
 ## Core Rule
 
@@ -77,6 +79,24 @@ Examples:
 
 Do not do whole-repository reconnaissance unless the problem is explicitly repo-wide or the first narrow pass shows the scope is broader than expected.
 
+## Investigation Confidence
+
+Treat sufficiency as an evidence gate, not a feeling.
+Before saying the context is `sufficient`, assign an investigation confidence percentage and record the basis in `.cflow/mr-wolf-notes.md`.
+The percentage estimates confidence that the relevant problem frame and candidate set are good enough for the next decision, not confidence that an implementation will succeed.
+
+For repo-wide, multi-file, or multi-candidate investigations, do not stop after one broad scan.
+Keep confidence below 80% unless the evidence includes:
+
+- broad inventory from commands or a temporary script to find likely search space and obvious noise
+- narrowing pass with focused verification of the strongest candidates or representative clusters
+- false-positive checks for important exclusions that looked relevant at first
+- a recorded decision for each high-value evidence channel: used, not available, or not relevant
+
+Use `sufficient` only at 80% confidence or higher.
+Below 80%, continue the context loop or ask one focused question.
+If a user asks to proceed below 80%, state the remaining uncertainty in the handoff.
+
 ## Noise Filter
 
 Treat context as noise when it does not affect:
@@ -95,12 +115,20 @@ If context seems relevant but expensive to load, say why it matters before expan
 
 Use the available tools to gather evidence instead of doing mechanical analysis in the model.
 
-Prefer, when relevant:
+Before declaring context sufficient, choose the evidence channels that matter for the problem and record the choice in `.cflow/mr-wolf-notes.md`.
+Use relevant high-value channels; if you skip one, record why that high-value channel was not applicable.
+
+High-value channels include:
 
 - MCP resources or tools for external systems, repository metadata, tickets, docs, or structured sources
 - other installed skills when one clearly owns a bounded subtask or follow-up path
 - system commands such as `rg`, test runners, package scripts, language tools, and format or schema checkers in read-only or diagnostic mode
 - temporary scripts in the system temp directory for deterministic analysis across many inputs
+
+When MCP tools are available and the question depends on code structure, symbols, semantic relationships, repository metadata, tickets, or docs, use a relevant MCP tool unless a narrower non-MCP source is clearly enough; record the reason when MCP is skipped.
+
+For repo-wide or many-input analysis, use deterministic commands or a temporary script unless a single standard command already produces the needed fact.
+Use a temporary script when the task requires comparing, scoring, grouping, parsing, normalizing, or extracting facts from many files.
 
 Use temporary scripts only for mechanical work such as parsing, counting, indexing, diffing, grouping, normalizing, extracting metadata, or checking consistency.
 Choose Python or Node.js based on the task and available project conventions.
@@ -119,10 +147,12 @@ Stop at an evidence-backed handoff:
 - list the evidence gathered and the tools used
 - name candidate areas or files with short rationale
 - separate confirmed candidates from uncertain ones
+- include the investigation confidence percentage
 - recommend whether the work should enter `cf-start`
 
 If the work is multi-file, ordered, risky, or resumable, ask whether to preserve the discovery in `.cflow/refactor-brief.md` and continue through `cf-start`.
 `cf-start` owns that brief, work-unit planning, safety net, execution, review, verification, and resume.
+When handing off, say that `cf-start` should read `.cflow/mr-wolf-notes.md` as discovery input; do not imply that `cf-mr-wolf` will write `.cflow/refactor-brief.md`.
 
 Use `cf-file-split` or `cf-cognitive` directly only when the user asks for one explicit local file-level action and no broader Cflow planning or resume state is needed.
 
@@ -154,6 +184,7 @@ For an active context loop, return only:
 - **Context checked**: focused sources inspected, or `none yet`.
 - **Signal**: what matters.
 - **Noise excluded**: what was intentionally not inspected and why.
+- **Confidence**: percentage plus basis.
 - **Sufficiency**: `sufficient` or `needs more context`, with one sentence.
 - **Next question**: exactly one focused question, only if needed.
 
@@ -168,6 +199,7 @@ For a completed handoff, return only:
 - **Decision**: chosen direction.
 - **Scope**: what is in scope.
 - **Non-goals**: what is out of scope.
+- **Confidence**: percentage plus remaining uncertainty, if any.
 - **Notes**: `.cflow/mr-wolf-notes.md` updated, reset, or not used because no problem was provided.
 - **Next step**: immediate implementation step, or `cf-start` handoff when the work is Cflow cleanup/refactor.
 
