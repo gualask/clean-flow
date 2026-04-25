@@ -16,9 +16,7 @@ You must determine:
 - project type
 - main external boundaries
 - domain gravity
-- current boundary model
-- current packaging model
-- current dependency directions
+- current boundary and packaging model
 - observed repository invariants that later Cflow skills may rely on
 
 ## Language rules
@@ -42,49 +40,18 @@ It is configured as a read-only, lower-cost reconnaissance agent for this specif
 
 If the custom agent is unavailable, use one equivalent clean-context reconnaissance subagent to inspect the repository and return a read-only architecture report.
 
-The subagent must not:
+Start the custom agent with only the repository path and the user's mapping request.
+Do not paste the custom agent's TOML instructions or full report format into the spawn prompt.
 
-- edit files
-- create `.cflow/*`
-- update `.gitignore`
-- decide the final architecture map
-
-Give the subagent the repository path and require this report format:
-
-```md
-## Repository Context
-Project type, product shape, dominant language, and dominant docs language.
-
-## Entry Points
-CLI commands, apps, APIs, workers, scripts, package exports, or public library APIs.
-
-## Top-Level Map
-Main directories, packages, crates, apps, modules, or bounded areas and what each owns.
-
-## External Boundaries
-Filesystem, database, network, browser APIs, OS APIs, queues, storage, subprocesses, or tool integrations.
-
-## Boundary Model
-Current architecture style, important dependency directions, and ownership boundaries.
-
-## Packaging Model
-How code is organized: capability, layer, feature, workflow, or hybrid.
-
-## Observed Invariants
-Existing flows, contracts, and constraints visible in the repository.
-
-## Evidence
-Files read and why they matter.
-
-## Unknowns
-Areas the controller should verify before writing `.cflow/architecture.md`.
-```
+Expect the subagent report to contain these sections: **Repository Context**, **Entry Points**, **Top-Level Map**, **External Boundaries**, **Boundary and Packaging Model**, **Observed Invariants**, **Evidence**, **Unknowns**.
 
 Treat the subagent report as the primary repository scan.
+Use `../cf-start/assets/architecture.template.md` as the review rubric for whether the report is good enough to write `.cflow/architecture.md`.
 While the subagent is running, do not read manifests, source directories, docs, or implementation files to build a parallel architecture map.
 During that wait, the controller may only inspect Cflow artifacts, `.gitignore`, the architecture template, and worktree status.
 Do not repeat full reconnaissance unless the report is incomplete, contradictory, or unsupported by its cited evidence.
 Spot-check only the evidence needed to trust the report, resolve contradictions, or fill unknowns.
+If the report misses a template section or fills it with generic, prescriptive, or off-scope content, ask the subagent one targeted follow-up or do the smallest evidence spot-check needed.
 If a full controller-side scan becomes necessary, say why before doing it.
 You still own artifact writes, `.gitignore`, final interpretation, and the user-facing output.
 
@@ -105,7 +72,7 @@ When bootstrapping or refreshing the architecture map:
 
 - Keep this skill repository-level.
 - Describe the repository as it is now, not as an idealized architecture.
-- Keep `.cflow/architecture.md` observational: do not add refactor recommendations, target shapes, or prescriptive guidance.
+- Keep `.cflow/architecture.md` observational: do not add refactor recommendations, target shapes, prescriptive guidance, future-work caveats, or planning notes.
 - Map the current shape before judging whether refactor work is justified.
 - Do not choose work units, intervention modes, or target shape in this skill.
 - If the user also needs refactor planning or resume, recommend `cf-start` after the map is updated.

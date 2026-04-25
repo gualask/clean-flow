@@ -79,8 +79,18 @@ test("architecture artifact template stays observational", async () => {
 
   assert.doesNotMatch(body, /Refactor guidance/i);
   assert.doesNotMatch(body, /future refactors should/i);
+  assert.match(body, /Use this template as both the artifact shape and the controller review rubric/);
+  assert.match(body, /Before writing the file, check the subagent report against every section below/);
+  assert.match(body, /Must identify what the repository exists to do/);
+  assert.match(body, /Exclude generated, vendored, dependency, cache, and build-output directories/);
+  assert.match(body, /## Boundary and packaging model/);
+  assert.doesNotMatch(body, /## Boundary model/);
+  assert.doesNotMatch(body, /## Packaging model/);
+  assert.doesNotMatch(body, /## Dependency direction/);
+  assert.match(body, /Runtime crossings: `<caller area>` -> `<runtime\/API boundary>` -> `<owner area>`/);
+  assert.match(body, /Should not repeat the top-level map directory by directory/);
   assert.match(body, /## Observed invariants/);
-  assert.match(body, /Keep this section descriptive; do not add refactor recommendations/);
+  assert.match(body, /Keep this section descriptive; do not add refactor recommendations, future-work caveats, or planning notes/);
 });
 
 test("cf-start ships workflow phase references", async () => {
@@ -119,11 +129,21 @@ test("cf-architecture-map requires read-only clean-context reconnaissance", asyn
   assert.match(body, /Clean-Context Reconnaissance/);
   assert.match(body, /use the `cflow_architecture_recon` custom agent when available/);
   assert.match(body, /use one equivalent clean-context reconnaissance subagent/);
-  assert.match(body, /## Observed Invariants/);
+  assert.match(body, /Start the custom agent with only the repository path and the user's mapping request/);
+  assert.match(body, /Do not paste the custom agent's TOML instructions or full report format into the spawn prompt/);
+  assert.match(body, /Expect the subagent report to contain these sections/);
+  assert.match(body, /Boundary and Packaging Model/);
+  assert.match(body, /Use `\.\.\/cf-start\/assets\/architecture\.template\.md` as the review rubric/);
+  assert.match(body, /If the report misses a template section or fills it with generic, prescriptive, or off-scope content/);
+  assert.doesNotMatch(body, /## Boundary Model/);
+  assert.doesNotMatch(body, /## Packaging Model/);
+  assert.doesNotMatch(body, /Do not repeat the top-level map directory by directory/);
+  assert.match(body, /Observed Invariants/);
   assert.match(body, /Keep `\.cflow\/architecture\.md` observational/);
-  assert.match(body, /do not add refactor recommendations, target shapes, or prescriptive guidance/);
+  assert.match(body, /do not add refactor recommendations, target shapes, prescriptive guidance, future-work caveats, or planning notes/);
+  assert.doesNotMatch(body, /Do not include generated, vendored, dependency, cache, or build-output directories/);
+  assert.doesNotMatch(body, /Exclude generated, vendored, dependency, cache, and build-output directories/);
   assert.doesNotMatch(body, /Refactor Guidance/);
-  assert.match(body, /must not:\n\n- edit files\n- create `\.cflow\/\*`\n- update `\.gitignore`/);
   assert.match(body, /Treat the subagent report as the primary repository scan/);
   assert.match(body, /While the subagent is running, do not read manifests, source directories, docs, or implementation files/);
   assert.match(body, /the controller may only inspect Cflow artifacts, `\.gitignore`, the architecture template, and worktree status/);
@@ -144,7 +164,13 @@ test("cf-architecture-map ships a low-cost read-only Codex custom agent", async 
   assert.match(body, /^sandbox_mode = "read-only"$/m);
   assert.match(body, /Do not edit files, create \.cflow\/\*/);
   assert.match(body, /Cite enough concrete file evidence/);
+  assert.match(body, /Exclude generated, vendored, dependency, cache, and build-output directories/);
+  assert.match(body, /## Boundary and Packaging Model/);
+  assert.doesNotMatch(body, /## Boundary Model/);
+  assert.doesNotMatch(body, /## Packaging Model/);
+  assert.match(body, /Runtime crossings: `<caller area>` -> `<runtime\/API boundary>` -> `<owner area>`/);
   assert.match(body, /## Observed Invariants/);
+  assert.match(body, /do not add refactor recommendations, future-work caveats, or planning notes/);
   assert.doesNotMatch(body, /Refactor Guidance/);
   assert.match(body, /## Evidence/);
   assert.match(body, /## Unknowns/);

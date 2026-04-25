@@ -23,18 +23,25 @@ CLI commands, apps, APIs, workers, scripts, package exports, or public library A
 
 ## Top-Level Map
 Main directories, packages, crates, apps, modules, or bounded areas and what each owns.
+Exclude generated, vendored, dependency, cache, and build-output directories such as dist, build, target, node_modules, coverage, or framework caches unless intentionally tracked and architecturally relevant.
 
 ## External Boundaries
 Filesystem, database, network, browser APIs, OS APIs, queues, storage, subprocesses, or tool integrations.
 
-## Boundary Model
-Current architecture style, important dependency directions, and ownership boundaries.
+## Boundary and Packaging Model
+Observed runtime crossings, ownership boundaries, dependency directions, and physical packaging shape.
 
-## Packaging Model
-How code is organized: capability, layer, feature, workflow, or hybrid.
+Use this abstract form:
+
+- Runtime crossings: `<caller area>` -> `<runtime/API boundary>` -> `<owner area>`.
+- Ownership boundaries: `<area>` owns `<responsibility>`.
+- Dependency direction: `<area>` depends on `<area>`; `<area>` appears independent from `<area>`.
+- Physical packaging: code is organized mainly by `<feature/layer/capability/workflow/hybrid>`.
+
+Do not repeat the top-level map directory by directory.
 
 ## Observed Invariants
-Existing flows, contracts, and constraints visible in the repository. Keep this descriptive and do not add refactor recommendations.
+Existing flows, contracts, and constraints visible in the repository. Keep this descriptive and do not add refactor recommendations, future-work caveats, or planning notes.
 
 ## Evidence
 Files read and why they matter.

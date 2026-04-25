@@ -1,23 +1,28 @@
 # .cflow/architecture.md
 
+Use this template as both the artifact shape and the controller review rubric.
+Before writing the file, check the subagent report against every section below.
+
 ## Purpose
 
-Describe what this repository exists to do in 2-4 lines.
+Must identify what the repository exists to do in 2-4 lines.
+Should not describe desired future architecture.
 
 ## Product shape
 
-Record the high-level shape in repository terms:
+Must record the high-level shape in repository terms:
 - project type
 - domain gravity
 - main operational style
 
 ## Top-level map
 
-List the main packages, crates, apps, modules, or bounded areas and what each one owns.
+Must list the main packages, crates, apps, modules, or bounded areas and what each one owns.
+Exclude generated, vendored, dependency, cache, and build-output directories unless they are intentionally tracked and architecturally relevant.
 
 ## Entry points
 
-List the user-facing or system-facing entry points:
+Must list the user-facing or system-facing entry points:
 - CLI commands
 - HTTP servers
 - UI apps
@@ -27,7 +32,7 @@ List the user-facing or system-facing entry points:
 
 ## External boundaries
 
-List the important boundaries:
+Must list the important runtime boundaries:
 - filesystem
 - database
 - network / HTTP
@@ -38,33 +43,20 @@ List the important boundaries:
 - subprocesses
 - tool integrations
 
-## Boundary model
+## Boundary and packaging model
 
-State the current dominant model, for example:
-- layered
-- use-case oriented
-- modular monolith
-- ports-and-adapters-ish
-- mixed / pragmatic
+Must record only observed facts:
 
-Explain it briefly in repository terms, not abstract theory.
+- Runtime crossings: `<caller area>` -> `<runtime/API boundary>` -> `<owner area>`.
+- Ownership boundaries: `<area>` owns `<responsibility>`.
+- Dependency direction: `<area>` depends on `<area>`; `<area>` appears independent from `<area>`.
+- Physical packaging: code is organized mainly by `<feature/layer/capability/workflow/hybrid>`.
 
-## Packaging model
-
-State how code is mainly organized:
-- by capability
-- by layer
-- by feature
-- by workflow
-- hybrid
-
-## Dependency direction
-
-Describe the dependency directions that are visible in the current repository.
+Should not repeat the top-level map directory by directory.
 
 ## Observed invariants
 
-Record existing flows, contracts, and constraints visible in the repository.
-Keep this section descriptive; do not add refactor recommendations.
+Must record existing flows, contracts, and constraints visible in the repository.
+Keep this section descriptive; do not add refactor recommendations, future-work caveats, or planning notes.
 
 Keep this document stable and short.

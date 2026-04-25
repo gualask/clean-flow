@@ -11,6 +11,9 @@
 - Extended install/remove to sync Cflow-owned Codex custom agents alongside packaged skills.
 - Tightened `cf-architecture-map` so the controller does not duplicate the reconnaissance scan while the subagent runs.
 - Changed `.cflow/architecture.md` output from refactor guidance to observed repository invariants.
+- Added architecture-map filtering for generated, vendored, dependency, cache, and build-output directories.
+- Merged architecture-map boundary, packaging, and dependency sections into one observational section.
+- Clarified that `architecture.template.md` is both artifact shape and controller review rubric.
 - Updated docs and tests for the four-public-skill package shape.
 
 ## 2026-04-24
