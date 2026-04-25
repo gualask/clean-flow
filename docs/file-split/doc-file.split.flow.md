@@ -21,9 +21,10 @@ Document the runtime flow for `cf-file-split`, the standalone skill for evaluati
 6. Controller loads `file-split-rules.md` and `reference-audit.md` before evaluation or execution.
 7. In evaluation mode, controller reports candidate extraction seams and stops unless the user asks to execute.
 8. In execution mode, controller performs one scoped behavior-preserving split.
-9. Controller updates imports, exports, call sites, and tests affected by that split.
-10. Controller runs the smallest relevant check.
-11. Final output reports scope, files touched, seam rationale, checks, and remaining risks.
+9. Controller re-checks the resulting local directory shape. If the split creates or extends a related file cluster, controller groups that cluster into the appropriate local subfolder when placement is clear.
+10. Controller updates imports, exports, call sites, and tests affected by that split and any placement adjustment.
+11. Controller runs the smallest relevant check.
+12. Final output reports scope, files touched, seam rationale, final placement, checks, and remaining risks.
 
 ## Review Checks
 
@@ -31,6 +32,7 @@ Document the runtime flow for `cf-file-split`, the standalone skill for evaluati
 - It should not create or depend on `.cflow/*`.
 - Evaluation and execution modes must stay distinct.
 - Splits need a real seam: ownership, lifecycle, domain vocabulary, reuse, or testability.
+- Placement must be based on the resulting local cluster, not only the new file created by the current split.
+- A second or optional split must re-evaluate whether earlier flat extracted files now belong in a local subfolder.
 - Placement must follow local conventions and reference audit rules.
 - If the seam is not clear enough, stop or ask one focused question instead of inventing a split.
-

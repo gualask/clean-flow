@@ -38,16 +38,24 @@ Use those locations only when reuse already exists, the extracted owner is truly
 ## Placement
 
 Place new files by nearest existing ownership and repository convention, not by generic type.
+Choose placement for the resulting local cluster, not only for the one file being created now.
 
 Choose placement in this order:
 
 - an existing local path or subfolder when it already owns the same seam
 - flat next to the caller when creating one local extracted file
-- a new local subfolder when the split creates at least two related files that should stay together
+- a new local subfolder when the split creates or extends at least two related files that should stay together
 - shared or global locations only when the grouping rules justify promotion
 
 Do not create a new top-level architectural folder during a local split.
 Do not move to `shared`, `common`, or `utils` because reuse is only theoretical.
+
+After every executed split, re-check the containing directory:
+
+- if the extracted owner now spans multiple related files, keep those files together in one local subfolder
+- if a previous split left one extracted file flat, move it with the new related files when the second split turns them into a cluster
+- if nearby conventions already group component clusters in subfolders, prefer the same shape over a flat pile of related files
+- if the remaining sibling files are unrelated peers, do not leave the extracted cluster mixed flat among them
 
 If more than one placement is plausible, ask one focused question before editing.
 Offer only applicable options: flat next to the caller, an existing subfolder, or a new subfolder, with a recommendation.

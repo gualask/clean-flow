@@ -41,7 +41,9 @@ If the target or placement is not clear enough, ask one focused question before 
 - Preserve behavior, public API, exports, side effects, evaluation order, and async behavior.
 - Move only the selected owned unit or related group.
 - Keep the source file as the readable entry point for the local workflow.
-- Follow shared grouping and placement rules before creating files.
+- Follow shared grouping and placement rules before creating files, and choose placement for the resulting local cluster rather than only for the new file.
+- After the split, re-check whether the containing directory is now an unhealthy flat cluster. If this split creates or extends a related group of two or more files, move that group into a local subfolder in the same execution step when the placement is clear.
+- If a previous split left one extracted file flat and the current split makes it part of a larger owner cluster, include that earlier extracted file in the placement adjustment.
 - Do not promote code to shared, global hooks, common, or utils locations unless the shared grouping rules justify it.
 - After moving code, ensure you have read [../_shared/references/reference-audit.md](../_shared/references/reference-audit.md) in this invocation, then audit moved names and paths.
 
@@ -58,4 +60,4 @@ Return only:
 - **Scope**: target file and mode, evaluation or execution.
 - **Decision**: candidates and recommendation, or split performed.
 - **Checks**: commands run and pass/fail result, or why no check ran.
-- **Result**: behavior preservation, remaining risk, and next action.
+- **Result**: behavior preservation, final placement decision, remaining risk, and next action.

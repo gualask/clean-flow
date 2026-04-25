@@ -198,6 +198,32 @@ test("cf-start phase references preserve internal-skill guardrails", async () =>
   assert.match(planningBody, /Never finish planning with both `current work unit` and `recommended next work unit` unset/);
 });
 
+test("cf-file-split requires post-split placement review for related clusters", async () => {
+  const skillBody = await readFile(path.join(SKILLS_ROOT, "cf-file-split", "SKILL.md"), "utf8");
+  const rulesBody = await readFile(
+    path.join(SKILLS_ROOT, "_shared", "references", "file-split-rules.md"),
+    "utf8",
+  );
+  const flowBody = await readFile(
+    path.join(REPO_ROOT, "docs", "file-split", "doc-file.split.flow.md"),
+    "utf8",
+  );
+
+  assert.match(skillBody, /resulting local cluster/);
+  assert.match(skillBody, /unhealthy flat cluster/);
+  assert.match(skillBody, /previous split left one extracted file flat/);
+  assert.match(skillBody, /final placement decision/);
+
+  assert.match(rulesBody, /resulting local cluster/);
+  assert.match(rulesBody, /split creates or extends at least two related files/);
+  assert.match(rulesBody, /second split turns them into a cluster/);
+  assert.match(rulesBody, /do not leave the extracted cluster mixed flat/);
+
+  assert.match(flowBody, /resulting local directory shape/);
+  assert.match(flowBody, /related file cluster/);
+  assert.match(flowBody, /second or optional split/);
+});
+
 test("shared support references are not packaged as public skills", async () => {
   const skills = await listSkillDirectories(SKILLS_ROOT);
   const skillNames = skills.map((skill) => skill.name);
