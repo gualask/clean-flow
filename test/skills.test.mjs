@@ -282,3 +282,14 @@ test("only public entrypoints are packaged as skills", async () => {
     );
   }
 });
+
+test("public skill flow docs exist", async () => {
+  for (const docPath of [
+    path.join(REPO_ROOT, "docs", "start", "doc-start.flow.md"),
+    path.join(REPO_ROOT, "docs", "architecture-map", "doc-architecture.map.flow.md"),
+    path.join(REPO_ROOT, "docs", "cognitive", "doc-cognitive.flow.md"),
+    path.join(REPO_ROOT, "docs", "file-split", "doc-file.split.flow.md"),
+  ]) {
+    assert.equal(await pathExists(docPath), true, `${docPath} is missing`);
+  }
+});

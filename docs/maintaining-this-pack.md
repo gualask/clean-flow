@@ -14,21 +14,14 @@ At runtime:
 
 ## Runtime Model
 
-Cflow has three runtime pieces:
+Cflow has two maintainer concerns:
 
 1. distribution
    - `cflow-skills install` copies public skill directories plus `_shared` support resources
    - `cflow-skills install` copies Cflow-owned Codex custom agents from `.codex/agents`
    - install does not bootstrap `.cflow/`
-2. bootstrap
-   - `cf-architecture-map` uses the read-only `cflow_architecture_recon` custom agent before creating or refreshing `.cflow/architecture.md` when available
-   - while that agent runs, the controller only checks artifacts, `.gitignore`, template, and worktree status; it does not build a parallel architecture map
-   - `cf-architecture-map` creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, and updates `.gitignore`
-   - `cf-start` creates or refreshes `.cflow/refactor-brief.md` when the workflow needs resumable handoff state
-3. execution
-   - `cf-start` is the workflow controller for assessment, alignment, planning, mapping, execution, review, verify, feedback intake, and resume
-   - `cf-cognitive` is a standalone local file-level cognitive complexity entrypoint
-   - `cf-file-split` is a standalone local file-level split entrypoint
+2. public runtime flows
+   - flow sequencing and review checks are maintained only in the per-public-skill flow references listed under [Source Of Truth](#source-of-truth)
 
 The former internal workflow skills are now `cf-start` phase references.
 They are not packaged as separate skill entrypoints.
@@ -107,9 +100,16 @@ Codex custom agents:
 - Codex custom agent sources live in `skills/_codex_agents/`.
 - Agent-specific install instructions live in `install/<agent>/`.
 
-For per-entrypoint and per-phase contracts, use [skill-contract-matrix.md](./skill-contract-matrix.md).
-For the shortest runtime walkthrough, use [workflow-map.md](./workflow-map.md).
+For per-entrypoint and per-phase ownership, use [skill-contract-matrix.md](./skill-contract-matrix.md).
+For runtime navigation, use [workflow-map.md](./workflow-map.md).
 For real target-repo validation, use [repo-trial-rules.md](./repo-trial-rules.md).
+
+Per-public-skill flow references:
+
+- `cf-start`: [start/doc-start.flow.md](./start/doc-start.flow.md)
+- `cf-architecture-map`: [architecture-map/doc-architecture.map.flow.md](./architecture-map/doc-architecture.map.flow.md)
+- `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
+- `cf-file-split`: [file-split/doc-file.split.flow.md](./file-split/doc-file.split.flow.md)
 
 ## Runtime Reference Rules
 
@@ -139,20 +139,10 @@ Do not duplicate the same rule in both `SKILL.md` and a reference unless `SKILL.
 ## Key Design Decisions
 
 - Cflow does not depend on `AGENTS.md` for manual start or artifact-backed resume.
-- `cf-start` is the only workflow controller.
-- `cf-architecture-map` owns `.cflow/` bootstrap, `.gitignore` updates, and `.cflow/architecture.md`.
-- `cf-architecture-map` keeps `cflow_architecture_recon` reconnaissance read-only and lower-cost; the main controller owns final interpretation and artifact writes.
-- `cf-architecture-map` must not duplicate the subagent scan unless the report is missing, incomplete, contradictory, or unsupported by evidence.
-- `cf-start` owns workflow entry, phase routing, and `.cflow/refactor-brief.md`.
-- `cf-cognitive` and `cf-file-split` do not create or require `.cflow/*` artifacts.
-- `soft-mixed` is a repository-level assessment outcome, not an execution mode.
-- Every executable work unit must choose exactly one mode: `split` or `consolidate`.
-- A local fast lane may skip work-unit planning when one explicit, local, low-risk, behavior-preserving cohesive unit is already clear enough.
-- Work-unit planning is required when multiple candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work must be sequenced.
-- Hard-path work must define target shape and migration units before code edits.
-- After non-trivial fresh assessment, `cf-start` must stop at an alignment checkpoint.
-- After that checkpoint, simple confirmation may proceed; material steering stays in alignment until the path is clear enough.
-- In `.cflow/refactor-brief.md`, `current work unit` means the active selected unit only; after a completed safe stop with no new unit selected, it should be `none`.
+- Public skill flow rules live in `docs/<public-skill>/doc-*.flow.md`; do not keep duplicate flow copies in maintainer overview docs.
+- The former internal workflow skills remain `cf-start` phase references, not separately packaged entrypoints.
+- `_shared` is for runtime rules consumed by multiple public skills or phase references.
+- `skills/_codex_agents` is for real Codex custom agents that should be installed, not notes or examples.
 
 ## Skill Change Validation
 
@@ -170,6 +160,7 @@ Checklist:
 - `Runtime boundary`: does every runtime rule live in a skill or linked reference, not only in docs?
 - `Output contract`: does the output still give the next phase enough state?
 - `Matrix sync`: does [skill-contract-matrix.md](./skill-contract-matrix.md) reflect the same contract?
+- `Flow doc sync`: does the affected `docs/<public-skill>/doc-*.flow.md` reflect the public flow?
 
 ## Maintainer Workflow
 
@@ -178,11 +169,12 @@ When changing the pack:
 - update the relevant public `SKILL.md`
 - update the relevant `cf-start/references/*.md` phase contract
 - update [skill-contract-matrix.md](./skill-contract-matrix.md) when entrypoint or phase behavior changes
-- update [workflow-map.md](./workflow-map.md) when lifecycle or branch flow changes
+- update [workflow-map.md](./workflow-map.md) when public flow links or cross-flow handoffs change
+- update the affected `docs/<public-skill>/doc-*.flow.md` when a public skill flow changes
 - update this document when maintainer rules change
 - if bootstrap artifact structure changes, update `skills/cf-start/assets/*.template.md`
 - if install/remove behavior changes, update `src/` and filesystem tests
-- if Codex custom agent behavior changes, update `skills/_codex_agents/*.toml`, the consuming `SKILL.md`, docs, and tests together
+- if Codex custom agent behavior changes, update `skills/_codex_agents/*.toml`, the consuming `SKILL.md`, the affected flow doc, and tests together
 - keep `README.md` focused on user-facing install and usage
 
 ## Testing
@@ -204,16 +196,14 @@ Current automated coverage checks:
 - Codex implicit invocation policy for shipped public skills
 - presence of `cf-start` bootstrap assets and phase references
 - shared reference links from consuming skills and phase references
+- presence of per-public-skill flow docs
 
 ## Manual Smoke Checks
 
 The most important manual validation is a real target-repo run:
 
 1. install the pack into a target repo
-2. invoke `$cf-start` as the standard workflow first-use path
-3. invoke `$cf-architecture-map` as standalone mapping
-4. invoke `$cf-cognitive` with explicit files and once without a file target
-5. invoke `$cf-file-split` once in evaluation mode and once with an explicit local split
-6. confirm the target repo gets `.agents/skills/...`
-7. confirm the target repo gets `.codex/agents/cflow_architecture_recon.toml`
-8. confirm `.cflow/`, `.cflow/architecture.md`, `.cflow/refactor-brief.md`, and `.gitignore` are created only by runtime workflow when needed
+2. exercise each public skill according to its `docs/<public-skill>/doc-*.flow.md` reference
+3. confirm the target repo gets `.agents/skills/...`
+4. confirm the target repo gets Cflow-owned custom agents under `.codex/agents/`
+5. confirm runtime artifacts match the owning public flow docs

@@ -1,34 +1,34 @@
 # Skill Contract Matrix
 
-This file is the compact contract baseline for entry, gating, and routing decisions.
+This file is the compact contract index for entry, gating, and routing decisions.
+It intentionally does not restate the runtime flow of public skills.
 
 Use it together with [maintaining-this-pack.md](./maintaining-this-pack.md).
-The source of truth remains each `skills/*/SKILL.md` and the runtime references directly linked from that skill.
+The source of truth remains each `skills/*/SKILL.md`, the runtime references directly linked from that skill, and the per-public-skill flow docs linked below.
 
 ## Runtime Shape
 
-Cflow now ships four public skill entrypoints:
+Cflow ships four public skill entrypoints:
 
-- `cf-start`
-- `cf-architecture-map`
-- `cf-cognitive`
-- `cf-file-split`
+- `cf-start`: [start/doc-start.flow.md](./start/doc-start.flow.md)
+- `cf-architecture-map`: [architecture-map/doc-architecture.map.flow.md](./architecture-map/doc-architecture.map.flow.md)
+- `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
+- `cf-file-split`: [file-split/doc-file.split.flow.md](./file-split/doc-file.split.flow.md)
 
 The former internal workflow skills are not packaged as separate skill entrypoints.
 Their contracts live as granular phase references under `skills/cf-start/references/`.
 
-Cflow also ships one Codex custom agent:
-
-- `cflow_architecture_recon`, sourced from `skills/_codex_agents/cflow_architecture_recon.toml` and installed into `.codex/agents/` or `$CODEX_HOME/agents`, configured as read-only `gpt-5.4-mini` reconnaissance for `cf-architecture-map`.
+Cflow also ships the Codex custom agent source under `skills/_codex_agents/`.
+The public flow that consumes it is documented in [architecture-map/doc-architecture.map.flow.md](./architecture-map/doc-architecture.map.flow.md).
 
 ## Skill Entrypoints
 
-| Skill | Role | Supported direct human entrypoint | Minimum context to proceed | Artifact behavior | May edit code |
-| --- | --- | --- | --- | --- | --- |
-| `cf-start` | workflow controller | yes | repository state only; existing `.cflow/*` artifacts are optional | owns workflow entry plus creation or refresh of `.cflow/refactor-brief.md`; routes to `cf-architecture-map` when architecture bootstrap or refresh is needed | yes, through execution phase |
-| `cf-architecture-map` | repository map | yes | repository state only; existing `.cflow/architecture.md` is optional | uses the read-only `cflow_architecture_recon` custom agent before artifact writes when available; while it runs, the controller only checks artifacts, `.gitignore`, template, and worktree status; creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, never creates `.cflow/refactor-brief.md` | no |
-| `cf-cognitive` | local cognitive cleanup | yes | repository state plus up to three optional source file targets | does not create or update `.cflow/*`; discovers up to three justified candidates when needed | yes |
-| `cf-file-split` | local file split | yes | repository state plus one explicit or inferable target source file | does not create or update `.cflow/*`; evaluates or executes one scoped file-level split | yes |
+| Skill | Role | Flow reference |
+| --- | --- | --- |
+| `cf-start` | workflow controller | [cf-start flow](./start/doc-start.flow.md) |
+| `cf-architecture-map` | repository map | [cf-architecture-map flow](./architecture-map/doc-architecture.map.flow.md) |
+| `cf-cognitive` | local cognitive cleanup | [cf-cognitive flow](./cognitive/doc-cognitive.flow.md) |
+| `cf-file-split` | local file split | [cf-file-split flow](./file-split/doc-file.split.flow.md) |
 
 ## cf-start Phase References
 
@@ -53,11 +53,8 @@ Cflow also ships one Codex custom agent:
 
 ## Execution Modes
 
-- `soft-mixed` is allowed only as a repository-level assessment outcome.
-- Every executable work unit must declare exactly one mode: `split` or `consolidate`.
-- A local fast lane may skip planning only when one explicit, local, low-risk, behavior-preserving cohesive unit is already clear enough to map, lock, or execute.
-- Work-unit planning is required when multiple candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work must be sequenced.
-- Hard-path work must define target shape and migration units before code edits.
+Execution-mode flow rules are maintained in [start/doc-start.flow.md](./start/doc-start.flow.md) and the relevant `skills/cf-start/references/*.md` files.
+Do not keep a parallel copy in this matrix.
 
 ## Maintainer Use
 
@@ -65,7 +62,6 @@ Use this file to answer:
 
 - which shipped skill should trigger?
 - which `cf-start` reference owns the phase?
-- which artifact may be created or updated?
-- whether code edits are allowed?
+- where the authoritative public-skill flow is documented?
 
-When a contract changes, update the affected `SKILL.md`, any affected `cf-start/references/*.md`, this matrix, and [maintaining-this-pack.md](./maintaining-this-pack.md) when maintainer rules changed.
+When a contract changes, update the affected `SKILL.md`, any affected `cf-start/references/*.md`, the affected per-public-skill flow doc, this matrix when ownership/indexing changes, and [maintaining-this-pack.md](./maintaining-this-pack.md) when maintainer rules changed.

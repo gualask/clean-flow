@@ -14,6 +14,8 @@
 - Added architecture-map filtering for generated, vendored, dependency, cache, and build-output directories.
 - Merged architecture-map boundary, packaging, and dependency sections into one observational section.
 - Clarified that `architecture.template.md` is both artifact shape and controller review rubric.
+- Added per-public-skill flow docs under `docs/<skill>/doc-*.flow.md`.
+- Made those flow docs the reference for public skill flows and reduced duplicate flow rules in overview docs.
 - Updated docs and tests for the four-public-skill package shape.
 
 ## 2026-04-24

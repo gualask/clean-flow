@@ -35,6 +35,7 @@ Use this protocol to answer questions like:
 Do not use this document as the source of truth for skill contracts.
 For that, use:
 
+- the relevant per-public-skill flow doc under `docs/<public-skill>/doc-*.flow.md`
 - [maintaining-this-pack.md](/Users/blazar/Dev/clean-flow/docs/maintaining-this-pack.md)
 - [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md)
 - the relevant `skills/*/SKILL.md`
@@ -92,6 +93,7 @@ If a field is unknown, mark it as unknown rather than guessing.
 2. Identify the active skill or likely active skill.
 3. Check the current contract in:
    - the skill file
+   - the relevant per-public-skill flow doc
    - [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md)
    - [maintaining-this-pack.md](/Users/blazar/Dev/clean-flow/docs/maintaining-this-pack.md)
 4. Separate:
@@ -187,6 +189,7 @@ Do not rewrite a full skill when the defect is one sentence.
 If a real-repo trial changes the actual skill contract, update all relevant sources:
 
 - the affected `skills/*/SKILL.md`
+- the affected `docs/<public-skill>/doc-*.flow.md`
 - [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md)
 - [maintaining-this-pack.md](/Users/blazar/Dev/clean-flow/docs/maintaining-this-pack.md) when maintainer rules changed
 
