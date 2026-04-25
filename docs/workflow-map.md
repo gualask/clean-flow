@@ -32,7 +32,8 @@ flowchart TD
     Y1 --> Y3[Return recommendation and stop unless user asks to execute]
     Y2 --> Y4[Run smallest relevant checks]
 
-    A[User invokes cf-architecture-map] --> A1[Build or refresh .cflow/architecture.md]
+    A[User invokes cf-architecture-map] --> A0[Read-only clean-context reconnaissance]
+    A0 --> A1[Build or refresh .cflow/architecture.md]
     A1 --> A2[Return map and recommend stop or continue with cf-start]
 
     B[User invokes cf-start] --> C{Architecture map usable?}
@@ -88,15 +89,15 @@ flowchart TD
 
 | Stage | Runtime owner | What happens | May edit code |
 | --- | --- | --- | --- |
-| Architecture mapping and bootstrap | `cf-architecture-map` | Creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, and updates `.gitignore` for `.cflow/`. | No |
+| Architecture mapping and bootstrap | `cf-architecture-map` | Uses read-only clean-context reconnaissance, creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, and updates `.gitignore` for `.cflow/`. | No |
 | Local cognitive complexity | `cf-cognitive` | Finds or refactors up to three source files sequentially without bootstrapping Cflow artifacts. | Yes |
 | Local file-level split | `cf-file-split` | Evaluates or executes one behavior-preserving file-level split without bootstrapping Cflow artifacts. | Yes |
 | Workflow entry and resume | `cf-start` + `routing.md` | Uses current artifacts, ensures architecture context, and chooses fresh assessment, resume, review, or verify. | Indirectly |
 | Repository assessment and alignment | `cf-start` + `assessment.md` | Checks whether intervention is justified, frames pressure, and stops at alignment for non-trivial fresh work. | No |
-| Work-unit and hard-path planning | `cf-start` + `planning.md` | Orders units, defines hard target shape, or breaks hard path into migration units. | No |
-| Local mapping | `cf-start` + `mapping.md` | Maps split or consolidation direction for the active seam. | No |
-| Safety lock and execution | `cf-start` + `execution.md` | Chooses behavior lock, applies one bounded split or consolidation step, and optionally simplifies local code. | Yes |
-| Judgment and evidence | `cf-start` + `closure.md` | Reviews structural quality, verifies with factual checks, and handles feedback. | No |
+| Work-unit and hard-path planning | `cf-start` + `work-unit-planning.md`, `target-shape.md`, `migration-unit-planning.md` | Orders units, defines hard target shape, or breaks hard path into migration units. | No |
+| Local mapping | `cf-start` + `concentration-map.md`, `fragmentation-map.md` | Maps split or consolidation direction for the active seam. | No |
+| Safety lock and execution | `cf-start` + `safety-net.md`, `split-execution.md`, `consolidation-execution.md`, `local-simplify.md` | Chooses behavior lock, applies one bounded split or consolidation step, and optionally simplifies local code. | Yes |
+| Judgment and evidence | `cf-start` + `review.md`, `verify.md`, `feedback-intake.md` | Reviews structural quality, verifies with factual checks, and handles feedback. | No |
 
 ## Typical Sequences
 

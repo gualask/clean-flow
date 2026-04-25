@@ -4,7 +4,9 @@
 
 - Consolidated workflow execution into `cf-start` as the single Cflow workflow controller.
 - Replaced packaged `cf-internal-*` skill entrypoints with `cf-start/references/*` phase references.
+- Restored the former internal skill contracts as granular `cf-start` phase playbooks instead of compressed phase summaries.
 - Added DOT routing and lifecycle diagrams to `cf-start`.
+- Added read-only clean-context reconnaissance subagent protocol to `cf-architecture-map`.
 - Updated docs and tests for the four-public-skill package shape.
 
 ## 2026-04-24

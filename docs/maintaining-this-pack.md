@@ -19,6 +19,7 @@ Cflow has three runtime pieces:
    - `cflow-skills install` copies public skill directories plus `_shared` support resources
    - install does not bootstrap `.cflow/`
 2. bootstrap
+   - `cf-architecture-map` uses a read-only clean-context reconnaissance subagent before creating or refreshing `.cflow/architecture.md`
    - `cf-architecture-map` creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, and updates `.gitignore`
    - `cf-start` creates or refreshes `.cflow/refactor-brief.md` when the workflow needs resumable handoff state
 3. execution
@@ -54,10 +55,19 @@ Public skill entrypoints:
 - `skills/cf-start/references/routing.md`
 - `skills/cf-start/references/artifacts.md`
 - `skills/cf-start/references/assessment.md`
-- `skills/cf-start/references/planning.md`
-- `skills/cf-start/references/mapping.md`
-- `skills/cf-start/references/execution.md`
-- `skills/cf-start/references/closure.md`
+- `skills/cf-start/references/alignment.md`
+- `skills/cf-start/references/concentration-map.md`
+- `skills/cf-start/references/fragmentation-map.md`
+- `skills/cf-start/references/work-unit-planning.md`
+- `skills/cf-start/references/target-shape.md`
+- `skills/cf-start/references/migration-unit-planning.md`
+- `skills/cf-start/references/safety-net.md`
+- `skills/cf-start/references/split-execution.md`
+- `skills/cf-start/references/consolidation-execution.md`
+- `skills/cf-start/references/local-simplify.md`
+- `skills/cf-start/references/review.md`
+- `skills/cf-start/references/verify.md`
+- `skills/cf-start/references/feedback-intake.md`
 
 Shared support references:
 
@@ -120,6 +130,7 @@ Do not duplicate the same rule in both `SKILL.md` and a reference unless `SKILL.
 - Cflow does not depend on `AGENTS.md` for manual start or artifact-backed resume.
 - `cf-start` is the only workflow controller.
 - `cf-architecture-map` owns `.cflow/` bootstrap, `.gitignore` updates, and `.cflow/architecture.md`.
+- `cf-architecture-map` keeps subagent reconnaissance read-only; the main controller owns final interpretation and artifact writes.
 - `cf-start` owns workflow entry, phase routing, and `.cflow/refactor-brief.md`.
 - `cf-cognitive` and `cf-file-split` do not create or require `.cflow/*` artifacts.
 - `soft-mixed` is a repository-level assessment outcome, not an execution mode.

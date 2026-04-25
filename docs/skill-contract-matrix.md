@@ -15,14 +15,14 @@ Cflow now ships four public skill entrypoints:
 - `cf-file-split`
 
 The former internal workflow skills are not packaged as separate skill entrypoints.
-Their contracts live as phase references under `skills/cf-start/references/`.
+Their contracts live as granular phase references under `skills/cf-start/references/`.
 
 ## Skill Entrypoints
 
 | Skill | Role | Supported direct human entrypoint | Minimum context to proceed | Artifact behavior | May edit code |
 | --- | --- | --- | --- | --- | --- |
 | `cf-start` | workflow controller | yes | repository state only; existing `.cflow/*` artifacts are optional | owns workflow entry plus creation or refresh of `.cflow/refactor-brief.md`; routes to `cf-architecture-map` when architecture bootstrap or refresh is needed | yes, through execution phase |
-| `cf-architecture-map` | repository map | yes | repository state only; existing `.cflow/architecture.md` is optional | creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, never creates `.cflow/refactor-brief.md` | no |
+| `cf-architecture-map` | repository map | yes | repository state only; existing `.cflow/architecture.md` is optional | uses one read-only clean-context reconnaissance subagent before artifact writes; creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, never creates `.cflow/refactor-brief.md` | no |
 | `cf-cognitive` | local cognitive cleanup | yes | repository state plus up to three optional source file targets | does not create or update `.cflow/*`; discovers up to three justified candidates when needed | yes |
 | `cf-file-split` | local file split | yes | repository state plus one explicit or inferable target source file | does not create or update `.cflow/*`; evaluates or executes one scoped file-level split | yes |
 
@@ -32,11 +32,20 @@ Their contracts live as phase references under `skills/cf-start/references/`.
 | --- | --- | --- | --- | --- |
 | `references/routing.md` | choose entry mode, fresh path, or resume point | prompt, repository state, and any existing `.cflow/*` artifacts | route to the required public entrypoint or earlier phase | no |
 | `references/artifacts.md` | define `.cflow/refactor-brief.md` updates | decision to create, refresh, or update brief state | defer artifact update until required fields are known | no |
-| `references/assessment.md` | premise check, intervention framing, alignment | current `.cflow/architecture.md`; brief optional | route to `cf-architecture-map` when architecture is missing or stale | no |
-| `references/planning.md` | work-unit planning, hard-path target shape, migration units | architecture map plus assessed direction, candidate areas, or explicit bounded scope | return to assessment or alignment | no |
-| `references/mapping.md` | concentration and fragmentation seam mapping | architecture map plus active work unit, brief, or explicit local/repo scope | return to assessment or planning | no |
-| `references/execution.md` | safety lock, split execution, consolidation execution, local simplify | architecture map plus clear work unit or explicit local behavior-preserving scope | return to mapping, planning, or assessment | yes |
-| `references/closure.md` | review, verification, feedback intake | architecture map plus completed unit, touched area, or concrete feedback | return to resume routing or assessment | no |
+| `references/assessment.md` | premise check and intervention framing | current `.cflow/architecture.md`; brief optional | route to `cf-architecture-map` when architecture is missing or stale | no |
+| `references/alignment.md` | user steering after assessment | assessed direction or concrete decision to resolve | return to assessment | no |
+| `references/concentration-map.md` | concentration seam mapping and split direction | architecture map plus active unit, brief, or explicit scope | return to assessment or planning | no |
+| `references/fragmentation-map.md` | fragmentation seam mapping and consolidation direction | architecture map plus active unit, brief, or explicit scope | return to assessment or planning | no |
+| `references/work-unit-planning.md` | soft-path work-unit ordering | architecture map plus assessed direction, candidate area, or explicit bounded scope | return to assessment, alignment, or target shape | no |
+| `references/target-shape.md` | hard-path target direction | architecture map, brief, and justified hard path | return to assessment or alignment | no |
+| `references/migration-unit-planning.md` | hard-path bounded migration units | architecture map, brief, and aligned target direction | return to target shape or assessment | no |
+| `references/safety-net.md` | behavior lock before structural edits | clear current work unit or explicit local behavior-preserving scope | return to planning or map phase | no |
+| `references/split-execution.md` | one bounded split-oriented structural step | mapped split seam plus credible safety lock | return to safety net or concentration map | yes |
+| `references/consolidation-execution.md` | one bounded consolidation-oriented structural step | consolidation-ready seam plus credible safety lock | return to safety net or fragmentation map | yes |
+| `references/local-simplify.md` | local readability cleanup after structural work | recently touched area | return to `cf-start` if unanchored | yes |
+| `references/review.md` | structural review after bounded work | completed step or explicit touched area | return to resume routing or assessment | no |
+| `references/verify.md` | factual verification after bounded work | completed unit or explicit touched area | return to resume routing or assessment | no |
+| `references/feedback-intake.md` | verified intake of refactor feedback | concrete feedback and touched area | return to resume routing or assessment | no |
 
 ## Execution Modes
 

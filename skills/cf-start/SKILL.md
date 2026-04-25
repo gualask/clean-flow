@@ -92,16 +92,25 @@ Read each reference in this invocation when its trigger is met:
 | --- | --- |
 | [references/routing.md](references/routing.md) | ambiguous entry mode, non-trivial fresh path selection, or resume routing that is not obvious from an active current work unit |
 | [references/artifacts.md](references/artifacts.md) | creating or refreshing `.cflow/refactor-brief.md`, or deciding required brief field updates |
-| [references/assessment.md](references/assessment.md) | fresh assessment, premise checks, or post-assessment alignment |
-| [references/planning.md](references/planning.md) | sequencing multiple work units, defining hard-path target shape, or planning migration units |
-| [references/mapping.md](references/mapping.md) | mapping concentration pressure, fragmentation pressure, split direction, or consolidation direction |
-| [references/execution.md](references/execution.md) | choosing a safety lock, applying a split or consolidation step, or doing local post-structural simplification |
-| [references/closure.md](references/closure.md) | review, verification, or feedback intake |
+| [references/assessment.md](references/assessment.md) | fresh assessment, premise checks, or intervention framing |
+| [references/alignment.md](references/alignment.md) | user steering after assessment may change scope, exclusions, risk, direction, or whether to continue |
+| [references/work-unit-planning.md](references/work-unit-planning.md) | sequencing multiple soft-path work units |
+| [references/target-shape.md](references/target-shape.md) | hard restructure target direction is justified but unresolved |
+| [references/migration-unit-planning.md](references/migration-unit-planning.md) | hard-path target is aligned and needs bounded migration units |
+| [references/concentration-map.md](references/concentration-map.md) | mapping concentration pressure or split direction |
+| [references/fragmentation-map.md](references/fragmentation-map.md) | mapping fragmentation pressure or consolidation direction |
+| [references/safety-net.md](references/safety-net.md) | choosing a behavior lock before structural edits |
+| [references/split-execution.md](references/split-execution.md) | applying one bounded split-oriented structural step |
+| [references/consolidation-execution.md](references/consolidation-execution.md) | applying one bounded consolidation-oriented structural step |
+| [references/local-simplify.md](references/local-simplify.md) | local readability cleanup after structural execution |
+| [references/review.md](references/review.md) | reviewing a completed bounded refactor step |
+| [references/verify.md](references/verify.md) | verifying a completed bounded unit with factual checks |
+| [references/feedback-intake.md](references/feedback-intake.md) | validating refactor feedback before acting |
 
 ## Fresh assessment
 
 Use [references/routing.md](references/routing.md) for intent inference, fresh assessment details, and path selection.
-Use [references/assessment.md](references/assessment.md) for premise checks and alignment behavior.
+Use [references/assessment.md](references/assessment.md) for premise checks and intervention framing.
 
 Do not implement during fresh assessment.
 Always end non-trivial fresh assessment at the alignment checkpoint with exactly one focused question.

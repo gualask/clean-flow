@@ -76,10 +76,19 @@ test("cf-start ships workflow phase references", async () => {
     "routing.md",
     "artifacts.md",
     "assessment.md",
-    "planning.md",
-    "mapping.md",
-    "execution.md",
-    "closure.md",
+    "alignment.md",
+    "concentration-map.md",
+    "fragmentation-map.md",
+    "work-unit-planning.md",
+    "target-shape.md",
+    "migration-unit-planning.md",
+    "safety-net.md",
+    "split-execution.md",
+    "consolidation-execution.md",
+    "local-simplify.md",
+    "review.md",
+    "verify.md",
+    "feedback-intake.md",
   ]) {
     assert.equal(
       await pathExists(path.join(SKILLS_ROOT, "cf-start", "references", referenceName)),
@@ -87,6 +96,42 @@ test("cf-start ships workflow phase references", async () => {
       `cf-start is missing references/${referenceName}`,
     );
   }
+});
+
+test("cf-architecture-map requires read-only clean-context reconnaissance", async () => {
+  const body = await readFile(
+    path.join(SKILLS_ROOT, "cf-architecture-map", "SKILL.md"),
+    "utf8",
+  );
+
+  assert.match(body, /Clean-Context Reconnaissance/);
+  assert.match(body, /use one clean-context reconnaissance subagent/);
+  assert.match(body, /must not:\n\n- edit files\n- create `\.cflow\/\*`\n- update `\.gitignore`/);
+  assert.match(body, /Treat the subagent report as the primary repository scan/);
+  assert.match(body, /Do not repeat full reconnaissance/);
+  assert.match(body, /You still own artifact writes, `\.gitignore`, final interpretation/);
+});
+
+test("cf-start phase references preserve internal-skill guardrails", async () => {
+  const safetyNetBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "safety-net.md"),
+    "utf8",
+  );
+  const splitBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "split-execution.md"),
+    "utf8",
+  );
+  const planningBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "work-unit-planning.md"),
+    "utf8",
+  );
+
+  assert.match(safetyNetBody, /Characterization tests lock current behavior/);
+  assert.match(safetyNetBody, /Do not weaken or rewrite tests just to make a refactor pass/);
+  assert.match(splitBody, /If the seam is still not mapped enough/);
+  assert.match(splitBody, /If the safety lock breaks after a move, stop and investigate/);
+  assert.match(planningBody, /faking lightweight planning/);
+  assert.match(planningBody, /Never finish planning with both `current work unit` and `recommended next work unit` unset/);
 });
 
 test("shared support references are not packaged as public skills", async () => {
@@ -123,24 +168,37 @@ test("shared support references are not packaged as public skills", async () => 
     path.join(SKILLS_ROOT, "cf-file-split", "SKILL.md"),
     "utf8",
   );
-  const executionBody = await readFile(
-    path.join(SKILLS_ROOT, "cf-start", "references", "execution.md"),
+  const splitExecutionBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "split-execution.md"),
     "utf8",
   );
-  const closureBody = await readFile(
-    path.join(SKILLS_ROOT, "cf-start", "references", "closure.md"),
+  const consolidationExecutionBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "consolidation-execution.md"),
+    "utf8",
+  );
+  const localSimplifyBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "local-simplify.md"),
+    "utf8",
+  );
+  const reviewBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "review.md"),
+    "utf8",
+  );
+  const verifyBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "verify.md"),
     "utf8",
   );
 
   assert.match(cognitiveBody, /\.\.\/_shared\/references\/local-refactor-rules\.md/);
   assert.match(fileSplitBody, /\.\.\/_shared\/references\/file-split-rules\.md/);
   assert.match(fileSplitBody, /\.\.\/_shared\/references\/reference-audit\.md/);
-  assert.match(executionBody, /\.\.\/\.\.\/_shared\/references\/file-split-rules\.md/);
-  assert.match(executionBody, /\.\.\/\.\.\/_shared\/references\/reference-audit\.md/);
-  assert.match(executionBody, /\.\.\/\.\.\/_shared\/references\/local-refactor-rules\.md/);
-  assert.match(executionBody, /\.\.\/\.\.\/_shared\/references\/local-readability-review\.md/);
-  assert.match(closureBody, /\.\.\/\.\.\/_shared\/references\/reference-audit\.md/);
-  assert.match(closureBody, /\.\.\/\.\.\/_shared\/references\/local-readability-review\.md/);
+  assert.match(splitExecutionBody, /\.\.\/\.\.\/_shared\/references\/file-split-rules\.md/);
+  assert.match(splitExecutionBody, /\.\.\/\.\.\/_shared\/references\/reference-audit\.md/);
+  assert.match(consolidationExecutionBody, /\.\.\/\.\.\/_shared\/references\/reference-audit\.md/);
+  assert.match(localSimplifyBody, /\.\.\/\.\.\/_shared\/references\/local-refactor-rules\.md/);
+  assert.match(localSimplifyBody, /\.\.\/\.\.\/_shared\/references\/local-readability-review\.md/);
+  assert.match(reviewBody, /\.\.\/\.\.\/_shared\/references\/local-readability-review\.md/);
+  assert.match(verifyBody, /\.\.\/\.\.\/_shared\/references\/reference-audit\.md/);
 });
 
 test("only public entrypoints are packaged as skills", async () => {

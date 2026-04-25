@@ -1,29 +1,27 @@
-# Assessment And Alignment
+# Assessment
 
-Use this reference for fresh assessment, premise checks, and post-assessment alignment.
+Do assessment only. Do not implement, move files, or write patches.
 
-Do not implement in this phase.
+## Goal
 
-## Assessment Goal
+Decide the right **repository-level intervention frame** using the current architecture map.
 
-Decide the right repository-level intervention frame using the current architecture map.
+You must determine:
 
-Determine:
-
-- whether intervention is justified now
+- whether intervention is actually justified
 - candidate intervention areas worth carrying forward
-- dominant pressure: concentration, fragmentation, mixed, or none
-- plausible intervention mode: soft-split, soft-consolidate, soft-mixed, hard-restructure, or no-structural-refactor
-- whether durable handoff state is needed
+- which intervention modes are plausible
+- whether `.cflow/refactor-brief.md` must be created or refreshed in this pass
 
-## Assessment Preflight
+## Preflight
 
-- Requires current architecture context; route through `cf-architecture-map` first when missing, stale, or materially incomplete.
-- Read any existing brief and re-check repository state before deciding.
+1. Require current `.cflow/architecture.md`; if missing, stale, or materially incomplete, stop and route to `cf-architecture-map`.
+2. Read architecture plus existing `.cflow/refactor-brief.md`.
+3. Re-check the repository and treat it as the source of truth.
 
-## Premise Check
+## Premise check
 
-Answer honestly:
+Answer these honestly:
 
 1. What concrete problem is this intervention solving now?
 2. What is the cost of leaving the current shape as-is for now?
@@ -31,69 +29,37 @@ Answer honestly:
 
 For hard restructure also answer:
 
-1. Is repository shape itself the recurring cause of friction?
-2. Would a good soft intervention likely remove most of the pain anyway?
+4. Is repository shape itself the recurring cause of friction?
+5. Would a good soft intervention likely remove most of the pain anyway?
 
-## Intervention Framing
+## Intervention mode framing
 
-- Treat `soft-mixed` as a repository-level outcome only.
-- Each executable work unit must still choose exactly one mode: `split` or `consolidate`.
-- Do not split one coherent local cleanup into multiple work units just to make units smaller.
-- Leave local fast lane, planning, and hard-path routing decisions to `routing.md`.
+Do not choose the final mode yet, but identify what is plausible:
 
-## Alignment Goal
+- soft-split
+- soft-consolidate
+- soft-mixed
+- hard-restructure
+- no-structural-refactor
 
-Resolve only decisions that materially change cleanup or refactor direction.
+Treat `soft-mixed` as a repository-level outcome only.
+Later work units must still choose `split` or `consolidate`.
 
-Alignment is sufficient only when next phase, scope boundaries, exclusions, and whether to continue are explicit enough to route without another alignment pass.
+## Artifact behavior
 
-## Alignment Trigger
+Do not create or refresh `.cflow/architecture.md` in this phase.
+If the map is missing or stale, route to `cf-architecture-map` first.
 
-Use alignment when a reply after the assessment checkpoint may materially change:
+Update or create `.cflow/refactor-brief.md` when the work is non-trivial, risky, multi-step, or needs resumable handoff state.
 
-- scope
-- exclusions
-- invariants
-- risk appetite
-- direction
-- whether to continue
+If assessment identifies candidate intervention areas worth carrying forward and the brief is missing, create it before returning.
 
-Simple confirmation or a factual question that does not affect those decisions does not require a separate alignment pass.
+## Output format
 
-## Deliberation
+Return sections: **Premise check**, **Candidate intervention areas**, **Plausible intervention modes**, **Artifact decision**, **Recommended next action**.
 
-If the decision is still fuzzy:
+## Anti-goals
 
-1. State the decision in one sentence.
-2. Choose 3-4 genuine perspectives with real stakes in this repository.
-3. Let each perspective speak once: what it values, its main concern, and what it loses in each direction.
-4. Surface convergence, live tension, and a reframe when the original question was wrong.
-
-Keep this short. Do not create fake personas or run a debate loop.
-
-## Questioning
-
-- Ask one question at a time.
-- Ask only when the answer materially changes path, scope, exclusions, invariants, migration appetite, or whether to continue.
-- Offer at most two concrete options with trade-offs and a recommendation.
-- Prefer repository evidence first.
-
-## Artifact Behavior
-
-Use `artifacts.md` for brief creation and field updates.
-Do not create or refresh `.cflow/architecture.md` here.
-
-Once enough decisions are aligned:
-
-- record aligned decisions in `.cflow/refactor-brief.md` when they create resumable handoff state
-- route to `cf-architecture-map` if architectural guidance itself needs a refresh
-- keep work units concise
-- do not freeze brittle file lists
-
-## Output
-
-For assessment, return premise, candidate areas, plausible modes, artifact decision, and recommended next action.
-
-For unresolved alignment, end with exactly one focused question.
-
-For sufficient alignment, return aligned decisions, exclusions or non-goals, artifacts updated, and recommended next action.
+- Do not implement.
+- Do not dive into work-unit splitting yet.
+- Do not rewrite the architecture map from this phase.

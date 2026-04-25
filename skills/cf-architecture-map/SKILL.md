@@ -33,6 +33,53 @@ You must determine:
 2. Re-check the repository.
 3. Treat the repository as the source of truth.
 
+## Clean-Context Reconnaissance
+
+Before creating or refreshing `.cflow/architecture.md`, use one clean-context reconnaissance subagent to inspect the repository and return a read-only architecture report.
+
+The subagent must not:
+
+- edit files
+- create `.cflow/*`
+- update `.gitignore`
+- decide the final architecture map
+
+Give the subagent the repository path and this report format:
+
+```md
+## Repository Context
+Project type, product shape, dominant language, and dominant docs language.
+
+## Entry Points
+CLI commands, apps, APIs, workers, scripts, package exports, or public library APIs.
+
+## Top-Level Map
+Main directories, packages, crates, apps, modules, or bounded areas and what each owns.
+
+## External Boundaries
+Filesystem, database, network, browser APIs, OS APIs, queues, storage, subprocesses, or tool integrations.
+
+## Boundary Model
+Current architecture style, important dependency directions, and ownership boundaries.
+
+## Packaging Model
+How code is organized: capability, layer, feature, workflow, or hybrid.
+
+## Refactor Guidance
+Stable rules future Cflow phases should respect.
+
+## Evidence
+Files read and why they matter.
+
+## Unknowns
+Areas the controller should verify before writing `.cflow/architecture.md`.
+```
+
+Treat the subagent report as the primary repository scan.
+Do not repeat full reconnaissance unless the report is incomplete, contradictory, or unsupported by its cited evidence.
+Spot-check only the evidence needed to trust the report, resolve contradictions, or fill unknowns.
+You still own artifact writes, `.gitignore`, final interpretation, and the user-facing output.
+
 ## Bootstrap rules
 
 Use `../cf-start/assets/architecture.template.md` as the source template for `.cflow/architecture.md`.

@@ -37,8 +37,8 @@ Rules:
 - In `soft-mixed`, break work into bounded work units only when there is more than one cohesive intervention; assign each work unit exactly one `mode`: `split` or `consolidate`.
 - Do not split one coherent local cleanup into multiple work units just to make the units smaller.
 - For lightweight paths, use the local fast lane when the next cohesive local unit is explicit, local, low-risk, behavior-preserving, and already clear enough to map, lock, or execute.
-- Otherwise use planning before local mapping or execution.
-- For hard restructure, define target shape first, then migration units.
+- Otherwise use work-unit planning before local mapping or execution.
+- For hard restructure, use target-shape planning first, then migration-unit planning.
 - Do not implement yet.
 - Follow the `cf-start` alignment checkpoint rule before execution.
 
@@ -49,15 +49,15 @@ Resume from the correct point:
 - if `.cflow/architecture.md` is missing, stale, or materially incomplete -> `cf-architecture-map`
 - if the brief is stale, or repository changes made the recorded path or work-unit state unreliable -> reassessment
 - if repository-level intervention framing is still unclear -> assessment phase
-- if hard-path direction is chosen but target shape is still unresolved -> target-shape planning
-- if hard-path direction is aligned but migration units are not yet planned -> migration planning
-- if `current work unit` is `none` and there are multiple credible candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work -> work-unit planning
+- if hard-path direction is chosen but target shape is still unresolved -> `target-shape.md`
+- if hard-path direction is aligned but migration units are not yet planned -> `migration-unit-planning.md`
+- if `current work unit` is `none` and there are multiple credible candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work -> `work-unit-planning.md`
 - if `current work unit` is `none` but the prompt or brief gives one explicit, local, behavior-preserving cohesive unit -> continue by mapping, locking, or executing that unit instead of forcing planning
-- if an active work unit is selected but not ready -> concentration mapping, fragmentation mapping, or safety net
+- if an active work unit is selected but not ready -> `concentration-map.md`, `fragmentation-map.md`, or `safety-net.md`
 - if an active work unit is ready for structural work -> execute by its declared mode:
-  - `split` -> split execution
-  - `consolidate` -> consolidation execution
-- if structural work is already done -> review or verify based on whether judgment or factual closure is needed
+  - `split` -> `split-execution.md`
+  - `consolidate` -> `consolidation-execution.md`
+- if structural work is already done -> `review.md` or `verify.md` based on whether judgment or factual closure is needed
 
 Rules:
 
