@@ -82,8 +82,7 @@ It evaluates whether one source file has natural extraction boundaries, or execu
 When `cf-start` needs architecture context, it routes through `cf-architecture-map` internally before continuing.
 
 The remaining workflow phases are internal references loaded by `cf-start` when their trigger condition is met.
-
-For an end-to-end workflow view, see [docs/workflow-map.md](./docs/workflow-map.md).
+For the `cf-start` flow and phase contracts, see [docs/start/doc-start.flow.md](./docs/start/doc-start.flow.md).
 
 ## Uninstall
 
@@ -107,4 +106,4 @@ node ./bin/cflow-skills.mjs remove --global
 ```
 
 For pack maintenance and runtime design, see [docs/maintaining-this-pack.md](./docs/maintaining-this-pack.md).
-For the workflow map, see [docs/workflow-map.md](./docs/workflow-map.md).
+For public skill flows, see the `docs/<public-skill>/doc-*.flow.md` files.

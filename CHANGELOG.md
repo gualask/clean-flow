@@ -16,6 +16,7 @@
 - Clarified that `architecture.template.md` is both artifact shape and controller review rubric.
 - Added per-public-skill flow docs under `docs/<skill>/doc-*.flow.md`.
 - Made those flow docs the reference for public skill flows and reduced duplicate flow rules in overview docs.
+- Removed redundant workflow and contract overview docs; `doc-start.flow.md` now carries the `cf-start` phase contracts.
 - Updated docs and tests for the four-public-skill package shape.
 
 ## 2026-04-24

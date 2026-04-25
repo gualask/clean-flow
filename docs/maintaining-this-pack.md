@@ -100,13 +100,11 @@ Codex custom agents:
 - Codex custom agent sources live in `skills/_codex_agents/`.
 - Agent-specific install instructions live in `install/<agent>/`.
 
-For per-entrypoint and per-phase ownership, use [skill-contract-matrix.md](./skill-contract-matrix.md).
-For runtime navigation, use [workflow-map.md](./workflow-map.md).
 For real target-repo validation, use [repo-trial-rules.md](./repo-trial-rules.md).
 
 Per-public-skill flow references:
 
-- `cf-start`: [start/doc-start.flow.md](./start/doc-start.flow.md)
+- `cf-start`: [start/doc-start.flow.md](./start/doc-start.flow.md), including internal phase contracts
 - `cf-architecture-map`: [architecture-map/doc-architecture.map.flow.md](./architecture-map/doc-architecture.map.flow.md)
 - `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
 - `cf-file-split`: [file-split/doc-file.split.flow.md](./file-split/doc-file.split.flow.md)
@@ -159,7 +157,6 @@ Checklist:
 - `Artifact behavior`: do create, refresh, assume, or update rules match the phase?
 - `Runtime boundary`: does every runtime rule live in a skill or linked reference, not only in docs?
 - `Output contract`: does the output still give the next phase enough state?
-- `Matrix sync`: does [skill-contract-matrix.md](./skill-contract-matrix.md) reflect the same contract?
 - `Flow doc sync`: does the affected `docs/<public-skill>/doc-*.flow.md` reflect the public flow?
 
 ## Maintainer Workflow
@@ -168,8 +165,6 @@ When changing the pack:
 
 - update the relevant public `SKILL.md`
 - update the relevant `cf-start/references/*.md` phase contract
-- update [skill-contract-matrix.md](./skill-contract-matrix.md) when entrypoint or phase behavior changes
-- update [workflow-map.md](./workflow-map.md) when public flow links or cross-flow handoffs change
 - update the affected `docs/<public-skill>/doc-*.flow.md` when a public skill flow changes
 - update this document when maintainer rules change
 - if bootstrap artifact structure changes, update `skills/cf-start/assets/*.template.md`

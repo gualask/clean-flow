@@ -29,7 +29,7 @@ Use this protocol to answer questions like:
 
 - did the skill behave correctly on a real repository?
 - is the reported problem a real skill problem or a repo-specific edge case?
-- does the fix belong in one `SKILL.md`, in the matrix, in the maintainer rules, or nowhere?
+- does the fix belong in one `SKILL.md`, in a flow doc, in the maintainer rules, or nowhere?
 - is the proposed fix a local wording improvement or a contract change?
 
 Do not use this document as the source of truth for skill contracts.
@@ -37,7 +37,6 @@ For that, use:
 
 - the relevant per-public-skill flow doc under `docs/<public-skill>/doc-*.flow.md`
 - [maintaining-this-pack.md](/Users/blazar/Dev/clean-flow/docs/maintaining-this-pack.md)
-- [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md)
 - the relevant `skills/*/SKILL.md`
 
 ## Trial Model
@@ -94,7 +93,6 @@ If a field is unknown, mark it as unknown rather than guessing.
 3. Check the current contract in:
    - the skill file
    - the relevant per-public-skill flow doc
-   - [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md)
    - [maintaining-this-pack.md](/Users/blazar/Dev/clean-flow/docs/maintaining-this-pack.md)
 4. Separate:
    - observed facts
@@ -173,7 +171,7 @@ Typical outcomes:
 - `Gate change`: the skill proceeds or stops under the wrong conditions.
 - `Output change`: the behavior is right but the output contract is too weak or too loose.
 - `Artifact change`: the skill updates, assumes, or creates the wrong artifact state.
-- `Contract change`: the current pack model itself is wrong and docs plus matrix must change.
+- `Contract change`: the current pack model itself is wrong and runtime sources plus flow docs must change.
 
 Do not rewrite a full skill when the defect is one sentence.
 
@@ -190,7 +188,6 @@ If a real-repo trial changes the actual skill contract, update all relevant sour
 
 - the affected `skills/*/SKILL.md`
 - the affected `docs/<public-skill>/doc-*.flow.md`
-- [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md)
 - [maintaining-this-pack.md](/Users/blazar/Dev/clean-flow/docs/maintaining-this-pack.md) when maintainer rules changed
 
 If the trial changes only local wording and not the contract, update only the necessary file.
