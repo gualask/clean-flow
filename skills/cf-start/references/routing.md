@@ -32,7 +32,7 @@ Rules:
 
 - Use `cf-architecture-map` whenever `.cflow/architecture.md` is missing, stale, or materially incomplete.
 - Use the assessment phase when repository-level intervention framing is still needed after architecture context is current.
-- For non-trivial work, create or refresh `.cflow/refactor-brief.md`.
+- Use `artifacts.md` when non-trivial work needs durable handoff state.
 - Treat `soft-mixed` as a repository-level outcome, not as one executable step.
 - In `soft-mixed`, break work into bounded work units only when there is more than one cohesive intervention; assign each work unit exactly one `mode`: `split` or `consolidate`.
 - Do not split one coherent local cleanup into multiple work units just to make the units smaller.
@@ -40,7 +40,7 @@ Rules:
 - Otherwise use planning before local mapping or execution.
 - For hard restructure, define target shape first, then migration units.
 - Do not implement yet.
-- Always end fresh assessment at the alignment checkpoint with exactly one focused question.
+- Follow the `cf-start` alignment checkpoint rule before execution.
 
 ## Detailed resume routing
 
@@ -63,5 +63,5 @@ Rules:
 
 - In `soft-mixed`, select the next work unit by local dominant pressure and use that unit's declared mode.
 - Do not jump from lightweight assessment directly into local mapping or execution unless the next cohesive local unit is already explicit in the brief or prompt.
-- Do not silently switch direction without updating the artifacts.
+- Do not silently switch direction without updating the brief through `artifacts.md`.
 - Do not execute more than one cohesive bounded unit per invocation unless the user explicitly asked for a broader pass.

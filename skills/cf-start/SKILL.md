@@ -12,12 +12,7 @@ When the next phase is clear from repository state and Cflow artifacts, advance 
 ## Goal
 
 Handle fresh assessment, artifact-backed resume, or review/verify re-entry through `cf-start`.
-
-For fresh work after assessment and alignment:
-
-- local fast lane may skip work-unit planning when the scope is explicit, local, low-risk, behavior-preserving, and already has one cohesive stop condition
-- lightweight cleanup or refactor must use the planning phase before local mapping or execution when there are multiple credible candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work
-- hard-path restructuring must define target shape and migration units before implementation
+Use `references/routing.md` for path decisions after the initial repository read.
 
 ## Entry routing
 
@@ -91,32 +86,22 @@ Questions that do not affect those decisions can be answered briefly before cont
 
 ## Reference map
 
-Ensure you have read these references in this invocation when their trigger condition is met:
+Read each reference in this invocation when its trigger is met:
 
-- Ensure you have read [references/routing.md](references/routing.md) before choosing the entry mode when assessment vs resume vs review-or-verify is not trivially obvious from the prompt and repository state.
-- Ensure you have read [references/routing.md](references/routing.md) before finalizing the proposed path for any non-trivial fresh assessment.
-- Ensure you have read [references/routing.md](references/routing.md) before resume routing whenever the next phase is not already obvious from an active current work unit.
-- Ensure you have read [references/artifacts.md](references/artifacts.md) before creating or refreshing `.cflow/refactor-brief.md`, or deciding which brief fields must be updated.
-- Ensure you have read [references/assessment.md](references/assessment.md) before fresh assessment, premise checks, or post-assessment alignment.
-- Ensure you have read [references/planning.md](references/planning.md) before sequencing multiple work units, defining hard-path target shape, or planning migration units.
-- Ensure you have read [references/mapping.md](references/mapping.md) before mapping concentration pressure, fragmentation pressure, split direction, or consolidation direction.
-- Ensure you have read [references/execution.md](references/execution.md) before choosing a safety lock, applying a split or consolidation step, or doing local post-structural simplification.
-- Ensure you have read [references/closure.md](references/closure.md) before review, verification, or feedback intake.
-
-Use `assets/refactor-brief.template.md` as the source template whenever brief bootstrap is required.
+| Reference | Trigger |
+| --- | --- |
+| [references/routing.md](references/routing.md) | ambiguous entry mode, non-trivial fresh path selection, or resume routing that is not obvious from an active current work unit |
+| [references/artifacts.md](references/artifacts.md) | creating or refreshing `.cflow/refactor-brief.md`, or deciding required brief field updates |
+| [references/assessment.md](references/assessment.md) | fresh assessment, premise checks, or post-assessment alignment |
+| [references/planning.md](references/planning.md) | sequencing multiple work units, defining hard-path target shape, or planning migration units |
+| [references/mapping.md](references/mapping.md) | mapping concentration pressure, fragmentation pressure, split direction, or consolidation direction |
+| [references/execution.md](references/execution.md) | choosing a safety lock, applying a split or consolidation step, or doing local post-structural simplification |
+| [references/closure.md](references/closure.md) | review, verification, or feedback intake |
 
 ## Fresh assessment
 
 Use [references/routing.md](references/routing.md) for intent inference, fresh assessment details, and path selection.
 Use [references/assessment.md](references/assessment.md) for premise checks and alignment behavior.
-
-At a high level:
-
-1. ensure architecture context is current
-2. assess repository-level intervention pressure
-3. apply concentration and fragmentation lenses
-4. frame the proposed path
-5. update artifacts when needed
 
 Do not implement during fresh assessment.
 Always end non-trivial fresh assessment at the alignment checkpoint with exactly one focused question.
@@ -165,10 +150,5 @@ Return only:
 
 ## Artifact update baseline
 
-Do not create or refresh `.cflow/architecture.md` directly in this skill.
-Use `cf-architecture-map` when the architecture map is missing or stale.
-
-If `.cflow/refactor-brief.md` exists or is created, update the fields required by [references/artifacts.md](references/artifacts.md).
-
-- In `Execution state`, keep `current work unit` as the active selected unit only; use `none` at a safe stopping point with no next unit selected.
-- In `Execution state`, set `recommended next work unit` whenever the near-term next unit is known but not yet completed.
+`cf-architecture-map` owns `.cflow/architecture.md`.
+`cf-start` owns `.cflow/refactor-brief.md`; update it through [references/artifacts.md](references/artifacts.md).

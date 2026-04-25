@@ -4,10 +4,9 @@ Use this reference for safety locks, bounded structural execution, and local pos
 
 ## Shared Preflight
 
-- Require current `.cflow/architecture.md`; if missing, route to `cf-architecture-map`.
-- Read architecture plus existing `.cflow/refactor-brief.md`.
+- Requires current architecture context.
 - Without a brief, continue only with an explicit, local, behavior-preserving scope.
-- Re-check the touched area and treat repository state as source of truth.
+- Re-check the touched area before editing.
 - Do not broaden scope beyond one bounded work unit or cohesive local unit unless the user explicitly asks.
 
 ## Safety Net
@@ -108,9 +107,8 @@ Report discovered bugs separately unless the user explicitly asked for a behavio
 
 ## Artifact Updates
 
-If `.cflow/refactor-brief.md` is missing and this step produces resumable execution state, create it before returning.
-
-Update:
+Use `artifacts.md` for brief creation and execution-state rules.
+Record phase-specific changes in:
 
 - `Work units` status labels
 - `Safety net` if assumptions changed

@@ -6,10 +6,9 @@ Do analysis first. Do not implement in this phase.
 
 ## Shared Preflight
 
-- Require current `.cflow/architecture.md`; if missing, route to `cf-architecture-map`.
-- Read architecture plus existing `.cflow/refactor-brief.md`.
+- Requires current architecture context.
 - Without a brief, continue only with an explicit local or repo-level scope; otherwise return to assessment.
-- Re-check the repository and treat it as source of truth.
+- Re-check the mapped scope before deciding.
 
 ## Concentration Mapping
 
@@ -60,7 +59,7 @@ Analyze in this order:
 
 ## Artifact Updates
 
-If `.cflow/refactor-brief.md` is missing and this pass produces resumable seam-mapping state, create it before returning.
+Use `artifacts.md` for brief creation and baseline field rules.
 
 For concentration mapping, update:
 

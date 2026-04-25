@@ -12,10 +12,9 @@ Do not implement in this phase.
 
 ## Shared Preflight
 
-1. Require current `.cflow/architecture.md`; if missing, route to `cf-architecture-map`.
-2. Read architecture plus existing `.cflow/refactor-brief.md`.
-3. Re-check candidate areas and treat repository state as source of truth.
-4. If there is no assessed direction, candidate area, or explicit bounded scope to order, route back to assessment.
+- Requires current architecture context.
+- Requires an assessed direction, candidate area, or explicit bounded scope to order; otherwise return to assessment.
+- Re-check candidate areas before recording units.
 
 ## Work-Unit Planning
 
@@ -39,8 +38,7 @@ Rules:
 - A unit may touch several nearby files when they are part of one behavior-preserving structural move with one clear stop condition.
 - Split units only when ordering, ownership, risk, verification, or reviewability materially improves.
 - Keep each work unit explicitly `mode: split` or `mode: consolidate`.
-- Choose exactly one next unit: active `current work unit` when ready to continue, otherwise `recommended next work unit`.
-- Never finish planning with both `current work unit` and `recommended next work unit` unset.
+- Choose exactly one next unit using the execution-state rules in `artifacts.md`.
 - Name units by workflow or seam when that is more stable than a brittle file list.
 
 ## Target Shape
@@ -67,15 +65,12 @@ Rules:
 - Keep each migration unit behavior-preserving unless a behavior change was explicitly requested.
 - Record what is intentionally deferred.
 - Choose exactly one first migration unit.
-- Mark it active only when goal, dependency order, and immediate next phase are explicit enough to continue without another planning pass.
-- Otherwise leave `current work unit` as `none` and record it as `recommended next work unit`.
-- Never finish with both `current work unit` and `recommended next work unit` unset.
+- Mark it active only when goal, dependency order, and immediate next phase are explicit enough; otherwise record it as the recommended next work unit.
 
 ## Artifact Updates
 
-If `.cflow/refactor-brief.md` is missing and planning creates resumable state, create it before returning.
-
-Update:
+Use `artifacts.md` for brief creation and execution-state rules.
+Record phase-specific changes in:
 
 - `Work units`
 - `Constraints` when hard-path or migration constraints changed

@@ -14,13 +14,12 @@ Determine:
 - candidate intervention areas worth carrying forward
 - dominant pressure: concentration, fragmentation, mixed, or none
 - plausible intervention mode: soft-split, soft-consolidate, soft-mixed, hard-restructure, or no-structural-refactor
-- whether `.cflow/refactor-brief.md` must be created or refreshed
+- whether durable handoff state is needed
 
 ## Assessment Preflight
 
-1. Require current `.cflow/architecture.md`; if missing, stale, or materially incomplete, route to `cf-architecture-map`.
-2. Read architecture plus existing `.cflow/refactor-brief.md`.
-3. Re-check repository state and treat it as source of truth.
+- Requires current architecture context; route through `cf-architecture-map` first when missing, stale, or materially incomplete.
+- Read any existing brief and re-check repository state before deciding.
 
 ## Premise Check
 
@@ -40,9 +39,7 @@ For hard restructure also answer:
 - Treat `soft-mixed` as a repository-level outcome only.
 - Each executable work unit must still choose exactly one mode: `split` or `consolidate`.
 - Do not split one coherent local cleanup into multiple work units just to make units smaller.
-- Use the local fast lane when one explicit, local, low-risk, behavior-preserving cohesive unit is already clear enough to map, lock, or execute.
-- Use planning when multiple credible candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work must be sequenced.
-- Use hard-path planning only when soft intervention is not enough.
+- Leave local fast lane, planning, and hard-path routing decisions to `routing.md`.
 
 ## Alignment Goal
 
@@ -83,14 +80,13 @@ Keep this short. Do not create fake personas or run a debate loop.
 
 ## Artifact Behavior
 
+Use `artifacts.md` for brief creation and field updates.
 Do not create or refresh `.cflow/architecture.md` here.
-
-Create or refresh `.cflow/refactor-brief.md` when work is non-trivial, risky, multi-step, or needs resumable handoff state.
 
 Once enough decisions are aligned:
 
-- update `.cflow/architecture.md` only when repository guidance became clearer and architecture context is already present
-- create or refresh `.cflow/refactor-brief.md` when aligned decisions create resumable handoff state
+- record aligned decisions in `.cflow/refactor-brief.md` when they create resumable handoff state
+- route to `cf-architecture-map` if architectural guidance itself needs a refresh
 - keep work units concise
 - do not freeze brittle file lists
 

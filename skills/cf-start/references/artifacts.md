@@ -15,6 +15,9 @@ When bootstrapping or refreshing the refactor brief:
 
 Use `cf-architecture-map` to bootstrap `.cflow/`, update `.gitignore`, and create or refresh `.cflow/architecture.md`.
 
+Do not create or refresh `.cflow/architecture.md` from `cf-start` phases.
+If architectural guidance materially changed, route to `cf-architecture-map` for a refresh or record the decision in `.cflow/refactor-brief.md` until the next architecture-map pass.
+
 ## Required brief updates
 
 If `.cflow/refactor-brief.md` exists or is created, update at least:
@@ -35,3 +38,10 @@ Update these too when they changed:
 - `Verification`
 - `Review notes`
 - `Unknowns to re-check`
+
+## Execution State Rules
+
+- Keep `current work unit` as the active selected unit only.
+- Use `current work unit: none` at a safe stopping point with no next unit selected.
+- Set `recommended next work unit` whenever the near-term next unit is known but not yet active or completed.
+- Never finish planning with both `current work unit` and `recommended next work unit` unset.

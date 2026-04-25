@@ -6,10 +6,9 @@ Do not introduce new structural changes here unless the user explicitly asks.
 
 ## Shared Preflight
 
-- Require current `.cflow/architecture.md`; if missing, route to `cf-architecture-map`.
-- Read architecture plus existing `.cflow/refactor-brief.md`.
+- Requires current architecture context.
 - If completed unit, touched area, feedback target, or current path is unclear, return to assessment or resume routing first.
-- Re-check the touched area and treat repository state as source of truth.
+- Re-check the touched area before judging or verifying.
 
 ## Review
 
@@ -78,6 +77,8 @@ Feedback buckets:
 - feedback that conflicts with repository evidence or agreed constraints
 
 ## Artifact Updates
+
+Use `artifacts.md` for baseline field and execution-state rules.
 
 For review, update:
 
