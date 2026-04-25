@@ -81,16 +81,7 @@ Codex custom agents:
 
 ## Golden Rules
 
-- Keep runtime behavior in the relevant `SKILL.md` or a reference file directly linked from that skill.
-- Keep `docs/` maintainer-only; do not assume docs are visible at runtime.
-- Prefer state-based gates over actor-based gates.
-- Keep `cf-start/SKILL.md` as the controller: identity, hard gates, DOT flow diagrams, reference map, and output contracts.
-- Put phase-specific operational detail in `cf-start/references/*.md`.
-- Keep `_shared` only for runtime rules consumed by multiple public skills or phase references.
-- Keep `skills/_codex_agents` only for real Codex custom agents that should be installed, not for notes or examples.
-- Do not create separate internal skills unless a phase needs independent triggering as a real user-facing entrypoint.
-- Be strict only when the failure mode is concrete and costly.
-- Otherwise state the preferred direction plus the conditions that justify exceptions.
+Pack-wide golden rules live in [golden-rules.md](./golden-rules.md).
 
 ## Source Of Truth
 
@@ -100,6 +91,7 @@ Codex custom agents:
 - Bootstrap templates live in `skills/cf-start/assets/`.
 - Codex custom agent sources live in `skills/_codex_agents/`.
 - Agent-specific install instructions live in `install/<agent>/`.
+- Pack-wide maintainer rules live in [golden-rules.md](./golden-rules.md).
 
 For real target-repo validation, use [repo-trial-rules.md](./repo-trial-rules.md).
 

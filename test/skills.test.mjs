@@ -69,6 +69,10 @@ test("cf-start ships bootstrap asset templates", async () => {
     await pathExists(path.join(SKILLS_ROOT, "cf-start", "assets", "refactor-brief.template.md")),
     true,
   );
+  assert.equal(
+    await pathExists(path.join(SKILLS_ROOT, "cf-mr-wolf", "assets", "mr-wolf-notes.template.md")),
+    true,
+  );
 });
 
 test("architecture artifact template stays observational", async () => {
@@ -174,6 +178,21 @@ test("cf-architecture-map ships a low-cost read-only Codex custom agent", async 
   assert.doesNotMatch(body, /Refactor Guidance/);
   assert.match(body, /## Evidence/);
   assert.match(body, /## Unknowns/);
+});
+
+test("maintainer golden rules require empty-context skill polish", async () => {
+  const body = await readFile(path.join(REPO_ROOT, "docs", "golden-rules.md"), "utf8");
+  const maintainingBody = await readFile(
+    path.join(REPO_ROOT, "docs", "maintaining-this-pack.md"),
+    "utf8",
+  );
+
+  assert.match(maintainingBody, /golden-rules\.md/);
+  assert.match(body, /empty context/);
+  assert.match(body, /every sentence must be necessary runtime guidance/);
+  assert.match(body, /no historical migration notes/);
+  assert.match(body, /maintainer-only labels/);
+  assert.match(body, /decorative wording/);
 });
 
 test("cf-start phase references preserve internal-skill guardrails", async () => {
@@ -363,21 +382,39 @@ test("cf-mr-wolf fully replaces the old clarification entrypoint", async () => {
   }
 });
 
-test("cf-mr-wolf artifacts are optional and live under .cflow", async () => {
+test("cf-mr-wolf maintains compact investigation notes under .cflow", async () => {
   const body = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
   const flowBody = await readFile(
     path.join(REPO_ROOT, "docs", "mr-wolf", "doc-mr-wolf.flow.md"),
     "utf8",
   );
+  const templateBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "assets", "mr-wolf-notes.template.md"),
+    "utf8",
+  );
 
-  assert.match(body, /\.cflow\/mr-wolf-brief\.md/);
-  assert.match(body, /only after asking the user/);
-  assert.match(body, /whether the chat handoff is enough/);
+  assert.match(body, /\.cflow\/mr-wolf-notes\.md/);
+  assert.match(body, /assets\/mr-wolf-notes\.template\.md/);
+  assert.match(body, /Overwrite stale or unrelated notes/);
+  assert.match(body, /Do not list every non-candidate file/);
+  assert.match(body, /Do not add handoff, next skill, or workflow-decision sections/);
   assert.doesNotMatch(body, /docs\/mr-wolf/);
+  assert.doesNotMatch(body, /\.cflow\/mr-wolf-brief\.md/);
 
-  assert.match(flowBody, /\.cflow\/mr-wolf-brief\.md/);
-  assert.match(flowBody, /only after the user chooses the artifact/);
+  assert.match(flowBody, /\.cflow\/mr-wolf-notes\.md/);
+  assert.match(flowBody, /reuse or reset it based on relevance/);
+  assert.match(flowBody, /keep notes current but do not write `\.cflow\/architecture\.md` or `\.cflow\/refactor-brief\.md`/);
+  assert.doesNotMatch(flowBody, /do not write `\.cflow\/\*` artifacts/);
+  assert.match(flowBody, /excluded false positives/);
+  assert.match(flowBody, /not exhaustive rejected lists/);
   assert.doesNotMatch(flowBody, /docs\/mr-wolf\/YYYY-MM-DD/);
+
+  assert.match(templateBody, /## Findings/);
+  assert.match(templateBody, /confirmed candidates/);
+  assert.match(templateBody, /candidates to verify/);
+  assert.match(templateBody, /excluded false positives/);
+  assert.doesNotMatch(templateBody, /## Handoff/);
+  assert.doesNotMatch(templateBody, /next skill/);
 });
 
 test("cf-mr-wolf uses tools and deterministic temp scripts for evidence gathering", async () => {
@@ -398,6 +435,26 @@ test("cf-mr-wolf uses tools and deterministic temp scripts for evidence gatherin
   assert.match(flowBody, /MCP resources/);
   assert.match(flowBody, /deterministic `\/tmp` scripts/);
   assert.match(flowBody, /mechanical analysis/);
+});
+
+test("cf-mr-wolf hands cleanup discovery to cf-start before execution skills", async () => {
+  const body = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
+  const flowBody = await readFile(
+    path.join(REPO_ROOT, "docs", "mr-wolf", "doc-mr-wolf.flow.md"),
+    "utf8",
+  );
+
+  assert.match(body, /Cflow Handoff Boundary/);
+  assert.match(body, /do not jump directly into execution skills/);
+  assert.match(body, /cf-file-split/);
+  assert.match(body, /cf-cognitive/);
+  assert.match(body, /preserve the discovery in `\.cflow\/refactor-brief\.md`/);
+  assert.match(body, /cf-start` owns that brief/);
+  assert.match(body, /not an execution plan or refactor backlog/);
+
+  assert.match(flowBody, /recommend `cf-start`/);
+  assert.match(flowBody, /do not route straight to `cf-file-split` or `cf-cognitive`/);
+  assert.match(flowBody, /do not create that brief directly from `cf-mr-wolf`/);
 });
 
 async function listFiles(pathsToScan) {

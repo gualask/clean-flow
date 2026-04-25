@@ -6,7 +6,31 @@ Use this skill as a focused fixer before implementation: identify the real probl
 Do not roleplay, quote, or imitate a fictional character. Keep the tone direct, calm, and operational.
 
 When `cf-start` routes here, treat this as upstream clarification before Cflow assessment or execution.
-Do not create or update `.cflow/architecture.md` or `.cflow/refactor-brief.md`; return a handoff that `cf-start` can use after the problem is clear.
+Do not create or update `.cflow/architecture.md` or `.cflow/refactor-brief.md` from this skill.
+If Cflow persistence is needed, return a handoff that `cf-start` can use.
+
+## Notes File
+
+Use `.cflow/mr-wolf-notes.md` as the investigation notes file.
+Create it from `assets/mr-wolf-notes.template.md` when it is missing.
+Create `.cflow/` first if needed.
+
+At the start of every invocation with a concrete problem:
+
+1. Read `.cflow/mr-wolf-notes.md` if it exists.
+2. Decide whether the notes are relevant to the current request and repository state.
+3. Reuse and update relevant notes.
+4. Overwrite stale or unrelated notes with a fresh investigation from the template.
+
+The notes file is a compact source of truth for discovery evidence, not an execution plan or refactor backlog.
+Use `Findings` as:
+
+- `confirmed candidates`: evidenced candidates worth carrying forward
+- `candidates to verify`: plausible candidates that still need focused checks
+- `excluded false positives`: only important false positives that looked relevant but were excluded as noise
+
+Do not list every non-candidate file.
+Do not add handoff, next skill, or workflow-decision sections to the notes file.
 
 ## Entry Behavior
 
@@ -85,6 +109,23 @@ Write these scripts under `/tmp`, keep them disposable, and have them print comp
 Do not use temporary scripts to make product, architecture, or prioritization judgments.
 Scripts should produce evidence; the skill still owns interpretation, trade-offs, and the final handoff.
 
+## Cflow Handoff Boundary
+
+When the evidence points to behavior-preserving cleanup, refactor, file splitting, cognitive cleanup, or multiple candidate files, do not jump directly into execution skills such as `cf-file-split` or `cf-cognitive`.
+
+Stop at an evidence-backed handoff:
+
+- summarize the problem frame
+- list the evidence gathered and the tools used
+- name candidate areas or files with short rationale
+- separate confirmed candidates from uncertain ones
+- recommend whether the work should enter `cf-start`
+
+If the work is multi-file, ordered, risky, or resumable, ask whether to preserve the discovery in `.cflow/refactor-brief.md` and continue through `cf-start`.
+`cf-start` owns that brief, work-unit planning, safety net, execution, review, verification, and resume.
+
+Use `cf-file-split` or `cf-cognitive` directly only when the user asks for one explicit local file-level action and no broader Cflow planning or resume state is needed.
+
 ## Decision and Options
 
 When enough context exists, propose the smallest useful decision.
@@ -99,29 +140,6 @@ If there are multiple credible directions, present 2-3 options:
 
 Do not fake balance.
 If one option is clearly better, say so.
-
-## Handoff Artifact
-
-Always provide a chat handoff when the analysis completes.
-
-Create a brief file only when it materially helps implementation, resume, review, or handoff to another LLM, and only after asking the user whether they want the artifact or whether the chat handoff is enough.
-If the user chooses an artifact, create it with the other Cflow artifacts:
-
-`.cflow/mr-wolf-brief.md`
-
-A brief should stay short and include only:
-
-- Problem
-- Context checked
-- Decision
-- Scope
-- Non-goals
-- Implementation notes
-- Validation plan
-- Open questions, if any
-
-Do not create a brief for a small decision, a single focused question, or a task that can be implemented safely from the chat handoff.
-Do not create `.cflow/mr-wolf-brief.md` silently.
 
 ## Output Format
 
@@ -150,8 +168,8 @@ For a completed handoff, return only:
 - **Decision**: chosen direction.
 - **Scope**: what is in scope.
 - **Non-goals**: what is out of scope.
-- **Artifact**: `.cflow/mr-wolf-brief.md`, `none`, or `offered, awaiting user choice`.
-- **Next step**: immediate implementation step or public skill to invoke.
+- **Notes**: `.cflow/mr-wolf-notes.md` updated, reset, or not used because no problem was provided.
+- **Next step**: immediate implementation step, or `cf-start` handoff when the work is Cflow cleanup/refactor.
 
 ## Anti-patterns
 
