@@ -67,6 +67,24 @@ Treat context as noise when it does not affect:
 Do not read more files just to appear thorough.
 If context seems relevant but expensive to load, say why it matters before expanding the slice.
 
+## Evidence Gathering
+
+Use the available tools to gather evidence instead of doing mechanical analysis in the model.
+
+Prefer, when relevant:
+
+- MCP resources or tools for external systems, repository metadata, tickets, docs, or structured sources
+- other installed skills when one clearly owns a bounded subtask or follow-up path
+- system commands such as `rg`, test runners, package scripts, language tools, and format or schema checkers in read-only or diagnostic mode
+- temporary scripts in the system temp directory for deterministic analysis across many inputs
+
+Use temporary scripts only for mechanical work such as parsing, counting, indexing, diffing, grouping, normalizing, extracting metadata, or checking consistency.
+Choose Python or Node.js based on the task and available project conventions.
+Write these scripts under `/tmp`, keep them disposable, and have them print compact facts or summaries.
+
+Do not use temporary scripts to make product, architecture, or prioritization judgments.
+Scripts should produce evidence; the skill still owns interpretation, trade-offs, and the final handoff.
+
 ## Decision and Options
 
 When enough context exists, propose the smallest useful decision.

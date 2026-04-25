@@ -17,13 +17,14 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 2. If no concrete problem or task is present, ask exactly one question: what problem should be solved.
 3. If a problem exists, frame the apparent goal, uncertainty, likely scope, and success criteria.
 4. Choose the smallest context slice that can confirm or reject the frame.
-5. Inspect only that slice, then separate signal from noise.
-6. Recap whether the context is sufficient to continue.
-7. If context is insufficient, ask one focused question or inspect the next smallest justified slice.
-8. Once clear enough, recommend a direction or present 2-3 options with trade-offs.
-9. Return a concise implementation handoff in chat.
-10. If a persistent brief would materially help, ask whether the user wants `.cflow/mr-wolf-brief.md` or whether the chat handoff is enough.
-11. Create `.cflow/mr-wolf-brief.md` only after the user chooses the artifact.
+5. Use available MCP resources, relevant skills, system commands, or deterministic `/tmp` scripts when they can gather evidence more reliably than model-only analysis.
+6. Inspect only the selected evidence, then separate signal from noise.
+7. Recap whether the context is sufficient to continue.
+8. If context is insufficient, ask one focused question or inspect the next smallest justified slice.
+9. Once clear enough, recommend a direction or present 2-3 options with trade-offs.
+10. Return a concise implementation handoff in chat.
+11. If a persistent brief would materially help, ask whether the user wants `.cflow/mr-wolf-brief.md` or whether the chat handoff is enough.
+12. Create `.cflow/mr-wolf-brief.md` only after the user chooses the artifact.
 
 ## Contracts
 
@@ -31,6 +32,7 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 | --- | --- | --- |
 | invoked without a problem | ask what problem must be solved before inspecting repository context | no |
 | ambiguous problem | inspect only the smallest relevant context slice, recap sufficiency, ask one focused question if needed | no |
+| many deterministic inputs | use tools or temporary `/tmp` scripts for mechanical analysis, then interpret the compact output | no |
 | clear enough for options | present recommended direction first, with only real alternatives and trade-offs | no |
 | non-trivial handoff | provide chat handoff and ask whether to create `.cflow/mr-wolf-brief.md` when persistence is useful | no |
 | explicit skip | note the biggest missing requirement or risk briefly, then hand off or proceed as authorized | only after handoff |
@@ -41,6 +43,7 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 - The skill is a pragmatic problem fixer, not a generic planning worksheet.
 - It asks for the problem first when invoked without instructions.
 - It narrows context before reading, and avoids whole-repository scans by default.
+- It uses available tools and deterministic temporary scripts instead of making the model do mechanical analysis.
 - It states what context was excluded as noise and why.
 - It does not create large specs for small tasks.
 - It creates `.cflow/mr-wolf-brief.md` only after asking the user.

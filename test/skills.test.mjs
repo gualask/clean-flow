@@ -354,6 +354,26 @@ test("cf-mr-wolf artifacts are optional and live under .cflow", async () => {
   assert.doesNotMatch(flowBody, /docs\/mr-wolf\/YYYY-MM-DD/);
 });
 
+test("cf-mr-wolf uses tools and deterministic temp scripts for evidence gathering", async () => {
+  const body = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
+  const flowBody = await readFile(
+    path.join(REPO_ROOT, "docs", "mr-wolf", "doc-mr-wolf.flow.md"),
+    "utf8",
+  );
+
+  assert.match(body, /MCP resources or tools/);
+  assert.match(body, /other installed skills/);
+  assert.match(body, /system commands/);
+  assert.match(body, /temporary scripts/);
+  assert.match(body, /under `\/tmp`/);
+  assert.match(body, /Scripts should produce evidence/);
+  assert.match(body, /skill still owns interpretation/);
+
+  assert.match(flowBody, /MCP resources/);
+  assert.match(flowBody, /deterministic `\/tmp` scripts/);
+  assert.match(flowBody, /mechanical analysis/);
+});
+
 async function listFiles(pathsToScan) {
   const files = [];
 
