@@ -71,6 +71,7 @@ Before suggesting a skill change, collect as much of this packet as possible:
 - user goal in that repository
 - exact invocation path:
   - `cf-start`
+  - `cf-mr-wolf`
   - `cf-architecture-map`
   - `cf-cognitive`
   - `cf-file-split`

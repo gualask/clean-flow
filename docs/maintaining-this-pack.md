@@ -44,6 +44,7 @@ docs/            maintainer documentation
 Public skill entrypoints:
 
 - `cf-start`
+- `cf-mr-wolf`
 - `cf-architecture-map`
 - `cf-cognitive`
 - `cf-file-split`
@@ -105,6 +106,7 @@ For real target-repo validation, use [repo-trial-rules.md](./repo-trial-rules.md
 Per-public-skill flow references:
 
 - `cf-start`: [start/doc-start.flow.md](./start/doc-start.flow.md), including internal phase contracts
+- `cf-mr-wolf`: [mr-wolf/doc-mr-wolf.flow.md](./mr-wolf/doc-mr-wolf.flow.md)
 - `cf-architecture-map`: [architecture-map/doc-architecture.map.flow.md](./architecture-map/doc-architecture.map.flow.md)
 - `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
 - `cf-file-split`: [file-split/doc-file.split.flow.md](./file-split/doc-file.split.flow.md)

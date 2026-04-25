@@ -2,7 +2,7 @@
 name: cf-file-split
 description: Evaluate or execute a behavior-preserving file-level split from one source file into nearby owned files. Use when the user asks whether a file should be split or asks to perform a scoped extraction into files.
 ---
-This is a supported public entrypoint for local file-level split review and execution.
+Use this skill for local file-level split review and execution.
 
 Use this when the user asks whether a source file should be split into files, or asks to execute a specific local file-level extraction.
 Do not use this for cognitive cleanup inside one file; use `cf-cognitive` for that.

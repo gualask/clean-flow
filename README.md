@@ -7,12 +7,14 @@ Cflow is a skill pack for **behavior-preserving cleanup and refactor work**, wit
 Supported public entrypoints:
 
 - `cf-start`
+- `cf-mr-wolf`
 - `cf-architecture-map`
 - `cf-cognitive`
 - `cf-file-split`
 
 `cf-start` is the workflow controller.
 Its internal phases live as runtime references under `skills/cf-start/references/` and are not installed as separate skill entrypoints.
+`cf-mr-wolf` is a public entrypoint for clarifying ambiguous problems with minimal context before implementation or before Cflow assessment.
 
 ## Install
 
@@ -68,6 +70,9 @@ It does not create `.cflow/` by itself.
 
 For supported workflow first use and resume, start with `cf-start`.
 `cf-start` is the main public workflow entrypoint for assessment, alignment, resume, and work-unit selection.
+
+For ambiguous ideas, unclear feature/refactor goals, or implementation tasks that need focused problem framing before coding, use `cf-mr-wolf`.
+When `cf-start` cannot yet assess what problem a cleanup or refactor solves, it routes through `cf-mr-wolf` first.
 
 For standalone repository mapping, use `cf-architecture-map`.
 `cf-architecture-map` is the public entrypoint that bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and creates or refreshes `.cflow/architecture.md`.

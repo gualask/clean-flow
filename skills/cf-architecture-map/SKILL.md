@@ -2,7 +2,7 @@
 name: cf-architecture-map
 description: Build or refresh `.cflow/architecture.md` from repository state. Use as a standalone repository-mapping entrypoint or when other Cflow skills need current architecture context before proceeding.
 ---
-This is a supported public entrypoint for repository mapping.
+Use this skill for repository mapping.
 It may also be used internally by other Cflow skills when architecture context is missing or stale.
 Do not implement, move files, or write patches in this skill.
 

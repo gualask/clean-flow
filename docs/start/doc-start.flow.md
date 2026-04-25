@@ -3,6 +3,7 @@
 ## Purpose
 
 Document the runtime flow for `cf-start`, the public workflow controller for Cflow assessment, planning, execution, review, verification, feedback intake, and resume.
+When the upstream problem is too ambiguous for Cflow assessment, `cf-start` hands off to `cf-mr-wolf`.
 
 ## Runtime Inputs
 
@@ -17,21 +18,22 @@ Document the runtime flow for `cf-start`, the public workflow controller for Cfl
 1. Trigger `cf-start`.
 2. Controller reads the hard gates, DOT flow diagrams, reference map, and output contracts from `cf-start/SKILL.md`.
 3. Controller loads `references/routing.md` when it must decide fresh entry, resume, review, verify, or route handoff.
-4. If architecture context is missing or stale, controller routes to `cf-architecture-map` before continuing.
-5. If `.cflow/refactor-brief.md` is needed, controller uses `references/artifacts.md` and `refactor-brief.template.md`.
-6. Fresh work enters `assessment.md`; non-trivial fresh assessment stops at alignment.
-7. User steering after assessment enters `alignment.md` until direction is clear enough.
-8. Soft-path work routes through work-unit planning or directly to mapping only when one local low-risk unit is already clear.
-9. Hard-path work routes through target-shape and migration-unit planning before any code edits.
-10. Execution routes through safety net, split or consolidation execution, optional local simplify, review, and verify.
-11. Feedback routes through feedback intake before returning to alignment or the appropriate resume point.
-12. Controller keeps `.cflow/refactor-brief.md` current when resumable state matters.
+4. If the problem, goal, scope, or success criteria are not clear enough for Cflow assessment, controller routes to `cf-mr-wolf` before creating Cflow artifacts.
+5. If architecture context is missing or stale, controller routes to `cf-architecture-map` before continuing.
+6. If `.cflow/refactor-brief.md` is needed, controller uses `references/artifacts.md` and `refactor-brief.template.md`.
+7. Fresh work enters `assessment.md`; non-trivial fresh assessment stops at alignment.
+8. User steering after assessment enters `alignment.md` until direction is clear enough.
+9. Soft-path work routes through work-unit planning or directly to mapping only when one local low-risk unit is already clear.
+10. Hard-path work routes through target-shape and migration-unit planning before any code edits.
+11. Execution routes through safety net, split or consolidation execution, optional local simplify, review, and verify.
+12. Feedback routes through feedback intake before returning to alignment or the appropriate resume point.
+13. Controller keeps `.cflow/refactor-brief.md` current when resumable state matters.
 
 ## Phase Contracts
 
 | Reference | Phase contract | Minimum context | If context missing | May edit code |
 | --- | --- | --- | --- | --- |
-| `references/routing.md` | choose entry mode, fresh path, or resume point | prompt, repository state, and any existing `.cflow/*` artifacts | route to the required public entrypoint or earlier phase | no |
+| `references/routing.md` | choose entry mode, upstream problem-shaping handoff, fresh path, or resume point | prompt, repository state, and any existing `.cflow/*` artifacts | route to the required public entrypoint or earlier phase | no |
 | `references/artifacts.md` | define `.cflow/refactor-brief.md` updates | decision to create, refresh, or update brief state | defer artifact update until required fields are known | no |
 | `references/assessment.md` | premise check and intervention framing | current `.cflow/architecture.md`; brief optional | route to `cf-architecture-map` when architecture is missing or stale | no |
 | `references/alignment.md` | user steering after assessment | assessed direction or concrete decision to resolve | return to assessment | no |
@@ -51,6 +53,7 @@ Document the runtime flow for `cf-start`, the public workflow controller for Cfl
 ## Review Checks
 
 - `cf-start` remains the only workflow controller.
+- Upstream problem ambiguity routes to `cf-mr-wolf` before `.cflow/*` artifacts are created or updated.
 - Runtime behavior lives in `SKILL.md` or a directly linked reference, not only in docs.
 - Phase routing is state-based, not actor-based.
 - Architecture bootstrap belongs to `cf-architecture-map`; refactor brief ownership belongs to `cf-start`.

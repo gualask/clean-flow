@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import path from "node:path";
 import test from "node:test";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 import { listSkillDirectories, pathExists } from "../src/lib/fs.mjs";
@@ -269,6 +269,7 @@ test("only public entrypoints are packaged as skills", async () => {
   const skills = await listSkillDirectories(SKILLS_ROOT);
   const publicSkillNames = new Set([
     "cf-start",
+    "cf-mr-wolf",
     "cf-architecture-map",
     "cf-cognitive",
     "cf-file-split",
@@ -286,6 +287,12 @@ test("only public entrypoints are packaged as skills", async () => {
 test("public skill flow docs exist", async () => {
   for (const docPath of [
     path.join(REPO_ROOT, "docs", "start", "doc-start.flow.md"),
+    path.join(
+      REPO_ROOT,
+      "docs",
+      "mr-wolf",
+      "doc-mr-wolf.flow.md",
+    ),
     path.join(REPO_ROOT, "docs", "architecture-map", "doc-architecture.map.flow.md"),
     path.join(REPO_ROOT, "docs", "cognitive", "doc-cognitive.flow.md"),
     path.join(REPO_ROOT, "docs", "file-split", "doc-file.split.flow.md"),
@@ -293,3 +300,85 @@ test("public skill flow docs exist", async () => {
     assert.equal(await pathExists(docPath), true, `${docPath} is missing`);
   }
 });
+
+test("cf-start routes upstream problem ambiguity to cf-mr-wolf", async () => {
+  const startBody = await readFile(path.join(SKILLS_ROOT, "cf-start", "SKILL.md"), "utf8");
+  const routingBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "routing.md"),
+    "utf8",
+  );
+
+  assert.match(startBody, /cf-mr-wolf/);
+  assert.match(startBody, /problem, goal, scope, or success criteria/);
+  assert.match(routingBody, /cf-mr-wolf-handoff/);
+  assert.match(routingBody, /before creating or updating Cflow artifacts/);
+});
+
+test("cf-mr-wolf fully replaces the old clarification entrypoint", async () => {
+  const staleNoun = ["brain", "storming"].join("");
+  const staleSkillName = ["problem", staleNoun].join("-");
+  const staleFlowName = ["problem", staleNoun].join(".");
+  const scannedFiles = await listFiles([
+    path.join(REPO_ROOT, "README.md"),
+    path.join(REPO_ROOT, "docs"),
+    path.join(REPO_ROOT, "skills"),
+  ]);
+
+  assert.equal(await pathExists(path.join(SKILLS_ROOT, staleSkillName)), false);
+  assert.equal(
+    await pathExists(path.join(REPO_ROOT, "docs", staleSkillName)),
+    false,
+  );
+
+  for (const filePath of scannedFiles) {
+    const body = await readFile(filePath, "utf8");
+    assert.equal(body.includes(staleSkillName), false, `${filePath} mentions ${staleSkillName}`);
+    assert.equal(body.includes(staleFlowName), false, `${filePath} mentions ${staleFlowName}`);
+  }
+});
+
+test("cf-mr-wolf artifacts are optional and live under .cflow", async () => {
+  const body = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
+  const flowBody = await readFile(
+    path.join(REPO_ROOT, "docs", "mr-wolf", "doc-mr-wolf.flow.md"),
+    "utf8",
+  );
+
+  assert.match(body, /\.cflow\/mr-wolf-brief\.md/);
+  assert.match(body, /only after asking the user/);
+  assert.match(body, /whether the chat handoff is enough/);
+  assert.doesNotMatch(body, /docs\/mr-wolf/);
+
+  assert.match(flowBody, /\.cflow\/mr-wolf-brief\.md/);
+  assert.match(flowBody, /only after the user chooses the artifact/);
+  assert.doesNotMatch(flowBody, /docs\/mr-wolf\/YYYY-MM-DD/);
+});
+
+async function listFiles(pathsToScan) {
+  const files = [];
+
+  for (const pathname of pathsToScan) {
+    const entries = await readdir(pathname, { withFileTypes: true }).catch((error) => {
+      if (error?.code === "ENOTDIR") {
+        return null;
+      }
+      throw error;
+    });
+
+    if (entries === null) {
+      files.push(pathname);
+      continue;
+    }
+
+    for (const entry of entries) {
+      const entryPath = path.join(pathname, entry.name);
+      if (entry.isDirectory()) {
+        files.push(...(await listFiles([entryPath])));
+      } else if (entry.isFile()) {
+        files.push(entryPath);
+      }
+    }
+  }
+
+  return files;
+}

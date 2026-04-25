@@ -2,7 +2,7 @@
 name: cf-cognitive
 description: Find or refactor up to three source files per session, one file at a time, to reduce real cognitive complexity from long functions, deep nesting, nested or oversized try/catch blocks, long loops, or hard-to-read local logic while preserving behavior. Use with or without explicit file targets.
 ---
-This is a supported public entrypoint for local file-level cognitive complexity refactors.
+Use this skill for local file-level cognitive complexity refactors.
 
 Use this for up to three source files per session, processed one file at a time.
 Do not bootstrap or require `.cflow/` artifacts.

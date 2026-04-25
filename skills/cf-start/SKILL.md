@@ -1,9 +1,9 @@
 ---
 name: cf-start
-description: Main public workflow entrypoint for Cflow. Use to start, assess, align, resume, plan, execute, review, or verify behavior-preserving cleanup and refactor work through `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
+description: Main workflow entrypoint for Cflow. Use to start, assess, align, resume, plan, execute, review, or verify behavior-preserving cleanup and refactor work through `.cflow/architecture.md` and `.cflow/refactor-brief.md`. Route upstream ambiguity to `cf-mr-wolf` when the problem, goal, scope, or success criteria are not clear enough for Cflow assessment.
 ---
 
-This is the main public workflow entrypoint for the pack and the controller for the Cflow workflow.
+This is the main workflow controller for Cflow.
 It runs the internal phases itself by loading the relevant references in `references/`.
 Do not tell the user to invoke phase references directly.
 Do not behave like a router that only suggests another step.
@@ -13,6 +13,7 @@ When the next phase is clear from repository state and Cflow artifacts, advance 
 
 Handle fresh assessment, artifact-backed resume, or review/verify re-entry through `cf-start`.
 Use `references/routing.md` for path decisions after the initial repository read.
+If the request needs upstream problem shaping before Cflow can assess it, route to `cf-mr-wolf`.
 
 ## Entry routing
 
@@ -20,6 +21,7 @@ Use this diagram as the runtime routing contract.
 
 ```dot
 digraph cflow_entry {
+  "problem unclear?" -> "cf-mr-wolf" [label="yes"];
   "local cognitive cleanup?" -> "cf-cognitive" [label="yes"];
   "file split only?" -> "cf-file-split" [label="yes"];
   "standalone architecture map?" -> "cf-architecture-map" [label="yes"];
@@ -90,7 +92,7 @@ Read each reference in this invocation when its trigger is met:
 
 | Reference | Trigger |
 | --- | --- |
-| [references/routing.md](references/routing.md) | ambiguous entry mode, non-trivial fresh path selection, or resume routing that is not obvious from an active current work unit |
+| [references/routing.md](references/routing.md) | ambiguous entry mode, upstream problem-shaping handoff, non-trivial fresh path selection, or resume routing that is not obvious from an active current work unit |
 | [references/artifacts.md](references/artifacts.md) | creating or refreshing `.cflow/refactor-brief.md`, or deciding required brief field updates |
 | [references/assessment.md](references/assessment.md) | fresh assessment, premise checks, or intervention framing |
 | [references/alignment.md](references/alignment.md) | user steering after assessment may change scope, exclusions, risk, direction, or whether to continue |
@@ -113,6 +115,7 @@ Use [references/routing.md](references/routing.md) for intent inference, fresh a
 Use [references/assessment.md](references/assessment.md) for premise checks and intervention framing.
 
 Do not implement during fresh assessment.
+If the problem, goal, scope, or success criteria are not clear enough to assess as Cflow work, route to `cf-mr-wolf` before creating or updating Cflow artifacts.
 Always end non-trivial fresh assessment at the alignment checkpoint with exactly one focused question.
 
 ## Resume
