@@ -67,7 +67,7 @@ Describe the important dependency direction rules in a few lines.
 Record the flows or constraints that future refactors should keep easy to reason about, for example:
 - critical workflows that must stay legible
 - areas that should remain thin
-- areas that should stay local rather than shared
+- areas that should stay local, and areas with real shared ownership
 
 ## Refactor guidance
 

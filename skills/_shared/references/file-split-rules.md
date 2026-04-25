@@ -25,6 +25,16 @@ Classify each visible boundary:
 
 Use `none` only when no natural file-level boundary is visible.
 
+## Grouping
+
+When recommending or executing a split, name the exact new file set.
+
+Keep extracted hooks, helpers, constants, and small private units inside the extracted owner file when that remains one readable local concern.
+If that owner file would still be too large or would contain multiple stable units, split those units into additional local files instead of promoting them upward.
+
+Do not promote code to shared, global hooks, common, or utils locations only to reduce file size.
+Use those locations only when reuse already exists, the extracted owner is truly cross-feature, or repository convention clearly places that kind of owner there.
+
 ## Placement
 
 Place new files by nearest existing ownership and repository convention, not by generic type.
@@ -34,7 +44,7 @@ Choose placement in this order:
 - an existing local path or subfolder when it already owns the same seam
 - flat next to the caller when creating one local extracted file
 - a new local subfolder when the split creates at least two related files that should stay together
-- shared locations only when reuse already exists or the extracted owner is truly cross-feature
+- shared or global locations only when the grouping rules justify promotion
 
 Do not create a new top-level architectural folder during a local split.
 Do not move to `shared`, `common`, or `utils` because reuse is only theoretical.

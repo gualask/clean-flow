@@ -28,10 +28,11 @@ Do this even when you already have a recommendation.
 At the checkpoint:
 
 - if the user replies with simple confirmation only, continue with the proposed path
-- if the user gives any non-trivial reply, switch into brainstorming first
+- if the user gives a reply that may materially change the path, switch into brainstorming first
 
 Simple confirmation means short approval with no new steering.
-Any doubt, question, reassurance request, scope change, risk concern, or direction change counts as a non-trivial reply and must enter brainstorming.
+A reply is non-trivial when it may materially change scope, exclusions, invariants, risk appetite, direction, or whether to continue.
+Questions that do not affect those decisions can be answered briefly before continuing.
 
 ## Language rules
 

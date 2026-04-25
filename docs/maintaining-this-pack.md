@@ -12,6 +12,18 @@ At runtime:
 - Cflow artifacts live in the target repository under `.cflow/`
 - this source repository does not need `.cflow/architecture.md` or `.cflow/refactor-brief.md`
 
+## Golden Rules
+
+These rules are the highest-priority maintainer checks for changing Cflow skills.
+
+- Be highly prescriptive only when the failure mode is concrete and costly.
+- Otherwise, state the preferred direction plus the conditions that justify exceptions.
+- A strict rule must not contradict another rule in the same skill or in a required shared reference.
+- If tightening wording blocks a valid path that another rule intentionally permits, rewrite the instruction around the real concern rather than the broad prohibition.
+- Runtime behavior must live in the relevant `SKILL.md` or in a reference file directly linked from that skill; `docs/` is maintainer context only.
+- Prefer state-based gates over actor-based gates unless actor identity materially changes behavior.
+- Keep shared runtime rules in `skills/_shared/references/` only when at least two skills genuinely consume the same rule.
+
 ## Runtime Model
 
 Cflow has three distinct runtime pieces:
@@ -441,6 +453,7 @@ For each skill change, ask all of these:
 - `Artifact behavior`: do create, refresh, assume, or update rules match the actual contract of the skill?
 - `Runtime prompt boundary`: if a rule is needed for runtime behavior, does it still live in `SKILL.md` rather than only in `docs/`?
 - `No docs leakage assumption`: did you avoid treating `docs/` content as if it were automatically available to the model using the skill?
+- `Instruction strictness`: if a rule removes agent discretion, is the reason strong enough, and does the rule still leave room for other skill rules to apply without conflict?
 - `Output contract`: does the output still make sense for the next step in the workflow?
 - `Reference sync`: does the `Skill Reference` section still say the same thing as the skill file?
 - `Matrix sync`: does [skill-contract-matrix.md](/Users/blazar/Dev/clean-flow/docs/skill-contract-matrix.md) still reflect the same contract?

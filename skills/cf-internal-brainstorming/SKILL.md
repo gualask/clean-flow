@@ -24,9 +24,9 @@ Alignment is sufficient only when the next phase, scope boundaries, exclusions, 
 
 ## Trigger
 
-Use this when the user gives any non-trivial reply after the assessment checkpoint.
+Use this when a reply after the assessment checkpoint may materially change scope, exclusions, invariants, risk appetite, direction, or whether to continue.
 
-Anything beyond simple confirmation means the user is steering the direction and this skill should align it before execution continues.
+Simple confirmation or a factual question that does not affect those decisions does not require this skill.
 
 ## Deliberation mode
 

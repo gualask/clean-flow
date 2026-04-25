@@ -41,7 +41,7 @@ Do not consolidate just because files are small. Keep a boundary when it carries
 - Avoid replacing over-fragmentation with a new god file.
 - Preserve existing dataflow and avoid unnecessary allocations, clones, or passes over the same data unless they clearly reduce complexity.
 - Move ownership only when the caller gets simpler in a visible way.
-- If consolidation reveals a real autonomous sub-seam, keep it local unless reuse already exists.
+- If consolidation reveals a real autonomous sub-seam, keep it near the owning seam by default; move it broader only when reuse, cross-feature ownership, or repository convention justifies it.
 - Report likely bugs or behavior inconsistencies separately unless the user explicitly asked for a behavior fix.
 
 ## Before finishing

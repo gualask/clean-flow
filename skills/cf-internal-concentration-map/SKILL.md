@@ -16,7 +16,7 @@ When the scope is a bounded local seam, do the local mapping that must exist bef
   - orchestration
   - integrations
   - pure logic
-- what should stay local instead of being promoted to shared utilities
+- what should stay local and what, if anything, has real shared ownership
 - the safest split direction for this seam
 
 Look for:
@@ -42,7 +42,7 @@ Look for:
 3. Identify distinct workflows hiding inside the scope.
 4. Identify which responsibilities are mixed.
 5. Classify the code into entry points, orchestration, integrations, and pure logic.
-6. Identify what should stay local instead of being promoted to shared helpers.
+6. Identify what should stay local and what, if anything, has real shared ownership.
 7. Decide whether the safest action is:
    - split
    - keep local and leave it alone

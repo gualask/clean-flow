@@ -31,6 +31,7 @@ If the target or placement is not clear enough, ask one focused question before 
 
 - Identify natural file boundaries using the shared file split rules.
 - Classify each visible boundary as `recommended`, `optional`, or `keep local`.
+- When recommending extraction, name the exact new file set and what stays grouped inside each file.
 - Name what should stay in the source file.
 - Recommend `none` only when no natural file-level boundary is visible.
 - Prefer no split when extraction would add navigation cost without simplifying the source file.
@@ -40,8 +41,8 @@ If the target or placement is not clear enough, ask one focused question before 
 - Preserve behavior, public API, exports, side effects, evaluation order, and async behavior.
 - Move only the selected owned unit or related group.
 - Keep the source file as the readable entry point for the local workflow.
-- Follow shared placement rules before creating files.
-- Avoid shared/common locations unless reuse already exists or the owner is truly cross-feature.
+- Follow shared grouping and placement rules before creating files.
+- Do not promote code to shared, global hooks, common, or utils locations unless the shared grouping rules justify it.
 - After moving code, ensure you have read [../_shared/references/reference-audit.md](../_shared/references/reference-audit.md) in this invocation, then audit moved names and paths.
 
 ## Verification
