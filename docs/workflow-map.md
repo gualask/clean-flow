@@ -1,25 +1,19 @@
 # Cflow Workflow Map
 
-This document is the shortest end-to-end view of how Cflow is meant to run in a target repository.
-Use it for orientation.
-Use [maintaining-this-pack.md](./maintaining-this-pack.md) and [skill-contract-matrix.md](./skill-contract-matrix.md) for the full contract details.
-
-Mermaid is used here because the main thing missing from the docs was branch and resume visibility.
-The phase index below is the text fallback if the diagram is not rendered.
+This document is the end-to-end view of how Cflow runs in a target repository.
+Use [maintaining-this-pack.md](./maintaining-this-pack.md) and [skill-contract-matrix.md](./skill-contract-matrix.md) for contract details.
 
 ## Core Rules
 
 - `cf-start` is the main supported direct user entrypoint for workflow execution and resume.
-- `cf-architecture-map` is also a supported direct user entrypoint, but only for standalone repository mapping.
-- `cf-cognitive` is a supported direct user entrypoint for local file-level cognitive complexity refactors; it can use explicit files or discover up to three justified candidates, and it does not require `.cflow/`.
-- `cf-file-split` is a supported direct user entrypoint for evaluating or executing one local behavior-preserving file-level split, and it does not require `.cflow/`.
+- `cf-start` also owns the internal workflow phases by loading `skills/cf-start/references/*.md`.
+- `cf-architecture-map` is the supported direct repository-mapping entrypoint.
+- `cf-cognitive` is the supported direct local cognitive complexity entrypoint and does not require `.cflow/`.
+- `cf-file-split` is the supported direct local file-level split entrypoint and does not require `.cflow/`.
 - `cflow-skills install` syncs packaged skills plus shared support resources; it does not create `.cflow/`.
-- All remaining skills are internal workflow steps, not supported user-facing entrypoints.
-- Internal workflow skills should still be implicitly invocable in Codex when their descriptions match the current step.
-- If an internal workflow skill is reached without required architecture context, it should stop and route to `cf-architecture-map`.
-- If an internal workflow skill is reached without some earlier workflow context beyond architecture, it should stop and route to `cf-start` or the required earlier phase.
+- If a workflow phase lacks required architecture context, `cf-start` routes to `cf-architecture-map`.
 - `soft-mixed` is allowed only as a repository-level assessment outcome; each executable work unit must still declare exactly one mode: `split` or `consolidate`.
-- A local fast lane may skip work-unit planning when one explicit, local, low-risk, behavior-preserving cohesive unit is already clear enough to map, lock, or execute.
+- A local fast lane may skip work-unit planning only when one explicit, local, low-risk, behavior-preserving cohesive unit is already clear enough to map, lock, or execute.
 - Work-unit planning is required when multiple candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work must be sequenced.
 
 ## End-To-End Flow
@@ -28,9 +22,9 @@ The phase index below is the text fallback if the diagram is not rendered.
 flowchart TD
     X[User invokes cf-cognitive] --> X0{File target provided?}
     X0 -- yes --> X1[Refactor selected file sequentially]
-    X0 -- no --> X3[Discover up to three justified candidate files]
-    X3 --> X1
-    X1 --> X2[Run smallest relevant checks after each file and stop by file three]
+    X0 -- no --> X2[Discover up to three justified candidate files]
+    X2 --> X1
+    X1 --> X3[Run smallest relevant checks after each file and stop by file three]
 
     Y[User invokes cf-file-split] --> Y0{Asking whether to split?}
     Y0 -- yes --> Y1[Evaluate file-level extraction candidates]
@@ -41,139 +35,105 @@ flowchart TD
     A[User invokes cf-architecture-map] --> A1[Build or refresh .cflow/architecture.md]
     A1 --> A2[Return map and recommend stop or continue with cf-start]
 
-    B[User invokes cf-start] --> C{Current architecture map is usable?}
+    B[User invokes cf-start] --> C{Architecture map usable?}
     C -- no or stale --> A1
-    C -- yes --> D{Usable refactor brief already exists?}
+    C -- yes --> D{Usable brief exists?}
     A1 --> D
-    D -- no or stale --> E[Fresh assessment in cf-start]
-    D -- yes --> F{Resume target from brief}
+    D -- no or stale --> E[Fresh assessment]
+    D -- yes --> F[Resume from brief state]
 
-    E --> E1{Dedicated assessment pass needed?}
-    E1 -- yes --> E2[cf-internal-assessment]
-    E1 -- no --> E3[Concentration lens]
-    E2 --> E3
-    E3 --> E4[Fragmentation lens]
-    E4 --> E5[Path framing and brief updates]
-    E5 --> G[Alignment checkpoint]
+    E --> G[Assessment and pressure lenses]
+    G --> H[Alignment checkpoint]
+    H -- simple confirmation --> I{Chosen direction}
+    H -- material steering --> J[Alignment phase]
+    J --> I
 
-    G -- simple confirmation --> H{Chosen direction}
-    G -- non-trivial steering --> I[cf-internal-brainstorming]
-    I --> H
+    I -- one clear local unit --> K[Mapping]
+    I -- multiple units / ordering --> L[Work-unit planning]
+    I -- hard restructure --> M[Target shape]
+    I -- review only --> R[Review]
+    I -- verify only --> S[Verify]
+    I -- no structural refactor --> T[Stop]
 
-    H -- local fast lane --> J0{One cohesive local unit}
-    H -- soft split needing sequencing --> J[cf-internal-work-unit-planning]
-    H -- soft consolidate needing sequencing --> J
-    H -- soft mixed needing sequencing --> J
-    H -- hard restructure --> K[cf-internal-target-shape]
-    H -- review only --> R[cf-internal-review]
-    H -- verify only --> S[cf-internal-verify]
-    H -- no structural refactor --> T[Stop with assessment result]
+    M --> N[Migration planning]
+    L --> K
+    N --> O[Safety net]
+    K --> O
 
-    K --> L[cf-internal-migration-unit-planning]
-    J0 -- mode: split --> M
-    J0 -- mode: consolidate --> N
-    J0 -- ready for structural work --> O
-    J --> J1{Recommended next work unit}
-    J1 -- mode: split --> M[cf-internal-concentration-map when seam needs mapping]
-    J1 -- mode: consolidate --> N[cf-internal-fragmentation-map when seam needs mapping]
-    J1 -- ready for structural work --> O[cf-internal-safety-net]
-    M --> O
-    N --> O
-    L --> O
+    O -- no-go --> U[Return to mapping, planning, or stop]
+    O -- go, mode split --> P[Split execution]
+    O -- go, mode consolidate --> Q[Consolidation execution]
 
-    O -- mode: split --> P[cf-internal-boundary-apply]
-    O -- mode: consolidate --> Q[cf-internal-consolidate-seam]
-
-    P --> U[Optional cf-internal-local-simplify]
-    Q --> U
+    P --> V[Optional local simplify]
+    Q --> V
     P --> R
     Q --> R
-    U --> R
+    V --> R
 
     R --> S
-    R --> V[cf-internal-feedback-intake when review feedback arrives]
-    V --> H
-    S --> W[Close unit or continue with next bounded unit]
+    R --> W[Feedback intake]
+    W --> H
+    S --> Z[Close unit or continue with next bounded unit]
 
-    F -- planning --> J
-    F -- mapping split --> M
-    F -- mapping consolidate --> N
-    F -- safety net --> O
-    F -- execution split --> P
-    F -- execution consolidate --> Q
-    F -- review --> R
-    F -- verify --> S
+    F --> L
+    F --> K
+    F --> O
+    F --> P
+    F --> Q
+    F --> R
+    F --> S
 ```
-
-## How To Read The Diagram
-
-- Fresh non-trivial work always stops at the alignment checkpoint before implementation.
-- `cf-start` ensures architecture context is current before fresh assessment or resume; when it is not, it routes through `cf-architecture-map` first.
-- `cf-architecture-map` can also be used standalone and stop cleanly after updating `.cflow/architecture.md`.
-- A short approval can continue directly from the checkpoint.
-- Any non-trivial steering after the checkpoint must go through `cf-internal-brainstorming` first.
-- Repository-level assessment framing may stay inside `cf-start` or use `cf-internal-assessment` when a dedicated pass is needed.
-- Lightweight work uses the local fast lane when one cohesive local unit is already clear enough to continue.
-- Lightweight work enters `cf-internal-work-unit-planning` when sequencing, dependencies, cross-boundary scope, or resumable multi-step state matters.
-- Hard-path work must define target shape and migration units before code edits.
-- Resume is not its own phase; `cf-start` re-enters the correct phase using the brief, the current architecture map, and repository state.
 
 ## Phase Index
 
-| Stage | Skills | What happens | May edit code |
+| Stage | Runtime owner | What happens | May edit code |
 | --- | --- | --- | --- |
-| Architecture mapping and bootstrap | `cf-architecture-map` | Creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and returns without planning work units. | No |
-| Local cognitive complexity | `cf-cognitive` | Finds or refactors up to three source files sequentially to reduce cognitive complexity without bootstrapping Cflow artifacts. | Yes |
-| Local file-level split | `cf-file-split` | Evaluates or executes one local behavior-preserving split from a source file into nearby owned files without bootstrapping Cflow artifacts. | Yes |
-| Workflow entry and resume | `cf-start` | Uses current artifacts, ensures architecture context is current, and decides whether this is fresh assessment, resume, review, or verify. | Indirectly, only by routing into execution later |
-| Repository assessment | `cf-start`, `cf-internal-assessment` | Checks whether intervention is justified, records candidate intervention areas, and frames plausible direction using the current architecture map. | No |
-| Alignment | `cf-start`, `cf-internal-brainstorming` | Stops after fresh assessment, then resolves user steering before execution continues. | No |
-| Work-unit planning | `cf-internal-work-unit-planning` | Orders credible cohesive work units, records dependencies, and chooses the recommended next unit without invoking hard-path structural planning. | No |
-| Local mapping | `cf-internal-concentration-map`, `cf-internal-fragmentation-map` | Maps the active seam and clarifies whether the next bounded unit should split or consolidate. | No |
-| Hard-path planning | `cf-internal-target-shape`, `cf-internal-migration-unit-planning` | Defines a repository-fitting target direction and breaks it into bounded migration units that prove that direction incrementally. | No |
-| Safety lock | `cf-internal-safety-net` | Chooses the smallest credible behavior lock before structural work. | No |
-| Structural execution | `cf-internal-boundary-apply`, `cf-internal-consolidate-seam` | Applies exactly one bounded structural unit, preserving behavior. | Yes |
-| Local cleanup | `cf-internal-local-simplify` | Improves naming and local readability after a structural step without reopening architecture. | Yes |
-| Judgment and evidence | `cf-internal-review`, `cf-internal-verify`, `cf-internal-feedback-intake` | Reviews structural quality, gathers factual verification, and turns feedback into a verified next action. | No |
+| Architecture mapping and bootstrap | `cf-architecture-map` | Creates or refreshes `.cflow/architecture.md`, bootstraps `.cflow/`, and updates `.gitignore` for `.cflow/`. | No |
+| Local cognitive complexity | `cf-cognitive` | Finds or refactors up to three source files sequentially without bootstrapping Cflow artifacts. | Yes |
+| Local file-level split | `cf-file-split` | Evaluates or executes one behavior-preserving file-level split without bootstrapping Cflow artifacts. | Yes |
+| Workflow entry and resume | `cf-start` + `routing.md` | Uses current artifacts, ensures architecture context, and chooses fresh assessment, resume, review, or verify. | Indirectly |
+| Repository assessment and alignment | `cf-start` + `assessment.md` | Checks whether intervention is justified, frames pressure, and stops at alignment for non-trivial fresh work. | No |
+| Work-unit and hard-path planning | `cf-start` + `planning.md` | Orders units, defines hard target shape, or breaks hard path into migration units. | No |
+| Local mapping | `cf-start` + `mapping.md` | Maps split or consolidation direction for the active seam. | No |
+| Safety lock and execution | `cf-start` + `execution.md` | Chooses behavior lock, applies one bounded split or consolidation step, and optionally simplifies local code. | Yes |
+| Judgment and evidence | `cf-start` + `closure.md` | Reviews structural quality, verifies with factual checks, and handles feedback. | No |
 
 ## Typical Sequences
 
-### Standalone Architecture Map
+Standalone architecture map:
 
 `cf-architecture-map` -> update `.cflow/architecture.md` -> stop or continue with `cf-start`
 
-### Local Cognitive Complexity
+Local cognitive complexity:
 
-`cf-cognitive` -> use explicit files or discover up to three justified candidates -> refactor sequentially -> run smallest relevant checks after each file -> stop by file three
+`cf-cognitive` -> use explicit files or discover up to three candidates -> refactor sequentially -> run checks -> stop by file three
 
-### Local File Split
+Local file split:
 
-`cf-file-split` -> evaluate candidates or execute one scoped split -> run smallest relevant checks when code changes -> stop
+`cf-file-split` -> evaluate candidates or execute one scoped split -> run checks when code changes -> stop
 
-### Soft Split
+Soft split:
 
-`cf-start` -> alignment checkpoint -> optional `cf-internal-work-unit-planning` when sequencing is needed -> `cf-internal-concentration-map` -> `cf-internal-safety-net` -> `cf-internal-boundary-apply` -> optional `cf-internal-local-simplify` -> `cf-internal-review` -> `cf-internal-verify`
+`cf-start` -> alignment checkpoint -> optional planning -> mapping -> safety net -> split execution -> optional local simplify -> review -> verify
 
-### Soft Consolidate
+Soft consolidate:
 
-`cf-start` -> alignment checkpoint -> optional `cf-internal-work-unit-planning` when sequencing is needed -> `cf-internal-fragmentation-map` -> `cf-internal-safety-net` -> `cf-internal-consolidate-seam` -> optional `cf-internal-local-simplify` -> `cf-internal-review` -> `cf-internal-verify`
+`cf-start` -> alignment checkpoint -> optional planning -> mapping -> safety net -> consolidation execution -> optional local simplify -> review -> verify
 
-### Hard Restructure
+Hard restructure:
 
-`cf-start` -> alignment checkpoint -> `cf-internal-target-shape` -> `cf-internal-migration-unit-planning` -> `cf-internal-safety-net` -> one bounded execution unit -> `cf-internal-review` -> `cf-internal-verify`
+`cf-start` -> alignment checkpoint -> target shape -> migration planning -> safety net -> one bounded execution unit -> review -> verify
 
-### Resume
+Resume:
 
-`cf-start` -> ensure current `.cflow/architecture.md` -> re-enter local fast lane, work-unit planning, mapping, safety-net, execution, review, or verify based on `.cflow/refactor-brief.md` and current repository state
+`cf-start` -> ensure current `.cflow/architecture.md` -> re-enter the correct phase based on `.cflow/refactor-brief.md` and repository state
 
 ## Artifacts Through The Flow
 
-- Installer output lives in the target skill directory: `.agents/skills/` for local install, or `$CODEX_HOME/skills` / `~/.codex/skills` for global install.
+- Installer output lives in `.agents/skills/` for local install, or `$CODEX_HOME/skills` / `~/.codex/skills` for global install.
 - Shared support references live under `_shared/`; they are linked explicitly by consuming skills and are not standalone skills.
 - Runtime state lives in the target repository under `.cflow/`.
-- The canonical runtime artifacts are:
-  - `.cflow/architecture.md`
-  - `.cflow/refactor-brief.md`
-- `cf-architecture-map` owns bootstrap of `.cflow/`, updates `.gitignore` when needed, and creates or refreshes `.cflow/architecture.md`.
-- `cf-start` owns workflow entry plus creation or refresh of `.cflow/refactor-brief.md` when needed.
-- Execution, review, and verification skills keep the brief current as the handoff record between invocations.
+- The canonical runtime artifacts are `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
+- `cf-architecture-map` owns `.cflow/` bootstrap, `.gitignore` updates, and `.cflow/architecture.md`.
+- `cf-start` owns workflow entry plus `.cflow/refactor-brief.md`.
+- Execution, review, and verification phases keep the brief current as the handoff record between invocations.

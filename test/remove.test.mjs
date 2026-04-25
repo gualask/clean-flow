@@ -21,7 +21,7 @@ test("remove deletes only Cflow-owned skill and support directories", async () =
 
   const ownedShared = await writeSupportDirectory(destinationRoot);
   const ownedStart = await writeSkill(destinationRoot, "cf-start");
-  const ownedReview = await writeSkill(destinationRoot, "cf-internal-review");
+  const ownedCognitive = await writeSkill(destinationRoot, "cf-cognitive");
   await writeSkill(destinationRoot, "foreign-skill");
 
   await writeMarker(ownedShared, {
@@ -33,9 +33,9 @@ test("remove deletes only Cflow-owned skill and support directories", async () =
     sourceSkill: "cf-start",
     fingerprint: await computeSkillFingerprint(ownedStart),
   });
-  await writeMarker(ownedReview, {
-    sourceSkill: "cf-internal-review",
-    fingerprint: await computeSkillFingerprint(ownedReview),
+  await writeMarker(ownedCognitive, {
+    sourceSkill: "cf-cognitive",
+    fingerprint: await computeSkillFingerprint(ownedCognitive),
   });
 
   const result = await removeSkills({ destinationRoot });

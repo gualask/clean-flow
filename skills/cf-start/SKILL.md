@@ -1,14 +1,13 @@
 ---
 name: cf-start
-description: Main public workflow entrypoint for Cflow. Use to start or resume cleanup and refactor work, bootstrap `.cflow/refactor-brief.md`, evaluate concentration and fragmentation pressure, and stop at an alignment checkpoint before non-trivial execution.
+description: Main public workflow entrypoint for Cflow. Use to start, assess, align, resume, plan, execute, review, or verify behavior-preserving cleanup and refactor work through `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
 ---
 
-This is the main public workflow entrypoint for the pack.
-`cf-architecture-map` is also a supported public entrypoint, but only for standalone repository mapping.
-Do not tell the user to invoke internal skills directly.
-Internal workflow skills are still valid workflow steps when the repository state already fits them.
-Do not behave like a router that only suggests another skill.
-When the next phase is already clear from repository state and Cflow artifacts, advance into it yourself instead of only suggesting it.
+This is the main public workflow entrypoint for the pack and the controller for the Cflow workflow.
+It runs the internal phases itself by loading the relevant references in `references/`.
+Do not tell the user to invoke phase references directly.
+Do not behave like a router that only suggests another step.
+When the next phase is clear from repository state and Cflow artifacts, advance into it yourself.
 
 ## Goal
 
@@ -17,8 +16,51 @@ Handle fresh assessment, artifact-backed resume, or review/verify re-entry throu
 For fresh work after assessment and alignment:
 
 - local fast lane may skip work-unit planning when the scope is explicit, local, low-risk, behavior-preserving, and already has one cohesive stop condition
-- lightweight cleanup or refactor must enter `cf-internal-work-unit-planning` before local mapping or execution when there are multiple credible candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work
-- hard-path restructuring must enter `cf-internal-target-shape` and then `cf-internal-migration-unit-planning` before implementation
+- lightweight cleanup or refactor must use the planning phase before local mapping or execution when there are multiple credible candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work
+- hard-path restructuring must define target shape and migration units before implementation
+
+## Entry routing
+
+Use this diagram as the runtime routing contract.
+
+```dot
+digraph cflow_entry {
+  "local cognitive cleanup?" -> "cf-cognitive" [label="yes"];
+  "file split only?" -> "cf-file-split" [label="yes"];
+  "standalone architecture map?" -> "cf-architecture-map" [label="yes"];
+  "cleanup/refactor workflow" -> "cf-start";
+
+  "cf-start" -> "architecture current?";
+  "architecture current?" -> "cf-architecture-map" [label="no"];
+  "architecture current?" -> "fresh or resume?" [label="yes"];
+  "fresh or resume?" -> "assessment" [label="fresh"];
+  "fresh or resume?" -> "resume from brief" [label="resume"];
+}
+```
+
+## Workflow lifecycle
+
+Use this diagram as the lifecycle contract after architecture context is current.
+
+```dot
+digraph cflow_lifecycle {
+  "assessment" -> "alignment checkpoint";
+  "alignment checkpoint" -> "planning" [label="multi-unit or ordering"];
+  "alignment checkpoint" -> "mapping" [label="one clear local unit"];
+  "alignment checkpoint" -> "target shape" [label="hard path"];
+  "target shape" -> "migration planning";
+  "planning" -> "mapping";
+  "migration planning" -> "safety net";
+  "mapping" -> "safety net";
+  "safety net" -> "execution";
+  "execution" -> "local simplify" [label="optional"];
+  "execution" -> "review";
+  "local simplify" -> "review";
+  "review" -> "verify";
+  "verify" -> "close or next unit";
+  "feedback" -> "alignment checkpoint";
+}
+```
 
 ## Hard rule
 
@@ -28,7 +70,7 @@ Do this even when you already have a recommendation.
 At the checkpoint:
 
 - if the user replies with simple confirmation only, continue with the proposed path
-- if the user gives a reply that may materially change the path, switch into brainstorming first
+- if the user gives a reply that may materially change the path, stay in the alignment phase first
 
 Simple confirmation means short approval with no new steering.
 A reply is non-trivial when it may materially change scope, exclusions, invariants, risk appetite, direction, or whether to continue.
@@ -55,12 +97,18 @@ Ensure you have read these references in this invocation when their trigger cond
 - Ensure you have read [references/routing.md](references/routing.md) before finalizing the proposed path for any non-trivial fresh assessment.
 - Ensure you have read [references/routing.md](references/routing.md) before resume routing whenever the next phase is not already obvious from an active current work unit.
 - Ensure you have read [references/artifacts.md](references/artifacts.md) before creating or refreshing `.cflow/refactor-brief.md`, or deciding which brief fields must be updated.
+- Ensure you have read [references/assessment.md](references/assessment.md) before fresh assessment, premise checks, or post-assessment alignment.
+- Ensure you have read [references/planning.md](references/planning.md) before sequencing multiple work units, defining hard-path target shape, or planning migration units.
+- Ensure you have read [references/mapping.md](references/mapping.md) before mapping concentration pressure, fragmentation pressure, split direction, or consolidation direction.
+- Ensure you have read [references/execution.md](references/execution.md) before choosing a safety lock, applying a split or consolidation step, or doing local post-structural simplification.
+- Ensure you have read [references/closure.md](references/closure.md) before review, verification, or feedback intake.
 
 Use `assets/refactor-brief.template.md` as the source template whenever brief bootstrap is required.
 
 ## Fresh assessment
 
 Use [references/routing.md](references/routing.md) for intent inference, fresh assessment details, and path selection.
+Use [references/assessment.md](references/assessment.md) for premise checks and alignment behavior.
 
 At a high level:
 

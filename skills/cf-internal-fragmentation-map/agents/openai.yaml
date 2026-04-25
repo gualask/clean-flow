@@ -1,6 +1,0 @@
-interface:
-  display_name: "Cflow:internal fragmentation map"
-  short_description: "Map fragmentation pressure and safe consolidation candidates"
-  default_prompt: "Use $cf-internal-fragmentation-map to map fragmentation pressure for the current seam."
-policy:
-  allow_implicit_invocation: true

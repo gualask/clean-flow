@@ -1,6 +1,0 @@
-interface:
-  display_name: "Cflow:internal consolidate seam"
-  short_description: "Apply one bounded consolidation-oriented structural step"
-  default_prompt: "Use $cf-internal-consolidate-seam to execute the selected consolidation step."
-policy:
-  allow_implicit_invocation: true

@@ -73,8 +73,8 @@ Before suggesting a skill change, collect as much of this packet as possible:
   - `cf-start`
   - `cf-architecture-map`
   - `cf-cognitive`
-  - internal skill reached from flow
-  - internal skill invoked directly
+  - `cf-file-split`
+  - `cf-start` phase reached from flow, such as assessment, planning, mapping, execution, closure
 - exact user prompt or the closest faithful paraphrase
 - whether `.cflow/architecture.md` existed
 - whether `.cflow/refactor-brief.md` existed

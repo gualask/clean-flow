@@ -71,6 +71,24 @@ test("cf-start ships bootstrap asset templates", async () => {
   );
 });
 
+test("cf-start ships workflow phase references", async () => {
+  for (const referenceName of [
+    "routing.md",
+    "artifacts.md",
+    "assessment.md",
+    "planning.md",
+    "mapping.md",
+    "execution.md",
+    "closure.md",
+  ]) {
+    assert.equal(
+      await pathExists(path.join(SKILLS_ROOT, "cf-start", "references", referenceName)),
+      true,
+      `cf-start is missing references/${referenceName}`,
+    );
+  }
+});
+
 test("shared support references are not packaged as public skills", async () => {
   const skills = await listSkillDirectories(SKILLS_ROOT);
   const skillNames = skills.map((skill) => skill.name);
@@ -101,44 +119,31 @@ test("shared support references are not packaged as public skills", async () => 
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
     "utf8",
   );
-  const localSimplifyBody = await readFile(
-    path.join(SKILLS_ROOT, "cf-internal-local-simplify", "SKILL.md"),
-    "utf8",
-  );
-  const boundaryBody = await readFile(
-    path.join(SKILLS_ROOT, "cf-internal-boundary-apply", "SKILL.md"),
-    "utf8",
-  );
   const fileSplitBody = await readFile(
     path.join(SKILLS_ROOT, "cf-file-split", "SKILL.md"),
     "utf8",
   );
-  const consolidateBody = await readFile(
-    path.join(SKILLS_ROOT, "cf-internal-consolidate-seam", "SKILL.md"),
+  const executionBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "execution.md"),
     "utf8",
   );
-  const verifyBody = await readFile(
-    path.join(SKILLS_ROOT, "cf-internal-verify", "SKILL.md"),
-    "utf8",
-  );
-  const reviewBody = await readFile(
-    path.join(SKILLS_ROOT, "cf-internal-review", "SKILL.md"),
+  const closureBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "closure.md"),
     "utf8",
   );
 
   assert.match(cognitiveBody, /\.\.\/_shared\/references\/local-refactor-rules\.md/);
-  assert.match(localSimplifyBody, /\.\.\/_shared\/references\/local-refactor-rules\.md/);
-  assert.match(localSimplifyBody, /\.\.\/_shared\/references\/local-readability-review\.md/);
   assert.match(fileSplitBody, /\.\.\/_shared\/references\/file-split-rules\.md/);
   assert.match(fileSplitBody, /\.\.\/_shared\/references\/reference-audit\.md/);
-  assert.match(boundaryBody, /\.\.\/_shared\/references\/file-split-rules\.md/);
-  assert.match(boundaryBody, /\.\.\/_shared\/references\/reference-audit\.md/);
-  assert.match(consolidateBody, /\.\.\/_shared\/references\/reference-audit\.md/);
-  assert.match(verifyBody, /\.\.\/_shared\/references\/reference-audit\.md/);
-  assert.match(reviewBody, /\.\.\/_shared\/references\/local-readability-review\.md/);
+  assert.match(executionBody, /\.\.\/\.\.\/_shared\/references\/file-split-rules\.md/);
+  assert.match(executionBody, /\.\.\/\.\.\/_shared\/references\/reference-audit\.md/);
+  assert.match(executionBody, /\.\.\/\.\.\/_shared\/references\/local-refactor-rules\.md/);
+  assert.match(executionBody, /\.\.\/\.\.\/_shared\/references\/local-readability-review\.md/);
+  assert.match(closureBody, /\.\.\/\.\.\/_shared\/references\/reference-audit\.md/);
+  assert.match(closureBody, /\.\.\/\.\.\/_shared\/references\/local-readability-review\.md/);
 });
 
-test("only public entrypoints omit the cf-internal prefix", async () => {
+test("only public entrypoints are packaged as skills", async () => {
   const skills = await listSkillDirectories(SKILLS_ROOT);
   const publicSkillNames = new Set([
     "cf-start",
@@ -148,11 +153,10 @@ test("only public entrypoints omit the cf-internal prefix", async () => {
   ]);
 
   for (const skill of skills) {
-    const isPublic = publicSkillNames.has(skill.name);
     assert.equal(
-      isPublic || skill.name.startsWith("cf-internal-"),
+      publicSkillNames.has(skill.name),
       true,
-      `${skill.name} should use the cf-internal- prefix unless it is a public entrypoint`,
+      `${skill.name} should be a public entrypoint`,
     );
   }
 });

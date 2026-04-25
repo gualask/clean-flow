@@ -1,6 +1,0 @@
-interface:
-  display_name: "Cflow:internal review"
-  short_description: "Judge whether one bounded refactor step reduced pressure without over-engineering"
-  default_prompt: "Use $cf-internal-review to judge whether the completed refactor reduced pressure."
-policy:
-  allow_implicit_invocation: true

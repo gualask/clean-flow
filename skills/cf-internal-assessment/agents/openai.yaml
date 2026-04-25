@@ -1,6 +1,0 @@
-interface:
-  display_name: "Cflow:internal assessment"
-  short_description: "Assess intervention need, candidate areas, and plausible modes"
-  default_prompt: "Use $cf-internal-assessment to assess whether structural intervention is justified."
-policy:
-  allow_implicit_invocation: true

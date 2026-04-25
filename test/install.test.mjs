@@ -23,7 +23,7 @@ test("install copies new skills and support directories with owned markers", asy
   await writeSupportDirectory(sourceRoot);
   await writeSupportDirectory(sourceRoot, "_draft");
   await writeSkill(sourceRoot, "cf-start");
-  await writeSkill(sourceRoot, "cf-internal-review");
+  await writeSkill(sourceRoot, "cf-cognitive");
 
   const result = await installSkills({ sourceRoot, destinationRoot });
 
@@ -34,7 +34,7 @@ test("install copies new skills and support directories with owned markers", asy
   assert.equal(result.applied, true);
   assert.deepEqual(await listDirectoryNames(destinationRoot), [
     "_shared",
-    "cf-internal-review",
+    "cf-cognitive",
     "cf-start",
   ]);
 
@@ -63,7 +63,7 @@ test("install updates owned skills, prunes removed owned skills, and keeps forei
   await writeSkill(sourceRoot, "cf-start", {
     "SKILL.md": `---\nname: "cf-start"\ndescription: "Updated"\n---\n\n# cf-start v2\n`,
   });
-  await writeSkill(sourceRoot, "cf-internal-review");
+  await writeSkill(sourceRoot, "cf-cognitive");
 
   const ownedShared = await writeSupportDirectory(destinationRoot, "_shared", {
     "references/example.md": "# Old shared reference\n",
@@ -98,7 +98,7 @@ test("install updates owned skills, prunes removed owned skills, and keeps forei
   assert.equal(result.conflicts.length, 0);
   assert.deepEqual(await listDirectoryNames(destinationRoot), [
     "_shared",
-    "cf-internal-review",
+    "cf-cognitive",
     "cf-start",
     "foreign-skill",
   ]);

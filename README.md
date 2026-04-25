@@ -11,22 +11,8 @@ Supported public entrypoints:
 - `cf-cognitive`
 - `cf-file-split`
 
-Internal workflow skills:
-
-- `cf-internal-assessment`
-- `cf-internal-brainstorming`
-- `cf-internal-concentration-map`
-- `cf-internal-fragmentation-map`
-- `cf-internal-work-unit-planning`
-- `cf-internal-target-shape`
-- `cf-internal-migration-unit-planning`
-- `cf-internal-safety-net`
-- `cf-internal-boundary-apply`
-- `cf-internal-consolidate-seam`
-- `cf-internal-local-simplify`
-- `cf-internal-review`
-- `cf-internal-verify`
-- `cf-internal-feedback-intake`
+`cf-start` is the workflow controller.
+Its internal phases live as runtime references under `skills/cf-start/references/` and are not installed as separate skill entrypoints.
 
 ## Install
 
@@ -93,8 +79,7 @@ It evaluates whether one source file has natural extraction boundaries, or execu
 
 When `cf-start` needs architecture context, it routes through `cf-architecture-map` internally before continuing.
 
-All remaining skills are internal workflow skills.
-They are not meant to be invoked directly by users.
+The remaining workflow phases are internal references loaded by `cf-start` when their trigger condition is met.
 
 For an end-to-end workflow view, see [docs/workflow-map.md](./docs/workflow-map.md).
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-04-25
+
+- Consolidated workflow execution into `cf-start` as the single Cflow workflow controller.
+- Replaced packaged `cf-internal-*` skill entrypoints with `cf-start/references/*` phase references.
+- Added DOT routing and lifecycle diagrams to `cf-start`.
+- Updated docs and tests for the four-public-skill package shape.
+
 ## 2026-04-24
 
 - Added `_shared` support references and installer support for Cflow-owned support directories.
