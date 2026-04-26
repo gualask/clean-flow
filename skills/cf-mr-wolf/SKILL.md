@@ -156,6 +156,7 @@ If the work is multi-file, ordered, risky, or resumable, ask whether to preserve
 When handing off, say that `cf-start` should read `.cflow/mr-wolf-notes.md` as discovery input; do not imply that `cf-mr-wolf` will write `.cflow/refactor-brief.md`.
 
 Use `cf-file-split` or `cf-cognitive` directly only when the user asks for one explicit local file-level action and no broader Cflow planning or resume state is needed.
+When the evidence points to an unclear multi-step path, ordering risk, state gap, or workflow flaw but not yet to a specific refactor, recommend `cf-trace`.
 
 ## Decision and Options
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-04-26
+
+- Added `cf-trace` as a public entrypoint for reconstructing one workflow path and auditing it for orchestration flaws.
+- Added `.cflow/trace.md` as the trace artifact shape for observed/inferred path steps, audit findings, lens coverage, evidence, unknowns, and recommended route.
+- Added the `cflow_trace_recon` Codex custom agent source under `skills/_codex_agents` using `gpt-5.4-mini` for read-only path reconstruction.
+- Updated public entrypoint docs, `cf-start` routing, maintainer notes, trial rules, and structural tests for `cf-trace`.
+
 ## 2026-04-25
 
 - Consolidated workflow execution into `cf-start` as the single Cflow workflow controller.

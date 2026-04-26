@@ -18,7 +18,7 @@ Cflow has two maintainer concerns:
 
 1. distribution
    - `cflow-skills install` copies public skill directories plus `_shared` support resources
-   - `cflow-skills install` copies Cflow-owned Codex custom agents from `.codex/agents`
+   - `cflow-skills install` copies Cflow-owned Codex custom agents from `skills/_codex_agents`
    - install does not bootstrap `.cflow/`
 2. public runtime flows
    - flow sequencing and review checks are maintained only in the per-public-skill flow references listed under [Source Of Truth](#source-of-truth)
@@ -46,6 +46,7 @@ Public skill entrypoints:
 - `cf-start`
 - `cf-mr-wolf`
 - `cf-architecture-map`
+- `cf-trace`
 - `cf-cognitive`
 - `cf-file-split`
 
@@ -78,6 +79,7 @@ Shared support references:
 Codex custom agents:
 
 - `skills/_codex_agents/cflow_architecture_recon.toml`
+- `skills/_codex_agents/cflow_trace_recon.toml`
 
 ## Golden Rules
 
@@ -88,7 +90,7 @@ Pack-wide golden rules live in [golden-rules.md](./golden-rules.md).
 - Public skill contracts live in `skills/*/SKILL.md`.
 - `cf-start` phase contracts live in `skills/cf-start/references/*.md`.
 - Shared runtime rules live in `skills/_shared/references/`.
-- Bootstrap templates live in `skills/cf-start/assets/`.
+- Bootstrap and artifact templates live in the owning public skill's `assets/` directory.
 - Codex custom agent sources live in `skills/_codex_agents/`.
 - Agent-specific install instructions live in `install/<agent>/`.
 - Pack-wide maintainer rules live in [golden-rules.md](./golden-rules.md).
@@ -100,6 +102,7 @@ Per-public-skill flow references:
 - `cf-start`: [start/doc-start.flow.md](./start/doc-start.flow.md), including internal phase contracts
 - `cf-mr-wolf`: [mr-wolf/doc-mr-wolf.flow.md](./mr-wolf/doc-mr-wolf.flow.md)
 - `cf-architecture-map`: [architecture-map/doc-architecture.map.flow.md](./architecture-map/doc-architecture.map.flow.md)
+- `cf-trace`: [trace/doc-trace.flow.md](./trace/doc-trace.flow.md)
 - `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
 - `cf-file-split`: [file-split/doc-file.split.flow.md](./file-split/doc-file.split.flow.md)
 
@@ -161,7 +164,7 @@ When changing the pack:
 - update the relevant `cf-start/references/*.md` phase contract
 - update the affected `docs/<public-skill>/doc-*.flow.md` when a public skill flow changes
 - update this document when maintainer rules change
-- if bootstrap artifact structure changes, update `skills/cf-start/assets/*.template.md`
+- if artifact structure changes, update the owning skill's `assets/*.template.md`
 - if install/remove behavior changes, update `src/` and filesystem tests
 - if Codex custom agent behavior changes, update `skills/_codex_agents/*.toml`, the consuming `SKILL.md`, the affected flow doc, and tests together
 - keep `README.md` focused on user-facing install and usage
@@ -184,6 +187,7 @@ Current automated coverage checks:
 - structural checks for packaged public skills
 - Codex implicit invocation policy for shipped public skills
 - presence of `cf-start` bootstrap assets and phase references
+- presence of `cf-trace` trace artifact template and read-only reconstruction agent
 - shared reference links from consuming skills and phase references
 - presence of per-public-skill flow docs
 

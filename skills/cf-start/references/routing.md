@@ -8,6 +8,7 @@ Ensure this reference has been read in the current invocation before finalizing 
 Use these modes:
 
 - `cf-mr-wolf-handoff`
+- `cf-trace-handoff`
 - `assessment-only`
 - `assessment-then-alignment`
 - `resume-existing-work`
@@ -17,6 +18,7 @@ Heuristics:
 
 - If there is no live brief or the task looks new, start with assessment.
 - If the request asks to clarify, shape, design, de-risk, or spec an unclear problem before implementation, route to `cf-mr-wolf`.
+- If the request asks only to reconstruct or audit a path, workflow, sequence, state transition, or orchestration flaw before deciding on fixes, route to `cf-trace`.
 - If Cflow cannot yet answer what problem the refactor solves, what success looks like, or what is explicitly out of scope from the repo and conversation, route to `cf-mr-wolf` before creating or updating Cflow artifacts.
 - If there is a live brief and the user says resume / continue / proceed, resume from the correct phase.
 - If the user explicitly asks only for review or verification, bootstrap or refresh prerequisites first and then route internally to that mode.
@@ -35,6 +37,7 @@ Rules:
 
 - Use `cf-architecture-map` whenever `.cflow/architecture.md` is missing, stale, or materially incomplete.
 - Use `cf-mr-wolf` whenever the upstream problem is still too ambiguous to justify repository-level intervention framing.
+- Use `cf-trace` whenever the current blocker is understanding whether one path, workflow, sequence, state transition, or orchestration contract is flawed.
 - Use the assessment phase when repository-level intervention framing is still needed after architecture context is current.
 - Use `artifacts.md` when non-trivial work needs durable handoff state.
 - Treat `soft-mixed` as a repository-level outcome, not as one executable step.

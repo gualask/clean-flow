@@ -73,6 +73,10 @@ test("cf-start ships bootstrap asset templates", async () => {
     await pathExists(path.join(SKILLS_ROOT, "cf-mr-wolf", "assets", "mr-wolf-notes.template.md")),
     true,
   );
+  assert.equal(
+    await pathExists(path.join(SKILLS_ROOT, "cf-trace", "assets", "trace.template.md")),
+    true,
+  );
 });
 
 test("architecture artifact template stays observational", async () => {
@@ -176,6 +180,74 @@ test("cf-architecture-map ships a low-cost read-only Codex custom agent", async 
   assert.match(body, /## Observed Invariants/);
   assert.match(body, /do not add refactor recommendations, future-work caveats, or planning notes/);
   assert.doesNotMatch(body, /Refactor Guidance/);
+  assert.match(body, /## Evidence/);
+  assert.match(body, /## Unknowns/);
+});
+
+test("cf-trace requires read-only clean-context reconstruction", async () => {
+  const body = await readFile(path.join(SKILLS_ROOT, "cf-trace", "SKILL.md"), "utf8");
+  const templateBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-trace", "assets", "trace.template.md"),
+    "utf8",
+  );
+  const flowBody = await readFile(
+    path.join(REPO_ROOT, "docs", "trace", "doc-trace.flow.md"),
+    "utf8",
+  );
+
+  assert.match(body, /use the `cflow_trace_recon` custom agent when available/);
+  assert.match(body, /use one equivalent clean-context reconnaissance subagent/);
+  assert.match(body, /Read `\.cflow\/architecture\.md` if it exists/);
+  assert.match(body, /route to `cf-architecture-map` before continuing/);
+  assert.match(body, /Start the custom agent with only the repository path and the user's trace request/);
+  assert.match(body, /Do not paste the custom agent's TOML instructions or full report format/);
+  assert.match(body, /Use `assets\/trace\.template\.md` as the review rubric/);
+  assert.match(body, /The subagent produces reconstruction only/);
+  assert.match(body, /Every reconstructed step must be marked as observed or inferred/);
+  assert.match(body, /sequence correctness/);
+  assert.match(body, /state and resume/);
+  assert.match(body, /instruction ambiguity/);
+  assert.match(body, /Recommend exactly one immediate route/);
+  assert.match(body, /do not create or refresh `\.cflow\/architecture\.md` or `\.cflow\/refactor-brief\.md`/);
+
+  assert.match(templateBody, /## Reconstruction/);
+  assert.match(templateBody, /status: observed \| inferred/);
+  assert.match(templateBody, /## Audit findings/);
+  assert.match(templateBody, /## Lens coverage/);
+  assert.match(templateBody, /## Recommended route/);
+  assert.match(templateBody, /cf-mr-wolf \| cf-architecture-map \| cf-start \| cf-cognitive \| cf-file-split \| direct fix \| none/);
+
+  assert.match(flowBody, /Custom agent source: `skills\/_codex_agents\/cflow_trace_recon\.toml`/);
+  assert.match(flowBody, /The custom agent must reconstruct the path only/);
+  assert.match(flowBody, /preflight reads only existing `\.cflow\/architecture\.md`/);
+  assert.match(flowBody, /routes to `cf-architecture-map` before continuing/);
+  assert.match(flowBody, /reads `\.cflow\/architecture\.md` first when present/);
+  assert.match(flowBody, /The controller must not duplicate the path scan/);
+  assert.match(flowBody, /`\.cflow\/trace\.md` must distinguish observed from inferred steps/);
+  assert.match(flowBody, /Every applicable audit lens must be covered/);
+});
+
+test("cf-trace ships a low-cost read-only Codex custom agent", async () => {
+  const body = await readFile(
+    path.join(SKILLS_ROOT, "_codex_agents", "cflow_trace_recon.toml"),
+    "utf8",
+  );
+
+  assert.match(body, /^name = "cflow_trace_recon"$/m);
+  assert.match(body, /^model = "gpt-5\.4-mini"$/m);
+  assert.match(body, /^model_reasoning_effort = "medium"$/m);
+  assert.match(body, /^sandbox_mode = "read-only"$/m);
+  assert.match(body, /Do not edit files, create \.cflow\/\*/);
+  assert.match(body, /Do not .*decide audit severity/);
+  assert.match(body, /Read \.cflow\/architecture\.md first when it exists/);
+  assert.match(body, /Do not treat \.cflow\/architecture\.md as proof that a path step exists/);
+  assert.match(body, /Every reconstructed step must be marked as observed or inferred/);
+  assert.match(body, /## Trace Scope/);
+  assert.match(body, /## Observed Sequence/);
+  assert.match(body, /## Inputs and Triggers/);
+  assert.match(body, /## State and Artifacts/);
+  assert.match(body, /## External Effects/);
+  assert.match(body, /## Failure and Resume Paths/);
   assert.match(body, /## Evidence/);
   assert.match(body, /## Unknowns/);
 });
@@ -316,6 +388,7 @@ test("only public entrypoints are packaged as skills", async () => {
     "cf-start",
     "cf-mr-wolf",
     "cf-architecture-map",
+    "cf-trace",
     "cf-cognitive",
     "cf-file-split",
   ]);
@@ -339,6 +412,7 @@ test("public skill flow docs exist", async () => {
       "doc-mr-wolf.flow.md",
     ),
     path.join(REPO_ROOT, "docs", "architecture-map", "doc-architecture.map.flow.md"),
+    path.join(REPO_ROOT, "docs", "trace", "doc-trace.flow.md"),
     path.join(REPO_ROOT, "docs", "cognitive", "doc-cognitive.flow.md"),
     path.join(REPO_ROOT, "docs", "file-split", "doc-file.split.flow.md"),
   ]) {
@@ -357,6 +431,24 @@ test("cf-start routes upstream problem ambiguity to cf-mr-wolf", async () => {
   assert.match(startBody, /problem, goal, scope, or success criteria/);
   assert.match(routingBody, /cf-mr-wolf-handoff/);
   assert.match(routingBody, /before creating or updating Cflow artifacts/);
+});
+
+test("cf-start routes path reconstruction and workflow audit to cf-trace", async () => {
+  const startBody = await readFile(path.join(SKILLS_ROOT, "cf-start", "SKILL.md"), "utf8");
+  const routingBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "routing.md"),
+    "utf8",
+  );
+  const flowBody = await readFile(
+    path.join(REPO_ROOT, "docs", "start", "doc-start.flow.md"),
+    "utf8",
+  );
+
+  assert.match(startBody, /path reconstruction or workflow audit/);
+  assert.match(startBody, /cf-trace/);
+  assert.match(routingBody, /cf-trace-handoff/);
+  assert.match(routingBody, /orchestration flaw/);
+  assert.match(flowBody, /routes to `cf-trace` before refactor assessment/);
 });
 
 test("cf-mr-wolf fully replaces the old clarification entrypoint", async () => {

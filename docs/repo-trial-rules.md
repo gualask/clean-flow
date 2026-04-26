@@ -73,6 +73,7 @@ Before suggesting a skill change, collect as much of this packet as possible:
   - `cf-start`
   - `cf-mr-wolf`
   - `cf-architecture-map`
+  - `cf-trace`
   - `cf-cognitive`
   - `cf-file-split`
   - `cf-start` phase reached from flow, such as assessment, planning, mapping, execution, closure

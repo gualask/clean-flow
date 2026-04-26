@@ -9,6 +9,7 @@ Supported public entrypoints:
 - `cf-start`
 - `cf-mr-wolf`
 - `cf-architecture-map`
+- `cf-trace`
 - `cf-cognitive`
 - `cf-file-split`
 
@@ -77,6 +78,11 @@ When `cf-start` cannot yet assess what problem a cleanup or refactor solves, it 
 For standalone repository mapping, use `cf-architecture-map`.
 `cf-architecture-map` is the public entrypoint that bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and creates or refreshes `.cflow/architecture.md`.
 It uses the packaged `cflow_architecture_recon` Codex custom agent for read-only repository reconnaissance when available.
+
+For path reconstruction and workflow flaw analysis, use `cf-trace`.
+`cf-trace` is the public entrypoint that creates or refreshes `.cflow/trace.md`, then audits the reconstructed path for sequence, state, ownership, boundary, failure, observability, testability, and instruction-ambiguity issues.
+It uses the packaged `cflow_trace_recon` Codex custom agent for read-only path reconstruction when available.
+It requires current `.cflow/architecture.md` context and routes through `cf-architecture-map` first when that map is missing or stale.
 
 For local cognitive complexity reduction, use `cf-cognitive`.
 It can use explicit files or discover up to three justified candidate files, then works sequentially without requiring `.cflow/` artifacts.

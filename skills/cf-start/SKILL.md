@@ -25,6 +25,7 @@ digraph cflow_entry {
   "local cognitive cleanup?" -> "cf-cognitive" [label="yes"];
   "file split only?" -> "cf-file-split" [label="yes"];
   "standalone architecture map?" -> "cf-architecture-map" [label="yes"];
+  "path reconstruction or workflow audit?" -> "cf-trace" [label="yes"];
   "cleanup/refactor workflow" -> "cf-start";
 
   "cf-start" -> "architecture current?";
@@ -116,6 +117,7 @@ Use [references/assessment.md](references/assessment.md) for premise checks and 
 
 Do not implement during fresh assessment.
 If the problem, goal, scope, or success criteria are not clear enough to assess as Cflow work, route to `cf-mr-wolf` before creating or updating Cflow artifacts.
+If the user asks only to reconstruct or audit a path, route to `cf-trace` before refactor assessment.
 Always end non-trivial fresh assessment at the alignment checkpoint with exactly one focused question.
 
 ## Resume
