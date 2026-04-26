@@ -531,9 +531,9 @@ test("cf-mr-wolf uses tools and deterministic temp scripts for evidence gatherin
   assert.match(body, /Problem-framing pass/);
   assert.match(body, /Bounded analysis pass/);
   assert.match(body, /Scoping questions are part of problem framing/);
-  assert.match(body, /ask exactly one focused scoping question before broad inventory/);
+  assert.match(body, /Ask exactly one focused scoping question before broad inventory/);
   assert.match(body, /candidate areas, priority, success criteria, constraints, or validation/);
-  assert.match(body, /Do not ask a scoping question when the user already named a bounded target/);
+  assert.match(body, /Skip it when the target is already bounded/);
   assert.match(body, /Use specialist skills only after the problem frame or candidate area is bounded/);
   assert.match(body, /currently available skill names and descriptions/);
   assert.match(body, /Record only specialist skills actually used/);
@@ -551,10 +551,10 @@ test("cf-mr-wolf uses tools and deterministic temp scripts for evidence gatherin
   assert.match(body, /under `\/tmp`/);
   assert.match(body, /For repo-wide, many-input, or multi-candidate analysis, use deterministic commands or a temporary script/);
   assert.match(body, /When MCP tools are available and the question depends on code structure/);
-  assert.match(body, /parsing, counting, indexing, diffing, grouping/);
-  assert.match(body, /record why it was not applicable/);
+  assert.match(body, /parse, count, index, diff, group/);
+  assert.match(body, /record why/);
   assert.match(body, /notes for used evidence channels, important skipped non-specialist high-value channels, and only specialist skills actually used/);
-  assert.match(body, /Do not use temporary scripts to make product, architecture, or prioritization judgments/);
+  assert.match(body, /do not make product, architecture, or prioritization judgments/);
 
   assert.match(flowBody, /MCP resources/);
   assert.match(flowBody, /problem-framing pass/);
