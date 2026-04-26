@@ -2,11 +2,11 @@
 name: cf-mr-wolf
 description: Solve unclear problems before execution. Use when the user wants to clarify, frame, de-risk, design, or turn an ambiguous task, feature, refactor, architecture change, product idea, or implementation request into a minimal actionable handoff. If invoked without a concrete problem, first ask what problem must be solved. Do not use for trivial mechanical edits, direct bug fixes with clear requirements, or when the user explicitly asks to skip planning.
 ---
-Use this skill as a focused fixer before implementation: identify the real problem, isolate noise, collect only the context needed, decide whether the context is sufficient, and produce a short handoff.
+Operate as a focused fixer before implementation: identify the real problem, isolate noise, collect only the context needed, decide whether the context is sufficient, and produce a short handoff.
 Do not roleplay, quote, or imitate a fictional character. Keep the tone direct, calm, and operational.
 
 When `cf-start` routes here, treat this as upstream clarification before Cflow assessment or execution.
-Do not create or update `.cflow/architecture.md` or `.cflow/refactor-brief.md` from this skill.
+Do not create or update `.cflow/architecture.md` or `.cflow/refactor-brief.md` here.
 If Cflow persistence is needed, return a handoff that `cf-start` can use.
 
 ## Notes File
@@ -38,105 +38,77 @@ Do not add handoff, next skill, or workflow-decision sections to the notes file.
 
 If the invocation includes a concrete problem or task, start with problem intake and targeted context gathering.
 
-If the invocation is empty, generic, or only says to use this skill, do not inspect the repository yet.
+If the invocation is empty, generic, or only invokes the skill by name, do not inspect the repository yet.
 Ask exactly one question: what problem should be solved?
 
 If the user explicitly asks to skip planning, respect that, but first call out the biggest missing requirement or risk in one short note and stop.
-Do not use this skill to implement the task.
+Do not implement the task during clarification.
 
-## Core Rule
+## Operating Loop
 
 Do not implement while the problem is still ambiguous.
+Run a small loop until the problem is clear enough to hand off:
 
-Before coding, editing files, scaffolding, or making architectural changes, clarify enough to know:
+1. Problem-framing pass: state the current frame in one or two sentences, including the problem, success criteria, constraints, explicit non-goals, and smallest useful context slice.
+2. Context check: inspect only that slice, separate signal from noise, and expand only when more context can change scope, risk, validation, or the handoff.
+3. Bounded analysis pass: once the frame or candidate area is clear, use evidence channels that can test the frame and improve the handoff.
+4. Sufficiency check: assign an investigation confidence percentage, record the basis in `.cflow/mr-wolf-notes.md`, and ask one focused question only when the next step depends on it.
 
-- what problem is being solved
-- who or what benefits from solving it
-- what success looks like
-- what constraints matter
-- what is explicitly out of scope
+Scoping questions are part of problem framing.
+When the user goal is clear but the possible work area is large, ask exactly one focused scoping question before broad inventory if the answer can reduce candidate areas, priority, success criteria, constraints, or validation.
+Do not ask a scoping question when the user already named a bounded target, when a cheap narrow pass can identify the slice, or when the user explicitly asks to proceed despite the broad scope.
 
-These are sufficiency criteria, not a questionnaire.
-Ask only for information that materially changes the solution.
+Treat context as noise when it does not affect problem definition, success criteria, scope boundaries, constraints, risk, validation, or implementation handoff.
+Do not do whole-repository reconnaissance unless the problem is explicitly repo-wide or the first narrow pass shows the scope is broader than expected.
 
-## Context Loop
+For code repositories, derive the context slice from the problem:
 
-Run a small iterative loop until the problem is clear enough to hand off.
-
-1. State the current problem frame in one or two sentences.
-2. Choose the smallest context slice that can confirm or reject that frame.
-3. Inspect only that slice.
-4. Separate signal from noise.
-5. Recap whether the context is sufficient.
-6. Ask one focused question only if the next step depends on the answer.
-
-For code repositories, derive the context slice from the problem.
-Examples:
-
-- documentation restructure: docs, README, install guides, docs tests, and doc references; avoid source implementation files unless docs behavior depends on them
+- documentation restructure: docs, README, install guides, docs tests, and doc references
 - public API change: exported types, entrypoints, tests, and caller examples
 - refactor request: touched subsystem, call sites, tests, and architecture artifacts if relevant
 - bug with clear area: failing path, relevant tests, logs, and local implementation only
 
-Do not do whole-repository reconnaissance unless the problem is explicitly repo-wide or the first narrow pass shows the scope is broader than expected.
+## Evidence Channels
 
-## Investigation Confidence
+Use available tools for evidence instead of doing mechanical analysis in the model.
+Before declaring context sufficient, choose the evidence channels that matter for the bounded analysis pass and record them in `.cflow/mr-wolf-notes.md`.
+If an important non-specialist high-value channel is skipped, record why it was not applicable.
 
-Treat sufficiency as an evidence gate, not a feeling.
-Before saying the context is `sufficient`, assign an investigation confidence percentage and record the basis in `.cflow/mr-wolf-notes.md`.
-The percentage estimates confidence that the relevant problem frame and candidate set are good enough for the next decision, not confidence that an implementation will succeed.
+High-value channels are:
 
-For repo-wide, multi-file, or multi-candidate investigations, do not stop after one broad scan.
-Keep confidence below 80% unless the evidence includes:
+- MCP resources or tools for external systems, repository metadata, tickets, docs, or structured sources
+- system commands such as `rg`, test runners, package scripts, language tools, and format or schema checks in read-only or diagnostic mode
+- temporary `/tmp` scripts for mechanical work across many inputs
+- specialist skills that clearly match the bounded problem, such as UI review for a UI critique or API design review for an API shape problem
+
+Use specialist skills only after the problem frame or candidate area is bounded.
+Before declaring context sufficient in the bounded analysis pass, check the currently available skill names and descriptions.
+When a specialist skill clearly matches, apply its `SKILL.md` and directly linked references as a review lens over the selected context slice or a narrower one.
+Record only specialist skills actually used, with the reason they were used.
+Specialist evidence informs the handoff; it must not implement changes, expand the investigation into a broad audit, or replace direct repository evidence.
+
+When MCP tools are available and the question depends on code structure, symbols, semantic relationships, repository metadata, tickets, or docs, use a relevant MCP tool unless a narrower non-MCP source is clearly enough; record the reason when MCP is skipped.
+
+For repo-wide, many-input, or multi-candidate analysis, use deterministic commands or a temporary script unless a single standard command already produces the needed fact.
+Use temporary scripts only for mechanical work such as parsing, counting, indexing, diffing, grouping, normalizing, extracting metadata, or checking consistency.
+Choose Python or Node.js based on the task and available project conventions.
+Write temporary scripts under `/tmp`, keep them disposable, and have them print compact facts or summaries.
+Do not use temporary scripts to make product, architecture, or prioritization judgments.
+
+## Sufficiency Gate
+
+Use `sufficient` only at 80% confidence or higher.
+The percentage estimates confidence that the problem frame and candidate set are good enough for the next decision, not confidence that an implementation will succeed.
+
+For repo-wide, multi-file, or multi-candidate investigations, keep confidence below 80% unless the evidence includes:
 
 - broad inventory from commands or a temporary script to find likely search space and obvious noise
 - narrowing pass with focused verification of the strongest candidates or representative clusters
 - false-positive checks for important exclusions that looked relevant at first
-- a recorded decision for each high-value evidence channel: used, not available, or not relevant
+- notes for used evidence channels, important skipped non-specialist high-value channels, and only specialist skills actually used
 
-Use `sufficient` only at 80% confidence or higher.
-Below 80%, continue the context loop or ask one focused question.
+Below 80%, continue the operating loop or ask one focused question.
 If a user asks to proceed below 80%, state the remaining uncertainty in the handoff.
-
-## Noise Filter
-
-Treat context as noise when it does not affect:
-
-- the problem definition
-- the success criteria
-- scope boundaries
-- constraints or compatibility
-- risk and validation
-- implementation handoff
-
-Do not read more files just to appear thorough.
-If context seems relevant but expensive to load, say why it matters before expanding the slice.
-
-## Evidence Gathering
-
-Use the available tools to gather evidence instead of doing mechanical analysis in the model.
-
-Before declaring context sufficient, choose the evidence channels that matter for the problem and record the choice in `.cflow/mr-wolf-notes.md`.
-Use relevant high-value channels; if you skip one, record why that high-value channel was not applicable.
-
-High-value channels include:
-
-- MCP resources or tools for external systems, repository metadata, tickets, docs, or structured sources
-- other installed skills when one clearly owns a bounded subtask or follow-up path
-- system commands such as `rg`, test runners, package scripts, language tools, and format or schema checkers in read-only or diagnostic mode
-- temporary scripts in the system temp directory for deterministic analysis across many inputs
-
-When MCP tools are available and the question depends on code structure, symbols, semantic relationships, repository metadata, tickets, or docs, use a relevant MCP tool unless a narrower non-MCP source is clearly enough; record the reason when MCP is skipped.
-
-For repo-wide or many-input analysis, use deterministic commands or a temporary script unless a single standard command already produces the needed fact.
-Use a temporary script when the task requires comparing, scoring, grouping, parsing, normalizing, or extracting facts from many files.
-
-Use temporary scripts only for mechanical work such as parsing, counting, indexing, diffing, grouping, normalizing, extracting metadata, or checking consistency.
-Choose Python or Node.js based on the task and available project conventions.
-Write these scripts under `/tmp`, keep them disposable, and have them print compact facts or summaries.
-
-Do not use temporary scripts to make product, architecture, or prioritization judgments.
-Scripts should produce evidence; the skill still owns interpretation, trade-offs, and the final handoff.
 
 ## Cflow Handoff Boundary
 
@@ -153,7 +125,7 @@ Stop at an evidence-backed handoff:
 
 If the work is multi-file, ordered, risky, or resumable, ask whether to preserve the discovery in `.cflow/refactor-brief.md` and continue through `cf-start`.
 `cf-start` owns that brief, work-unit planning, safety net, execution, review, verification, and resume.
-When handing off, say that `cf-start` should read `.cflow/mr-wolf-notes.md` as discovery input; do not imply that `cf-mr-wolf` will write `.cflow/refactor-brief.md`.
+When handing off, say that `cf-start` should read `.cflow/mr-wolf-notes.md` as discovery input; do not imply that `.cflow/refactor-brief.md` will be written here.
 
 Use `cf-file-split` or `cf-cognitive` directly only when the user asks for one explicit local file-level action and no broader Cflow planning or resume state is needed.
 When the evidence points to an unclear multi-step path, ordering risk, state gap, or workflow flaw but not yet to a specific refactor, recommend `cf-trace`.
@@ -172,6 +144,8 @@ If there are multiple credible directions, present 2-3 options:
 
 Do not fake balance.
 If one option is clearly better, say so.
+
+For a completed handoff, make `Next step` a short recommendation with a reason, and name a specialized available skill when it clearly owns the best follow-up.
 
 ## Output Format
 
@@ -203,7 +177,7 @@ For a completed handoff, return only:
 - **Non-goals**: what is out of scope.
 - **Confidence**: percentage plus remaining uncertainty, if any.
 - **Notes**: `.cflow/mr-wolf-notes.md` updated, reset, or not used because no problem was provided.
-- **Next step**: immediate implementation step, or `cf-start` handoff when the work is Cflow cleanup/refactor.
+- **Next step**: short recommendation plus why, naming a specialized available skill when it is the best follow-up.
 
 ## Anti-patterns
 

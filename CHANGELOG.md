@@ -6,6 +6,9 @@
 - Added `.cflow/trace.md` as the trace artifact shape for observed/inferred path steps, audit findings, lens coverage, evidence, unknowns, and recommended route.
 - Added the `cflow_trace_recon` Codex custom agent source under `skills/_codex_agents` using `gpt-5.4-mini` for read-only path reconstruction.
 - Updated public entrypoint docs, `cf-start` routing, maintainer notes, trial rules, and structural tests for `cf-trace`.
+- Tightened `cf-mr-wolf` evidence gathering so it must consider available specialist skills before declaring context sufficient.
+- Added a `cf-mr-wolf` scoping-question gate for clear goals whose possible work area is still too broad.
+- Loosened `cf-mr-wolf` next-step output so it can recommend specialized available skills when they clearly own the follow-up.
 
 ## 2026-04-25
 

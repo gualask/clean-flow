@@ -508,6 +508,7 @@ test("cf-mr-wolf maintains compact investigation notes under .cflow", async () =
   assert.match(templateBody, /confidence:/);
   assert.match(templateBody, /confidence basis/);
   assert.match(templateBody, /evidence channels/);
+  assert.match(templateBody, /specialist skills used/);
   assert.match(templateBody, /evidence tools used/);
   assert.match(templateBody, /confirmed candidates/);
   assert.match(templateBody, /candidates to verify/);
@@ -524,20 +525,51 @@ test("cf-mr-wolf uses tools and deterministic temp scripts for evidence gatherin
   );
 
   assert.match(body, /MCP resources or tools/);
-  assert.match(body, /other installed skills/);
+  assert.match(body, /Operating Loop/);
+  assert.match(body, /Evidence Channels/);
+  assert.match(body, /Sufficiency Gate/);
+  assert.match(body, /Problem-framing pass/);
+  assert.match(body, /Bounded analysis pass/);
+  assert.match(body, /Scoping questions are part of problem framing/);
+  assert.match(body, /ask exactly one focused scoping question before broad inventory/);
+  assert.match(body, /candidate areas, priority, success criteria, constraints, or validation/);
+  assert.match(body, /Do not ask a scoping question when the user already named a bounded target/);
+  assert.match(body, /Use specialist skills only after the problem frame or candidate area is bounded/);
+  assert.match(body, /currently available skill names and descriptions/);
+  assert.match(body, /Record only specialist skills actually used/);
+  assert.match(body, /Specialist evidence informs the handoff/);
+  assert.match(body, /make `Next step` a short recommendation with a reason/);
+  assert.match(body, /naming a specialized available skill when it is the best follow-up/);
+  assert.doesNotMatch(body, /direct implementation only when/);
+  assert.doesNotMatch(body, /other installed skills when one clearly owns/);
+  assert.doesNotMatch(body, /This skill/);
+  assert.doesNotMatch(body, /not available`/);
+  assert.doesNotMatch(body, /not relevant`/);
+  assert.doesNotMatch(body, /sub-agent/);
   assert.match(body, /system commands/);
   assert.match(body, /temporary scripts/);
   assert.match(body, /under `\/tmp`/);
-  assert.match(body, /For repo-wide or many-input analysis, use deterministic commands or a temporary script/);
+  assert.match(body, /For repo-wide, many-input, or multi-candidate analysis, use deterministic commands or a temporary script/);
   assert.match(body, /When MCP tools are available and the question depends on code structure/);
-  assert.match(body, /Use a temporary script when the task requires comparing, scoring, grouping/);
-  assert.match(body, /record why that high-value channel was not applicable/);
-  assert.match(body, /Scripts should produce evidence/);
-  assert.match(body, /skill still owns interpretation/);
+  assert.match(body, /parsing, counting, indexing, diffing, grouping/);
+  assert.match(body, /record why it was not applicable/);
+  assert.match(body, /notes for used evidence channels, important skipped non-specialist high-value channels, and only specialist skills actually used/);
+  assert.match(body, /Do not use temporary scripts to make product, architecture, or prioritization judgments/);
 
   assert.match(flowBody, /MCP resources/);
+  assert.match(flowBody, /problem-framing pass/);
+  assert.match(flowBody, /ask one focused scoping question before broad inventory/);
+  assert.match(flowBody, /clear goal with broad possible scope/);
+  assert.match(flowBody, /unnecessarily large work area/);
+  assert.match(flowBody, /bounded analysis pass/);
+  assert.match(flowBody, /record only the specialist skills actually used plus why/);
+  assert.match(flowBody, /considers clearly matching specialist skills only after the problem frame or candidate area is bounded/);
+  assert.match(flowBody, /short recommended next step with a reason/);
+  assert.match(flowBody, /completed handoff/);
+  assert.match(flowBody, /recommends specialized available skills as next steps/);
+  assert.match(flowBody, /used-channel notes, or required skipped-channel reasons/);
+  assert.doesNotMatch(flowBody, /sub-agent/);
   assert.match(flowBody, /deterministic `\/tmp` scripts/);
-  assert.match(flowBody, /record why skipped channels are not applicable/);
   assert.match(flowBody, /mechanical analysis/);
 });
 
@@ -548,20 +580,21 @@ test("cf-mr-wolf requires confidence-gated narrowing before sufficiency", async 
     "utf8",
   );
 
-  assert.match(body, /Investigation Confidence/);
+  assert.match(body, /Sufficiency Gate/);
   assert.match(body, /assign an investigation confidence percentage/);
   assert.match(body, /broad inventory/);
   assert.match(body, /narrowing pass/);
   assert.match(body, /false-positive check/);
-  assert.match(body, /Keep confidence below 80% unless the evidence includes/);
-  assert.match(body, /recorded decision for each high-value evidence channel/);
+  assert.match(body, /keep confidence below 80% unless the evidence includes/);
+  assert.match(body, /notes for used evidence channels, important skipped non-specialist high-value channels, and only specialist skills actually used/);
   assert.match(body, /Use `sufficient` only at 80% confidence or higher/);
-  assert.match(body, /Below 80%, continue the context loop or ask one focused question/);
+  assert.match(body, /Below 80%, continue the operating loop or ask one focused question/);
 
   assert.match(flowBody, /broad inventory, narrowing pass, and false-positive check/);
   assert.match(flowBody, /investigation confidence percentage/);
   assert.match(flowBody, /at least 80% confidence/);
   assert.match(flowBody, /repo-wide or multi-candidate work stays below 80%/);
+  assert.match(flowBody, /used-channel notes, or required skipped-channel reasons/);
 });
 
 test("cf-mr-wolf hands cleanup discovery to cf-start before execution skills", async () => {
