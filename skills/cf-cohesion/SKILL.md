@@ -16,8 +16,8 @@ Do not bootstrap or require `.cflow/` artifacts.
 Choose exactly one mode:
 
 - **Discovery**: no explicit feature, workflow, or file area was provided. Read [references/discovery.md](references/discovery.md). Do not edit.
-- **Targeted evaluation**: an explicit feature, workflow, file cluster, or local area was provided, but the user did not explicitly ask to move files. Read [references/targeted-evaluation.md](references/targeted-evaluation.md). Do not edit.
-- **Execution**: the user explicitly asked to regroup, move, reorganize, or apply the cohesion fix for a bounded target. Read [references/execution.md](references/execution.md).
+- **Targeted evaluation**: an explicit feature, workflow, file cluster, or local area was provided, but the current request does not explicitly ask to move files. Read [references/targeted-evaluation.md](references/targeted-evaluation.md). Do not edit.
+- **Execution**: the current request explicitly asks to regroup, move, reorganize, or apply the cohesion fix for a bounded target. Read [references/execution.md](references/execution.md).
 
 If the target, mode, or requested outcome is ambiguous, ask one focused question.
 Do not infer execution from words like "review", "check", "is this right", or "should these live together".

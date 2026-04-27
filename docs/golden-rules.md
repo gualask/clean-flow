@@ -9,6 +9,7 @@ Use these rules when changing Cflow runtime skills, references, templates, docs,
   Before splitting guidance into a reference, ask: if this section moves out of `SKILL.md`, in which realistic invocations should the agent not read it?
 - Keep reference loading decisions in the consuming `SKILL.md`; a reference should contain the operational rules for an already-selected path, not the trigger logic needed to decide whether to read it.
 - Prefer state-based gates over actor-based gates.
+- For composable skills, choose entry modes from the `current request`, not from whether the literal user or another skill made the request. Use `user explicitly asked` only for intentional user-level authorization gates.
 - Keep `cf-start/SKILL.md` as the controller: identity, hard gates, DOT flow diagrams, reference map, and output contracts.
 - Put phase-specific operational detail in `cf-start/references/*.md`.
 - Keep `_shared` only for runtime rules consumed by multiple public skills or phase references.

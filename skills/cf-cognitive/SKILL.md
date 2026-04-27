@@ -6,7 +6,6 @@ Use this skill for local file-level cognitive complexity refactors.
 
 Use this for up to three source files per session, processed one file at a time.
 Do not bootstrap or require `.cflow/` artifacts.
-If no file is provided, discover candidate files, propose up to three justified targets, and start with the best first file unless the user asked only for recommendations.
 For file-level split review or extraction from one source file, route to `cf-split` instead.
 For cross-file cohesion, placement, navigation cost, or related files that may need a local feature slice, route to `cf-cohesion` instead.
 For repository structure, module boundaries, ownership moves, or broad multi-file refactors, route to `cf-start` instead.
@@ -14,20 +13,18 @@ For repository structure, module boundaries, ownership moves, or broad multi-fil
 Reduce real cognitive complexity in each target file while preserving behavior.
 Use numeric thresholds only when native tooling can measure them; otherwise report qualitatively.
 
-## Target Selection
+## Entry Modes
 
-- Use explicit file targets when provided, up to three per session.
-- Otherwise rank candidates from evidence: long functions, deep nesting, long loops, nested or oversized try/catch blocks, framework/runtime/infrastructure wiring blocks with behavior-heavy callbacks, complexity reports, recent user-mentioned or changed files, and nearby test coverage.
-- For broad no-file discovery, consider bundled `../_shared/scripts/repo-tree.mjs`; run it with `--help` first when a gitignore-aware tree with LOC may reduce context before selecting candidate files.
-- In discovery mode, keep a ranked shortlist of at most three files; do not add weak candidates just to reach three.
-- Process shortlisted files sequentially, best first, and verify after each file.
-- If only one file is fixed in this invocation, report remaining shortlisted candidates so the user can continue without rediscovery.
-- After three files, stop and let the user decide whether to start a new session.
-- If selection is ambiguous between similarly safe files, ask one focused question.
-- Read the whole target file, relevant tests/call sites, and local helper/error/async/performance conventions before editing.
-- If there is no real hotspot, stop and report that no good local candidate was found.
+Choose exactly one mode:
 
-## Refactor Triggers
+- **Discovery**: no explicit file target was provided. Read [references/discovery.md](references/discovery.md). Do not edit.
+- **Targeted evaluation**: one or more explicit file targets were provided, and the current request asks to review, assess, evaluate, or decide whether cleanup is worthwhile. Read [references/targeted-evaluation.md](references/targeted-evaluation.md). Do not edit.
+- **Execution**: the current request explicitly asks to refactor, reduce, clean up, fix cognitive complexity, or proceed on explicit target files or a confirmed discovery candidate. Read [references/execution.md](references/execution.md).
+
+If the target, mode, or requested outcome is ambiguous, ask one focused question.
+Do not infer execution from words like "review", "check", "is this complex", or "should we clean this up".
+
+## Shared Triggers
 
 Refactor only when the target has clear local cognitive pressure:
 
@@ -40,35 +37,12 @@ Refactor only when the target has clear local cognitive pressure:
 - complex boolean expressions, regex construction, parsing, or small algorithms that are hard to read inline
 - repeated non-trivial local logic
 
-## Local Refactor Rules
-
-Before editing any target file, ensure you have read [../_shared/references/local-refactor-rules.md](../_shared/references/local-refactor-rules.md) in this invocation.
-
-Apply that reference with these extra constraints:
-
-- keep changes inside the target file unless the user explicitly asks otherwise
-- do not move responsibilities to new files or shared utilities
-- do not continue past the shortlisted files or past three files in one session
-- treat anonymous callbacks passed to registration/lifecycle APIs as part of the local cognitive load when they contain branching, state changes, cleanup-sensitive behavior, or multiple side effects; prefer named local handlers or a shallow subscription helper when that makes setup, teardown, and effect order easier to scan
-
-## Post-refactor extraction candidates
-
-If local cleanup reveals possible file-level extraction, report `cf-split` as the next step with the target file and obvious candidate names.
-If local cleanup reveals that the remaining cognitive cost is related files scattered across folders, report `cf-cohesion` as the next step with the local feature or workflow name.
-Do not evaluate placement or execute extraction in this skill.
-
-## Verification
-
-Run the smallest relevant check: targeted tests, typecheck or compile, lint, or a narrow smoke check.
-Use native success criteria; do not require `failed=0` unless that is how the runner reports results.
-If a relevant check fails, decide whether the refactor caused it, fix refactor-caused failures, and re-run the check.
-If no relevant check can be run, say that explicitly.
-
 ## Output Format
 
 Return only:
 
-- **Files**: target files touched, plus remaining shortlist when relevant.
-- **Changes**: hotspots addressed and refactor applied.
+- **Scope**: mode and target files, or discovery area.
+- **Assessment**: candidates, target decision, or hotspots addressed.
+- **Changes**: edits made, or `none` for discovery/evaluation.
 - **Checks**: commands run and pass/fail result, or why no check ran.
-- **Result**: behavior preservation, remaining risk, and `cf-split` next step when file-level extraction should be reviewed.
+- **Result**: behavior preservation, remaining risk, and `cf-split` or `cf-cohesion` next step when relevant.

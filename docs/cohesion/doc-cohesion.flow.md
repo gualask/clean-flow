@@ -18,8 +18,8 @@ Document the runtime flow for `cf-cohesion`, the standalone skill for finding an
 1. Trigger `cf-cohesion`.
 2. Controller chooses exactly one entry mode from `SKILL.md`.
 3. If no explicit target was provided, controller loads `references/discovery.md`, scans for at most three candidate clusters, and does not edit.
-4. If an explicit target was provided without an explicit move request, controller loads `references/targeted-evaluation.md`, builds the cohesion map, and does not edit.
-5. If the user explicitly asked to apply a bounded regrouping, controller loads `references/execution.md`.
+4. If an explicit target was provided and the current request does not explicitly ask for a move, controller loads `references/targeted-evaluation.md`, builds the cohesion map, and does not edit.
+5. If the current request explicitly asks to apply a bounded regrouping, controller loads `references/execution.md`.
 6. If the target, mode, or requested outcome is ambiguous, controller asks one focused question.
 7. In execution mode, controller performs targeted evaluation first when needed, then moves exactly one clear local cluster.
 8. Controller updates imports, exports, call sites, tests, and local paths affected by the regrouping.
@@ -33,7 +33,7 @@ Document the runtime flow for `cf-cohesion`, the standalone skill for finding an
 - It should not create or depend on `.cflow/*`.
 - Discovery, targeted evaluation, and execution modes must stay distinct.
 - Discovery mode must not edit and must return at most three candidates.
-- Targeted evaluation mode must not edit unless the user explicitly asked to apply the move.
+- Targeted evaluation mode must not edit unless the current request explicitly asks to apply the move.
 - A recommended regrouping needs real navigation cost, not just similar file names.
 - Placement must follow nearest ownership and local convention.
 - Broadly shared files must stay outside the local slice.

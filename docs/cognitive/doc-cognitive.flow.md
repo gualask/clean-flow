@@ -7,6 +7,9 @@ Document the runtime flow for `cf-cognitive`, the standalone local cleanup skill
 ## Runtime Inputs
 
 - Public skill: `skills/cf-cognitive/SKILL.md`
+- Discovery reference: `skills/cf-cognitive/references/discovery.md`
+- Targeted evaluation reference: `skills/cf-cognitive/references/targeted-evaluation.md`
+- Execution reference: `skills/cf-cognitive/references/execution.md`
 - Shared refactor rules: `skills/_shared/references/local-refactor-rules.md`
 - Shared readability review: `skills/_shared/references/local-readability-review.md` when review or simplification needs it
 - Cohesion follow-up: `skills/cf-cohesion/SKILL.md` when remaining cost is cross-file placement or navigation
@@ -15,19 +18,23 @@ Document the runtime flow for `cf-cognitive`, the standalone local cleanup skill
 ## Flow
 
 1. Trigger `cf-cognitive`.
-2. If explicit files are provided, controller uses up to three target files in sequence.
-3. If no file is provided, controller discovers and ranks up to three justified candidate files from repository evidence, using bundled repo tree output when it can reduce broad context before file selection.
-4. Before editing a target file, controller reads the whole file plus relevant tests, call sites, and local conventions.
-5. Controller loads `local-refactor-rules.md` before editing in the invocation.
-6. Controller edits only when the target has real local cognitive pressure, including wiring/lifecycle callbacks that contain real behavior.
-7. Controller keeps behavior stable and prefers local simplification over broad extraction.
-8. After each file, controller runs the smallest relevant check.
-9. Controller stops after the explicit target set or at most three files.
-10. Final output reports files touched, checks run, and any remaining candidate shortlist.
+2. Controller chooses exactly one entry mode from `SKILL.md`.
+3. If no explicit file target was provided, controller loads `references/discovery.md`, ranks at most three candidate files, and does not edit.
+4. If explicit files were provided and the current request asks to review, assess, or decide whether cleanup is worthwhile, controller loads `references/targeted-evaluation.md` and does not edit.
+5. If the current request explicitly asks to refactor, reduce, clean up, fix cognitive complexity, or proceed on a confirmed candidate, controller loads `references/execution.md`.
+6. In execution mode, controller reads each whole target file plus relevant tests, call sites, and local conventions.
+7. Controller loads `local-refactor-rules.md` before editing in the invocation.
+8. Controller edits only when the target has real local cognitive pressure, including wiring/lifecycle callbacks that contain real behavior.
+9. Controller keeps behavior stable and prefers local simplification over broad extraction.
+10. After each executed file, controller runs the smallest relevant check.
+11. Controller stops after the explicit target set or at most three files.
+12. Final output reports scope, assessment, changes, checks, and any `cf-split` or `cf-cohesion` next step.
 
 ## Review Checks
 
 - No `.cflow/*` artifact should be created or required.
+- Discovery, targeted evaluation, and execution modes must stay distinct.
+- Discovery and targeted evaluation must not edit.
 - Candidate discovery must be evidence-based, not a broad refactor hunt.
 - Work is sequential by file; it should not fan out into repo-wide cleanup.
 - Edits stay in the target file unless the user explicitly asks otherwise.

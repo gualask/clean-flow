@@ -286,6 +286,22 @@ test("maintainer golden rules require empty-context skill polish", async () => {
   assert.match(body, /no historical migration notes/);
   assert.match(body, /maintainer-only labels/);
   assert.match(body, /decorative wording/);
+  assert.match(body, /current request/);
+  assert.match(body, /literal user or another skill/);
+  assert.match(body, /user-level authorization gates/);
+});
+
+test("composable skill entry modes use the current request", async () => {
+  const cognitiveBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
+    "utf8",
+  );
+  const cohesionBody = await readFile(path.join(SKILLS_ROOT, "cf-cohesion", "SKILL.md"), "utf8");
+
+  assert.match(cognitiveBody, /current request asks to review/);
+  assert.match(cognitiveBody, /current request explicitly asks to refactor/);
+  assert.match(cohesionBody, /current request does not explicitly ask to move files/);
+  assert.match(cohesionBody, /current request explicitly asks to regroup/);
 });
 
 test("cf-start phase references preserve internal-skill guardrails", async () => {
@@ -379,6 +395,18 @@ test("shared support resources are not packaged as public skills", async () => {
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
     "utf8",
   );
+  const cognitiveDiscoveryBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-cognitive", "references", "discovery.md"),
+    "utf8",
+  );
+  const cognitiveTargetedBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-cognitive", "references", "targeted-evaluation.md"),
+    "utf8",
+  );
+  const cognitiveExecutionBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-cognitive", "references", "execution.md"),
+    "utf8",
+  );
   const fileSplitBody = await readFile(
     path.join(SKILLS_ROOT, "cf-split", "SKILL.md"),
     "utf8",
@@ -409,10 +437,14 @@ test("shared support resources are not packaged as public skills", async () => {
   );
 
   assert.match(mrWolfBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
-  assert.match(cognitiveBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(cognitiveBody, /references\/discovery\.md/);
+  assert.match(cognitiveDiscoveryBody, /\.\.\/\.\.\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(fileSplitBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
-  assert.match(cognitiveBody, /\.\.\/_shared\/references\/local-refactor-rules\.md/);
-  assert.match(cognitiveBody, /registration\/lifecycle APIs/);
+  assert.match(cognitiveBody, /references\/targeted-evaluation\.md/);
+  assert.match(cognitiveTargetedBody, /Evaluate only\. Do not edit files\./);
+  assert.match(cognitiveBody, /references\/execution\.md/);
+  assert.match(cognitiveExecutionBody, /\.\.\/\.\.\/_shared\/references\/local-refactor-rules\.md/);
+  assert.match(cognitiveExecutionBody, /registration\/lifecycle APIs/);
   assert.match(localRefactorRulesBody, /wiring blocks that mix setup\/teardown/);
   assert.match(fileSplitBody, /\.\.\/_shared\/references\/file-split-rules\.md/);
   assert.match(fileSplitBody, /\.\.\/_shared\/references\/reference-audit\.md/);
