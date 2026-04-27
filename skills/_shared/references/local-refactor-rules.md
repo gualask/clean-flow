@@ -17,6 +17,7 @@ Prefer simplification when the touched code has real local pressure:
 - nesting deeper than function -> block -> block
 - nested try/catch blocks, unless language or framework constraints force them
 - try/catch blocks or loop bodies long enough to hide their main purpose
+- framework, runtime, or infrastructure wiring blocks that mix setup/teardown with nested callbacks containing real behavior, especially event subscriptions, observers, lifecycle hooks, timers, middleware, transactions, or scheduler callbacks
 - branching that hides the main path
 - complex boolean expressions, regex construction, parsing, or small algorithms that are hard to read inline
 - repeated non-trivial local logic
@@ -37,6 +38,8 @@ Avoid edits when the code is merely imperfect but still easy to follow.
 - Prefer guard clauses, clearer names, or local reshaping before adding helpers when those make the main path clear enough.
 - A helper is justified only when its name carries useful intent that the code did not already express.
 - Keep important side effects visible at the level where ordering matters.
+- Treat anonymous callbacks passed to registration/lifecycle APIs as local cognitive load when they contain branching, state changes, cleanup-sensitive behavior, or multiple side effects.
+- Prefer named local handlers or a shallow subscription helper when that makes setup, teardown, and effect order easier to scan.
 
 ## Naming
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-04-27
+
+- Updated `cf-cognitive` operational guidance and shared local refactor rules so framework/runtime/infrastructure wiring blocks with behavior-heavy callbacks count as cognitive complexity candidates.
+
 ## 2026-04-26
 
 - Added `cf-trace` as a public entrypoint for reconstructing one workflow path and auditing it for orchestration flaws.

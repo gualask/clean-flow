@@ -1,6 +1,6 @@
 ---
 name: cf-cognitive
-description: Find or refactor up to three source files per session, one file at a time, to reduce real cognitive complexity from long functions, deep nesting, nested or oversized try/catch blocks, long loops, or hard-to-read local logic while preserving behavior. Use with or without explicit file targets.
+description: Find or refactor local source-file cognitive complexity hotspots while preserving behavior. Use with or without explicit file targets.
 ---
 Use this skill for local file-level cognitive complexity refactors.
 
@@ -16,7 +16,7 @@ Use numeric thresholds only when native tooling can measure them; otherwise repo
 ## Target Selection
 
 - Use explicit file targets when provided, up to three per session.
-- Otherwise rank candidates from evidence: long functions, deep nesting, long loops, nested or oversized try/catch blocks, complexity reports, recent user-mentioned or changed files, and nearby test coverage.
+- Otherwise rank candidates from evidence: long functions, deep nesting, long loops, nested or oversized try/catch blocks, framework/runtime/infrastructure wiring blocks with behavior-heavy callbacks, complexity reports, recent user-mentioned or changed files, and nearby test coverage.
 - For broad no-file discovery, consider bundled `../_shared/scripts/repo-tree.mjs`; run it with `--help` first when a gitignore-aware tree with LOC may reduce context before selecting candidate files.
 - In discovery mode, keep a ranked shortlist of at most three files; do not add weak candidates just to reach three.
 - Process shortlisted files sequentially, best first, and verify after each file.
@@ -34,6 +34,7 @@ Refactor only when the target has clear local cognitive pressure:
 - nesting deeper than function -> block -> block
 - nested try/catch blocks that make control flow hard to follow; simplify when possible unless language or framework constraints force them
 - try/catch blocks or loop bodies long enough to hide their main purpose
+- framework, runtime, or infrastructure wiring blocks that mix setup/teardown with nested callbacks containing real behavior, especially event subscriptions, observers, lifecycle hooks, timers, middleware, transactions, or scheduler callbacks
 - branching that makes the main path hard to see
 - complex boolean expressions, regex construction, parsing, or small algorithms that are hard to read inline
 - repeated non-trivial local logic
@@ -47,6 +48,7 @@ Apply that reference with these extra constraints:
 - keep changes inside the target file unless the user explicitly asks otherwise
 - do not move responsibilities to new files or shared utilities
 - do not continue past the shortlisted files or past three files in one session
+- treat anonymous callbacks passed to registration/lifecycle APIs as part of the local cognitive load when they contain branching, state changes, cleanup-sensitive behavior, or multiple side effects; prefer named local handlers or a shallow subscription helper when that makes setup, teardown, and effect order easier to scan
 
 ## Post-refactor extraction candidates
 

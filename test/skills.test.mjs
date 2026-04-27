@@ -397,11 +397,17 @@ test("shared support resources are not packaged as public skills", async () => {
     path.join(SKILLS_ROOT, "cf-start", "references", "verify.md"),
     "utf8",
   );
+  const localRefactorRulesBody = await readFile(
+    path.join(SKILLS_ROOT, "_shared", "references", "local-refactor-rules.md"),
+    "utf8",
+  );
 
   assert.match(mrWolfBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(cognitiveBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(fileSplitBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(cognitiveBody, /\.\.\/_shared\/references\/local-refactor-rules\.md/);
+  assert.match(cognitiveBody, /registration\/lifecycle APIs/);
+  assert.match(localRefactorRulesBody, /wiring blocks that mix setup\/teardown/);
   assert.match(fileSplitBody, /\.\.\/_shared\/references\/file-split-rules\.md/);
   assert.match(fileSplitBody, /\.\.\/_shared\/references\/reference-audit\.md/);
   assert.match(splitExecutionBody, /\.\.\/\.\.\/_shared\/references\/file-split-rules\.md/);
