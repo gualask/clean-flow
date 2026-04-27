@@ -6,11 +6,10 @@ Manage the `clean-flow` installation for a specific repository without using `np
 
 Support these actions:
 
-- install into a specific repository
-- update into a specific repository
+- sync into a specific repository, for both first install and later updates
 - uninstall from a specific repository
 
-Local install syncs Cflow skills into `.agents/skills` and Cflow Codex custom agents into `.codex/agents`.
+Local sync installs or updates Cflow skills into `.agents/skills` and Cflow Codex custom agents into `.codex/agents`.
 
 ## Prerequisites
 
@@ -23,9 +22,9 @@ Each action below uses its own temporary shallow clone of this repository and re
 
 ## Step 2: Choose The Action
 
-### Install Or Update Locally
+### Sync Locally
 
-Use this when the user explicitly asked to install or update only the current repository, unless they gave a different target path.
+Use this when the user explicitly asked to install, sync, or update only the current repository, unless they gave a different target path.
 
 ```bash
 TMP_ROOT="$(mktemp -d)"

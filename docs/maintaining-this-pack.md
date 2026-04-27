@@ -17,9 +17,10 @@ At runtime:
 Cflow has two maintainer concerns:
 
 1. distribution
-   - `cflow-skills install` copies public skill directories plus `_shared` support resources
-   - `cflow-skills install` copies Cflow-owned Codex custom agents from `skills/_codex_agents`
-   - install does not bootstrap `.cflow/`
+   - `cflow-skills install` is an idempotent sync for both first install and later updates
+   - it copies public skill directories plus `_shared` support resources
+   - it copies Cflow-owned Codex custom agents from `skills/_codex_agents`
+   - it does not bootstrap `.cflow/`
 2. public runtime flows
    - flow sequencing and review checks are maintained only in the per-public-skill flow references listed under [Source Of Truth](#source-of-truth)
 

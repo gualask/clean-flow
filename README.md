@@ -18,30 +18,18 @@ Supported public entrypoints:
 Its internal phases live as runtime references under `skills/cf-start/references/` and are not installed as separate skill entrypoints.
 `cf-mr-wolf` is a public entrypoint for clarifying ambiguous problems with minimal context before implementation or before Cflow assessment.
 
-## Install
+## Install / Update
 
-For Codex global install, you can say:
+For Codex global, you can say:
 
 ```text
-Fetch and follow instructions from https://raw.githubusercontent.com/gualask/clean-flow/refs/heads/main/install/codex/GLOBAL.md and install Cflow globally.
+Fetch and follow instructions from https://raw.githubusercontent.com/gualask/clean-flow/refs/heads/main/install/codex/GLOBAL.md and sync Cflow globally.
 ```
 
-For Codex local install into the current repository, you can say:
+For Codex local in the current repository, you can say:
 
 ```text
-Fetch and follow instructions from https://raw.githubusercontent.com/gualask/clean-flow/refs/heads/main/install/codex/LOCAL.md and install Cflow into the current repository only.
-```
-
-For Codex global update, you can say:
-
-```text
-Fetch and follow instructions from https://raw.githubusercontent.com/gualask/clean-flow/refs/heads/main/install/codex/GLOBAL.md and update the global Cflow installation.
-```
-
-For Codex local update in the current repository, you can say:
-
-```text
-Fetch and follow instructions from https://raw.githubusercontent.com/gualask/clean-flow/refs/heads/main/install/codex/LOCAL.md and update Cflow in the current repository only.
+Fetch and follow instructions from https://raw.githubusercontent.com/gualask/clean-flow/refs/heads/main/install/codex/LOCAL.md and sync Cflow in the current repository only.
 ```
 
 ```bash
@@ -51,7 +39,7 @@ node ./bin/cflow-skills.mjs install /path/to/repo
 The CLI syncs packaged skills plus shared support resources from `skills/` into `/path/to/repo/.agents/skills`.
 It also syncs packaged Codex custom agents into `/path/to/repo/.codex/agents`.
 
-Global install:
+Global sync:
 
 ```bash
 node ./bin/cflow-skills.mjs install --global
@@ -67,7 +55,7 @@ node ./bin/cflow-skills.mjs install /path/to/repo --dry-run
 
 ## First Use
 
-Installing the pack only syncs packaged skills, shared support resources, and Cflow-owned Codex custom agents into the target location.
+Syncing the pack only installs or updates packaged skills, shared support resources, and Cflow-owned Codex custom agents into the target location.
 It does not create `.cflow/` by itself.
 
 For supported workflow first use and resume, start with `cf-start`.
