@@ -58,7 +58,7 @@ It is configured as a read-only, lower-cost reconnaissance agent for reconstruct
 If the custom agent is unavailable, use one equivalent clean-context reconnaissance subagent to inspect the repository and return a read-only trace report.
 If the runtime requires explicit subagent authorization, ask and stop; blocked delegation is not custom-agent unavailability and must not trigger controller-side reconstruction.
 
-Start the custom agent with only the repository path and the user's trace request.
+Start the custom agent with only the repository path and the current trace request.
 Do not paste the custom agent's TOML instructions or full report format into the spawn prompt.
 
 Expect the subagent report to contain these sections: **Trace Scope**, **Observed Sequence**, **Inputs and Triggers**, **State and Artifacts**, **External Effects**, **Failure and Resume Paths**, **Evidence**, **Unknowns**.

@@ -39,8 +39,9 @@ Before creating or refreshing `.cflow/architecture.md`, use the `cflow_architect
 It is configured as a read-only, lower-cost reconnaissance agent for this specific scan.
 
 If the custom agent is unavailable, use one equivalent clean-context reconnaissance subagent to inspect the repository and return a read-only architecture report.
+If the runtime requires explicit subagent authorization, ask and stop; blocked delegation is not custom-agent unavailability and must not trigger controller-side architecture mapping.
 
-Start the custom agent with only the repository path and the user's mapping request.
+Start the custom agent with only the repository path and the current mapping request.
 Do not paste the custom agent's TOML instructions or full report format into the spawn prompt.
 
 Expect the subagent report to contain these sections: **Repository Context**, **Entry Points**, **Top-Level Map**, **External Boundaries**, **Boundary and Packaging Model**, **Observed Invariants**, **Evidence**, **Unknowns**.

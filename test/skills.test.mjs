@@ -141,7 +141,9 @@ test("cf-architecture requires read-only clean-context reconnaissance", async ()
   assert.match(body, /Clean-Context Reconnaissance/);
   assert.match(body, /use the `cflow_architecture_recon` custom agent when available/);
   assert.match(body, /use one equivalent clean-context reconnaissance subagent/);
-  assert.match(body, /Start the custom agent with only the repository path and the user's mapping request/);
+  assert.match(body, /requires explicit subagent authorization/);
+  assert.match(body, /must not trigger controller-side architecture mapping/);
+  assert.match(body, /Start the custom agent with only the repository path and the current mapping request/);
   assert.match(body, /Do not paste the custom agent's TOML instructions or full report format into the spawn prompt/);
   assert.match(body, /Expect the subagent report to contain these sections/);
   assert.match(body, /Boundary and Packaging Model/);
@@ -212,7 +214,7 @@ test("cf-trace requires read-only clean-context reconstruction", async () => {
   assert.match(body, /must not trigger controller-side reconstruction/);
   assert.match(body, /Read `\.cflow\/architecture\.md` if it exists/);
   assert.match(body, /route to `cf-architecture` before continuing/);
-  assert.match(body, /Start the custom agent with only the repository path and the user's trace request/);
+  assert.match(body, /Start the custom agent with only the repository path and the current trace request/);
   assert.match(body, /Do not paste the custom agent's TOML instructions or full report format/);
   assert.match(body, /Use `assets\/trace\.template\.md` as the review rubric/);
   assert.match(body, /The subagent produces reconstruction only/);
@@ -353,6 +355,14 @@ test("cf-start phase references preserve internal-skill guardrails", async () =>
 
 test("cf-split requires post-split placement review for related clusters", async () => {
   const skillBody = await readFile(path.join(SKILLS_ROOT, "cf-split", "SKILL.md"), "utf8");
+  const evaluationBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-split", "references", "evaluation.md"),
+    "utf8",
+  );
+  const executionBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-split", "references", "execution.md"),
+    "utf8",
+  );
   const rulesBody = await readFile(
     path.join(SKILLS_ROOT, "_shared", "references", "file-split-rules.md"),
     "utf8",
@@ -362,11 +372,19 @@ test("cf-split requires post-split placement review for related clusters", async
     "utf8",
   );
 
-  assert.match(skillBody, /resulting local cluster/);
-  assert.match(skillBody, /unhealthy flat cluster/);
-  assert.match(skillBody, /previous split left one extracted file flat/);
+  assert.match(skillBody, /references\/evaluation\.md/);
+  assert.match(skillBody, /references\/execution\.md/);
   assert.match(skillBody, /final placement decision/);
-  assert.match(skillBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
+
+  assert.match(evaluationBody, /Evaluate only\. Do not edit files\./);
+  assert.match(evaluationBody, /\.\.\/\.\.\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(evaluationBody, /\.\.\/\.\.\/_shared\/references\/file-split-rules\.md/);
+  assert.match(executionBody, /resulting local cluster/);
+  assert.match(executionBody, /unhealthy flat cluster/);
+  assert.match(executionBody, /previous split left one extracted file flat/);
+  assert.match(executionBody, /\.\.\/\.\.\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(executionBody, /\.\.\/\.\.\/_shared\/references\/file-split-rules\.md/);
+  assert.match(executionBody, /\.\.\/\.\.\/_shared\/references\/reference-audit\.md/);
 
   assert.match(rulesBody, /resulting local cluster/);
   assert.match(rulesBody, /split creates or extends at least two related files/);
@@ -376,6 +394,8 @@ test("cf-split requires post-split placement review for related clusters", async
   assert.match(flowBody, /resulting local directory shape/);
   assert.match(flowBody, /related file cluster/);
   assert.match(flowBody, /second or optional split/);
+  assert.match(flowBody, /references\/evaluation\.md/);
+  assert.match(flowBody, /references\/execution\.md/);
   assert.match(flowBody, /bundled repo tree output/);
 });
 
@@ -430,6 +450,14 @@ test("shared support resources are not packaged as public skills", async () => {
     path.join(SKILLS_ROOT, "cf-split", "SKILL.md"),
     "utf8",
   );
+  const fileSplitEvaluationBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-split", "references", "evaluation.md"),
+    "utf8",
+  );
+  const fileSplitExecutionBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-split", "references", "execution.md"),
+    "utf8",
+  );
   const splitExecutionBody = await readFile(
     path.join(SKILLS_ROOT, "cf-start", "references", "split-execution.md"),
     "utf8",
@@ -458,15 +486,19 @@ test("shared support resources are not packaged as public skills", async () => {
   assert.match(mrWolfBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(cognitiveBody, /references\/discovery\.md/);
   assert.match(cognitiveDiscoveryBody, /\.\.\/\.\.\/_shared\/scripts\/repo-tree\.mjs/);
-  assert.match(fileSplitBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(fileSplitEvaluationBody, /\.\.\/\.\.\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(fileSplitExecutionBody, /\.\.\/\.\.\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(cognitiveBody, /references\/targeted-evaluation\.md/);
   assert.match(cognitiveTargetedBody, /Evaluate only\. Do not edit files\./);
   assert.match(cognitiveBody, /references\/execution\.md/);
   assert.match(cognitiveExecutionBody, /\.\.\/\.\.\/_shared\/references\/local-refactor-rules\.md/);
   assert.match(cognitiveExecutionBody, /registration\/lifecycle APIs/);
   assert.match(localRefactorRulesBody, /wiring blocks that mix setup\/teardown/);
-  assert.match(fileSplitBody, /\.\.\/_shared\/references\/file-split-rules\.md/);
-  assert.match(fileSplitBody, /\.\.\/_shared\/references\/reference-audit\.md/);
+  assert.match(fileSplitBody, /references\/evaluation\.md/);
+  assert.match(fileSplitBody, /references\/execution\.md/);
+  assert.match(fileSplitEvaluationBody, /\.\.\/\.\.\/_shared\/references\/file-split-rules\.md/);
+  assert.match(fileSplitExecutionBody, /\.\.\/\.\.\/_shared\/references\/file-split-rules\.md/);
+  assert.match(fileSplitExecutionBody, /\.\.\/\.\.\/_shared\/references\/reference-audit\.md/);
   assert.match(splitExecutionBody, /\.\.\/\.\.\/_shared\/references\/file-split-rules\.md/);
   assert.match(splitExecutionBody, /\.\.\/\.\.\/_shared\/references\/reference-audit\.md/);
   assert.match(consolidationExecutionBody, /\.\.\/\.\.\/_shared\/references\/reference-audit\.md/);
