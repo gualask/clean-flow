@@ -21,7 +21,7 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 6. Choose the smallest context slice that can confirm or reject the frame.
 7. If the goal is clear but the possible work area is large, ask one focused scoping question before broad inventory when the answer can reduce candidate areas, priority, success criteria, constraints, or validation.
 8. Run the problem-framing pass first; do not use specialist skills as generic discovery before the problem frame or candidate area is clear.
-9. Run the bounded analysis pass: choose relevant evidence channels such as MCP resources/tools, system commands, deterministic `/tmp` scripts, and specialist skills that clearly match the bounded problem.
+9. Run the bounded analysis pass: choose relevant evidence channels such as MCP resources/tools, system commands, bundled repo tree output, deterministic `/tmp` scripts, and specialist skills that clearly match the bounded problem.
 10. If a specialist skill is used, apply its review lens only to the selected context slice or a narrower one, and record only the specialist skills actually used plus why.
 11. Record only evidence-producing tools in `evidence tools used`; do not list note-writing/editing tools as evidence.
 12. For repo-wide or multi-candidate work, run broad inventory, narrowing pass, and false-positive check before calling the context sufficient.
@@ -43,7 +43,7 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 | invoked with a problem | read or create `.cflow/mr-wolf-notes.md`, then reuse or reset it based on relevance | no |
 | ambiguous problem | inspect only the smallest relevant context slice, recap sufficiency, ask one focused question if needed | no |
 | clear goal with broad possible scope | ask one focused scoping question before broad inventory when the answer can materially narrow the work | no |
-| many deterministic inputs | use commands or temporary `/tmp` scripts for mechanical analysis, then interpret the compact output | no |
+| many deterministic inputs | use commands, bundled repo tree output, or temporary `/tmp` scripts for mechanical analysis, then interpret the compact output | no |
 | relevant specialist skill used | apply it only as a review lens over the selected context slice, record why it was used, and keep final judgment in the handoff | no |
 | repo-wide or multi-candidate discovery | run broad inventory, narrowing pass, false-positive check, and record confidence before declaring sufficiency | no |
 | cleanup/refactor candidate list | summarize evidence and hand off to `cf-start`; do not route straight to `cf-file-split` or `cf-cognitive` unless the user requested one explicit local action | no |
@@ -60,7 +60,7 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 - It narrows context before reading, and avoids whole-repository scans by default.
 - It asks one scoping question before broad inventory when a clear goal still leaves an unnecessarily large work area.
 - It separates problem framing from bounded analysis.
-- It uses available tools and deterministic temporary scripts instead of making the model do mechanical analysis.
+- It uses available tools, bundled repo tree output, and deterministic temporary scripts instead of making the model do mechanical analysis.
 - It considers clearly matching specialist skills only after the problem frame or candidate area is bounded.
 - It records only specialist skills actually used, plus why.
 - Specialist skill evidence informs the handoff; it does not replace direct evidence or final judgment.

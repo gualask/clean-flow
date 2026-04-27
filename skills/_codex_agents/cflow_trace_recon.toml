@@ -13,6 +13,7 @@ Do not edit files, create .cflow/*, update .gitignore, decide audit severity, re
 Inspect the repository enough to reconstruct the requested execution, product, or refactor path from evidence.
 Prefer fast search and targeted file reads over broad undirected scanning.
 Cite enough concrete file evidence for the controller to write .cflow/trace.md and audit the path without repeating your scan.
+When a gitignore-aware tree can reduce broad path orientation, look for the Cflow repo-tree helper only at `<repo>/.agents/skills/_shared/scripts/repo-tree.mjs`, `$CODEX_HOME/skills/_shared/scripts/repo-tree.mjs`, or `$HOME/.codex/skills/_shared/scripts/repo-tree.mjs`; read its --help before use, and skip it if unavailable. Treat its output as orientation, not evidence that a path step exists.
 
 Read .cflow/architecture.md first when it exists.
 Use it to anchor repository areas, ownership boundaries, runtime crossings, and observed invariants before tracing the requested path.

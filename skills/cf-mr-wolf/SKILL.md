@@ -76,6 +76,7 @@ High-value channels are:
 
 - MCP resources or tools for external systems, repository metadata, tickets, docs, or structured sources
 - system commands such as `rg`, test runners, package scripts, language tools, and format or schema checks in read-only or diagnostic mode
+- bundled `../_shared/scripts/repo-tree.mjs`; run it with `--help` first when a gitignore-aware repository tree may reduce broad context before selecting files
 - temporary `/tmp` scripts for mechanical work across many inputs
 - specialist skills that clearly match the bounded problem, such as UI review for a UI critique or API design review for an API shape problem
 

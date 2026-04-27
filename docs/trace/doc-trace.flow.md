@@ -19,7 +19,7 @@ Document the runtime flow for `cf-trace`, the public path reconstruction and aud
 4. Controller preflight reads only existing `.cflow/architecture.md`, `.cflow/trace.md`, `.gitignore`, `trace.template.md`, and `git status --short`.
 5. If `.cflow/architecture.md` is missing, stale, or materially incomplete, controller routes to `cf-architecture-map` before continuing.
 6. Controller starts `cflow_trace_recon` with only repository path and the user trace request.
-7. Custom agent reads `.cflow/architecture.md` first when present, performs read-only path reconstruction from its TOML instructions, and returns the trace report.
+7. Custom agent reads `.cflow/architecture.md` first when present, performs read-only path reconstruction from its TOML instructions, uses bundled repo tree output when available to reduce broad path orientation, and returns the trace report.
 8. While the agent runs, controller does not scan manifests, docs, source directories, or implementation files.
 9. Controller checks the report against `trace.template.md` as the artifact rubric.
 10. Controller performs only targeted spot-checks for missing, contradictory, generic, prescriptive, or unsupported report content.

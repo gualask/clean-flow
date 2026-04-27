@@ -9,6 +9,8 @@
 - Tightened `cf-mr-wolf` evidence gathering so it must consider available specialist skills before declaring context sufficient.
 - Added a `cf-mr-wolf` scoping-question gate for clear goals whose possible work area is still too broad.
 - Loosened `cf-mr-wolf` next-step output so it can recommend specialized available skills when they clearly own the follow-up.
+- Added the shared `repo-tree.mjs` runtime helper for gitignore-aware folder and file-name tree summaries during broad Cflow context gathering.
+- Connected the shared repo tree helper to `cf-cognitive`, `cf-file-split`, and the architecture/trace reconnaissance agents for broad discovery orientation.
 
 ## 2026-04-25
 

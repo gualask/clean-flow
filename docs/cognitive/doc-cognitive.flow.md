@@ -15,7 +15,7 @@ Document the runtime flow for `cf-cognitive`, the standalone local cleanup skill
 
 1. Trigger `cf-cognitive`.
 2. If explicit files are provided, controller uses up to three target files in sequence.
-3. If no file is provided, controller discovers and ranks up to three justified candidate files from repository evidence.
+3. If no file is provided, controller discovers and ranks up to three justified candidate files from repository evidence, using bundled repo tree output when it can reduce broad context before file selection.
 4. Before editing a target file, controller reads the whole file plus relevant tests, call sites, and local conventions.
 5. Controller loads `local-refactor-rules.md` before editing in the invocation.
 6. Controller edits only when the target has real local cognitive pressure.
@@ -32,4 +32,3 @@ Document the runtime flow for `cf-cognitive`, the standalone local cleanup skill
 - Edits stay in the target file unless the user explicitly asks otherwise.
 - Helpers are kept only when they reduce reading cost.
 - If file-level extraction appears appropriate, the next step should be `cf-file-split`, not unbounded splitting inside `cf-cognitive`.
-

@@ -133,6 +133,10 @@ test("cf-architecture-map requires read-only clean-context reconnaissance", asyn
     path.join(SKILLS_ROOT, "cf-architecture-map", "SKILL.md"),
     "utf8",
   );
+  const flowBody = await readFile(
+    path.join(REPO_ROOT, "docs", "architecture-map", "doc-architecture.map.flow.md"),
+    "utf8",
+  );
 
   assert.match(body, /Clean-Context Reconnaissance/);
   assert.match(body, /use the `cflow_architecture_recon` custom agent when available/);
@@ -158,6 +162,7 @@ test("cf-architecture-map requires read-only clean-context reconnaissance", asyn
   assert.match(body, /Do not repeat full reconnaissance/);
   assert.match(body, /If a full controller-side scan becomes necessary, say why before doing it/);
   assert.match(body, /You still own artifact writes, `\.gitignore`, final interpretation/);
+  assert.match(flowBody, /using bundled repo tree output when available/);
 });
 
 test("cf-architecture-map ships a low-cost read-only Codex custom agent", async () => {
@@ -172,6 +177,12 @@ test("cf-architecture-map ships a low-cost read-only Codex custom agent", async 
   assert.match(body, /^sandbox_mode = "read-only"$/m);
   assert.match(body, /Do not edit files, create \.cflow\/\*/);
   assert.match(body, /Cite enough concrete file evidence/);
+  assert.match(body, /repo-tree helper/);
+  assert.match(body, /<repo>\/\.agents\/skills\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(body, /\$CODEX_HOME\/skills\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(body, /\$HOME\/\.codex\/skills\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(body, /skip it if unavailable/);
+  assert.match(body, /orientation, not architecture evidence/);
   assert.match(body, /Exclude generated, vendored, dependency, cache, and build-output directories/);
   assert.match(body, /## Boundary and Packaging Model/);
   assert.doesNotMatch(body, /## Boundary Model/);
@@ -225,6 +236,7 @@ test("cf-trace requires read-only clean-context reconstruction", async () => {
   assert.match(flowBody, /The controller must not duplicate the path scan/);
   assert.match(flowBody, /`\.cflow\/trace\.md` must distinguish observed from inferred steps/);
   assert.match(flowBody, /Every applicable audit lens must be covered/);
+  assert.match(flowBody, /uses bundled repo tree output when available/);
 });
 
 test("cf-trace ships a low-cost read-only Codex custom agent", async () => {
@@ -239,6 +251,12 @@ test("cf-trace ships a low-cost read-only Codex custom agent", async () => {
   assert.match(body, /^sandbox_mode = "read-only"$/m);
   assert.match(body, /Do not edit files, create \.cflow\/\*/);
   assert.match(body, /Do not .*decide audit severity/);
+  assert.match(body, /repo-tree helper/);
+  assert.match(body, /<repo>\/\.agents\/skills\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(body, /\$CODEX_HOME\/skills\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(body, /\$HOME\/\.codex\/skills\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(body, /skip it if unavailable/);
+  assert.match(body, /orientation, not evidence that a path step exists/);
   assert.match(body, /Read \.cflow\/architecture\.md first when it exists/);
   assert.match(body, /Do not treat \.cflow\/architecture\.md as proof that a path step exists/);
   assert.match(body, /Every reconstructed step must be marked as observed or inferred/);
@@ -262,6 +280,9 @@ test("maintainer golden rules require empty-context skill polish", async () => {
   assert.match(maintainingBody, /golden-rules\.md/);
   assert.match(body, /empty context/);
   assert.match(body, /every sentence must be necessary runtime guidance/);
+  assert.match(body, /progressive disclosure/);
+  assert.match(body, /for all runtime guidance/);
+  assert.match(body, /smallest linked resource/);
   assert.match(body, /no historical migration notes/);
   assert.match(body, /maintainer-only labels/);
   assert.match(body, /decorative wording/);
@@ -304,6 +325,7 @@ test("cf-file-split requires post-split placement review for related clusters", 
   assert.match(skillBody, /unhealthy flat cluster/);
   assert.match(skillBody, /previous split left one extracted file flat/);
   assert.match(skillBody, /final placement decision/);
+  assert.match(skillBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
 
   assert.match(rulesBody, /resulting local cluster/);
   assert.match(rulesBody, /split creates or extends at least two related files/);
@@ -313,9 +335,10 @@ test("cf-file-split requires post-split placement review for related clusters", 
   assert.match(flowBody, /resulting local directory shape/);
   assert.match(flowBody, /related file cluster/);
   assert.match(flowBody, /second or optional split/);
+  assert.match(flowBody, /bundled repo tree output/);
 });
 
-test("shared support references are not packaged as public skills", async () => {
+test("shared support resources are not packaged as public skills", async () => {
   const skills = await listSkillDirectories(SKILLS_ROOT);
   const skillNames = skills.map((skill) => skill.name);
 
@@ -340,7 +363,12 @@ test("shared support references are not packaged as public skills", async () => 
     await pathExists(path.join(SKILLS_ROOT, "_shared", "references", "file-split-rules.md")),
     true,
   );
+  assert.equal(
+    await pathExists(path.join(SKILLS_ROOT, "_shared", "scripts", "repo-tree.mjs")),
+    true,
+  );
 
+  const mrWolfBody = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
   const cognitiveBody = await readFile(
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
     "utf8",
@@ -370,6 +398,9 @@ test("shared support references are not packaged as public skills", async () => 
     "utf8",
   );
 
+  assert.match(mrWolfBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(cognitiveBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(fileSplitBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(cognitiveBody, /\.\.\/_shared\/references\/local-refactor-rules\.md/);
   assert.match(fileSplitBody, /\.\.\/_shared\/references\/file-split-rules\.md/);
   assert.match(fileSplitBody, /\.\.\/_shared\/references\/reference-audit\.md/);

@@ -32,7 +32,7 @@ They are not packaged as separate skill entrypoints.
 skills/          canonical runtime source, including skill dirs and installable support files
 skills/_codex_agents/
                  canonical Codex custom agent source
-skills/_shared/  shared runtime references used by multiple skills
+skills/_shared/  shared runtime references and scripts used by multiple skills
 src/             sync and fingerprint logic
 bin/             CLI entrypoint
 test/            filesystem and structure tests
@@ -76,6 +76,10 @@ Shared support references:
 - `skills/_shared/references/file-split-rules.md`
 - `skills/_shared/references/reference-audit.md`
 
+Shared support scripts:
+
+- `skills/_shared/scripts/repo-tree.mjs`
+
 Codex custom agents:
 
 - `skills/_codex_agents/cflow_architecture_recon.toml`
@@ -90,6 +94,7 @@ Pack-wide golden rules live in [golden-rules.md](./golden-rules.md).
 - Public skill contracts live in `skills/*/SKILL.md`.
 - `cf-start` phase contracts live in `skills/cf-start/references/*.md`.
 - Shared runtime rules live in `skills/_shared/references/`.
+- Shared deterministic runtime helpers live in `skills/_shared/scripts/`.
 - Bootstrap and artifact templates live in the owning public skill's `assets/` directory.
 - Codex custom agent sources live in `skills/_codex_agents/`.
 - Agent-specific install instructions live in `install/<agent>/`.

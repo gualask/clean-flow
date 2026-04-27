@@ -5,6 +5,7 @@ Use these rules when changing Cflow runtime skills, references, templates, docs,
 - Keep runtime behavior in the relevant `SKILL.md` or a reference file directly linked from that skill.
 - Keep `docs/` maintainer-only; do not assume docs are visible at runtime.
 - Polish every `SKILL.md` as if an LLM reads it from empty context: every sentence must be necessary runtime guidance, with no historical migration notes, maintainer-only labels, stale names, or decorative wording.
+- Apply progressive disclosure for all runtime guidance: keep `SKILL.md` to trigger conditions, hard gates, and essential routing; move detailed procedures, reference material, examples, and helper usage instructions to the smallest linked resource that is loaded only when needed.
 - Prefer state-based gates over actor-based gates.
 - Keep `cf-start/SKILL.md` as the controller: identity, hard gates, DOT flow diagrams, reference map, and output contracts.
 - Put phase-specific operational detail in `cf-start/references/*.md`.

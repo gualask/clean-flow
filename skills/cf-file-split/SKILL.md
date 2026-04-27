@@ -14,6 +14,7 @@ Do not bootstrap or require `.cflow/` artifacts.
 
 - Identify one target source file or one explicitly touched local file area.
 - If the target file is ambiguous, ask one focused question.
+- If the target is an area rather than one file, consider bundled `../_shared/scripts/repo-tree.mjs`; run it with `--help` first when a gitignore-aware file-name tree may reduce context before choosing the target file.
 - Read the whole target file, nearby imports/exports, call sites, tests, and local naming or folder conventions.
 - Treat repository state as the source of truth.
 

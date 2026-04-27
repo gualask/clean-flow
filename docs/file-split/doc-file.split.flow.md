@@ -14,7 +14,7 @@ Document the runtime flow for `cf-file-split`, the standalone skill for evaluati
 ## Flow
 
 1. Trigger `cf-file-split`.
-2. Controller identifies one explicit or inferable target source file.
+2. Controller identifies one explicit or inferable target source file, using bundled repo tree output when an area-level target needs file-name context before file selection.
 3. If the target or placement is ambiguous, controller asks one focused question.
 4. Controller decides whether the user is asking for evaluation or execution.
 5. Controller reads the whole target file, relevant imports and exports, call sites, tests, and local folder conventions.

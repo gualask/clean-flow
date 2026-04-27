@@ -17,6 +17,7 @@ Use numeric thresholds only when native tooling can measure them; otherwise repo
 
 - Use explicit file targets when provided, up to three per session.
 - Otherwise rank candidates from evidence: long functions, deep nesting, long loops, nested or oversized try/catch blocks, complexity reports, recent user-mentioned or changed files, and nearby test coverage.
+- For broad no-file discovery, consider bundled `../_shared/scripts/repo-tree.mjs`; run it with `--help` first when a gitignore-aware tree with LOC may reduce context before selecting candidate files.
 - In discovery mode, keep a ranked shortlist of at most three files; do not add weak candidates just to reach three.
 - Process shortlisted files sequentially, best first, and verify after each file.
 - If only one file is fixed in this invocation, report remaining shortlisted candidates so the user can continue without rediscovery.
