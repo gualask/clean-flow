@@ -392,6 +392,30 @@ test("composable skill entry modes use the current request", async () => {
   assert.match(cohesionBody, /current request explicitly asks to regroup/);
 });
 
+test("cf-cognitive treats nested main-path stacks as local pressure", async () => {
+  const skillBody = await readFile(path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"), "utf8");
+  const targetedBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-cognitive", "references", "targeted-evaluation.md"),
+    "utf8",
+  );
+  const executionBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-cognitive", "references", "execution.md"),
+    "utf8",
+  );
+  const flowBody = await readFile(
+    path.join(REPO_ROOT, "docs", "cognitive", "doc-cognitive.flow.md"),
+    "utf8",
+  );
+
+  assert.match(skillBody, /deepest main-path stack/);
+  assert.match(skillBody, /Do not downrank this only because behavior is correct/);
+  assert.match(targetedBody, /Use `recommended`, not `optional`/);
+  assert.match(targetedBody, /guard or branch -> runner\/callback -> try\/catch -> result branching/);
+  assert.match(executionBody, /Flatten the target function's main path first/);
+  assert.match(executionBody, /result-to-toast\/error branching/);
+  assert.match(flowBody, /guard\/runner\/callback\/try\/result branching stacks/);
+});
+
 test("cf-start phase references preserve internal-skill guardrails", async () => {
   const startBody = await readFile(path.join(SKILLS_ROOT, "cf-start", "SKILL.md"), "utf8");
   const safetyNetBody = await readFile(

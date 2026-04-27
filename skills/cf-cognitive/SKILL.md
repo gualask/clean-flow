@@ -37,6 +37,8 @@ Refactor only when the target has clear local cognitive pressure:
 - complex boolean expressions, regex construction, parsing, or small algorithms that are hard to read inline
 - repeated non-trivial local logic
 
+Before classifying nested code as `optional` or `keep as-is`, trace the deepest main-path stack. A small method is still a cleanup candidate when the reader must pass through guard/branch, runner or callback, try/catch, and result branching before seeing the intent. Do not downrank this only because behavior is correct, the code is local, or no file split is needed.
+
 ## Output Format
 
 Return only:

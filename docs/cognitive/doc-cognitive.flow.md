@@ -38,6 +38,7 @@ Document the runtime flow for `cf-cognitive`, the standalone local cleanup skill
 - Candidate discovery must be evidence-based, not a broad refactor hunt.
 - Work is sequential by file; it should not fan out into repo-wide cleanup.
 - Edits stay in the target file unless the user explicitly asks otherwise.
+- Small methods with guard/runner/callback/try/result branching stacks are valid cleanup candidates when flattening the caller exposes intent.
 - Helpers are kept only when they reduce reading cost.
 - Wiring, registration, and lifecycle blocks are not automatically exempt when nested callbacks hide branching, state changes, cleanup-sensitive behavior, or multiple side effects.
 - If file-level extraction appears appropriate, the next step should be `cf-split`, not unbounded splitting inside `cf-cognitive`.

@@ -16,6 +16,7 @@ Decide whether the explicit target files have real local cognitive pressure wort
 
 - Classify each target as `recommended`, `optional`, `keep as-is`, or `route`.
 - Use `recommended` only when local control flow, nesting, callbacks, parsing, branching, or repeated non-trivial logic materially slows reading.
+- Use `recommended`, not `optional`, when a function's main path is hidden behind multiple indentation layers such as guard or branch -> runner/callback -> try/catch -> result branching, and a same-file task or result helper would make the caller read as guard plus orchestration.
 - When lifecycle, registration, framework/runtime wiring, or infrastructure callbacks contain real behavior such as branching, multiple state updates, mutable state changes, cleanup-sensitive ordering, or promise/error handling, do not classify the target as `keep as-is` only because it is not split-worthy.
 - Use `recommended` when a same-file named handler or shallow local helper would make the outer block read as setup, teardown, or orchestration without hiding ordering-sensitive side effects.
 - Use `optional` when cleanup could help but current code is still easy enough to follow.

@@ -13,6 +13,7 @@ Execute local cognitive cleanup only for explicit target files or a confirmed di
 - Keep changes inside the target file unless the user explicitly asks otherwise.
 - Do not move responsibilities to new files or shared utilities.
 - Do not continue past the target files or past three files in one session.
+- Flatten the target function's main path first. For nested async actions, prefer a shallow caller that performs guards and invokes a named same-file task; move result-to-toast/error branching into a small same-file helper when that exposes the orchestration.
 - Treat anonymous callbacks passed to registration/lifecycle APIs as part of the local cognitive load when they contain branching, state changes, cleanup-sensitive behavior, or multiple side effects.
 - Prefer named local handlers or a shallow subscription helper when that makes setup, teardown, and effect order easier to scan.
 - If local cleanup reveals possible file-level extraction, report `cf-split` as the next step with the target file and obvious candidate names.
