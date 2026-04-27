@@ -301,6 +301,10 @@ test("cf-start phase references preserve internal-skill guardrails", async () =>
     path.join(SKILLS_ROOT, "cf-start", "references", "work-unit-planning.md"),
     "utf8",
   );
+  const alignmentBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "alignment.md"),
+    "utf8",
+  );
 
   assert.match(safetyNetBody, /Characterization tests lock current behavior/);
   assert.match(safetyNetBody, /Do not weaken or rewrite tests just to make a refactor pass/);
@@ -308,6 +312,8 @@ test("cf-start phase references preserve internal-skill guardrails", async () =>
   assert.match(splitBody, /If the safety lock breaks after a move, stop and investigate/);
   assert.match(planningBody, /faking lightweight planning/);
   assert.match(planningBody, /Never finish planning with both `current work unit` and `recommended next work unit` unset/);
+  assert.doesNotMatch(alignmentBody, /update `\.cflow\/architecture\.md`/);
+  assert.match(alignmentBody, /route to `cf-architecture-map` if repository observations became clearer enough to change `\.cflow\/architecture\.md`/);
 });
 
 test("cf-file-split requires post-split placement review for related clusters", async () => {
