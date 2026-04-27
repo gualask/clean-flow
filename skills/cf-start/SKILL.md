@@ -1,6 +1,6 @@
 ---
 name: cf-start
-description: Main workflow entrypoint for Cflow. Use to start, assess, align, resume, plan, execute, review, or verify behavior-preserving cleanup and refactor work through `.cflow/architecture.md` and `.cflow/refactor-brief.md`. Route upstream ambiguity to `cf-mr-wolf` when the problem, goal, scope, or success criteria are not clear enough for Cflow assessment.
+description: Main workflow entrypoint for behavior-preserving cleanup and refactor work in Cflow. Use when the user wants to assess new cleanup/refactor work, resume existing `.cflow` work, plan or execute a bounded work unit, or review/verify progress. Use `cf-mr-wolf` first when problem framing, success criteria, or scope are not clear enough to assess.
 ---
 
 This is the main workflow controller for Cflow.
@@ -43,10 +43,10 @@ Use this diagram as the lifecycle contract after architecture context is current
 
 ```dot
 digraph cflow_lifecycle {
-  "assessment" -> "alignment checkpoint";
-  "alignment checkpoint" -> "planning" [label="multi-unit or ordering"];
-  "alignment checkpoint" -> "mapping" [label="one clear local unit"];
-  "alignment checkpoint" -> "target shape" [label="hard path"];
+  "assessment" -> "decision checkpoint";
+  "decision checkpoint" -> "planning" [label="multi-unit or ordering"];
+  "decision checkpoint" -> "mapping" [label="one clear local unit"];
+  "decision checkpoint" -> "target shape" [label="hard path"];
   "target shape" -> "migration planning";
   "planning" -> "mapping";
   "migration planning" -> "safety net";
@@ -57,23 +57,30 @@ digraph cflow_lifecycle {
   "local simplify" -> "review";
   "review" -> "verify";
   "verify" -> "close or next unit";
-  "feedback" -> "alignment checkpoint";
+  "feedback" -> "decision checkpoint";
 }
 ```
 
-## Hard rule
+## Checkpoint rule
 
-For non-trivial fresh work, always stop at an **alignment checkpoint** after the initial assessment.
+For non-trivial fresh work, always stop at a **decision checkpoint** after the initial assessment.
 Do this even when you already have a recommendation.
 
 At the checkpoint:
 
 - if the user replies with simple confirmation only, continue with the proposed path
-- if the user gives a reply that may materially change the path, stay in the alignment phase first
+- if the user asks a factual question that does not affect the path, answer briefly and continue only when the next step is still clear
+- if the user gives steering that materially changes scope, exclusions, invariants, risk appetite, direction, or whether to continue, re-run routing or assessment before proceeding and update `.cflow/refactor-brief.md` when resumable state matters
+- route to `cf-mr-wolf` only when the request, repository evidence, and existing `.cflow/*` artifacts cannot answer at least one required framing question:
+  - what problem the cleanup or refactor is supposed to solve
+  - what observable success would look like
+  - what scope boundary or candidate area is in bounds
+  - what is explicitly out of scope or must not change
 
 Simple confirmation means short approval with no new steering.
 A reply is non-trivial when it may materially change scope, exclusions, invariants, risk appetite, direction, or whether to continue.
-Questions that do not affect those decisions can be answered briefly before continuing.
+When routing to `cf-mr-wolf`, state the missing framing answer and the checked evidence source that failed to provide it.
+Do not implement while a material decision is open.
 
 ## Language rules
 
@@ -97,10 +104,9 @@ Read each reference in this invocation when its trigger is met:
 | [references/routing.md](references/routing.md) | ambiguous entry mode, upstream problem-shaping handoff, non-trivial fresh path selection, or resume routing that is not obvious from an active current work unit |
 | [references/artifacts.md](references/artifacts.md) | creating or refreshing `.cflow/refactor-brief.md`, or deciding required brief field updates |
 | [references/assessment.md](references/assessment.md) | fresh assessment, premise checks, or intervention framing |
-| [references/alignment.md](references/alignment.md) | user steering after assessment may change scope, exclusions, risk, direction, or whether to continue |
 | [references/work-unit-planning.md](references/work-unit-planning.md) | sequencing multiple soft-path work units |
 | [references/target-shape.md](references/target-shape.md) | hard restructure target direction is justified but unresolved |
-| [references/migration-unit-planning.md](references/migration-unit-planning.md) | hard-path target is aligned and needs bounded migration units |
+| [references/migration-unit-planning.md](references/migration-unit-planning.md) | hard-path target is confirmed and needs bounded migration units |
 | [references/concentration-map.md](references/concentration-map.md) | mapping concentration pressure or split direction |
 | [references/fragmentation-map.md](references/fragmentation-map.md) | mapping fragmentation pressure or consolidation direction |
 | [references/safety-net.md](references/safety-net.md) | choosing a behavior lock before structural edits |
@@ -119,7 +125,7 @@ Use [references/assessment.md](references/assessment.md) for premise checks and 
 Do not implement during fresh assessment.
 If the problem, goal, scope, or success criteria are not clear enough to assess as Cflow work, route to `cf-mr-wolf` before creating or updating Cflow artifacts.
 If the user asks only to reconstruct or audit a path, route to `cf-trace` before refactor assessment.
-Always end non-trivial fresh assessment at the alignment checkpoint with exactly one focused question.
+Always end non-trivial fresh assessment at the decision checkpoint with exactly one focused question.
 
 ## Resume
 
@@ -142,7 +148,7 @@ Return only:
 - **Pressure**: concentration, fragmentation, mixed, or none.
 - **Proposed path**: the recommended path and why.
 - **Artifacts**: created or updated files, one line.
-- **Alignment checkpoint**: exactly one focused question.
+- **Decision checkpoint**: exactly one focused question.
 
 End with exactly one focused question.
 

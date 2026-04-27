@@ -77,4 +77,4 @@ If the actual implementation changed understanding, also update:
 
 - `Fragmentation pressure`
 - `Target direction`
-- `Alignment notes`
+- `Decision notes`

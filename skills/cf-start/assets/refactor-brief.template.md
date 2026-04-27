@@ -35,7 +35,7 @@
 - exclusions / non-goals:
 - scope limits:
 
-## Alignment notes
+## Decision notes
 
 - user confirmations:
 - user corrections:

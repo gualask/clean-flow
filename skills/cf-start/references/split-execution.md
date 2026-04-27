@@ -82,4 +82,4 @@ If the actual implementation changed understanding, also update:
 
 - `Concentration pressure`
 - `Target direction`
-- `Alignment notes`
+- `Decision notes`

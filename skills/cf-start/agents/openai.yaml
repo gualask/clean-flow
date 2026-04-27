@@ -1,6 +1,6 @@
 interface:
   display_name: "Cflow:start"
-  short_description: "Bootstrap artifacts, assess, align, and resume refactor work"
+  short_description: "Assess, checkpoint, resume, and run refactor work"
   default_prompt: "Use $cf-start to assess or resume Cflow cleanup work in this repository."
 policy:
   allow_implicit_invocation: true

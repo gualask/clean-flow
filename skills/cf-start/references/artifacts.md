@@ -26,7 +26,7 @@ If `.cflow/refactor-brief.md` exists or is created, update at least:
 - `Assessment summary`
 - `Concentration pressure`
 - `Fragmentation pressure`
-- `Alignment notes`
+- `Decision notes`
 - `Execution state`
 - `Handoff notes`
 

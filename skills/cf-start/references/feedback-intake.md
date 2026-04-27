@@ -48,5 +48,5 @@ If a brief exists, update:
 If the feedback changes the plan, also update:
 
 - `Work units`
-- `Alignment notes`
+- `Decision notes`
 - `Unknowns to re-check`

@@ -10,7 +10,7 @@ Use these modes:
 - `cf-mr-wolf-handoff`
 - `cf-trace-handoff`
 - `assessment-only`
-- `assessment-then-alignment`
+- `assessment-then-checkpoint`
 - `resume-existing-work`
 - `review-or-verify`
 
@@ -21,9 +21,10 @@ Heuristics:
 - If the request asks only to reconstruct or audit a path, workflow, sequence, state transition, or orchestration flaw before deciding on fixes, route to `cf-trace`.
 - If the request asks only for local cognitive cleanup, one file-level split, or local cohesion regrouping, route to `cf-cognitive`, `cf-split`, or `cf-cohesion` instead of starting repository-level assessment.
 - If Cflow cannot yet answer what problem the refactor solves, what success looks like, or what is explicitly out of scope from the repo and conversation, route to `cf-mr-wolf` before creating or updating Cflow artifacts.
+- A `cf-mr-wolf-handoff` must identify the missing framing answer and cite the checked source that failed to answer it: user request, repository evidence, `.cflow/architecture.md`, or `.cflow/refactor-brief.md`.
 - If there is a live brief and the user says resume / continue / proceed, resume from the correct phase.
 - If the user explicitly asks only for review or verification, bootstrap or refresh prerequisites first and then route internally to that mode.
-- For non-trivial fresh work, default to `assessment-then-alignment`.
+- For non-trivial fresh work, default to `assessment-then-checkpoint`.
 
 ## Fresh assessment details
 
@@ -48,7 +49,7 @@ Rules:
 - Otherwise use work-unit planning before local mapping or execution.
 - For hard restructure, use target-shape planning first, then migration-unit planning.
 - Do not implement yet.
-- Follow the `cf-start` alignment checkpoint rule before execution.
+- Follow the `cf-start` decision checkpoint rule before execution.
 
 ## Detailed resume routing
 
@@ -58,7 +59,7 @@ Resume from the correct point:
 - if the brief is stale, or repository changes made the recorded path or work-unit state unreliable -> reassessment
 - if repository-level intervention framing is still unclear -> assessment phase
 - if hard-path direction is chosen but target shape is still unresolved -> `target-shape.md`
-- if hard-path direction is aligned but migration units are not yet planned -> `migration-unit-planning.md`
+- if hard-path direction is confirmed but migration units are not yet planned -> `migration-unit-planning.md`
 - if `current work unit` is `none` and there are multiple credible candidates, dependency/order decisions, cross-boundary scope, or resumable multi-step work -> `work-unit-planning.md`
 - if `current work unit` is `none` but the prompt or brief gives one explicit, local, behavior-preserving cohesive unit -> continue by mapping, locking, or executing that unit instead of forcing planning
 - if an active work unit is selected but not ready -> `concentration-map.md`, `fragmentation-map.md`, or `safety-net.md`

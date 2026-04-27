@@ -46,4 +46,4 @@ If review changes confidence in the target direction, also update:
 
 - `Target direction`
 - `Unknowns to re-check`
-- `Alignment notes`
+- `Decision notes`

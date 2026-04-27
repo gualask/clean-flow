@@ -56,4 +56,4 @@ If a brief exists or is created, update:
 If planning clarifies the near-term path, also update:
 
 - `Assessment summary`
-- `Alignment notes`
+- `Decision notes`

@@ -16,6 +16,7 @@ For non-runtime files, check that the change does not move runtime behavior into
 
 ## Runtime Skill Text
 
+- Treat frontmatter `description` as discovery metadata, not procedure: front-load user-facing task words and trigger phrases, state when to use the skill plus its key non-use or routing boundary, and avoid internal implementation details or artifact names unless they are invocation signals such as existing `.cflow` work.
 - Polish every `SKILL.md` as if an LLM reads it from empty context: every sentence must be necessary runtime guidance, with no historical migration notes, maintainer-only labels, stale names, or decorative wording.
 - In runtime skill instructions, do not refer to the current skill by its own skill name; use state, scope, artifact, or phase terms such as `here`, `this pass`, or the specific artifact instead.
 - Apply progressive disclosure for all runtime guidance: keep `SKILL.md` to trigger conditions, hard gates, and essential routing; move detailed procedures, reference material, examples, and helper usage instructions to the smallest linked resource that is loaded only when needed.

@@ -10,7 +10,7 @@ Define a bounded, repository-fitting target shape for a hard restructure.
 
 1. Require current `.cflow/architecture.md` and `.cflow/refactor-brief.md`; route to `cf-architecture` or `cf-start` if missing.
 2. If hard restructure is not already justified, route to `cf-start`.
-3. If unresolved user steering still blocks target-shape decisions, route to alignment.
+3. If unresolved user steering still blocks target-shape decisions, return to the `cf-start` decision checkpoint; route to `cf-mr-wolf` if the problem, goal, scope, or success criteria are unclear.
 4. Re-check the repository and treat it as the source of truth.
 
 ## Rules
@@ -35,6 +35,6 @@ Update:
 - `Assessment summary`
 - `Target direction`
 - `Constraints`
-- `Alignment notes`
+- `Decision notes`
 - `Execution state`
 - `Handoff notes`

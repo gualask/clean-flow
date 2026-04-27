@@ -106,7 +106,6 @@ test("cf-start ships workflow phase references", async () => {
     "routing.md",
     "artifacts.md",
     "assessment.md",
-    "alignment.md",
     "concentration-map.md",
     "fragmentation-map.md",
     "work-unit-planning.md",
@@ -294,6 +293,9 @@ test("maintainer golden rules require empty-context skill polish", async () => {
   assert.match(body, /## File-Type Checklist/);
   assert.match(body, /Use this checklist additively/);
   assert.match(body, /multiple roles/);
+  assert.match(body, /frontmatter `description` as discovery metadata/);
+  assert.match(body, /trigger phrases/);
+  assert.match(body, /artifact names unless they are invocation signals/);
   assert.match(body, /empty context/);
   assert.match(body, /every sentence must be necessary runtime guidance/);
   assert.match(body, /do not refer to the current skill by its own skill name/);
@@ -326,6 +328,7 @@ test("composable skill entry modes use the current request", async () => {
 });
 
 test("cf-start phase references preserve internal-skill guardrails", async () => {
+  const startBody = await readFile(path.join(SKILLS_ROOT, "cf-start", "SKILL.md"), "utf8");
   const safetyNetBody = await readFile(
     path.join(SKILLS_ROOT, "cf-start", "references", "safety-net.md"),
     "utf8",
@@ -338,10 +341,6 @@ test("cf-start phase references preserve internal-skill guardrails", async () =>
     path.join(SKILLS_ROOT, "cf-start", "references", "work-unit-planning.md"),
     "utf8",
   );
-  const alignmentBody = await readFile(
-    path.join(SKILLS_ROOT, "cf-start", "references", "alignment.md"),
-    "utf8",
-  );
 
   assert.match(safetyNetBody, /Characterization tests lock current behavior/);
   assert.match(safetyNetBody, /Do not weaken or rewrite tests just to make a refactor pass/);
@@ -349,8 +348,14 @@ test("cf-start phase references preserve internal-skill guardrails", async () =>
   assert.match(splitBody, /If the safety lock breaks after a move, stop and investigate/);
   assert.match(planningBody, /faking lightweight planning/);
   assert.match(planningBody, /Never finish planning with both `current work unit` and `recommended next work unit` unset/);
-  assert.doesNotMatch(alignmentBody, /update `\.cflow\/architecture\.md`/);
-  assert.match(alignmentBody, /route to `cf-architecture` if repository observations became clearer enough to change `\.cflow\/architecture\.md`/);
+  assert.match(startBody, /Do not implement while a material decision is open/);
+  assert.match(startBody, /missing framing answer/);
+  assert.match(startBody, /checked evidence source/);
+  assert.doesNotMatch(startBody, /references\/alignment\.md/);
+  assert.equal(
+    await pathExists(path.join(SKILLS_ROOT, "cf-start", "references", "alignment.md")),
+    false,
+  );
 });
 
 test("cf-split requires post-split placement review for related clusters", async () => {

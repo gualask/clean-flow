@@ -71,7 +71,7 @@ Installing the pack only syncs packaged skills, shared support resources, and Cf
 It does not create `.cflow/` by itself.
 
 For supported workflow first use and resume, start with `cf-start`.
-`cf-start` is the main public workflow entrypoint for assessment, alignment, resume, and work-unit selection.
+`cf-start` is the main public workflow entrypoint for assessment, decision checkpoints, resume, and work-unit selection.
 
 For ambiguous ideas, unclear feature/refactor goals, or implementation tasks that need focused problem framing before coding, use `cf-mr-wolf`.
 When `cf-start` cannot yet assess what problem a cleanup or refactor solves, it routes through `cf-mr-wolf` first.

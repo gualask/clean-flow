@@ -56,7 +56,6 @@ Public skill entrypoints:
 - `skills/cf-start/references/routing.md`
 - `skills/cf-start/references/artifacts.md`
 - `skills/cf-start/references/assessment.md`
-- `skills/cf-start/references/alignment.md`
 - `skills/cf-start/references/concentration-map.md`
 - `skills/cf-start/references/fragmentation-map.md`
 - `skills/cf-start/references/work-unit-planning.md`

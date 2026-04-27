@@ -23,12 +23,12 @@ When the upstream problem is too ambiguous for Cflow assessment, `cf-start` hand
 6. If the user asks only for local cognitive cleanup, file split, or local cohesion regrouping, controller routes to `cf-cognitive`, `cf-split`, or `cf-cohesion`.
 7. If architecture context is missing or stale, controller routes to `cf-architecture` before continuing.
 8. If `.cflow/refactor-brief.md` is needed, controller uses `references/artifacts.md` and `refactor-brief.template.md`.
-9. Fresh work enters `assessment.md`; non-trivial fresh assessment stops at alignment.
-10. User steering after assessment enters `alignment.md` until direction is clear enough.
+9. Fresh work enters `assessment.md`; non-trivial fresh assessment stops at the built-in decision checkpoint.
+10. User steering after assessment is handled by the checkpoint rule in `cf-start/SKILL.md`: simple confirmation continues, material steering re-runs routing or assessment, and unclear problem framing routes to `cf-mr-wolf`.
 11. Soft-path work routes through work-unit planning or directly to mapping only when one local low-risk unit is already clear.
 12. Hard-path work routes through target-shape and migration-unit planning before any code edits.
 13. Execution routes through safety net, split or consolidation execution, optional local simplify, review, and verify.
-14. Feedback routes through feedback intake before returning to alignment or the appropriate resume point.
+14. Feedback routes through feedback intake before returning to the decision checkpoint or the appropriate resume point.
 15. Controller keeps `.cflow/refactor-brief.md` current when resumable state matters.
 
 ## Phase Contracts
@@ -38,12 +38,11 @@ When the upstream problem is too ambiguous for Cflow assessment, `cf-start` hand
 | `references/routing.md` | choose entry mode, upstream problem-shaping handoff, fresh path, or resume point | prompt, repository state, and any existing `.cflow/*` artifacts | route to the required public entrypoint or earlier phase | no |
 | `references/artifacts.md` | define `.cflow/refactor-brief.md` updates | decision to create, refresh, or update brief state | defer artifact update until required fields are known | no |
 | `references/assessment.md` | premise check and intervention framing | current `.cflow/architecture.md`; brief optional | route to `cf-architecture` when architecture is missing or stale | no |
-| `references/alignment.md` | user steering after assessment | assessed direction or concrete decision to resolve | return to assessment | no |
 | `references/concentration-map.md` | concentration seam mapping and split direction | architecture map plus active unit, brief, or explicit scope | return to assessment or planning | no |
 | `references/fragmentation-map.md` | fragmentation seam mapping and consolidation direction | architecture map plus active unit, brief, or explicit scope | return to assessment or planning | no |
-| `references/work-unit-planning.md` | soft-path work-unit ordering | architecture map plus assessed direction, candidate area, or explicit bounded scope | return to assessment, alignment, or target shape | no |
-| `references/target-shape.md` | hard-path target direction | architecture map, brief, and justified hard path | return to assessment or alignment | no |
-| `references/migration-unit-planning.md` | hard-path bounded migration units | architecture map, brief, and aligned target direction | return to target shape or assessment | no |
+| `references/work-unit-planning.md` | soft-path work-unit ordering | architecture map plus assessed direction, candidate area, or explicit bounded scope | return to assessment, checkpoint, or target shape | no |
+| `references/target-shape.md` | hard-path target direction | architecture map, brief, and justified hard path | return to assessment, checkpoint, or `cf-mr-wolf` | no |
+| `references/migration-unit-planning.md` | hard-path bounded migration units | architecture map, brief, and confirmed target direction | return to target shape or assessment | no |
 | `references/safety-net.md` | behavior lock before structural edits | clear current work unit or explicit local behavior-preserving scope | return to planning or map phase | no |
 | `references/split-execution.md` | one bounded split-oriented structural step | mapped split seam plus credible safety lock | return to safety net or concentration map | yes |
 | `references/consolidation-execution.md` | one bounded consolidation-oriented structural step | consolidation-ready seam plus credible safety lock | return to safety net or fragmentation map | yes |
