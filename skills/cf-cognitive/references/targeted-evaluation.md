@@ -16,6 +16,8 @@ Decide whether the explicit target files have real local cognitive pressure wort
 
 - Classify each target as `recommended`, `optional`, `keep as-is`, or `route`.
 - Use `recommended` only when local control flow, nesting, callbacks, parsing, branching, or repeated non-trivial logic materially slows reading.
+- When lifecycle, registration, framework/runtime wiring, or infrastructure callbacks contain real behavior such as branching, multiple state updates, mutable state changes, cleanup-sensitive ordering, or promise/error handling, do not classify the target as `keep as-is` only because it is not split-worthy.
+- Use `recommended` when a same-file named handler or shallow local helper would make the outer block read as setup, teardown, or orchestration without hiding ordering-sensitive side effects.
 - Use `optional` when cleanup could help but current code is still easy enough to follow.
 - Use `keep as-is` when the code is merely imperfect or stylistically noisy.
 - Use `route` when the right next step is `cf-split`, `cf-cohesion`, or `cf-start`.

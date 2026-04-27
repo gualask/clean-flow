@@ -493,7 +493,12 @@ test("shared support resources are not packaged as public skills", async () => {
   assert.match(cognitiveBody, /references\/execution\.md/);
   assert.match(cognitiveExecutionBody, /\.\.\/\.\.\/_shared\/references\/local-refactor-rules\.md/);
   assert.match(cognitiveExecutionBody, /registration\/lifecycle APIs/);
+  assert.match(cognitiveTargetedBody, /do not classify the target as `keep as-is` only because it is not split-worthy/);
+  assert.match(cognitiveTargetedBody, /same-file named handler or shallow local helper/);
   assert.match(localRefactorRulesBody, /wiring blocks that mix setup\/teardown/);
+  assert.match(localRefactorRulesBody, /keep setup, teardown, cancellation, and ordering visible at the call site/);
+  assert.match(localRefactorRulesBody, /Extract inline callback behavior into named file-local handlers/);
+  assert.match(localRefactorRulesBody, /without hiding ordering-sensitive side effects/);
   assert.match(fileSplitBody, /references\/evaluation\.md/);
   assert.match(fileSplitBody, /references\/execution\.md/);
   assert.match(fileSplitEvaluationBody, /\.\.\/\.\.\/_shared\/references\/file-split-rules\.md/);

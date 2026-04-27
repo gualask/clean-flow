@@ -40,6 +40,8 @@ Avoid edits when the code is merely imperfect but still easy to follow.
 - Keep important side effects visible at the level where ordering matters.
 - Treat anonymous callbacks passed to registration/lifecycle APIs as local cognitive load when they contain branching, state changes, cleanup-sensitive behavior, or multiple side effects.
 - Prefer named local handlers or a shallow subscription helper when that makes setup, teardown, and effect order easier to scan.
+- For lifecycle, registration, framework/runtime wiring, and infrastructure APIs, keep setup, teardown, cancellation, and ordering visible at the call site.
+- Extract inline callback behavior into named file-local handlers only when the name makes the local behavior easier to scan without hiding ordering-sensitive side effects.
 
 ## Naming
 
