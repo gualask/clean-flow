@@ -24,6 +24,7 @@ digraph cflow_entry {
   "problem unclear?" -> "cf-mr-wolf" [label="yes"];
   "local cognitive cleanup?" -> "cf-cognitive" [label="yes"];
   "file split only?" -> "cf-file-split" [label="yes"];
+  "local cohesion regrouping?" -> "cf-cohesion" [label="yes"];
   "standalone architecture map?" -> "cf-architecture-map" [label="yes"];
   "path reconstruction or workflow audit?" -> "cf-trace" [label="yes"];
   "cleanup/refactor workflow" -> "cf-start";

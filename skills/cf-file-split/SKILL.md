@@ -6,6 +6,7 @@ Use this skill for local file-level split review and execution.
 
 Use this when the user asks whether a source file should be split into files, or asks to execute a specific local file-level extraction.
 Do not use this for cognitive cleanup inside one file; use `cf-cognitive` for that.
+Do not use this for regrouping already-split related files; use `cf-cohesion` for that.
 For repository structure, module boundaries, cross-feature ownership moves, or broad multi-file refactors, route to `cf-start`.
 
 Do not bootstrap or require `.cflow/` artifacts.

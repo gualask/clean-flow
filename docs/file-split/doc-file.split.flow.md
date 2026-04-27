@@ -29,6 +29,7 @@ Document the runtime flow for `cf-file-split`, the standalone skill for evaluati
 ## Review Checks
 
 - The skill handles one target file, not a package-wide decomposition.
+- Already-split related files that are scattered across folders belong to `cf-cohesion`.
 - It should not create or depend on `.cflow/*`.
 - Evaluation and execution modes must stay distinct.
 - Splits need a real seam: ownership, lifecycle, domain vocabulary, reuse, or testability.

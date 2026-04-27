@@ -117,6 +117,7 @@ Recommend exactly one immediate route:
 - `cf-start` when findings justify multi-step cleanup, refactor planning, or resumable execution
 - `cf-cognitive` when the issue is local cognitive complexity in up to three files
 - `cf-file-split` when the issue is one scoped file-level extraction
+- `cf-cohesion` when the issue is a local cluster of related files scattered across folders
 - direct fix when the issue is a clear, bounded implementation bug and the user asked to proceed
 - `none` when no credible issue is found
 

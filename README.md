@@ -12,6 +12,7 @@ Supported public entrypoints:
 - `cf-trace`
 - `cf-cognitive`
 - `cf-file-split`
+- `cf-cohesion`
 
 `cf-start` is the workflow controller.
 Its internal phases live as runtime references under `skills/cf-start/references/` and are not installed as separate skill entrypoints.
@@ -89,6 +90,9 @@ It can use explicit files or discover up to three justified candidate files, the
 
 For local file-level split review or execution, use `cf-file-split`.
 It evaluates whether one source file has natural extraction boundaries, or executes one scoped behavior-preserving file split.
+
+For local cohesion review or regrouping, use `cf-cohesion`.
+It evaluates whether already-related files are scattered across folders, or executes one behavior-preserving local regrouping into a cohesive feature or workflow slice.
 
 When `cf-start` needs architecture context, it routes through `cf-architecture-map` internally before continuing.
 

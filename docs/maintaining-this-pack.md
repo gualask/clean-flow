@@ -49,6 +49,7 @@ Public skill entrypoints:
 - `cf-trace`
 - `cf-cognitive`
 - `cf-file-split`
+- `cf-cohesion`
 
 `cf-start` phase references:
 
@@ -110,6 +111,7 @@ Per-public-skill flow references:
 - `cf-trace`: [trace/doc-trace.flow.md](./trace/doc-trace.flow.md)
 - `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
 - `cf-file-split`: [file-split/doc-file.split.flow.md](./file-split/doc-file.split.flow.md)
+- `cf-cohesion`: [cohesion/doc-cohesion.flow.md](./cohesion/doc-cohesion.flow.md)
 
 ## Runtime Reference Rules
 

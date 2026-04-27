@@ -9,6 +9,7 @@ Document the runtime flow for `cf-cognitive`, the standalone local cleanup skill
 - Public skill: `skills/cf-cognitive/SKILL.md`
 - Shared refactor rules: `skills/_shared/references/local-refactor-rules.md`
 - Shared readability review: `skills/_shared/references/local-readability-review.md` when review or simplification needs it
+- Cohesion follow-up: `skills/cf-cohesion/SKILL.md` when remaining cost is cross-file placement or navigation
 - Target artifacts: none; this skill does not create or update `.cflow/*`
 
 ## Flow
@@ -33,3 +34,4 @@ Document the runtime flow for `cf-cognitive`, the standalone local cleanup skill
 - Helpers are kept only when they reduce reading cost.
 - Wiring, registration, and lifecycle blocks are not automatically exempt when nested callbacks hide branching, state changes, cleanup-sensitive behavior, or multiple side effects.
 - If file-level extraction appears appropriate, the next step should be `cf-file-split`, not unbounded splitting inside `cf-cognitive`.
+- If related files are already split but scattered, the next step should be `cf-cohesion`, not local cognitive cleanup.

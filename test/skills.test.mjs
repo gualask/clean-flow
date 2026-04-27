@@ -226,7 +226,7 @@ test("cf-trace requires read-only clean-context reconstruction", async () => {
   assert.match(templateBody, /## Audit findings/);
   assert.match(templateBody, /## Lens coverage/);
   assert.match(templateBody, /## Recommended route/);
-  assert.match(templateBody, /cf-mr-wolf \| cf-architecture-map \| cf-start \| cf-cognitive \| cf-file-split \| direct fix \| none/);
+  assert.match(templateBody, /cf-mr-wolf \| cf-architecture-map \| cf-start \| cf-cognitive \| cf-file-split \| cf-cohesion \| direct fix \| none/);
 
   assert.match(flowBody, /Custom agent source: `skills\/_codex_agents\/cflow_trace_recon\.toml`/);
   assert.match(flowBody, /The custom agent must reconstruct the path only/);
@@ -434,6 +434,7 @@ test("only public entrypoints are packaged as skills", async () => {
     "cf-trace",
     "cf-cognitive",
     "cf-file-split",
+    "cf-cohesion",
   ]);
 
   for (const skill of skills) {
@@ -458,6 +459,7 @@ test("public skill flow docs exist", async () => {
     path.join(REPO_ROOT, "docs", "trace", "doc-trace.flow.md"),
     path.join(REPO_ROOT, "docs", "cognitive", "doc-cognitive.flow.md"),
     path.join(REPO_ROOT, "docs", "file-split", "doc-file.split.flow.md"),
+    path.join(REPO_ROOT, "docs", "cohesion", "doc-cohesion.flow.md"),
   ]) {
     assert.equal(await pathExists(docPath), true, `${docPath} is missing`);
   }
@@ -651,13 +653,14 @@ test("cf-mr-wolf hands cleanup discovery to cf-start before execution skills", a
   assert.match(body, /do not jump directly into execution skills/);
   assert.match(body, /cf-file-split/);
   assert.match(body, /cf-cognitive/);
+  assert.match(body, /cf-cohesion/);
   assert.match(body, /preserve the discovery in `\.cflow\/refactor-brief\.md`/);
   assert.match(body, /cf-start` owns that brief/);
   assert.match(body, /cf-start` should read `\.cflow\/mr-wolf-notes\.md` as discovery input/);
   assert.match(body, /not an execution plan or refactor backlog/);
 
   assert.match(flowBody, /recommend `cf-start`/);
-  assert.match(flowBody, /do not route straight to `cf-file-split` or `cf-cognitive`/);
+  assert.match(flowBody, /do not route straight to `cf-file-split`, `cf-cognitive`, or `cf-cohesion`/);
   assert.match(flowBody, /do not create that brief directly from `cf-mr-wolf`/);
 });
 

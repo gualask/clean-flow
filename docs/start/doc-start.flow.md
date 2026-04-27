@@ -20,15 +20,16 @@ When the upstream problem is too ambiguous for Cflow assessment, `cf-start` hand
 3. Controller loads `references/routing.md` when it must decide fresh entry, resume, review, verify, or route handoff.
 4. If the problem, goal, scope, or success criteria are not clear enough for Cflow assessment, controller routes to `cf-mr-wolf` before creating Cflow artifacts.
 5. If the user asks only to reconstruct or audit a path, controller routes to `cf-trace` before refactor assessment.
-6. If architecture context is missing or stale, controller routes to `cf-architecture-map` before continuing.
-7. If `.cflow/refactor-brief.md` is needed, controller uses `references/artifacts.md` and `refactor-brief.template.md`.
-8. Fresh work enters `assessment.md`; non-trivial fresh assessment stops at alignment.
-9. User steering after assessment enters `alignment.md` until direction is clear enough.
-10. Soft-path work routes through work-unit planning or directly to mapping only when one local low-risk unit is already clear.
-11. Hard-path work routes through target-shape and migration-unit planning before any code edits.
-12. Execution routes through safety net, split or consolidation execution, optional local simplify, review, and verify.
-13. Feedback routes through feedback intake before returning to alignment or the appropriate resume point.
-14. Controller keeps `.cflow/refactor-brief.md` current when resumable state matters.
+6. If the user asks only for local cognitive cleanup, file split, or local cohesion regrouping, controller routes to `cf-cognitive`, `cf-file-split`, or `cf-cohesion`.
+7. If architecture context is missing or stale, controller routes to `cf-architecture-map` before continuing.
+8. If `.cflow/refactor-brief.md` is needed, controller uses `references/artifacts.md` and `refactor-brief.template.md`.
+9. Fresh work enters `assessment.md`; non-trivial fresh assessment stops at alignment.
+10. User steering after assessment enters `alignment.md` until direction is clear enough.
+11. Soft-path work routes through work-unit planning or directly to mapping only when one local low-risk unit is already clear.
+12. Hard-path work routes through target-shape and migration-unit planning before any code edits.
+13. Execution routes through safety net, split or consolidation execution, optional local simplify, review, and verify.
+14. Feedback routes through feedback intake before returning to alignment or the appropriate resume point.
+15. Controller keeps `.cflow/refactor-brief.md` current when resumable state matters.
 
 ## Phase Contracts
 
@@ -56,6 +57,7 @@ When the upstream problem is too ambiguous for Cflow assessment, `cf-start` hand
 - `cf-start` remains the only workflow controller.
 - Upstream problem ambiguity routes to `cf-mr-wolf` before `.cflow/*` artifacts are created or updated.
 - Path reconstruction and workflow flaw analysis routes to `cf-trace` before refactor assessment.
+- Explicit local cleanup entrypoints route to `cf-cognitive`, `cf-file-split`, or `cf-cohesion` instead of becoming Cflow workflow phases.
 - Runtime behavior lives in `SKILL.md` or a directly linked reference, not only in docs.
 - Phase routing is state-based, not actor-based.
 - Architecture bootstrap belongs to `cf-architecture-map`; refactor brief ownership belongs to `cf-start`.

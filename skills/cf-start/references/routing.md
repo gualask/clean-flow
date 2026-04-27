@@ -19,6 +19,7 @@ Heuristics:
 - If there is no live brief or the task looks new, start with assessment.
 - If the request asks to clarify, shape, design, de-risk, or spec an unclear problem before implementation, route to `cf-mr-wolf`.
 - If the request asks only to reconstruct or audit a path, workflow, sequence, state transition, or orchestration flaw before deciding on fixes, route to `cf-trace`.
+- If the request asks only for local cognitive cleanup, one file-level split, or local cohesion regrouping, route to `cf-cognitive`, `cf-file-split`, or `cf-cohesion` instead of starting repository-level assessment.
 - If Cflow cannot yet answer what problem the refactor solves, what success looks like, or what is explicitly out of scope from the repo and conversation, route to `cf-mr-wolf` before creating or updating Cflow artifacts.
 - If there is a live brief and the user says resume / continue / proceed, resume from the correct phase.
 - If the user explicitly asks only for review or verification, bootstrap or refresh prerequisites first and then route internally to that mode.

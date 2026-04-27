@@ -113,7 +113,7 @@ If a user asks to proceed below 80%, state the remaining uncertainty in the hand
 
 ## Cflow Handoff Boundary
 
-When the evidence points to behavior-preserving cleanup, refactor, file splitting, cognitive cleanup, or multiple candidate files, do not jump directly into execution skills such as `cf-file-split` or `cf-cognitive`.
+When the evidence points to behavior-preserving cleanup, refactor, file splitting, cognitive cleanup, local cohesion regrouping, or multiple candidate files, do not jump directly into execution skills such as `cf-file-split`, `cf-cognitive`, or `cf-cohesion`.
 
 Stop at an evidence-backed handoff:
 
@@ -128,7 +128,7 @@ If the work is multi-file, ordered, risky, or resumable, ask whether to preserve
 `cf-start` owns that brief, work-unit planning, safety net, execution, review, verification, and resume.
 When handing off, say that `cf-start` should read `.cflow/mr-wolf-notes.md` as discovery input; do not imply that `.cflow/refactor-brief.md` will be written here.
 
-Use `cf-file-split` or `cf-cognitive` directly only when the user asks for one explicit local file-level action and no broader Cflow planning or resume state is needed.
+Use `cf-file-split`, `cf-cognitive`, or `cf-cohesion` directly only when the user asks for one explicit local action and no broader Cflow planning or resume state is needed.
 When the evidence points to an unclear multi-step path, ordering risk, state gap, or workflow flaw but not yet to a specific refactor, recommend `cf-trace`.
 
 ## Decision and Options

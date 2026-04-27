@@ -46,7 +46,7 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 | many deterministic inputs | use commands, bundled repo tree output, or temporary `/tmp` scripts for mechanical analysis, then interpret the compact output | no |
 | relevant specialist skill used | apply it only as a review lens over the selected context slice, record why it was used, and keep final judgment in the handoff | no |
 | repo-wide or multi-candidate discovery | run broad inventory, narrowing pass, false-positive check, and record confidence before declaring sufficiency | no |
-| cleanup/refactor candidate list | summarize evidence and hand off to `cf-start`; do not route straight to `cf-file-split` or `cf-cognitive` unless the user requested one explicit local action | no |
+| cleanup/refactor candidate list | summarize evidence and hand off to `cf-start`; do not route straight to `cf-file-split`, `cf-cognitive`, or `cf-cohesion` unless the user requested one explicit local action | no |
 | clear enough for options | present recommended direction first, with only real alternatives and trade-offs | no |
 | completed handoff | recommend the best next step with reason, naming a specialized available skill when it clearly owns the follow-up | no |
 | false positives | record only important excluded false positives, not every non-candidate file | no |

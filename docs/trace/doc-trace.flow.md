@@ -38,4 +38,4 @@ Document the runtime flow for `cf-trace`, the public path reconstruction and aud
 - `.cflow/trace.md` must distinguish observed from inferred steps.
 - Findings must be evidence-backed and ordered by severity.
 - Every applicable audit lens must be covered, including explicit `none found from current evidence` when no issue is visible.
-- The final route must be exactly one of `cf-mr-wolf`, `cf-architecture-map`, `cf-start`, `cf-cognitive`, `cf-file-split`, `direct fix`, or `none`.
+- The final route must be exactly one of `cf-mr-wolf`, `cf-architecture-map`, `cf-start`, `cf-cognitive`, `cf-file-split`, `cf-cohesion`, `direct fix`, or `none`.
