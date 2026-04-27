@@ -211,6 +211,8 @@ test("cf-trace requires read-only clean-context reconstruction", async () => {
   assert.match(body, /use one equivalent clean-context reconnaissance subagent/);
   assert.match(body, /requires explicit subagent authorization/);
   assert.match(body, /must not trigger controller-side reconstruction/);
+  assert.match(body, /preflight is complete; ask for authorization and stop/);
+  assert.match(body, /Do not continue with local-only trace reconstruction/);
   assert.match(body, /Read `\.cflow\/architecture\.md` if it exists/);
   assert.match(body, /route to `cf-architecture` before continuing/);
   assert.match(body, /Start the custom agent with only the repository path and the current trace request/);
@@ -223,6 +225,7 @@ test("cf-trace requires read-only clean-context reconstruction", async () => {
   assert.match(body, /instruction ambiguity/);
   assert.match(body, /Recommend exactly one immediate route/);
   assert.match(body, /do not create or refresh `\.cflow\/architecture\.md` or `\.cflow\/refactor-brief\.md`/);
+  assert.doesNotMatch(body, /gitignore/i);
 
   assert.match(templateBody, /## Reconstruction/);
   assert.match(templateBody, /status: observed \| inferred/);
@@ -233,6 +236,8 @@ test("cf-trace requires read-only clean-context reconstruction", async () => {
 
   assert.match(flowBody, /Custom agent source: `skills\/_codex_agents\/cflow_trace_recon\.toml`/);
   assert.match(flowBody, /The custom agent must reconstruct the path only/);
+  assert.match(flowBody, /Blocked subagent authorization must stop the flow/);
+  assert.match(flowBody, /must not fall back to local-only source scanning, trace updates, or audit/);
   assert.match(flowBody, /preflight reads only existing `\.cflow\/architecture\.md`/);
   assert.match(flowBody, /routes to `cf-architecture` before continuing/);
   assert.match(flowBody, /reads `\.cflow\/architecture\.md` first when present/);
@@ -240,6 +245,7 @@ test("cf-trace requires read-only clean-context reconstruction", async () => {
   assert.match(flowBody, /`\.cflow\/trace\.md` must distinguish observed from inferred steps/);
   assert.match(flowBody, /Every applicable audit lens must be covered/);
   assert.match(flowBody, /uses bundled repo tree output when available/);
+  assert.doesNotMatch(flowBody, /gitignore/i);
 });
 
 test("cf-trace ships a low-cost read-only Codex custom agent", async () => {

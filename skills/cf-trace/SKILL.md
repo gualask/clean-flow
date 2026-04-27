@@ -42,10 +42,10 @@ Do not use this for broad refactor planning; use `cf-start` after trace findings
 1. Identify the requested path, workflow, scenario, or entrypoint.
 2. Read `.cflow/architecture.md` if it exists.
 3. Read `.cflow/trace.md` if it exists.
-4. Check whether `.gitignore` already contains `.cflow/`.
-5. Read `assets/trace.template.md`.
-6. Check `git status --short` for user-change awareness.
-7. Do not reconstruct the path during preflight; the reconnaissance subagent owns that scan.
+4. Read `assets/trace.template.md`.
+5. Check `git status --short` for user-change awareness.
+6. Do not reconstruct the path during preflight; the reconnaissance subagent owns that scan.
+7. If explicit subagent authorization is required and has not been granted, preflight is complete; ask for authorization and stop before reading source paths, updating `.cflow/trace.md`, or auditing.
 
 If the requested path is too ambiguous to trace, ask one focused question before spawning reconnaissance.
 If `.cflow/architecture.md` is missing, stale, or materially incomplete, route to `cf-architecture` before continuing.
@@ -57,6 +57,7 @@ It is configured as a read-only, lower-cost reconnaissance agent for reconstruct
 
 If the custom agent is unavailable, use one equivalent clean-context reconnaissance subagent to inspect the repository and return a read-only trace report.
 If the runtime requires explicit subagent authorization, ask and stop; blocked delegation is not custom-agent unavailability and must not trigger controller-side reconstruction.
+Do not continue with local-only trace reconstruction just because the custom agent could not be started under the current runtime rules.
 
 Start the custom agent with only the repository path and the current trace request.
 Do not paste the custom agent's TOML instructions or full report format into the spawn prompt.
@@ -66,7 +67,7 @@ Expect the subagent report to contain these sections: **Trace Scope**, **Observe
 Treat the subagent report as the primary path reconstruction.
 Use `assets/trace.template.md` as the review rubric for whether the report is good enough to write `.cflow/trace.md`.
 While the subagent is running, do not read manifests, source directories, docs, or implementation files to build a parallel reconstruction.
-During that wait, the controller may only inspect `.cflow/architecture.md`, existing `.cflow/trace.md`, `.gitignore`, the trace template, and worktree status.
+During that wait, the controller may only inspect `.cflow/architecture.md`, existing `.cflow/trace.md`, the trace template, and worktree status.
 Do not repeat full reconnaissance unless the report is incomplete, contradictory, or unsupported by its cited evidence.
 Spot-check only the evidence needed to trust the report, resolve contradictions, or fill unknowns.
 If the report misses a required section or fills it with generic, prescriptive, or off-scope content, ask the subagent one targeted follow-up or do the smallest evidence spot-check needed.
@@ -82,7 +83,6 @@ Use `assets/trace.template.md` as the source template for `.cflow/trace.md`.
 When bootstrapping or refreshing the trace artifact:
 
 - create `.cflow/` if it does not exist
-- add `.cflow/` to the repository `.gitignore` if the entry is missing
 - create `.cflow/trace.md` from `assets/trace.template.md` when the file is missing
 - update `.cflow/trace.md` in place when it already exists
 - never create root-level `trace.md`
