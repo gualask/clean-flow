@@ -56,6 +56,7 @@ Before creating or refreshing `.cflow/trace.md`, use the `cflow_trace_recon` cus
 It is configured as a read-only, lower-cost reconnaissance agent for reconstructing one path.
 
 If the custom agent is unavailable, use one equivalent clean-context reconnaissance subagent to inspect the repository and return a read-only trace report.
+If the runtime requires explicit subagent authorization, ask and stop; blocked delegation is not custom-agent unavailability and must not trigger controller-side reconstruction.
 
 Start the custom agent with only the repository path and the user's trace request.
 Do not paste the custom agent's TOML instructions or full report format into the spawn prompt.

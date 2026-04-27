@@ -208,6 +208,8 @@ test("cf-trace requires read-only clean-context reconstruction", async () => {
 
   assert.match(body, /use the `cflow_trace_recon` custom agent when available/);
   assert.match(body, /use one equivalent clean-context reconnaissance subagent/);
+  assert.match(body, /requires explicit subagent authorization/);
+  assert.match(body, /must not trigger controller-side reconstruction/);
   assert.match(body, /Read `\.cflow\/architecture\.md` if it exists/);
   assert.match(body, /route to `cf-architecture` before continuing/);
   assert.match(body, /Start the custom agent with only the repository path and the user's trace request/);
@@ -278,8 +280,22 @@ test("maintainer golden rules require empty-context skill polish", async () => {
   );
 
   assert.match(maintainingBody, /golden-rules\.md/);
+  assert.match(body, /## How to Use/);
+  assert.match(body, /file type, runtime role, and public or installable surface/);
+  assert.match(body, /evaluate the full change against all of them/);
+  assert.match(body, /do not stop at the first matching issue/);
+  assert.match(body, /For runtime guidance/);
+  assert.match(body, /For non-runtime files/);
+  assert.match(body, /## Runtime Placement/);
+  assert.match(body, /## Runtime Skill Text/);
+  assert.match(body, /## Pack Surface Boundaries/);
+  assert.match(body, /## File-Type Checklist/);
+  assert.match(body, /Use this checklist additively/);
+  assert.match(body, /multiple roles/);
   assert.match(body, /empty context/);
   assert.match(body, /every sentence must be necessary runtime guidance/);
+  assert.match(body, /do not refer to the current skill by its own skill name/);
+  assert.match(body, /state, scope, artifact, or phase terms/);
   assert.match(body, /progressive disclosure/);
   assert.match(body, /for all runtime guidance/);
   assert.match(body, /smallest linked resource/);
@@ -289,6 +305,9 @@ test("maintainer golden rules require empty-context skill polish", async () => {
   assert.match(body, /current request/);
   assert.match(body, /literal user or another skill/);
   assert.match(body, /user-level authorization gates/);
+  assert.match(body, /`references\/\*\.md`: operational rules for an already-selected path/);
+  assert.match(body, /`docs\/\*\.md`: maintainer-only explanation/);
+  assert.match(body, /tests: guard contracts and package behavior/);
 });
 
 test("composable skill entry modes use the current request", async () => {
@@ -690,6 +709,9 @@ test("cf-mr-wolf hands cleanup discovery to cf-start before execution skills", a
   assert.match(body, /cf-start` owns that brief/);
   assert.match(body, /cf-start` should read `\.cflow\/mr-wolf-notes\.md` as discovery input/);
   assert.match(body, /not an execution plan or refactor backlog/);
+  assert.match(body, /When a follow-up skill owns required reconnaissance, artifact writes, or execution/);
+  assert.match(body, /hand off instead of doing that work here/);
+  assert.match(body, /if the current request continues into that skill and it needs subagent authorization, ask first/);
 
   assert.match(flowBody, /recommend `cf-start`/);
   assert.match(flowBody, /do not route straight to `cf-split`, `cf-cognitive`, or `cf-cohesion`/);
