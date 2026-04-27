@@ -82,6 +82,6 @@ For inferred steps, record what would verify the step.
 
 ## Recommended route
 
-- route: cf-mr-wolf | cf-architecture-map | cf-start | cf-cognitive | cf-file-split | cf-cohesion | direct fix | none
+- route: cf-mr-wolf | cf-architecture | cf-start | cf-cognitive | cf-split | cf-cohesion | direct fix | none
 - reason:
 - immediate next action:

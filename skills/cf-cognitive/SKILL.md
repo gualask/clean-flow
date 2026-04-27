@@ -7,7 +7,7 @@ Use this skill for local file-level cognitive complexity refactors.
 Use this for up to three source files per session, processed one file at a time.
 Do not bootstrap or require `.cflow/` artifacts.
 If no file is provided, discover candidate files, propose up to three justified targets, and start with the best first file unless the user asked only for recommendations.
-For file-level split review or extraction from one source file, route to `cf-file-split` instead.
+For file-level split review or extraction from one source file, route to `cf-split` instead.
 For cross-file cohesion, placement, navigation cost, or related files that may need a local feature slice, route to `cf-cohesion` instead.
 For repository structure, module boundaries, ownership moves, or broad multi-file refactors, route to `cf-start` instead.
 
@@ -53,7 +53,7 @@ Apply that reference with these extra constraints:
 
 ## Post-refactor extraction candidates
 
-If local cleanup reveals possible file-level extraction, report `cf-file-split` as the next step with the target file and obvious candidate names.
+If local cleanup reveals possible file-level extraction, report `cf-split` as the next step with the target file and obvious candidate names.
 If local cleanup reveals that the remaining cognitive cost is related files scattered across folders, report `cf-cohesion` as the next step with the local feature or workflow name.
 Do not evaluate placement or execute extraction in this skill.
 
@@ -71,4 +71,4 @@ Return only:
 - **Files**: target files touched, plus remaining shortlist when relevant.
 - **Changes**: hotspots addressed and refactor applied.
 - **Checks**: commands run and pass/fail result, or why no check ran.
-- **Result**: behavior preservation, remaining risk, and `cf-file-split` next step when file-level extraction should be reviewed.
+- **Result**: behavior preservation, remaining risk, and `cf-split` next step when file-level extraction should be reviewed.

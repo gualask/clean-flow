@@ -8,10 +8,10 @@ Supported public entrypoints:
 
 - `cf-start`
 - `cf-mr-wolf`
-- `cf-architecture-map`
+- `cf-architecture`
 - `cf-trace`
 - `cf-cognitive`
-- `cf-file-split`
+- `cf-split`
 - `cf-cohesion`
 
 `cf-start` is the workflow controller.
@@ -76,25 +76,25 @@ For supported workflow first use and resume, start with `cf-start`.
 For ambiguous ideas, unclear feature/refactor goals, or implementation tasks that need focused problem framing before coding, use `cf-mr-wolf`.
 When `cf-start` cannot yet assess what problem a cleanup or refactor solves, it routes through `cf-mr-wolf` first.
 
-For standalone repository mapping, use `cf-architecture-map`.
-`cf-architecture-map` is the public entrypoint that bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and creates or refreshes `.cflow/architecture.md`.
+For standalone repository mapping, use `cf-architecture`.
+`cf-architecture` is the public entrypoint that bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and creates or refreshes `.cflow/architecture.md`.
 It uses the packaged `cflow_architecture_recon` Codex custom agent for read-only repository reconnaissance when available.
 
 For path reconstruction and workflow flaw analysis, use `cf-trace`.
 `cf-trace` is the public entrypoint that creates or refreshes `.cflow/trace.md`, then audits the reconstructed path for sequence, state, ownership, boundary, failure, observability, testability, and instruction-ambiguity issues.
 It uses the packaged `cflow_trace_recon` Codex custom agent for read-only path reconstruction when available.
-It requires current `.cflow/architecture.md` context and routes through `cf-architecture-map` first when that map is missing or stale.
+It requires current `.cflow/architecture.md` context and routes through `cf-architecture` first when that map is missing or stale.
 
 For local cognitive complexity reduction, use `cf-cognitive`.
 It can use explicit files or discover up to three justified candidate files, then works sequentially without requiring `.cflow/` artifacts.
 
-For local file-level split review or execution, use `cf-file-split`.
+For local file-level split review or execution, use `cf-split`.
 It evaluates whether one source file has natural extraction boundaries, or executes one scoped behavior-preserving file split.
 
 For local cohesion review or regrouping, use `cf-cohesion`.
 It evaluates whether already-related files are scattered across folders, or executes one behavior-preserving local regrouping into a cohesive feature or workflow slice.
 
-When `cf-start` needs architecture context, it routes through `cf-architecture-map` internally before continuing.
+When `cf-start` needs architecture context, it routes through `cf-architecture` internally before continuing.
 
 The remaining workflow phases are internal references loaded by `cf-start` when their trigger condition is met.
 For the `cf-start` flow and phase contracts, see [docs/start/doc-start.flow.md](./docs/start/doc-start.flow.md).

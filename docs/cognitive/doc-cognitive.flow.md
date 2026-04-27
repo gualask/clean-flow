@@ -33,5 +33,5 @@ Document the runtime flow for `cf-cognitive`, the standalone local cleanup skill
 - Edits stay in the target file unless the user explicitly asks otherwise.
 - Helpers are kept only when they reduce reading cost.
 - Wiring, registration, and lifecycle blocks are not automatically exempt when nested callbacks hide branching, state changes, cleanup-sensitive behavior, or multiple side effects.
-- If file-level extraction appears appropriate, the next step should be `cf-file-split`, not unbounded splitting inside `cf-cognitive`.
+- If file-level extraction appears appropriate, the next step should be `cf-split`, not unbounded splitting inside `cf-cognitive`.
 - If related files are already split but scattered, the next step should be `cf-cohesion`, not local cognitive cleanup.

@@ -15,7 +15,7 @@ You must determine:
 
 ## Preflight
 
-1. Require current `.cflow/architecture.md`; if missing, stale, or materially incomplete, stop and route to `cf-architecture-map`.
+1. Require current `.cflow/architecture.md`; if missing, stale, or materially incomplete, stop and route to `cf-architecture`.
 2. Read architecture plus existing `.cflow/refactor-brief.md`.
 3. Re-check the repository and treat it as the source of truth.
 
@@ -48,7 +48,7 @@ Later work units must still choose `split` or `consolidate`.
 ## Artifact behavior
 
 Do not create or refresh `.cflow/architecture.md` in this phase.
-If the map is missing or stale, route to `cf-architecture-map` first.
+If the map is missing or stale, route to `cf-architecture` first.
 
 Update or create `.cflow/refactor-brief.md` when the work is non-trivial, risky, multi-step, or needs resumable handoff state.
 

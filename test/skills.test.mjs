@@ -128,13 +128,13 @@ test("cf-start ships workflow phase references", async () => {
   }
 });
 
-test("cf-architecture-map requires read-only clean-context reconnaissance", async () => {
+test("cf-architecture requires read-only clean-context reconnaissance", async () => {
   const body = await readFile(
-    path.join(SKILLS_ROOT, "cf-architecture-map", "SKILL.md"),
+    path.join(SKILLS_ROOT, "cf-architecture", "SKILL.md"),
     "utf8",
   );
   const flowBody = await readFile(
-    path.join(REPO_ROOT, "docs", "architecture-map", "doc-architecture.map.flow.md"),
+    path.join(REPO_ROOT, "docs", "architecture", "doc-architecture.flow.md"),
     "utf8",
   );
 
@@ -165,7 +165,7 @@ test("cf-architecture-map requires read-only clean-context reconnaissance", asyn
   assert.match(flowBody, /using bundled repo tree output when available/);
 });
 
-test("cf-architecture-map ships a low-cost read-only Codex custom agent", async () => {
+test("cf-architecture ships a low-cost read-only Codex custom agent", async () => {
   const body = await readFile(
     path.join(SKILLS_ROOT, "_codex_agents", "cflow_architecture_recon.toml"),
     "utf8",
@@ -209,7 +209,7 @@ test("cf-trace requires read-only clean-context reconstruction", async () => {
   assert.match(body, /use the `cflow_trace_recon` custom agent when available/);
   assert.match(body, /use one equivalent clean-context reconnaissance subagent/);
   assert.match(body, /Read `\.cflow\/architecture\.md` if it exists/);
-  assert.match(body, /route to `cf-architecture-map` before continuing/);
+  assert.match(body, /route to `cf-architecture` before continuing/);
   assert.match(body, /Start the custom agent with only the repository path and the user's trace request/);
   assert.match(body, /Do not paste the custom agent's TOML instructions or full report format/);
   assert.match(body, /Use `assets\/trace\.template\.md` as the review rubric/);
@@ -226,12 +226,12 @@ test("cf-trace requires read-only clean-context reconstruction", async () => {
   assert.match(templateBody, /## Audit findings/);
   assert.match(templateBody, /## Lens coverage/);
   assert.match(templateBody, /## Recommended route/);
-  assert.match(templateBody, /cf-mr-wolf \| cf-architecture-map \| cf-start \| cf-cognitive \| cf-file-split \| cf-cohesion \| direct fix \| none/);
+  assert.match(templateBody, /cf-mr-wolf \| cf-architecture \| cf-start \| cf-cognitive \| cf-split \| cf-cohesion \| direct fix \| none/);
 
   assert.match(flowBody, /Custom agent source: `skills\/_codex_agents\/cflow_trace_recon\.toml`/);
   assert.match(flowBody, /The custom agent must reconstruct the path only/);
   assert.match(flowBody, /preflight reads only existing `\.cflow\/architecture\.md`/);
-  assert.match(flowBody, /routes to `cf-architecture-map` before continuing/);
+  assert.match(flowBody, /routes to `cf-architecture` before continuing/);
   assert.match(flowBody, /reads `\.cflow\/architecture\.md` first when present/);
   assert.match(flowBody, /The controller must not duplicate the path scan/);
   assert.match(flowBody, /`\.cflow\/trace\.md` must distinguish observed from inferred steps/);
@@ -313,17 +313,17 @@ test("cf-start phase references preserve internal-skill guardrails", async () =>
   assert.match(planningBody, /faking lightweight planning/);
   assert.match(planningBody, /Never finish planning with both `current work unit` and `recommended next work unit` unset/);
   assert.doesNotMatch(alignmentBody, /update `\.cflow\/architecture\.md`/);
-  assert.match(alignmentBody, /route to `cf-architecture-map` if repository observations became clearer enough to change `\.cflow\/architecture\.md`/);
+  assert.match(alignmentBody, /route to `cf-architecture` if repository observations became clearer enough to change `\.cflow\/architecture\.md`/);
 });
 
-test("cf-file-split requires post-split placement review for related clusters", async () => {
-  const skillBody = await readFile(path.join(SKILLS_ROOT, "cf-file-split", "SKILL.md"), "utf8");
+test("cf-split requires post-split placement review for related clusters", async () => {
+  const skillBody = await readFile(path.join(SKILLS_ROOT, "cf-split", "SKILL.md"), "utf8");
   const rulesBody = await readFile(
     path.join(SKILLS_ROOT, "_shared", "references", "file-split-rules.md"),
     "utf8",
   );
   const flowBody = await readFile(
-    path.join(REPO_ROOT, "docs", "file-split", "doc-file.split.flow.md"),
+    path.join(REPO_ROOT, "docs", "split", "doc-split.flow.md"),
     "utf8",
   );
 
@@ -380,7 +380,7 @@ test("shared support resources are not packaged as public skills", async () => {
     "utf8",
   );
   const fileSplitBody = await readFile(
-    path.join(SKILLS_ROOT, "cf-file-split", "SKILL.md"),
+    path.join(SKILLS_ROOT, "cf-split", "SKILL.md"),
     "utf8",
   );
   const splitExecutionBody = await readFile(
@@ -430,10 +430,10 @@ test("only public entrypoints are packaged as skills", async () => {
   const publicSkillNames = new Set([
     "cf-start",
     "cf-mr-wolf",
-    "cf-architecture-map",
+    "cf-architecture",
     "cf-trace",
     "cf-cognitive",
-    "cf-file-split",
+    "cf-split",
     "cf-cohesion",
   ]);
 
@@ -455,10 +455,10 @@ test("public skill flow docs exist", async () => {
       "mr-wolf",
       "doc-mr-wolf.flow.md",
     ),
-    path.join(REPO_ROOT, "docs", "architecture-map", "doc-architecture.map.flow.md"),
+    path.join(REPO_ROOT, "docs", "architecture", "doc-architecture.flow.md"),
     path.join(REPO_ROOT, "docs", "trace", "doc-trace.flow.md"),
     path.join(REPO_ROOT, "docs", "cognitive", "doc-cognitive.flow.md"),
-    path.join(REPO_ROOT, "docs", "file-split", "doc-file.split.flow.md"),
+    path.join(REPO_ROOT, "docs", "split", "doc-split.flow.md"),
     path.join(REPO_ROOT, "docs", "cohesion", "doc-cohesion.flow.md"),
   ]) {
     assert.equal(await pathExists(docPath), true, `${docPath} is missing`);
@@ -651,7 +651,7 @@ test("cf-mr-wolf hands cleanup discovery to cf-start before execution skills", a
 
   assert.match(body, /Cflow Handoff Boundary/);
   assert.match(body, /do not jump directly into execution skills/);
-  assert.match(body, /cf-file-split/);
+  assert.match(body, /cf-split/);
   assert.match(body, /cf-cognitive/);
   assert.match(body, /cf-cohesion/);
   assert.match(body, /preserve the discovery in `\.cflow\/refactor-brief\.md`/);
@@ -660,7 +660,7 @@ test("cf-mr-wolf hands cleanup discovery to cf-start before execution skills", a
   assert.match(body, /not an execution plan or refactor backlog/);
 
   assert.match(flowBody, /recommend `cf-start`/);
-  assert.match(flowBody, /do not route straight to `cf-file-split`, `cf-cognitive`, or `cf-cohesion`/);
+  assert.match(flowBody, /do not route straight to `cf-split`, `cf-cognitive`, or `cf-cohesion`/);
   assert.match(flowBody, /do not create that brief directly from `cf-mr-wolf`/);
 });
 

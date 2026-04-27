@@ -45,10 +45,10 @@ Public skill entrypoints:
 
 - `cf-start`
 - `cf-mr-wolf`
-- `cf-architecture-map`
+- `cf-architecture`
 - `cf-trace`
 - `cf-cognitive`
-- `cf-file-split`
+- `cf-split`
 - `cf-cohesion`
 
 `cf-start` phase references:
@@ -107,10 +107,10 @@ Per-public-skill flow references:
 
 - `cf-start`: [start/doc-start.flow.md](./start/doc-start.flow.md), including internal phase contracts
 - `cf-mr-wolf`: [mr-wolf/doc-mr-wolf.flow.md](./mr-wolf/doc-mr-wolf.flow.md)
-- `cf-architecture-map`: [architecture-map/doc-architecture.map.flow.md](./architecture-map/doc-architecture.map.flow.md)
+- `cf-architecture`: [architecture/doc-architecture.flow.md](./architecture/doc-architecture.flow.md)
 - `cf-trace`: [trace/doc-trace.flow.md](./trace/doc-trace.flow.md)
 - `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
-- `cf-file-split`: [file-split/doc-file.split.flow.md](./file-split/doc-file.split.flow.md)
+- `cf-split`: [split/doc-split.flow.md](./split/doc-split.flow.md)
 - `cf-cohesion`: [cohesion/doc-cohesion.flow.md](./cohesion/doc-cohesion.flow.md)
 
 ## Runtime Reference Rules

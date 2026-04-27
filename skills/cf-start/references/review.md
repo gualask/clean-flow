@@ -4,7 +4,7 @@ Do review only. Do not introduce new structural changes in this phase unless the
 
 ## Preflight
 
-- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture-map`.
+- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture`.
 - Read architecture plus existing `.cflow/refactor-brief.md`.
 - If the completed step or touched area is not clear enough to review, stop and route to `cf-start` first.
 - Re-check the touched area and treat repository state as the source of truth.

@@ -4,7 +4,7 @@ Use this before a structural move, not before discovery.
 
 ## Preflight
 
-- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture-map`.
+- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture`.
 - Read architecture plus existing `.cflow/refactor-brief.md`.
 - Without a brief, continue only with an explicit, local, behavior-preserving scope; otherwise route to `cf-start` or the correct Cflow phase.
 - If a brief exists but the current work unit, cohesive local unit, or refactoring surface is still too unclear to name the behavior to lock, stop and route back to the correct planning or map phase before designing checks.

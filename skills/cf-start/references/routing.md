@@ -19,7 +19,7 @@ Heuristics:
 - If there is no live brief or the task looks new, start with assessment.
 - If the request asks to clarify, shape, design, de-risk, or spec an unclear problem before implementation, route to `cf-mr-wolf`.
 - If the request asks only to reconstruct or audit a path, workflow, sequence, state transition, or orchestration flaw before deciding on fixes, route to `cf-trace`.
-- If the request asks only for local cognitive cleanup, one file-level split, or local cohesion regrouping, route to `cf-cognitive`, `cf-file-split`, or `cf-cohesion` instead of starting repository-level assessment.
+- If the request asks only for local cognitive cleanup, one file-level split, or local cohesion regrouping, route to `cf-cognitive`, `cf-split`, or `cf-cohesion` instead of starting repository-level assessment.
 - If Cflow cannot yet answer what problem the refactor solves, what success looks like, or what is explicitly out of scope from the repo and conversation, route to `cf-mr-wolf` before creating or updating Cflow artifacts.
 - If there is a live brief and the user says resume / continue / proceed, resume from the correct phase.
 - If the user explicitly asks only for review or verification, bootstrap or refresh prerequisites first and then route internally to that mode.
@@ -36,7 +36,7 @@ Determine:
 
 Rules:
 
-- Use `cf-architecture-map` whenever `.cflow/architecture.md` is missing, stale, or materially incomplete.
+- Use `cf-architecture` whenever `.cflow/architecture.md` is missing, stale, or materially incomplete.
 - Use `cf-mr-wolf` whenever the upstream problem is still too ambiguous to justify repository-level intervention framing.
 - Use `cf-trace` whenever the current blocker is understanding whether one path, workflow, sequence, state transition, or orchestration contract is flawed.
 - Use the assessment phase when repository-level intervention framing is still needed after architecture context is current.
@@ -54,7 +54,7 @@ Rules:
 
 Resume from the correct point:
 
-- if `.cflow/architecture.md` is missing, stale, or materially incomplete -> `cf-architecture-map`
+- if `.cflow/architecture.md` is missing, stale, or materially incomplete -> `cf-architecture`
 - if the brief is stale, or repository changes made the recorded path or work-unit state unreliable -> reassessment
 - if repository-level intervention framing is still unclear -> assessment phase
 - if hard-path direction is chosen but target shape is still unresolved -> `target-shape.md`

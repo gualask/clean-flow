@@ -72,10 +72,10 @@ Before suggesting a skill change, collect as much of this packet as possible:
 - exact invocation path:
   - `cf-start`
   - `cf-mr-wolf`
-  - `cf-architecture-map`
+  - `cf-architecture`
   - `cf-trace`
   - `cf-cognitive`
-  - `cf-file-split`
+  - `cf-split`
   - `cf-cohesion`
   - `cf-start` phase reached from flow, such as assessment, planning, mapping, execution, closure
 - exact user prompt or the closest faithful paraphrase

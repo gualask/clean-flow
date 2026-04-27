@@ -28,7 +28,7 @@ Use this for:
 - refactor workflows or Cflow skill flows
 - any multi-step behavior where the likely failure is sequence, state, ownership, or missing validation
 
-Do not use this for a generic repository map; use `cf-architecture-map`.
+Do not use this for a generic repository map; use `cf-architecture`.
 Do not use this for broad refactor planning; use `cf-start` after trace findings justify it.
 
 ## Language rules
@@ -48,7 +48,7 @@ Do not use this for broad refactor planning; use `cf-start` after trace findings
 7. Do not reconstruct the path during preflight; the reconnaissance subagent owns that scan.
 
 If the requested path is too ambiguous to trace, ask one focused question before spawning reconnaissance.
-If `.cflow/architecture.md` is missing, stale, or materially incomplete, route to `cf-architecture-map` before continuing.
+If `.cflow/architecture.md` is missing, stale, or materially incomplete, route to `cf-architecture` before continuing.
 
 ## Clean-Context Trace Reconstruction
 
@@ -113,10 +113,10 @@ If a lens has no evidence-backed issue, record `none found from current evidence
 Recommend exactly one immediate route:
 
 - `cf-mr-wolf` when the problem, expected behavior, or success criteria need upstream clarification
-- `cf-architecture-map` when architecture context is missing or stale enough to block interpretation
+- `cf-architecture` when architecture context is missing or stale enough to block interpretation
 - `cf-start` when findings justify multi-step cleanup, refactor planning, or resumable execution
 - `cf-cognitive` when the issue is local cognitive complexity in up to three files
-- `cf-file-split` when the issue is one scoped file-level extraction
+- `cf-split` when the issue is one scoped file-level extraction
 - `cf-cohesion` when the issue is a local cluster of related files scattered across folders
 - direct fix when the issue is a clear, bounded implementation bug and the user asked to proceed
 - `none` when no credible issue is found

@@ -1,19 +1,19 @@
-# cf-architecture-map Flow
+# cf-architecture Flow
 
 ## Purpose
 
-Document the runtime flow for `cf-architecture-map` so maintainer reviews can catch orchestration flaws before they become skill behavior.
+Document the runtime flow for `cf-architecture` so maintainer reviews can catch orchestration flaws before they become skill behavior.
 
 ## Runtime Inputs
 
-- Public skill: `skills/cf-architecture-map/SKILL.md`
+- Public skill: `skills/cf-architecture/SKILL.md`
 - Custom agent source: `skills/_codex_agents/cflow_architecture_recon.toml`
 - Artifact template and review rubric: `skills/cf-start/assets/architecture.template.md`
 - Target artifacts: `.cflow/architecture.md`, `.gitignore`
 
 ## Flow
 
-1. Trigger `cf-architecture-map`.
+1. Trigger `cf-architecture`.
 2. Controller preflight reads only existing `.cflow/architecture.md`, `.gitignore`, `architecture.template.md`, and `git status --short`.
 3. Controller starts `cflow_architecture_recon` with only repository path and the user mapping request.
 4. Custom agent performs read-only reconnaissance from its TOML instructions, using bundled repo tree output when available to reduce broad directory inventory, and returns the architecture report.

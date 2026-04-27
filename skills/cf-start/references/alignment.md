@@ -13,7 +13,7 @@ Alignment is sufficient only when the next phase, scope boundaries, exclusions, 
 
 ## Preflight
 
-1. If `.cflow/architecture.md` is missing, stop and route to `cf-architecture-map` first.
+1. If `.cflow/architecture.md` is missing, stop and route to `cf-architecture` first.
 2. Read `.cflow/architecture.md`.
 3. Read `.cflow/refactor-brief.md` if it exists.
 4. If there is no already assessed direction and no concrete decision to resolve yet, stop and route to `cf-start` assessment first.
@@ -67,7 +67,7 @@ Rules:
 
 Once enough decisions are aligned:
 
-- route to `cf-architecture-map` if repository observations became clearer enough to change `.cflow/architecture.md`
+- route to `cf-architecture` if repository observations became clearer enough to change `.cflow/architecture.md`
 - create or refresh `.cflow/refactor-brief.md` if the work is non-trivial or the aligned decisions now create resumable handoff state
 - keep work units concise
 - do not write pseudo-code

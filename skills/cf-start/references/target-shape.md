@@ -8,7 +8,7 @@ Define a bounded, repository-fitting target shape for a hard restructure.
 
 ## Preflight
 
-1. Require current `.cflow/architecture.md` and `.cflow/refactor-brief.md`; route to `cf-architecture-map` or `cf-start` if missing.
+1. Require current `.cflow/architecture.md` and `.cflow/refactor-brief.md`; route to `cf-architecture` or `cf-start` if missing.
 2. If hard restructure is not already justified, route to `cf-start`.
 3. If unresolved user steering still blocks target-shape decisions, route to alignment.
 4. Re-check the repository and treat it as the source of truth.

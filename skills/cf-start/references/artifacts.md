@@ -13,10 +13,10 @@ When bootstrapping or refreshing the refactor brief:
 - never create root-level `refactor-brief.md`
 - when `.cflow/refactor-brief.md` already exists, update it in place instead of re-copying the template blindly
 
-Use `cf-architecture-map` to bootstrap `.cflow/`, update `.gitignore`, and create or refresh `.cflow/architecture.md`.
+Use `cf-architecture` to bootstrap `.cflow/`, update `.gitignore`, and create or refresh `.cflow/architecture.md`.
 
 Do not create or refresh `.cflow/architecture.md` from `cf-start` phases.
-If architecture observations materially changed, route to `cf-architecture-map` for a refresh or record the decision in `.cflow/refactor-brief.md` until the next architecture-map pass.
+If architecture observations materially changed, route to `cf-architecture` for a refresh or record the decision in `.cflow/refactor-brief.md` until the next architecture pass.
 
 ## Required brief updates
 

@@ -4,7 +4,7 @@ Use this to apply one bounded **split-oriented** cleanup step.
 
 ## Preflight
 
-- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture-map`.
+- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture`.
 - Read architecture plus existing `.cflow/refactor-brief.md`.
 - Without a brief, continue only with an explicit, local, behavior-preserving scope; otherwise route to `cf-start` or the correct Cflow phase.
 - If there is no credible safety lock for the current structural move, stop and route to safety-net first.

@@ -1,19 +1,19 @@
-# cf-file-split Flow
+# cf-split Flow
 
 ## Purpose
 
-Document the runtime flow for `cf-file-split`, the standalone skill for evaluating or executing one scoped behavior-preserving file split.
+Document the runtime flow for `cf-split`, the standalone skill for evaluating or executing one scoped behavior-preserving file split.
 
 ## Runtime Inputs
 
-- Public skill: `skills/cf-file-split/SKILL.md`
+- Public skill: `skills/cf-split/SKILL.md`
 - Split rules: `skills/_shared/references/file-split-rules.md`
 - Reference audit rules: `skills/_shared/references/reference-audit.md`
 - Target artifacts: none; this skill does not create or update `.cflow/*`
 
 ## Flow
 
-1. Trigger `cf-file-split`.
+1. Trigger `cf-split`.
 2. Controller identifies one explicit or inferable target source file, using bundled repo tree output when an area-level target needs file-name context before file selection.
 3. If the target or placement is ambiguous, controller asks one focused question.
 4. Controller decides whether the user is asking for evaluation or execution.

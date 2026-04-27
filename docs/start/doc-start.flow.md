@@ -20,8 +20,8 @@ When the upstream problem is too ambiguous for Cflow assessment, `cf-start` hand
 3. Controller loads `references/routing.md` when it must decide fresh entry, resume, review, verify, or route handoff.
 4. If the problem, goal, scope, or success criteria are not clear enough for Cflow assessment, controller routes to `cf-mr-wolf` before creating Cflow artifacts.
 5. If the user asks only to reconstruct or audit a path, controller routes to `cf-trace` before refactor assessment.
-6. If the user asks only for local cognitive cleanup, file split, or local cohesion regrouping, controller routes to `cf-cognitive`, `cf-file-split`, or `cf-cohesion`.
-7. If architecture context is missing or stale, controller routes to `cf-architecture-map` before continuing.
+6. If the user asks only for local cognitive cleanup, file split, or local cohesion regrouping, controller routes to `cf-cognitive`, `cf-split`, or `cf-cohesion`.
+7. If architecture context is missing or stale, controller routes to `cf-architecture` before continuing.
 8. If `.cflow/refactor-brief.md` is needed, controller uses `references/artifacts.md` and `refactor-brief.template.md`.
 9. Fresh work enters `assessment.md`; non-trivial fresh assessment stops at alignment.
 10. User steering after assessment enters `alignment.md` until direction is clear enough.
@@ -37,7 +37,7 @@ When the upstream problem is too ambiguous for Cflow assessment, `cf-start` hand
 | --- | --- | --- | --- | --- |
 | `references/routing.md` | choose entry mode, upstream problem-shaping handoff, fresh path, or resume point | prompt, repository state, and any existing `.cflow/*` artifacts | route to the required public entrypoint or earlier phase | no |
 | `references/artifacts.md` | define `.cflow/refactor-brief.md` updates | decision to create, refresh, or update brief state | defer artifact update until required fields are known | no |
-| `references/assessment.md` | premise check and intervention framing | current `.cflow/architecture.md`; brief optional | route to `cf-architecture-map` when architecture is missing or stale | no |
+| `references/assessment.md` | premise check and intervention framing | current `.cflow/architecture.md`; brief optional | route to `cf-architecture` when architecture is missing or stale | no |
 | `references/alignment.md` | user steering after assessment | assessed direction or concrete decision to resolve | return to assessment | no |
 | `references/concentration-map.md` | concentration seam mapping and split direction | architecture map plus active unit, brief, or explicit scope | return to assessment or planning | no |
 | `references/fragmentation-map.md` | fragmentation seam mapping and consolidation direction | architecture map plus active unit, brief, or explicit scope | return to assessment or planning | no |
@@ -57,10 +57,10 @@ When the upstream problem is too ambiguous for Cflow assessment, `cf-start` hand
 - `cf-start` remains the only workflow controller.
 - Upstream problem ambiguity routes to `cf-mr-wolf` before `.cflow/*` artifacts are created or updated.
 - Path reconstruction and workflow flaw analysis routes to `cf-trace` before refactor assessment.
-- Explicit local cleanup entrypoints route to `cf-cognitive`, `cf-file-split`, or `cf-cohesion` instead of becoming Cflow workflow phases.
+- Explicit local cleanup entrypoints route to `cf-cognitive`, `cf-split`, or `cf-cohesion` instead of becoming Cflow workflow phases.
 - Runtime behavior lives in `SKILL.md` or a directly linked reference, not only in docs.
 - Phase routing is state-based, not actor-based.
-- Architecture bootstrap belongs to `cf-architecture-map`; refactor brief ownership belongs to `cf-start`.
+- Architecture bootstrap belongs to `cf-architecture`; refactor brief ownership belongs to `cf-start`.
 - `soft-mixed` is assessment-only; every executable unit is exactly `split` or `consolidate`.
 - Hard-path work cannot skip target-shape and migration-unit planning.
 - Internal phase references must preserve the former internal-skill guardrails.

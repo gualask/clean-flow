@@ -6,7 +6,7 @@ Use this skill for local cross-file cohesion review and regrouping.
 
 Use this when related files already exist but are scattered across type folders, sibling areas, or local conventions in a way that raises navigation cost.
 Do not use this for cognitive cleanup inside one file; use `cf-cognitive` for that.
-Do not use this for extracting responsibilities out of one source file; use `cf-file-split` for that.
+Do not use this for extracting responsibilities out of one source file; use `cf-split` for that.
 For repository structure, module boundaries, cross-feature ownership moves, or broad multi-step refactors, route to `cf-start`.
 
 Do not bootstrap or require `.cflow/` artifacts.

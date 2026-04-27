@@ -23,14 +23,14 @@ Use this diagram as the runtime routing contract.
 digraph cflow_entry {
   "problem unclear?" -> "cf-mr-wolf" [label="yes"];
   "local cognitive cleanup?" -> "cf-cognitive" [label="yes"];
-  "file split only?" -> "cf-file-split" [label="yes"];
+  "file split only?" -> "cf-split" [label="yes"];
   "local cohesion regrouping?" -> "cf-cohesion" [label="yes"];
-  "standalone architecture map?" -> "cf-architecture-map" [label="yes"];
+  "standalone architecture map?" -> "cf-architecture" [label="yes"];
   "path reconstruction or workflow audit?" -> "cf-trace" [label="yes"];
   "cleanup/refactor workflow" -> "cf-start";
 
   "cf-start" -> "architecture current?";
-  "architecture current?" -> "cf-architecture-map" [label="no"];
+  "architecture current?" -> "cf-architecture" [label="no"];
   "architecture current?" -> "fresh or resume?" [label="yes"];
   "fresh or resume?" -> "assessment" [label="fresh"];
   "fresh or resume?" -> "resume from brief" [label="resume"];
@@ -165,5 +165,5 @@ Return only:
 
 ## Artifact update baseline
 
-`cf-architecture-map` owns `.cflow/architecture.md`.
+`cf-architecture` owns `.cflow/architecture.md`.
 `cf-start` owns `.cflow/refactor-brief.md`; update it through [references/artifacts.md](references/artifacts.md).
