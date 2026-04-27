@@ -51,7 +51,8 @@ Run a small loop until the problem is clear enough to hand off:
 1. Problem-framing pass: state the current frame in one or two sentences, including the problem, success criteria, constraints, explicit non-goals, and smallest useful context slice.
 2. Context check: inspect only that slice, separate signal from noise, and expand only when more context can change scope, risk, validation, or the handoff.
 3. Bounded analysis pass: once the frame or candidate area is clear, use evidence channels that can test the frame and improve the handoff.
-4. Sufficiency check: assign an investigation confidence percentage, record the basis in `.cflow/mr-wolf-notes.md`, and ask one focused question only when the next step depends on it.
+4. Finding de-risk pass: when bounded analysis produces candidate findings and the next step might be a fix, route, or completed handoff, de-risk the findings before declaring them actionable.
+5. Sufficiency check: assign an investigation confidence percentage, record the basis in `.cflow/mr-wolf-notes.md`, and ask one focused question only when the next step depends on it.
 
 Scoping questions are part of problem framing.
 Ask exactly one focused scoping question before broad inventory when a clear goal still leaves a large work area and the answer can reduce candidate areas, priority, success criteria, constraints, or validation.
@@ -80,11 +81,6 @@ High-value channels are:
 - temporary `/tmp` scripts for mechanical work across many inputs
 - specialist skills that clearly match the bounded problem, such as UI review for a UI critique or API design review for an API shape problem
 
-Use specialist skills only after the problem frame or candidate area is bounded.
-Before declaring context sufficient in the bounded analysis pass, check the currently available skill names and descriptions; when one clearly matches, apply its `SKILL.md` and directly linked references as a review lens over the selected context slice or a narrower one.
-Record only specialist skills actually used, with the reason.
-Specialist evidence informs the handoff; it must not implement changes, expand the investigation into a broad audit, or replace direct repository evidence.
-
 When MCP tools are available and the question depends on code structure, symbols, semantic relationships, repository metadata, tickets, or docs, use a relevant MCP tool unless a narrower non-MCP source is clearly enough; record the reason when MCP is skipped.
 
 For repo-wide, many-input, or multi-candidate analysis, use deterministic commands or a temporary script unless a single standard command already produces the needed fact.
@@ -96,6 +92,38 @@ Use temporary scripts only for mechanical evidence:
 - print compact facts or summaries
 - do not make product, architecture, or prioritization judgments
 
+Use specialist skills only after the problem frame or candidate area is bounded.
+Before declaring context sufficient in the bounded analysis pass, check the currently available skill names and descriptions; when one clearly matches, apply its `SKILL.md` and directly linked references as a review lens over the selected context slice or a narrower one.
+Record only specialist skills actually used, with the reason.
+Specialist evidence informs the handoff; it must not implement changes, expand the investigation into a broad audit, or replace direct repository evidence.
+
+## Agent Use
+
+If the runtime requires explicit subagent authorization, ask before starting it.
+Run at most one custom agent at a time; wait for its report before starting another.
+Start each custom agent with only the inputs named in the owning section; do not paste the agent TOML.
+While waiting, do not duplicate the delegated discovery or verification.
+Use each report as primary evidence: spot-check only gaps, contradictions, or unsupported claims; final judgment, notes, routing, and user-facing output remain yours.
+
+## Candidate Finding Agent
+
+When bounded evidence plus the selected context slice is context-heavy, use the `cflow_candidate_finding_recon` custom agent to propose candidate findings.
+Start it with only the repository path, problem frame, success criteria, non-goals, bounded evidence path/summary, selected context slice, and explicit exclusions.
+
+Expect the subagent report to contain these sections: **Discovery Scope**, **Candidate Findings**, **Grouped Or Deferred Observations**, **Evidence**, **Unknowns**.
+
+Do not cap candidate findings at three.
+Carry forward all materially relevant candidates, grouping equivalent findings and explicitly naming minor, deferred, out-of-scope, or non-actionable observations when they affect the decision.
+
+## Finding De-risk Agent
+
+Use the `cflow_finding_derisk_recon` custom agent to verify selected candidate findings before recommending a fix, route, or completed handoff.
+When the selected candidate set is too large for one useful pass, choose the smallest decision-blocking subset first, wait for the report, then decide whether a later sequential pass is needed.
+
+Start it with only the repository path, problem frame, assigned candidate findings, selected context slice, and explicit exclusions.
+
+Expect the subagent report to contain these sections: **Verification Scope**, **Finding Classification**, **Fix-Fit Risks**, **Evidence**, **Unknowns**.
+
 ## Sufficiency Gate
 
 Use `sufficient` only at 80% confidence or higher.
@@ -105,7 +133,7 @@ For repo-wide, multi-file, or multi-candidate investigations, keep confidence be
 
 - broad inventory from commands or a temporary script to find likely search space and obvious noise
 - narrowing pass with focused verification of the strongest candidates or representative clusters
-- false-positive checks for important exclusions that looked relevant at first
+- finding de-risk checks for candidate findings before recommending a fix or completed handoff
 - notes for used evidence channels, important skipped non-specialist high-value channels, and only specialist skills actually used
 
 Below 80%, continue the operating loop or ask one focused question.
@@ -120,7 +148,7 @@ Stop at an evidence-backed handoff:
 - summarize the problem frame
 - list the evidence gathered and evidence-producing tools used
 - name candidate areas or files with short rationale
-- separate confirmed candidates from uncertain ones
+- separate confirmed, false-positive, and uncertain findings when they materially affect the decision
 - include the investigation confidence percentage
 - recommend whether `cf-start` should own the next work
 

@@ -273,6 +273,71 @@ test("cf-trace ships a low-cost read-only Codex custom agent", async () => {
   assert.match(body, /## Unknowns/);
 });
 
+test("cf-mr-wolf ships a high-judgment read-only issue discovery agent", async () => {
+  const body = await readFile(
+    path.join(SKILLS_ROOT, "_codex_agents", "cflow_candidate_finding_recon.toml"),
+    "utf8",
+  );
+
+  assert.match(body, /^name = "cflow_candidate_finding_recon"$/m);
+  assert.match(body, /^description = "Read-only Cflow candidate finding discovery from bounded evidence and a selected context slice\."$/m);
+  assert.match(body, /^model = "gpt-5\.5"$/m);
+  assert.match(body, /^model_reasoning_effort = "medium"$/m);
+  assert.match(body, /^sandbox_mode = "read-only"$/m);
+  assert.match(body, /^nickname_candidates = \["Vincent"\]$/m);
+  assert.match(body, /candidate-finding discovery mode/);
+  assert.match(body, /Do not edit files, create \.cflow\/\*/);
+  assert.match(body, /Do not .*implement fixes/);
+  assert.match(body, /verify final false-positive status/);
+  assert.match(body, /Use available MCP tools or resources/);
+  assert.match(body, /MCP structure queries/);
+  assert.match(body, /Do not cap findings at three/);
+  assert.match(body, /Report every materially relevant candidate finding/);
+  assert.match(body, /Group equivalent findings together/);
+  assert.match(body, /## Discovery Scope/);
+  assert.match(body, /## Candidate Findings/);
+  assert.match(body, /Supporting evidence:/);
+  assert.match(body, /Affected area\/path:/);
+  assert.doesNotMatch(body, /Flow evidence:/);
+  assert.doesNotMatch(body, /Affected path:/);
+  assert.match(body, /Needs de-risk: yes \| no/);
+  assert.match(body, /## Grouped Or Deferred Observations/);
+  assert.match(body, /## Evidence/);
+  assert.match(body, /## Unknowns/);
+});
+
+test("cf-mr-wolf ships a high-judgment read-only finding de-risk agent", async () => {
+  const body = await readFile(
+    path.join(SKILLS_ROOT, "_codex_agents", "cflow_finding_derisk_recon.toml"),
+    "utf8",
+  );
+
+  assert.match(body, /^name = "cflow_finding_derisk_recon"$/m);
+  assert.match(body, /^model = "gpt-5\.5"$/m);
+  assert.match(body, /^model_reasoning_effort = "medium"$/m);
+  assert.match(body, /^sandbox_mode = "read-only"$/m);
+  assert.match(body, /^nickname_candidates = \["Jules"\]$/m);
+  assert.match(body, /Verify only the candidate findings provided by the controller/);
+  assert.doesNotMatch(body, /skills\/cf-mr-wolf\/references\/finding-de-risk\.md/);
+  assert.match(body, /Do not edit files, create \.cflow\/\*/);
+  assert.match(body, /Do not .*implement fixes/);
+  assert.match(body, /Do not propose unrelated refactors or new findings/);
+  assert.match(body, /Use available MCP tools or resources/);
+  assert.match(body, /MCP structure queries/);
+  assert.match(body, /Reject false positives and unsafe fixes/);
+  assert.match(body, /whether the issue is reachable in the current behavior, path, or context/);
+  assert.match(body, /already handled, impossible, intentional, test-only, out of scope/);
+  assert.match(body, /ordering, invariants, ownership, API shape, persistence, resume behavior/);
+  assert.match(body, /Do not mark a finding `confirmed` only because code looks suspicious/);
+  assert.match(body, /Treat missing evidence as uncertainty, not confirmation/);
+  assert.match(body, /## Verification Scope/);
+  assert.match(body, /## Finding Classification/);
+  assert.match(body, /Status: confirmed \| false-positive \| uncertain/);
+  assert.match(body, /## Fix-Fit Risks/);
+  assert.match(body, /## Evidence/);
+  assert.match(body, /## Unknowns/);
+});
+
 test("maintainer golden rules require empty-context skill polish", async () => {
   const body = await readFile(path.join(REPO_ROOT, "docs", "golden-rules.md"), "utf8");
   const maintainingBody = await readFile(
@@ -722,17 +787,81 @@ test("cf-mr-wolf requires confidence-gated narrowing before sufficiency", async 
   assert.match(body, /assign an investigation confidence percentage/);
   assert.match(body, /broad inventory/);
   assert.match(body, /narrowing pass/);
-  assert.match(body, /false-positive check/);
+  assert.match(body, /finding de-risk checks for candidate findings/);
   assert.match(body, /keep confidence below 80% unless the evidence includes/);
   assert.match(body, /notes for used evidence channels, important skipped non-specialist high-value channels, and only specialist skills actually used/);
   assert.match(body, /Use `sufficient` only at 80% confidence or higher/);
   assert.match(body, /Below 80%, continue the operating loop or ask one focused question/);
 
-  assert.match(flowBody, /broad inventory, narrowing pass, and false-positive check/);
+  assert.match(flowBody, /broad inventory, narrowing pass, candidate discovery, and finding de-risk checks/);
   assert.match(flowBody, /investigation confidence percentage/);
   assert.match(flowBody, /at least 80% confidence/);
   assert.match(flowBody, /repo-wide or multi-candidate work stays below 80%/);
   assert.match(flowBody, /used-channel notes, or required skipped-channel reasons/);
+});
+
+test("cf-mr-wolf de-risks findings before recommending fixes", async () => {
+  const body = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
+  const agentBody = await readFile(
+    path.join(SKILLS_ROOT, "_codex_agents", "cflow_finding_derisk_recon.toml"),
+    "utf8",
+  );
+  const flowBody = await readFile(
+    path.join(REPO_ROOT, "docs", "mr-wolf", "doc-mr-wolf.flow.md"),
+    "utf8",
+  );
+  const deRiskReferencePath = path.join(
+    SKILLS_ROOT,
+    "cf-mr-wolf",
+    "references",
+    "finding-de-risk.md",
+  );
+
+  assert.equal(await pathExists(deRiskReferencePath), false);
+  assert.doesNotMatch(body, /references\/finding-de-risk\.md/);
+  assert.match(body, /cflow_candidate_finding_recon/);
+  assert.match(body, /cflow_finding_derisk_recon/);
+  assert.match(body, /Agent Use/);
+  assert.match(body, /Run at most one custom agent at a time/);
+  assert.match(body, /wait for its report before starting another/);
+  assert.match(body, /Start each custom agent with only the inputs named in the owning section; do not paste the agent TOML/);
+  assert.match(body, /While waiting, do not duplicate the delegated discovery or verification/);
+  assert.doesNotMatch(body, /Do not build a duplicate candidate discovery or finding verification while the agent is running/);
+  assert.match(body, /Use each report as primary evidence/);
+  assert.match(body, /spot-check only gaps, contradictions, or unsupported claims/);
+  assert.match(body, /final judgment, notes, routing, and user-facing output remain yours/);
+  assert.match(body, /Candidate Finding Agent/);
+  assert.match(body, /When bounded evidence plus the selected context slice is context-heavy, use the `cflow_candidate_finding_recon` custom agent to propose candidate findings/);
+  assert.match(body, /Start it with only the repository path, problem frame, success criteria, non-goals, bounded evidence path\/summary, selected context slice, and explicit exclusions/);
+  assert.match(body, /Finding De-risk Agent/);
+  assert.match(body, /Use the `cflow_finding_derisk_recon` custom agent to verify selected candidate findings/);
+  assert.match(body, /Start it with only the repository path, problem frame, assigned candidate findings, selected context slice, and explicit exclusions/);
+  assert.match(body, /Do not cap candidate findings at three/);
+  assert.match(body, /smallest decision-blocking subset first/);
+  assert.doesNotMatch(body, /Do not paste the custom agent's TOML instructions or full report format/);
+  assert.match(body, /de-risk the findings before declaring them actionable/);
+  assert.match(body, /separate confirmed, false-positive, and uncertain findings/);
+  assert.doesNotMatch(body, /Clean-Context/);
+  assert.doesNotMatch(body, /GPT-5\.5 medium-reasoning/);
+  assert.doesNotMatch(body, /at most two/);
+
+  assert.match(flowBody, /cflow_candidate_finding_recon/);
+  assert.match(flowBody, /bounded evidence plus the selected context slice is context-heavy/);
+  assert.match(flowBody, /cflow_finding_derisk_recon/);
+  assert.match(flowBody, /Do not cap candidate findings at three/);
+  assert.match(flowBody, /Run custom agents sequentially only/);
+  assert.match(flowBody, /never run multiple custom agents at the same time/);
+  assert.match(flowBody, /merge any sequential reports before sufficiency/);
+  assert.doesNotMatch(flowBody, /Finding de-risk reference/);
+  assert.doesNotMatch(flowBody, /at most two/);
+  assert.match(flowBody, /classify each finding as confirmed, false-positive, or uncertain/);
+  assert.match(flowBody, /does not recommend fixes for candidate findings until reachability, false positives, and fix-fit/);
+
+  assert.match(agentBody, /Reject false positives and unsafe fixes/);
+  assert.match(agentBody, /whether the issue is reachable in the current behavior, path, or context/);
+  assert.match(agentBody, /fix-fit/);
+  assert.match(agentBody, /ordering, invariants, ownership, API shape, persistence, resume behavior/);
+  assert.match(agentBody, /Do not mark a finding `confirmed` only because code looks suspicious/);
 });
 
 test("cf-mr-wolf hands cleanup discovery to cf-start before execution skills", async () => {

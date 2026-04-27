@@ -84,6 +84,8 @@ Codex custom agents:
 
 - `skills/_codex_agents/cflow_architecture_recon.toml`
 - `skills/_codex_agents/cflow_trace_recon.toml`
+- `skills/_codex_agents/cflow_candidate_finding_recon.toml`
+- `skills/_codex_agents/cflow_finding_derisk_recon.toml`
 
 ## Golden Rules
 
