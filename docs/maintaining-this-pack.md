@@ -7,7 +7,7 @@ It is not a target repository that uses Cflow at runtime.
 
 At runtime:
 
-- skills are installed into `.agents/skills` in the target repository, or into `$CODEX_HOME/skills` / `~/.codex/skills` for global install
+- skills are installed into `.codex/skills` in the target repository, or into `$CODEX_HOME/skills` / `~/.codex/skills` for global install
 - Codex custom agents are installed into `.codex/agents` in the target repository, or into `$CODEX_HOME/agents` / `~/.codex/agents` for global install
 - Cflow artifacts live in the target repository under `.cflow/`
 - this source repository does not need `.cflow/architecture.md` or `.cflow/refactor-brief.md`
@@ -206,6 +206,6 @@ The most important manual validation is a real target-repo run:
 
 1. install the pack into a target repo
 2. exercise each public skill according to its `docs/<public-skill>/doc-*.flow.md` reference
-3. confirm the target repo gets `.agents/skills/...`
+3. confirm the target repo gets `.codex/skills/...`
 4. confirm the target repo gets Cflow-owned custom agents under `.codex/agents/`
 5. confirm runtime artifacts match the owning public flow docs

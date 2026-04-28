@@ -18,7 +18,7 @@ const HELP_TEXT = `Usage:
   cflow-skills remove --global [--dry-run]
 
 Notes:
-  - install syncs packaged skills/support resources into <repo>/.agents/skills
+  - install syncs packaged skills/support resources into <repo>/.codex/skills
   - install syncs packaged Codex custom agents into <repo>/.codex/agents
   - --global targets $CODEX_HOME/skills and $CODEX_HOME/agents, or ~/.codex/*
   - remove deletes only Cflow-owned skills, support directories, and Codex custom agents
@@ -212,7 +212,7 @@ function resolveDestinations(options) {
 
   const targetRoot = path.resolve(options.targetPath);
   return {
-    skillsRoot: path.resolve(targetRoot, ".agents", "skills"),
+    skillsRoot: path.resolve(targetRoot, ".codex", "skills"),
     codexAgentsRoot: path.resolve(targetRoot, ".codex", "agents"),
   };
 }

@@ -12,7 +12,7 @@ Stay in repository-mapping mode.
 Do not edit files, create .cflow/*, update .gitignore, choose refactor work units, or decide the final architecture map.
 Inspect the repository enough to report current architecture evidence. Prefer fast search and targeted file reads over broad undirected scanning.
 Cite enough concrete file evidence for the controller to write .cflow/architecture.md without repeating your scan.
-When a gitignore-aware tree can reduce broad directory inventory, look for the Cflow repo-tree helper only at `<repo>/.agents/skills/_shared/scripts/repo-tree.mjs`, `$CODEX_HOME/skills/_shared/scripts/repo-tree.mjs`, or `$HOME/.codex/skills/_shared/scripts/repo-tree.mjs`; read its --help before use, and skip it if unavailable. Treat its output as orientation, not architecture evidence by itself.
+When a gitignore-aware tree can reduce broad directory inventory, look for the Cflow repo-tree helper only at `<repo>/.codex/skills/_shared/scripts/repo-tree.mjs`, `$CODEX_HOME/skills/_shared/scripts/repo-tree.mjs`, or `$HOME/.codex/skills/_shared/scripts/repo-tree.mjs`; read its --help before use, and skip it if unavailable. Treat its output as orientation, not architecture evidence by itself.
 
 Return a concise Markdown report with exactly these sections:
 

@@ -20,7 +20,7 @@ import {
 test("install copies new skills and support directories with owned markers", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
-  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
 
   await mkdir(sourceRoot, { recursive: true });
   await writeSupportDirectory(sourceRoot);
@@ -55,7 +55,7 @@ test("install copies new skills and support directories with owned markers", asy
 test("install updates owned skills, prunes removed owned skills, and keeps foreign skills", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
-  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
 
   await mkdir(sourceRoot, { recursive: true });
   await mkdir(destinationRoot, { recursive: true });
@@ -121,7 +121,7 @@ test("install updates owned skills, prunes removed owned skills, and keeps forei
 test("install reports conflicts and leaves foreign same-name skills untouched", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
-  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
 
   await mkdir(sourceRoot, { recursive: true });
   await mkdir(destinationRoot, { recursive: true });
@@ -142,7 +142,7 @@ test("install reports conflicts and leaves foreign same-name skills untouched", 
 test("install dry-run computes the plan without mutating the target", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
-  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
 
   await mkdir(sourceRoot, { recursive: true });
   await writeSkill(sourceRoot, "cf-start");

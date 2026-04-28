@@ -36,7 +36,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/gualask/cle
 node ./bin/cflow-skills.mjs install /path/to/repo
 ```
 
-The CLI syncs packaged skills plus shared support resources from `skills/` into `/path/to/repo/.agents/skills`.
+The CLI syncs packaged skills plus shared support resources from `skills/` into `/path/to/repo/.codex/skills`.
 It also syncs packaged Codex custom agents into `/path/to/repo/.codex/agents`.
 
 Global sync:

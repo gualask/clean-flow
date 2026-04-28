@@ -179,7 +179,7 @@ test("cf-architecture ships a low-cost read-only Codex custom agent", async () =
   assert.match(body, /Do not edit files, create \.cflow\/\*/);
   assert.match(body, /Cite enough concrete file evidence/);
   assert.match(body, /repo-tree helper/);
-  assert.match(body, /<repo>\/\.agents\/skills\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(body, /<repo>\/\.codex\/skills\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(body, /\$CODEX_HOME\/skills\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(body, /\$HOME\/\.codex\/skills\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(body, /skip it if unavailable/);
@@ -261,7 +261,7 @@ test("cf-trace ships a low-cost read-only Codex custom agent", async () => {
   assert.match(body, /Do not edit files, create \.cflow\/\*/);
   assert.match(body, /Do not .*decide audit severity/);
   assert.match(body, /repo-tree helper/);
-  assert.match(body, /<repo>\/\.agents\/skills\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(body, /<repo>\/\.codex\/skills\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(body, /\$CODEX_HOME\/skills\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(body, /\$HOME\/\.codex\/skills\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(body, /skip it if unavailable/);
@@ -748,6 +748,31 @@ test("cf-mr-wolf maintains compact investigation notes under .cflow", async () =
   assert.match(templateBody, /excluded false positives/);
   assert.doesNotMatch(templateBody, /## Handoff/);
   assert.doesNotMatch(templateBody, /next skill/);
+});
+
+test("cf-mr-wolf centralizes route selection in a DOT priority contract", async () => {
+  const body = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
+  const flowBody = await readFile(
+    path.join(REPO_ROOT, "docs", "mr-wolf", "doc-mr-wolf.flow.md"),
+    "utf8",
+  );
+
+  assert.match(body, /## Runtime Flow/);
+  assert.match(body, /```dot\s+digraph mr_wolf_runtime/);
+  assert.match(body, /Choose the first terminal branch that matches/);
+  assert.match(body, /## Decision Priority/);
+  assert.match(body, /Resolve flow choices in this order/);
+  assert.match(body, /Confidence at 80% or higher: choose exactly one outcome route/);
+  assert.match(
+    body,
+    /Base the outcome route on the current request, evidence, confidence, and artifact state/,
+  );
+
+  assert.match(flowBody, /## Runtime Diagram/);
+  assert.match(flowBody, /first-match routing contract/);
+  assert.match(flowBody, /digraph mr_wolf_runtime/);
+  assert.match(flowBody, /## Outcome Priority/);
+  assert.match(flowBody, /choose exactly one outcome route/);
 });
 
 test("cf-mr-wolf uses tools and deterministic temp scripts for evidence gathering", async () => {

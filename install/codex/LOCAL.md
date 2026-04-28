@@ -9,7 +9,7 @@ Support these actions:
 - sync into a specific repository, for both first install and later updates
 - uninstall from a specific repository
 
-Local sync installs or updates Cflow skills into `.agents/skills` and Cflow Codex custom agents into `.codex/agents`.
+Local sync installs or updates Cflow skills into `.codex/skills` and Cflow Codex custom agents into `.codex/agents`.
 
 ## Prerequisites
 
