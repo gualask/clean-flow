@@ -18,12 +18,9 @@ Artifact ownership and write rules:
 
 ## Entry Behavior
 
-DOT: `entry`, `has_problem`, `skip_planning`, `ask_problem`, `stop_with_risk`.
-
 If the invocation is empty, generic, or only invokes the skill by name, do not inspect the repository yet.
 Ask exactly one question: what problem should be solved?
 If the user explicitly asks to skip planning, call out the biggest missing requirement or risk in one short note and stop.
-Otherwise follow the DOT and load the reached references.
 Do not implement during clarification.
 
 ## Runtime Flow
@@ -68,8 +65,6 @@ Read a reference only when its DOT nodes are reached:
 
 ## Decision Priority
 
-DOT owns pre-outcome gates.
-Only enter `choose_outcome` after `sufficiency >=80`.
 Choose the first matching route:
 
 1. `cflow_handoff`: cleanup/refactor candidates, multiple files, ordered work, risky work, or resumable work.
@@ -115,8 +110,5 @@ For a completed handoff, return only:
 
 Avoid:
 
-- treating every idea as a feature request
-- proposing unrelated refactors
-- adding architecture that the problem does not justify
 - inventing requirements to make the solution more impressive
 - hiding uncertainty

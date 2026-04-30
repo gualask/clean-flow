@@ -28,14 +28,10 @@ Do not add handoff, next skill, or workflow-decision sections to `.cflow/mr-wolf
 
 ## Operating Loop
 
-Do not implement while the problem is still ambiguous.
 Run a small loop until the problem is clear enough to hand off:
 
 - Problem-framing pass: state the current frame in one or two sentences, including the problem, success criteria, constraints, explicit non-goals, and smallest useful context slice.
 - Context check: inspect only that slice, separate signal from noise, and expand only when more context can change scope, risk, validation, or the handoff.
-- Bounded analysis pass: once the frame or candidate area is clear, use evidence channels that can test the frame and improve the handoff.
-- Finding de-risk pass: when bounded analysis produces candidate findings and the next step might be a fix, route, or completed handoff, de-risk the findings before declaring them actionable.
-- Sufficiency check: assign an investigation confidence percentage, record the basis in `.cflow/mr-wolf-notes.md`, and ask one focused question only when the next step depends on it.
 
 Scoping questions are part of problem framing.
 Ask exactly one focused scoping question before broad inventory when a clear goal still leaves a large work area and the answer can reduce candidate areas, priority, success criteria, constraints, or validation.
