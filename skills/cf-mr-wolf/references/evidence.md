@@ -11,10 +11,10 @@ High-value channels are:
 - system commands such as `rg`, test runners, package scripts, language tools, and format or schema checks in read-only or diagnostic mode
 - bundled `../../_shared/scripts/repo-tree.mjs`; run it with `--help` first when a gitignore-aware repository tree may reduce broad context before selecting files
 - temporary `/tmp` scripts for mechanical work across many inputs
-- specialist skills that clearly match the bounded problem, such as UI review for a UI critique or API design review for an API shape problem
+- specialist skills that clearly match the bounded problem, delegated through a dynamic read-only specialist agent
 
 When MCP tools are available and the question depends on code structure, symbols, semantic relationships, repository metadata, tickets, or docs, use a relevant MCP tool unless a narrower non-MCP source is clearly enough; record the reason when MCP is skipped.
-After the frame or candidate area is bounded, check available skill names/descriptions; if one clearly matches, use it as a bounded review lens over the selected slice, then record only the specialist skills actually used plus why.
+After the frame or candidate area is bounded, check available skill names/descriptions; if one clearly matches, use [agents.md](agents.md) to delegate a bounded read-only specialist analysis, then record the specialist report or why no skill matched.
 
 ## Sufficiency Gate
 
@@ -25,7 +25,7 @@ For repo-wide, multi-file, or multi-candidate investigations, keep confidence be
 - broad inventory from commands or a temporary script to find likely search space and obvious noise
 - narrowing pass with focused verification of the strongest candidates or representative clusters
 - finding de-risk checks for candidate findings before recommending a fix or completed handoff
-- notes for used evidence channels, important skipped non-specialist high-value channels, and only specialist skills actually used
+- notes for used evidence channels, important skipped non-specialist high-value channels, and specialist agent reports or no-match reasons
 
 Below 80%, continue the operating loop or ask one focused question.
 If a user asks to proceed below 80%, state the remaining uncertainty in the handoff.

@@ -19,7 +19,7 @@ If the work is multi-file, ordered, risky, or resumable, ask whether to preserve
 When handing off, say that `cf-start` should read `.cflow/mr-wolf-notes.md` as discovery input; do not imply that `.cflow/refactor-brief.md` will be written here.
 Use `cf-split`, `cf-cognitive`, or `cf-cohesion` directly only when the current request is one explicit local action and no broader Cflow planning or resume state is needed.
 When the evidence points to an unclear multi-step path, ordering risk, state gap, or workflow flaw but not yet to a specific refactor, recommend `cf-trace`.
-When a follow-up skill owns required reconnaissance, artifact writes, or execution, hand off instead of doing that work here; if the current request continues into that skill and it needs subagent authorization, ask first.
+When a follow-up skill owns required artifact writes or execution, hand off instead of doing that work here; if the current request continues into that skill and it needs subagent authorization, ask first.
 
 ## Decision and Options
 

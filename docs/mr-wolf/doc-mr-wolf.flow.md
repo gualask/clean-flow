@@ -31,7 +31,13 @@ digraph mr_wolf_runtime {
   frame_problem -> useful_scope_question;
   useful_scope_question -> ask_scope_question [label="yes"];
   useful_scope_question -> bounded_analysis [label="no"];
-  bounded_analysis -> context_heavy;
+  bounded_analysis -> specialist_match;
+  specialist_match -> specialist_agent [label="yes"];
+  specialist_match -> context_heavy [label="no"];
+  specialist_agent -> merge_specialist_report;
+  merge_specialist_report -> has_candidates [label="candidate findings"];
+  merge_specialist_report -> sufficiency [label="enough/no candidates"];
+  merge_specialist_report -> next_context_or_question [label="missing required context"];
   context_heavy -> candidate_agent [label="yes"];
   context_heavy -> has_candidates [label="no"];
   candidate_agent -> has_candidates;
@@ -62,19 +68,20 @@ When confidence is sufficient, choose exactly one outcome route in this order:
 1. Entry: trigger `cf-mr-wolf` directly, or route from `cf-start` when the upstream problem is too unclear for Cflow assessment. If no concrete problem or task is present, ask exactly one question: what problem should be solved.
 2. Notes preflight: if a problem exists, apply the `Artifacts` bootstrap rule when notes must be created, read `.cflow/mr-wolf-notes.md` when present, or create it from the template when missing. Decide whether existing notes are relevant to the current request and repository state; reuse or reset it based on relevance.
 3. Problem frame: frame the apparent goal, uncertainty, likely scope, and success criteria. Choose the smallest context slice that can confirm or reject the frame. For a clear goal with broad possible scope, ask one focused scoping question before broad inventory when the answer can reduce an unnecessarily large work area.
-4. Bounded analysis: run the problem-framing pass first, then the bounded analysis pass. Choose relevant evidence channels such as MCP resources/tools, system commands, bundled repo tree output, deterministic `/tmp` scripts, and specialist skills that clearly match the bounded problem. This keeps mechanical analysis in tools rather than model-only reasoning.
-5. Specialist lens: if a specialist skill is used, apply its review lens only to the selected context slice or a narrower one, and record only the specialist skills actually used plus why. Review checks must confirm the skill considers clearly matching specialist skills only after the problem frame or candidate area is bounded.
+4. Bounded analysis: run the problem-framing pass first, then build the smallest useful context slice with evidence channels such as MCP resources/tools, system commands, bundled repo tree output, and deterministic `/tmp` scripts.
+5. Specialist delegation: after the frame and context slice are bounded, check available skills. If one clearly matches the needed analysis, prefer a read-only dynamic specialist agent over generic candidate discovery or local-only review. Choose `gpt-5.4-mini` medium for mechanical checks and `gpt-5.5` high for reasoning-heavy analysis. Pass only the problem frame, success criteria, non-goals, selected context, exclusions, evidence summary, and required skill name.
 6. Evidence notes: record only evidence-producing tools in `evidence tools used`; do not list note-writing/editing tools as evidence.
-7. Multi-candidate sufficiency: for repo-wide or multi-candidate work, run broad inventory, narrowing pass, candidate discovery, and finding de-risk checks before calling the context sufficient.
-8. Candidate discovery: when bounded evidence plus the selected context slice is context-heavy, use `cflow_candidate_finding_recon` when available; pass only repository path, problem frame, success criteria, non-goals, bounded evidence path/summary, selected context slice, and exclusions. Do not cap candidate findings at three.
-9. Finding de-risk: when bounded analysis produces candidate findings and the next step might be a fix, route, or completed handoff, select all or the decision-blocking subset for de-risk. When finding de-risk is multi-candidate, call-path-heavy, or context-heavy, use `cflow_finding_derisk_recon` when available.
-10. Agent sequencing: Run custom agents sequentially only; wait for the current report before starting any later discovery or de-risk pass, and never run multiple custom agents at the same time. Treat custom-agent reports as the primary discovery or finding de-risk scan; merge any sequential reports before sufficiency, fix recommendation, or completed handoff.
-11. Classification: classify each de-risked finding as confirmed, false-positive, or uncertain. Inspect only selected evidence, separate signal from noise, and update notes with confirmed candidates, candidates to verify, and excluded false positives, not exhaustive rejected lists.
-12. Confidence: assign an investigation confidence percentage and record the basis. `sufficient` requires at least 80% confidence unless the user explicitly accepts the risk, and repo-wide or multi-candidate work stays below 80% if deterministic inventory, focused verification, finding de-risk checks, used-channel notes, or required skipped-channel reasons are missing.
-13. Next context: if context is insufficient, ask one focused question or inspect the next smallest justified slice.
-14. Outcome: if the evidence points to cleanup/refactor candidates, stop at evidence-backed handoff and recommend `cf-start`; do not route straight to `cf-split`, `cf-cognitive`, or `cf-cohesion` unless the user requested one explicit local action. If evidence points to an unclear path, ordering risk, state gap, or workflow flaw without a specific refactor yet, recommend `cf-trace`.
-15. Handoff: once clear enough, recommend a direction or present 2-3 options with trade-offs. Select a short recommended next step with a reason, naming a specialized available skill when it clearly owns the best follow-up. For Cflow cleanup/refactor work, ask whether to preserve the discovery through `.cflow/refactor-brief.md` and continue with `cf-start`; do not create that brief directly from `cf-mr-wolf`.
-16. Route basis: base the outcome route on current request, evidence, confidence, and artifact state, not on which skill or user path invoked this pass.
+7. Specialist report merge: treat the specialist report as primary evidence, update notes, then continue to candidate classification, sufficiency, or one focused context question based on the report.
+8. Multi-candidate sufficiency: for repo-wide or multi-candidate work, run broad inventory, narrowing pass, candidate discovery, and finding de-risk checks before calling the context sufficient.
+9. Candidate discovery: when no specialist skill clearly matches, or the specialist report leaves broad candidate discovery uncovered, use `cflow_candidate_finding_recon` when available; pass only repository path, problem frame, success criteria, non-goals, bounded evidence path/summary, selected context slice, and exclusions. Do not cap candidate findings at three.
+10. Finding de-risk: when bounded analysis produces candidate findings and the next step might be a fix, route, or completed handoff, select all or the decision-blocking subset for de-risk. When finding de-risk is multi-candidate, call-path-heavy, or context-heavy, use `cflow_finding_derisk_recon` when available.
+11. Agent sequencing: Run specialist and custom agents sequentially only; wait for the current report before starting any later discovery or de-risk pass, and never run multiple agents at the same time. Treat reports as primary evidence; merge them before sufficiency, fix recommendation, or completed handoff.
+12. Classification: classify each de-risked finding as confirmed, false-positive, or uncertain. Inspect only selected evidence, separate signal from noise, and update notes with confirmed candidates, candidates to verify, and excluded false positives, not exhaustive rejected lists.
+13. Confidence: assign an investigation confidence percentage and record the basis. `sufficient` requires at least 80% confidence unless the user explicitly accepts the risk, and repo-wide or multi-candidate work stays below 80% if deterministic inventory, focused verification, finding de-risk checks, used-channel notes, or required skipped-channel reasons are missing.
+14. Next context: if context is insufficient, ask one focused question or inspect the next smallest justified slice.
+15. Outcome: if the evidence points to cleanup/refactor candidates, stop at evidence-backed handoff and recommend `cf-start`; do not route straight to `cf-split`, `cf-cognitive`, or `cf-cohesion` unless the user requested one explicit local action. If evidence points to an unclear path, ordering risk, state gap, or workflow flaw without a specific refactor yet, recommend `cf-trace`.
+16. Handoff: once clear enough, recommend a direction or present 2-3 options with trade-offs. Select a short recommended next step with a reason, naming a specialized available skill when it clearly owns the best follow-up. For Cflow cleanup/refactor work, ask whether to preserve the discovery through `.cflow/refactor-brief.md` and continue with `cf-start`; do not create that brief directly from `cf-mr-wolf`.
+17. Route basis: base the outcome route on current request, evidence, confidence, and artifact state, not on which skill or user path invoked this pass.
 
 ## Contracts
 
@@ -85,11 +92,11 @@ When confidence is sufficient, choose exactly one outcome route in this order:
 | ambiguous problem | inspect only the smallest relevant context slice, recap sufficiency, ask one focused question if needed | no |
 | clear goal with broad possible scope | ask one focused scoping question before broad inventory when the answer can materially narrow the work | no |
 | many deterministic inputs | use commands, bundled repo tree output, or temporary `/tmp` scripts for mechanical analysis, then interpret the compact output | no |
-| relevant specialist skill used | apply it only as a review lens over the selected context slice, record why it was used, and keep final judgment in the handoff | no |
+| relevant specialist skill exists | delegate read-only analysis to one dynamic specialist agent over the selected context slice, merge the report, and keep final judgment in the handoff | no |
 | bounded evidence is context-heavy | use `cflow_candidate_finding_recon` when available, then treat its report as the primary candidate discovery scan | no |
 | candidate discovery finds more than three material findings | carry all material candidates forward, grouping equivalents and naming minor, deferred, out-of-scope, or non-actionable observations | no |
 | finding de-risk is multi-candidate, call-path-heavy, or context-heavy | use one `cflow_finding_derisk_recon` pass at a time, then merge any sequential reports as the primary finding de-risk scan | no |
-| any custom agent is used | run agents sequentially only; never run multiple custom agents at the same time | no |
+| any specialist or custom agent is used | run agents sequentially only; never run multiple agents at the same time | no |
 | candidate finding might lead to a fix or handoff | classify each finding as confirmed, false-positive, or uncertain with reachability and fix-fit evidence before recommending implementation | no |
 | repo-wide or multi-candidate discovery | run broad inventory, narrowing pass, finding de-risk checks, and record confidence before declaring sufficiency | no |
 | cleanup/refactor candidate list | summarize evidence and hand off to `cf-start`; do not route straight to `cf-split`, `cf-cognitive`, or `cf-cohesion` unless the user requested one explicit local action | no |
@@ -108,14 +115,16 @@ When confidence is sufficient, choose exactly one outcome route in this order:
 - It asks one scoping question before broad inventory when a clear goal still leaves an unnecessarily large work area.
 - It separates problem framing from bounded analysis.
 - It uses available tools, bundled repo tree output, and deterministic temporary scripts instead of making the model do mechanical analysis.
-- It considers clearly matching specialist skills only after the problem frame or candidate area is bounded.
-- It records only specialist skills actually used, plus why.
-- Specialist skill evidence informs the handoff; it does not replace direct evidence or final judgment.
+- It considers clearly matching specialist skills only after the problem frame and context slice are bounded.
+- It prefers read-only dynamic specialist agents over generic candidate discovery when a skill clearly matches.
+- It selects cheaper specialist models for mechanical work and higher-reasoning models for ambiguous or judgment-heavy work.
+- It records specialist agent reports or no-match reasons.
+- Specialist evidence informs the handoff; it does not replace final judgment.
 - It recommends specialized available skills as next steps when they clearly own the follow-up.
 - It does not declare discovery sufficient below 80% confidence unless the user accepts the risk.
 - It narrows repo-wide investigations through broad inventory, candidate verification, and finding de-risk checks.
 - It does not cap candidate findings at three.
-- It runs custom agents sequentially only.
+- It runs specialist and custom agents sequentially only.
 - It does not recommend fixes for candidate findings until reachability, false positives, and fix-fit have been checked or explicitly handed off for verification.
 - It keeps `.cflow/mr-wolf-notes.md` as compact investigation notes, not an execution plan.
 - It records `confirmed candidates`, `candidates to verify`, and `excluded false positives`, not exhaustive rejected lists.

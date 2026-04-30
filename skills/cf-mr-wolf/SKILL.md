@@ -40,7 +40,13 @@ digraph mr_wolf_runtime {
   frame_problem -> useful_scope_question;
   useful_scope_question -> ask_scope_question [label="yes"];
   useful_scope_question -> bounded_analysis [label="no"];
-  bounded_analysis -> context_heavy;
+  bounded_analysis -> specialist_match;
+  specialist_match -> specialist_agent [label="yes"];
+  specialist_match -> context_heavy [label="no"];
+  specialist_agent -> merge_specialist_report;
+  merge_specialist_report -> has_candidates [label="candidate findings"];
+  merge_specialist_report -> sufficiency [label="enough/no candidates"];
+  merge_specialist_report -> next_context_or_question [label="missing required context"];
   context_heavy -> candidate_agent [label="yes"];
   context_heavy -> has_candidates [label="no"];
   candidate_agent -> has_candidates;
@@ -62,7 +68,7 @@ Read a reference only when its DOT nodes are reached:
 
 - `notes_preflight`, `frame_problem`, `useful_scope_question`, `ask_scope_question`: [references/framing.md](references/framing.md)
 - `bounded_analysis`, `sufficiency`, `next_context_or_question`: [references/evidence.md](references/evidence.md)
-- `context_heavy`, `candidate_agent`, `has_candidates`, `derisk_findings`: [references/agents.md](references/agents.md)
+- `specialist_match`, `specialist_agent`, `merge_specialist_report`, `context_heavy`, `candidate_agent`, `has_candidates`, `derisk_findings`: [references/agents.md](references/agents.md)
 - `cflow_handoff`, `trace_recommendation`, `direct_local_handoff`, `options_or_handoff`: [references/outcomes.md](references/outcomes.md)
 
 ## Decision Priority
