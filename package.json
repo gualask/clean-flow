@@ -9,6 +9,7 @@
   },
   "scripts": {
     "count-tokens": "node src/commands/count-tokens.mjs",
+    "report": "node src/commands/skill-token-report.mjs",
     "test": "node --test test/*.test.mjs"
   },
   "devDependencies": {

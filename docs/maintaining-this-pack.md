@@ -165,6 +165,16 @@ Checklist:
 - `Output contract`: does the output still give the next phase enough state?
 - `Flow doc sync`: does the affected `docs/<public-skill>/doc-*.flow.md` reflect the public flow?
 
+Token budget report:
+
+```bash
+pnpm report
+pnpm report -- cf-start
+```
+
+The report shows discovery metadata, `SKILL.md` instruction tokens, each runtime reference or asset, per-skill totals, and the pack total.
+Budget warnings are emitted by `pnpm test`; the report is for maintainer review before trimming or moving detail into references.
+
 ## Maintainer Workflow
 
 When changing the pack:
