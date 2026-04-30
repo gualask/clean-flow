@@ -7,42 +7,74 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 ## Runtime Inputs
 
 - Public skill: `skills/cf-mr-wolf/SKILL.md`
+- Runtime references: `skills/cf-mr-wolf/references/framing.md`, `evidence.md`, `agents.md`, `outcomes.md`
 - Custom agent source: `skills/_codex_agents/cflow_candidate_finding_recon.toml`
 - Custom agent source: `skills/_codex_agents/cflow_finding_derisk_recon.toml`
 - Current conversation and user request
 - Focused repository context selected from the problem frame
 - Notes artifact: `.cflow/mr-wolf-notes.md`, created from `skills/cf-mr-wolf/assets/mr-wolf-notes.template.md`
 
+## Runtime Diagram
+
+`skills/cf-mr-wolf/SKILL.md` owns the runtime DOT diagram and reference map.
+Phase-specific runtime rules live in `skills/cf-mr-wolf/references/` and are loaded only when their DOT nodes are reached.
+The diagram is a first-match routing contract: once a terminal branch selects a route or question, lower-priority outcomes must not be evaluated.
+
+```dot
+digraph mr_wolf_runtime {
+  entry -> has_problem;
+  has_problem -> ask_problem [label="no"];
+  has_problem -> skip_planning [label="yes"];
+  skip_planning -> stop_with_risk [label="yes"];
+  skip_planning -> notes_preflight [label="no"];
+  notes_preflight -> frame_problem;
+  frame_problem -> useful_scope_question;
+  useful_scope_question -> ask_scope_question [label="yes"];
+  useful_scope_question -> bounded_analysis [label="no"];
+  bounded_analysis -> context_heavy;
+  context_heavy -> candidate_agent [label="yes"];
+  context_heavy -> has_candidates [label="no"];
+  candidate_agent -> has_candidates;
+  has_candidates -> derisk_findings [label="yes"];
+  has_candidates -> sufficiency [label="no"];
+  derisk_findings -> sufficiency;
+  sufficiency -> next_context_or_question [label="<80/missing evidence"];
+  sufficiency -> choose_outcome [label=">=80"];
+  choose_outcome -> cflow_handoff [label="refactor/multi-file/risky/resumable"];
+  choose_outcome -> trace_recommendation [label="path/order/state unclear"];
+  choose_outcome -> direct_local_handoff [label="one local action"];
+  choose_outcome -> options_or_handoff [label="decision/design remains"];
+}
+```
+
+## Outcome Priority
+
+When confidence is sufficient, choose exactly one outcome route in this order:
+
+1. Cleanup/refactor candidates, multiple candidate files, ordered work, risky work, or resumable work -> completed handoff to `cf-start`.
+2. Unclear multi-step path, ordering risk, state gap, or workflow flaw without a specific refactor yet -> recommend `cf-trace`.
+3. One explicit local action with no broader Cflow planning or resume state -> hand off to `cf-split`, `cf-cognitive`, or `cf-cohesion` only when it clearly owns that action.
+4. Multiple credible product, architecture, or implementation directions -> present options with recommendation first.
+5. Bounded problem ready for another worker or follow-up skill -> completed handoff with scope, non-goals, confidence, notes status, and next step.
+
 ## Flow
 
-1. Trigger `cf-mr-wolf` directly, or route from `cf-start` when the upstream problem is too unclear for Cflow assessment.
-2. If no concrete problem or task is present, ask exactly one question: what problem should be solved.
-3. If a problem exists, read `.cflow/mr-wolf-notes.md` when present, or create it from the template when missing.
-4. Decide whether existing notes are relevant to the current request and repository state; reuse relevant notes or overwrite stale/unrelated notes.
-5. Frame the apparent goal, uncertainty, likely scope, and success criteria.
-6. Choose the smallest context slice that can confirm or reject the frame.
-7. If the goal is clear but the possible work area is large, ask one focused scoping question before broad inventory when the answer can reduce candidate areas, priority, success criteria, constraints, or validation.
-8. Run the problem-framing pass first; do not use specialist skills as generic discovery before the problem frame or candidate area is clear.
-9. Run the bounded analysis pass: choose relevant evidence channels such as MCP resources/tools, system commands, bundled repo tree output, deterministic `/tmp` scripts, and specialist skills that clearly match the bounded problem.
-10. If a specialist skill is used, apply its review lens only to the selected context slice or a narrower one, and record only the specialist skills actually used plus why.
-11. Record only evidence-producing tools in `evidence tools used`; do not list note-writing/editing tools as evidence.
-12. For repo-wide or multi-candidate work, run broad inventory, narrowing pass, candidate discovery, and finding de-risk checks before calling the context sufficient.
-13. When bounded evidence plus the selected context slice is context-heavy, use `cflow_candidate_finding_recon` when available; pass only repository path, problem frame, success criteria, non-goals, bounded evidence path/summary, selected context slice, and exclusions.
-14. Do not cap candidate findings at three; carry forward all materially relevant candidates, grouping equivalent findings and naming minor, deferred, out-of-scope, or non-actionable observations when they affect the decision.
-15. When bounded analysis produces candidate findings and the next step might be a fix, route, or completed handoff, select all or the decision-blocking subset for de-risk.
-16. When finding de-risk is multi-candidate, call-path-heavy, or context-heavy, use `cflow_finding_derisk_recon` when available; pass only repository path, problem frame, assigned candidate findings, selected context slice, and exclusions.
-17. Run custom agents sequentially only; wait for the current report before starting any later discovery or de-risk pass, and never run multiple custom agents at the same time.
-18. Treat custom-agent reports as the primary discovery or finding de-risk scan; merge any sequential reports before sufficiency, fix recommendation, or completed handoff; spot-check only gaps, contradictions, or unsupported evidence.
-19. Classify each de-risked finding as confirmed, false-positive, or uncertain.
-20. Inspect only the selected evidence, then separate signal from noise and update the notes.
-21. Assign an investigation confidence percentage and record the basis.
-22. Recap whether the context is sufficient to continue; `sufficient` requires at least 80% confidence unless the user explicitly accepts the risk, and repo-wide or multi-candidate work stays below 80% if deterministic inventory, focused verification, finding de-risk checks, used-channel notes, or required skipped-channel reasons are missing.
-23. If context is insufficient, ask one focused question or inspect the next smallest justified slice.
-24. If the evidence points to cleanup/refactor candidates, stop at evidence-backed handoff and recommend `cf-start` instead of jumping directly to execution skills.
-25. If the evidence points to an unclear multi-step path, ordering risk, state gap, or workflow flaw but not yet to a specific refactor, recommend `cf-trace`.
-26. Once clear enough, recommend a direction or present 2-3 options with trade-offs.
-27. Select a short recommended next step with a reason, naming a specialized available skill when it clearly owns the best follow-up.
-28. For Cflow cleanup/refactor work, ask whether to preserve the discovery through `.cflow/refactor-brief.md` and continue with `cf-start`; do not create that brief directly from `cf-mr-wolf`.
+1. Entry: trigger `cf-mr-wolf` directly, or route from `cf-start` when the upstream problem is too unclear for Cflow assessment. If no concrete problem or task is present, ask exactly one question: what problem should be solved.
+2. Notes preflight: if a problem exists, read `.cflow/mr-wolf-notes.md` when present, or create it from the template when missing. Decide whether existing notes are relevant to the current request and repository state; reuse or reset it based on relevance.
+3. Problem frame: frame the apparent goal, uncertainty, likely scope, and success criteria. Choose the smallest context slice that can confirm or reject the frame. For a clear goal with broad possible scope, ask one focused scoping question before broad inventory when the answer can reduce an unnecessarily large work area.
+4. Bounded analysis: run the problem-framing pass first, then the bounded analysis pass. Choose relevant evidence channels such as MCP resources/tools, system commands, bundled repo tree output, deterministic `/tmp` scripts, and specialist skills that clearly match the bounded problem. This keeps mechanical analysis in tools rather than model-only reasoning.
+5. Specialist lens: if a specialist skill is used, apply its review lens only to the selected context slice or a narrower one, and record only the specialist skills actually used plus why. Review checks must confirm the skill considers clearly matching specialist skills only after the problem frame or candidate area is bounded.
+6. Evidence notes: record only evidence-producing tools in `evidence tools used`; do not list note-writing/editing tools as evidence.
+7. Multi-candidate sufficiency: for repo-wide or multi-candidate work, run broad inventory, narrowing pass, candidate discovery, and finding de-risk checks before calling the context sufficient.
+8. Candidate discovery: when bounded evidence plus the selected context slice is context-heavy, use `cflow_candidate_finding_recon` when available; pass only repository path, problem frame, success criteria, non-goals, bounded evidence path/summary, selected context slice, and exclusions. Do not cap candidate findings at three.
+9. Finding de-risk: when bounded analysis produces candidate findings and the next step might be a fix, route, or completed handoff, select all or the decision-blocking subset for de-risk. When finding de-risk is multi-candidate, call-path-heavy, or context-heavy, use `cflow_finding_derisk_recon` when available.
+10. Agent sequencing: Run custom agents sequentially only; wait for the current report before starting any later discovery or de-risk pass, and never run multiple custom agents at the same time. Treat custom-agent reports as the primary discovery or finding de-risk scan; merge any sequential reports before sufficiency, fix recommendation, or completed handoff.
+11. Classification: classify each de-risked finding as confirmed, false-positive, or uncertain. Inspect only selected evidence, separate signal from noise, and update notes with confirmed candidates, candidates to verify, and excluded false positives, not exhaustive rejected lists.
+12. Confidence: assign an investigation confidence percentage and record the basis. `sufficient` requires at least 80% confidence unless the user explicitly accepts the risk, and repo-wide or multi-candidate work stays below 80% if deterministic inventory, focused verification, finding de-risk checks, used-channel notes, or required skipped-channel reasons are missing.
+13. Next context: if context is insufficient, ask one focused question or inspect the next smallest justified slice.
+14. Outcome: if the evidence points to cleanup/refactor candidates, stop at evidence-backed handoff and recommend `cf-start`; do not route straight to `cf-split`, `cf-cognitive`, or `cf-cohesion` unless the user requested one explicit local action. If evidence points to an unclear path, ordering risk, state gap, or workflow flaw without a specific refactor yet, recommend `cf-trace`.
+15. Handoff: once clear enough, recommend a direction or present 2-3 options with trade-offs. Select a short recommended next step with a reason, naming a specialized available skill when it clearly owns the best follow-up. For Cflow cleanup/refactor work, ask whether to preserve the discovery through `.cflow/refactor-brief.md` and continue with `cf-start`; do not create that brief directly from `cf-mr-wolf`.
+16. Route basis: base the outcome route on current request, evidence, confidence, and artifact state, not on which skill or user path invoked this pass.
 
 ## Contracts
 
@@ -70,6 +102,7 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 ## Review Checks
 
 - The skill is a pragmatic problem fixer, not a generic planning worksheet.
+- The runtime DOT diagram and outcome priority are the single branch-order contract for route selection.
 - It asks for the problem first when invoked without instructions.
 - It narrows context before reading, and avoids whole-repository scans by default.
 - It asks one scoping question before broad inventory when a clear goal still leaves an unnecessarily large work area.

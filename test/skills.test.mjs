@@ -530,6 +530,10 @@ test("shared support resources are not packaged as public skills", async () => {
   );
 
   const mrWolfBody = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
+  const mrWolfEvidenceBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "evidence.md"),
+    "utf8",
+  );
   const cognitiveBody = await readFile(
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
     "utf8",
@@ -583,7 +587,8 @@ test("shared support resources are not packaged as public skills", async () => {
     "utf8",
   );
 
-  assert.match(mrWolfBody, /\.\.\/_shared\/scripts\/repo-tree\.mjs/);
+  assert.match(mrWolfBody, /references\/evidence\.md/);
+  assert.match(mrWolfEvidenceBody, /\.\.\/\.\.\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(cognitiveBody, /references\/discovery\.md/);
   assert.match(cognitiveDiscoveryBody, /\.\.\/\.\.\/_shared\/scripts\/repo-tree\.mjs/);
   assert.match(fileSplitEvaluationBody, /\.\.\/\.\.\/_shared\/scripts\/repo-tree\.mjs/);
@@ -707,8 +712,24 @@ test("cf-mr-wolf fully replaces the old clarification entrypoint", async () => {
   }
 });
 
+test("cf-mr-wolf description stays discovery metadata", async () => {
+  const body = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
+  const description = body.match(/^description:\s*(.+)$/m)?.[1] ?? "";
+
+  assert.match(description, /Clarify ambiguous problem framing/);
+  assert.match(description, /success criteria/);
+  assert.match(description, /refactor intent/);
+  assert.match(description, /implementation direction/);
+  assert.match(description, /skip when the requested edit or bug fix is already clear and bounded/);
+  assert.doesNotMatch(description, /If invoked|first ask|Do not use|Z-|\.cflow/);
+});
+
 test("cf-mr-wolf maintains compact investigation notes under .cflow", async () => {
   const body = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
+  const framingBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "framing.md"),
+    "utf8",
+  );
   const flowBody = await readFile(
     path.join(REPO_ROOT, "docs", "mr-wolf", "doc-mr-wolf.flow.md"),
     "utf8",
@@ -719,13 +740,34 @@ test("cf-mr-wolf maintains compact investigation notes under .cflow", async () =
   );
 
   assert.match(body, /\.cflow\/mr-wolf-notes\.md/);
-  assert.match(body, /assets\/mr-wolf-notes\.template\.md/);
-  assert.match(body, /Overwrite stale or unrelated notes/);
-  assert.match(body, /Do not list every non-candidate file/);
-  assert.match(body, /Do not add handoff, next skill, or workflow-decision sections/);
-  assert.match(body, /one finding or candidate per bullet/);
-  assert.match(body, /list only tools and scripts that produced evidence/);
-  assert.match(body, /do not include tools used only to create or update `\.cflow\/mr-wolf-notes\.md`/);
+  assert.match(body, /## Runtime Artifacts/);
+  assert.ok(
+    body.indexOf("## Runtime Artifacts") < body.indexOf("## Runtime Flow"),
+    "Runtime Artifacts should appear before the runtime graph",
+  );
+  assert.ok(
+    body.indexOf("## Entry Behavior") < body.indexOf("## Runtime Flow"),
+    "Entry Behavior should appear before the runtime graph",
+  );
+  assert.match(body, /Use artifacts as routing state, not aliases/);
+  assert.match(body, /`\.cflow\/mr-wolf-notes\.md`: owned here/);
+  assert.match(body, /before repository inspection, load \[references\/framing\.md\]/);
+  assert.match(body, /read existing notes if present or create them from `assets\/mr-wolf-notes\.template\.md`/);
+  assert.match(body, /match the current request and repository state before reusing, updating, or resetting/);
+  assert.match(body, /`\.cflow\/architecture\.md`: available input only/);
+  assert.match(body, /never create or update it here/);
+  assert.match(body, /`\.cflow\/refactor-brief\.md`: owned by `cf-start`, not this skill/);
+  assert.doesNotMatch(body, /## Artifacts Aliases/);
+  assert.doesNotMatch(body, /Z-notes|Z-brief/);
+  assert.doesNotMatch(body, /Create `?\.cflow\//);
+  assert.match(body, /references\/framing\.md/);
+  assert.match(framingBody, /assets\/mr-wolf-notes\.template\.md/);
+  assert.match(framingBody, /Overwrite stale or unrelated notes/);
+  assert.match(framingBody, /Do not list every non-candidate file/);
+  assert.match(framingBody, /Do not add handoff, next skill, or workflow-decision sections/);
+  assert.match(framingBody, /one finding or candidate per bullet/);
+  assert.match(framingBody, /list only tools and scripts that produced evidence/);
+  assert.match(framingBody, /do not include tools used only to create or update `\.cflow\/mr-wolf-notes\.md`/);
   assert.doesNotMatch(body, /docs\/mr-wolf/);
   assert.doesNotMatch(body, /\.cflow\/mr-wolf-brief\.md/);
 
@@ -759,14 +801,20 @@ test("cf-mr-wolf centralizes route selection in a DOT priority contract", async 
 
   assert.match(body, /## Runtime Flow/);
   assert.match(body, /```dot\s+digraph mr_wolf_runtime/);
-  assert.match(body, /Choose the first terminal branch that matches/);
+  assert.match(body, /DOT is first-match routing/);
+  assert.match(body, /## Reference Map/);
+  assert.match(body, /Read a reference only when its DOT nodes are reached/);
+  assert.match(body, /references\/framing\.md/);
+  assert.match(body, /references\/evidence\.md/);
+  assert.match(body, /references\/agents\.md/);
+  assert.match(body, /references\/outcomes\.md/);
   assert.match(body, /## Decision Priority/);
-  assert.match(body, /Resolve flow choices in this order/);
-  assert.match(body, /Confidence at 80% or higher: choose exactly one outcome route/);
-  assert.match(
-    body,
-    /Base the outcome route on the current request, evidence, confidence, and artifact state/,
-  );
+  assert.match(body, /DOT owns pre-outcome gates/);
+  assert.match(body, /Only enter `choose_outcome` after `sufficiency >=80`/);
+  assert.match(body, /Choose the first matching route/);
+  assert.match(body, /`cflow_handoff`: cleanup\/refactor candidates/);
+  assert.match(body, /`trace_recommendation`: unclear path, ordering, state, or workflow flaw/);
+  assert.match(body, /Base the route on current request, evidence, confidence, and artifact state/);
 
   assert.match(flowBody, /## Runtime Diagram/);
   assert.match(flowBody, /first-match routing contract/);
@@ -777,42 +825,51 @@ test("cf-mr-wolf centralizes route selection in a DOT priority contract", async 
 
 test("cf-mr-wolf uses tools and deterministic temp scripts for evidence gathering", async () => {
   const body = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
+  const framingBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "framing.md"),
+    "utf8",
+  );
+  const evidenceBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "evidence.md"),
+    "utf8",
+  );
+  const outcomesBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "outcomes.md"),
+    "utf8",
+  );
   const flowBody = await readFile(
     path.join(REPO_ROOT, "docs", "mr-wolf", "doc-mr-wolf.flow.md"),
     "utf8",
   );
 
-  assert.match(body, /MCP resources or tools/);
-  assert.match(body, /Operating Loop/);
-  assert.match(body, /Evidence Channels/);
-  assert.match(body, /Sufficiency Gate/);
-  assert.match(body, /Problem-framing pass/);
-  assert.match(body, /Bounded analysis pass/);
-  assert.match(body, /Scoping questions are part of problem framing/);
-  assert.match(body, /Ask exactly one focused scoping question before broad inventory/);
-  assert.match(body, /candidate areas, priority, success criteria, constraints, or validation/);
-  assert.match(body, /Skip it when the target is already bounded/);
-  assert.match(body, /Use specialist skills only after the problem frame or candidate area is bounded/);
-  assert.match(body, /currently available skill names and descriptions/);
-  assert.match(body, /Record only specialist skills actually used/);
-  assert.match(body, /Specialist evidence informs the handoff/);
-  assert.match(body, /make `Next step` a short recommendation with a reason/);
-  assert.match(body, /naming a specialized available skill when it is the best follow-up/);
+  assert.match(evidenceBody, /MCP resources or tools/);
+  assert.match(framingBody, /Operating Loop/);
+  assert.match(evidenceBody, /Evidence Channels/);
+  assert.match(evidenceBody, /Sufficiency Gate/);
+  assert.match(framingBody, /Problem-framing pass/);
+  assert.match(framingBody, /Bounded analysis pass/);
+  assert.match(framingBody, /Scoping questions are part of problem framing/);
+  assert.match(framingBody, /Ask exactly one focused scoping question before broad inventory/);
+  assert.match(framingBody, /candidate areas, priority, success criteria, constraints, or validation/);
+  assert.match(framingBody, /Skip it when the target is already bounded/);
+  assert.match(evidenceBody, /After the frame or candidate area is bounded/);
+  assert.match(evidenceBody, /check available skill names\/descriptions/);
+  assert.match(evidenceBody, /use it as a bounded review lens over the selected slice/);
+  assert.match(evidenceBody, /record only the specialist skills actually used plus why/);
+  assert.match(outcomesBody, /make `Next step` a short recommendation with a reason/);
+  assert.match(outcomesBody, /name a specialized available skill when it clearly owns the best follow-up/);
   assert.doesNotMatch(body, /direct implementation only when/);
   assert.doesNotMatch(body, /other installed skills when one clearly owns/);
   assert.doesNotMatch(body, /This skill/);
   assert.doesNotMatch(body, /not available`/);
   assert.doesNotMatch(body, /not relevant`/);
   assert.doesNotMatch(body, /sub-agent/);
-  assert.match(body, /system commands/);
-  assert.match(body, /temporary scripts/);
-  assert.match(body, /under `\/tmp`/);
-  assert.match(body, /For repo-wide, many-input, or multi-candidate analysis, use deterministic commands or a temporary script/);
-  assert.match(body, /When MCP tools are available and the question depends on code structure/);
-  assert.match(body, /parse, count, index, diff, group/);
-  assert.match(body, /record why/);
-  assert.match(body, /notes for used evidence channels, important skipped non-specialist high-value channels, and only specialist skills actually used/);
-  assert.match(body, /do not make product, architecture, or prioritization judgments/);
+  assert.match(evidenceBody, /system commands/);
+  assert.match(evidenceBody, /temporary `\/tmp` scripts/);
+  assert.match(evidenceBody, /For repo-wide, many-input, or multi-candidate analysis, use deterministic commands or a temporary script/);
+  assert.match(evidenceBody, /When MCP tools are available and the question depends on code structure/);
+  assert.match(evidenceBody, /record why/);
+  assert.match(evidenceBody, /notes for used evidence channels, important skipped non-specialist high-value channels, and only specialist skills actually used/);
 
   assert.match(flowBody, /MCP resources/);
   assert.match(flowBody, /problem-framing pass/);
@@ -833,20 +890,23 @@ test("cf-mr-wolf uses tools and deterministic temp scripts for evidence gatherin
 
 test("cf-mr-wolf requires confidence-gated narrowing before sufficiency", async () => {
   const body = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
+  const evidenceBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "evidence.md"),
+    "utf8",
+  );
   const flowBody = await readFile(
     path.join(REPO_ROOT, "docs", "mr-wolf", "doc-mr-wolf.flow.md"),
     "utf8",
   );
 
-  assert.match(body, /Sufficiency Gate/);
-  assert.match(body, /assign an investigation confidence percentage/);
-  assert.match(body, /broad inventory/);
-  assert.match(body, /narrowing pass/);
-  assert.match(body, /finding de-risk checks for candidate findings/);
-  assert.match(body, /keep confidence below 80% unless the evidence includes/);
-  assert.match(body, /notes for used evidence channels, important skipped non-specialist high-value channels, and only specialist skills actually used/);
-  assert.match(body, /Use `sufficient` only at 80% confidence or higher/);
-  assert.match(body, /Below 80%, continue the operating loop or ask one focused question/);
+  assert.match(evidenceBody, /Sufficiency Gate/);
+  assert.match(evidenceBody, /broad inventory/);
+  assert.match(evidenceBody, /narrowing pass/);
+  assert.match(evidenceBody, /finding de-risk checks for candidate findings/);
+  assert.match(evidenceBody, /keep confidence below 80% unless the evidence includes/);
+  assert.match(evidenceBody, /notes for used evidence channels, important skipped non-specialist high-value channels, and only specialist skills actually used/);
+  assert.match(evidenceBody, /Use `sufficient` only at 80% confidence or higher/);
+  assert.match(evidenceBody, /Below 80%, continue the operating loop or ask one focused question/);
 
   assert.match(flowBody, /broad inventory, narrowing pass, candidate discovery, and finding de-risk checks/);
   assert.match(flowBody, /investigation confidence percentage/);
@@ -857,6 +917,18 @@ test("cf-mr-wolf requires confidence-gated narrowing before sufficiency", async 
 
 test("cf-mr-wolf de-risks findings before recommending fixes", async () => {
   const body = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
+  const framingBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "framing.md"),
+    "utf8",
+  );
+  const agentsBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "agents.md"),
+    "utf8",
+  );
+  const outcomesBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "outcomes.md"),
+    "utf8",
+  );
   const agentBody = await readFile(
     path.join(SKILLS_ROOT, "_codex_agents", "cflow_finding_derisk_recon.toml"),
     "utf8",
@@ -874,28 +946,29 @@ test("cf-mr-wolf de-risks findings before recommending fixes", async () => {
 
   assert.equal(await pathExists(deRiskReferencePath), false);
   assert.doesNotMatch(body, /references\/finding-de-risk\.md/);
-  assert.match(body, /cflow_candidate_finding_recon/);
-  assert.match(body, /cflow_finding_derisk_recon/);
-  assert.match(body, /Agent Use/);
-  assert.match(body, /Run at most one custom agent at a time/);
-  assert.match(body, /wait for its report before starting another/);
-  assert.match(body, /Start each custom agent with only the inputs named in the owning section; do not paste the agent TOML/);
-  assert.match(body, /While waiting, do not duplicate the delegated discovery or verification/);
-  assert.doesNotMatch(body, /Do not build a duplicate candidate discovery or finding verification while the agent is running/);
-  assert.match(body, /Use each report as primary evidence/);
-  assert.match(body, /spot-check only gaps, contradictions, or unsupported claims/);
-  assert.match(body, /final judgment, notes, routing, and user-facing output remain yours/);
-  assert.match(body, /Candidate Finding Agent/);
-  assert.match(body, /When bounded evidence plus the selected context slice is context-heavy, use the `cflow_candidate_finding_recon` custom agent to propose candidate findings/);
-  assert.match(body, /Start it with only the repository path, problem frame, success criteria, non-goals, bounded evidence path\/summary, selected context slice, and explicit exclusions/);
-  assert.match(body, /Finding De-risk Agent/);
-  assert.match(body, /Use the `cflow_finding_derisk_recon` custom agent to verify selected candidate findings/);
-  assert.match(body, /Start it with only the repository path, problem frame, assigned candidate findings, selected context slice, and explicit exclusions/);
-  assert.match(body, /Do not cap candidate findings at three/);
-  assert.match(body, /smallest decision-blocking subset first/);
-  assert.doesNotMatch(body, /Do not paste the custom agent's TOML instructions or full report format/);
-  assert.match(body, /de-risk the findings before declaring them actionable/);
-  assert.match(body, /separate confirmed, false-positive, and uncertain findings/);
+  assert.match(body, /references\/agents\.md/);
+  assert.match(agentsBody, /cflow_candidate_finding_recon/);
+  assert.match(agentsBody, /cflow_finding_derisk_recon/);
+  assert.match(agentsBody, /Agent Use/);
+  assert.match(agentsBody, /Run at most one custom agent at a time/);
+  assert.match(agentsBody, /wait for its report before starting another/);
+  assert.match(agentsBody, /Start each custom agent with only the inputs named in the owning section; do not paste the agent TOML/);
+  assert.match(agentsBody, /While waiting, do not duplicate the delegated discovery or verification/);
+  assert.doesNotMatch(agentsBody, /Do not build a duplicate candidate discovery or finding verification while the agent is running/);
+  assert.match(agentsBody, /Use each report as primary evidence/);
+  assert.match(agentsBody, /spot-check only gaps, contradictions, or unsupported claims/);
+  assert.match(agentsBody, /final judgment, notes, routing, and user-facing output remain yours/);
+  assert.match(agentsBody, /Candidate Finding Agent/);
+  assert.match(agentsBody, /When bounded evidence plus the selected context slice is context-heavy, use the `cflow_candidate_finding_recon` custom agent to propose candidate findings/);
+  assert.match(agentsBody, /Start it with only the repository path, problem frame, success criteria, non-goals, bounded evidence path\/summary, selected context slice, and explicit exclusions/);
+  assert.match(agentsBody, /Finding De-risk Agent/);
+  assert.match(agentsBody, /Use the `cflow_finding_derisk_recon` custom agent to verify selected candidate findings/);
+  assert.match(agentsBody, /Start it with only the repository path, problem frame, assigned candidate findings, selected context slice, and explicit exclusions/);
+  assert.match(agentsBody, /Do not cap candidate findings at three/);
+  assert.match(agentsBody, /smallest decision-blocking subset first/);
+  assert.doesNotMatch(agentsBody, /Do not paste the custom agent's TOML instructions or full report format/);
+  assert.match(framingBody, /de-risk the findings before declaring them actionable/);
+  assert.match(outcomesBody, /separate confirmed, false-positive, and uncertain findings/);
   assert.doesNotMatch(body, /Clean-Context/);
   assert.doesNotMatch(body, /GPT-5\.5 medium-reasoning/);
   assert.doesNotMatch(body, /at most two/);
@@ -921,23 +994,26 @@ test("cf-mr-wolf de-risks findings before recommending fixes", async () => {
 
 test("cf-mr-wolf hands cleanup discovery to cf-start before execution skills", async () => {
   const body = await readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
+  const outcomesBody = await readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "outcomes.md"),
+    "utf8",
+  );
   const flowBody = await readFile(
     path.join(REPO_ROOT, "docs", "mr-wolf", "doc-mr-wolf.flow.md"),
     "utf8",
   );
 
-  assert.match(body, /Cflow Handoff Boundary/);
-  assert.match(body, /do not jump directly into execution skills/);
-  assert.match(body, /cf-split/);
-  assert.match(body, /cf-cognitive/);
-  assert.match(body, /cf-cohesion/);
-  assert.match(body, /preserve the discovery in `\.cflow\/refactor-brief\.md`/);
-  assert.match(body, /cf-start` owns that brief/);
-  assert.match(body, /cf-start` should read `\.cflow\/mr-wolf-notes\.md` as discovery input/);
-  assert.match(body, /not an execution plan or refactor backlog/);
-  assert.match(body, /When a follow-up skill owns required reconnaissance, artifact writes, or execution/);
-  assert.match(body, /hand off instead of doing that work here/);
-  assert.match(body, /if the current request continues into that skill and it needs subagent authorization, ask first/);
+  assert.match(outcomesBody, /Cflow Handoff Boundary/);
+  assert.match(outcomesBody, /do not jump directly into execution skills/);
+  assert.match(outcomesBody, /cf-split/);
+  assert.match(outcomesBody, /cf-cognitive/);
+  assert.match(outcomesBody, /cf-cohesion/);
+  assert.match(outcomesBody, /preserve the discovery in `\.cflow\/refactor-brief\.md`/);
+  assert.match(outcomesBody, /cf-start` owns that brief/);
+  assert.match(outcomesBody, /cf-start` should read `\.cflow\/mr-wolf-notes\.md` as discovery input/);
+  assert.match(outcomesBody, /When a follow-up skill owns required reconnaissance, artifact writes, or execution/);
+  assert.match(outcomesBody, /hand off instead of doing that work here/);
+  assert.match(outcomesBody, /if the current request continues into that skill and it needs subagent authorization, ask first/);
 
   assert.match(flowBody, /recommend `cf-start`/);
   assert.match(flowBody, /do not route straight to `cf-split`, `cf-cognitive`, or `cf-cohesion`/);

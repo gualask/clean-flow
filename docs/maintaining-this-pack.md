@@ -183,7 +183,7 @@ When changing the pack:
 Run:
 
 ```bash
-npm test
+pnpm test
 ```
 
 Current automated coverage checks:
