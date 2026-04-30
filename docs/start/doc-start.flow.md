@@ -22,7 +22,7 @@ When the upstream problem is too ambiguous for Cflow assessment, `cf-start` hand
 5. If the user asks only to reconstruct or audit a path, controller routes to `cf-trace` before refactor assessment.
 6. If the user asks only for local cognitive cleanup, file split, or local cohesion regrouping, controller routes to `cf-cognitive`, `cf-split`, or `cf-cohesion`.
 7. If architecture context is missing or stale, controller routes to `cf-architecture` before continuing.
-8. If `.cflow/refactor-brief.md` is needed, controller uses `references/artifacts.md` and `refactor-brief.template.md`.
+8. If `.cflow/refactor-brief.md` is needed, controller applies the `Artifacts` bootstrap rule when the brief must be created, then uses `references/artifacts.md` and `refactor-brief.template.md`.
 9. Fresh work enters `assessment.md`; non-trivial fresh assessment stops at the built-in decision checkpoint.
 10. User steering after assessment is handled by the checkpoint rule in `cf-start/SKILL.md`: simple confirmation continues, material steering re-runs routing or assessment, and unclear problem framing routes to `cf-mr-wolf`.
 11. Soft-path work routes through work-unit planning or directly to mapping only when one local low-risk unit is already clear.
@@ -59,7 +59,7 @@ When the upstream problem is too ambiguous for Cflow assessment, `cf-start` hand
 - Explicit local cleanup entrypoints route to `cf-cognitive`, `cf-split`, or `cf-cohesion` instead of becoming Cflow workflow phases.
 - Runtime behavior lives in `SKILL.md` or a directly linked reference, not only in docs.
 - Phase routing is state-based, not actor-based.
-- Architecture bootstrap belongs to `cf-architecture`; refactor brief ownership belongs to `cf-start`.
+- Architecture map ownership belongs to `cf-architecture`; refactor brief ownership belongs to `cf-start`.
 - `soft-mixed` is assessment-only; every executable unit is exactly `split` or `consolidate`.
 - Hard-path work cannot skip target-shape and migration-unit planning.
 - Internal phase references must preserve the former internal-skill guardrails.

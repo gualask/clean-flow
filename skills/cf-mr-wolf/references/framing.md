@@ -4,8 +4,7 @@ Read when DOT reaches `notes_preflight`, `frame_problem`, `useful_scope_question
 
 ## Notes File
 
-Use `.cflow/mr-wolf-notes.md` for investigation notes.
-Create it from `assets/mr-wolf-notes.template.md` when missing.
+Use the owned notes artifact for investigation notes.
 
 For every concrete problem:
 

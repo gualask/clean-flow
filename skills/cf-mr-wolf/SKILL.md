@@ -4,17 +4,19 @@ description: Clarify ambiguous problem framing before implementation or Cflow as
 ---
 Operate as a focused fixer before implementation: identify the real problem, isolate noise, collect only the context needed, decide whether the context is sufficient, and produce a short handoff.
 
-## Operating Principles
+## Artifacts
 
-Use available tools, MCP resources, and deterministic scripts for evidence at any phase instead of model-only mechanical analysis.
-
-## Runtime Artifacts
-
-Artifact ownership and write rules:
+This skill works with these Cflow artifacts:
 
 - `.cflow/mr-wolf-notes.md`: owned here. For every concrete problem, before repository inspection, read existing notes if present or create them from `assets/mr-wolf-notes.template.md` if missing, then decide whether they match the current request and repository state before reusing, updating, or resetting them.
 - `.cflow/architecture.md`: available input only when it can change the problem frame, scope, risk, validation, or handoff; never create or update it here.
 - `.cflow/refactor-brief.md`: owned by `cf-start`, not this skill; for multi-file, risky, ordered, or resumable work, ask whether `cf-start` should preserve discovery there.
+
+Before creating an owned `.cflow/*` artifact, if `.cflow/` does not exist, create it and add `.cflow/` to `.gitignore`, creating `.gitignore` if needed.
+
+## Operating Principles
+
+Use available tools, MCP resources, and deterministic scripts for evidence at any phase instead of model-only mechanical analysis.
 
 ## Entry Behavior
 

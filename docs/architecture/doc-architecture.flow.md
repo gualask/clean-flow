@@ -9,20 +9,19 @@ Document the runtime flow for `cf-architecture` so maintainer reviews can catch 
 - Public skill: `skills/cf-architecture/SKILL.md`
 - Custom agent source: `skills/_codex_agents/cflow_architecture_recon.toml`
 - Artifact template and review rubric: `skills/cf-start/assets/architecture.template.md`
-- Target artifacts: `.cflow/architecture.md`, `.gitignore`
+- Target artifact: `.cflow/architecture.md`
 
 ## Flow
 
 1. Trigger `cf-architecture`.
-2. Controller preflight reads only existing `.cflow/architecture.md`, `.gitignore`, `architecture.template.md`, and `git status --short`.
+2. Controller preflight reads only existing `.cflow/architecture.md`, `architecture.template.md`, and `git status --short`.
 3. Controller starts `cflow_architecture_recon` with only repository path and the user mapping request.
 4. Custom agent performs read-only reconnaissance from its TOML instructions, using bundled repo tree output when available to reduce broad directory inventory, and returns the architecture report.
 5. While the agent runs, controller does not scan manifests, docs, source directories, or implementation files.
 6. Controller checks the report against `architecture.template.md` as the artifact rubric.
 7. Controller performs only targeted spot-checks for missing, contradictory, generic, prescriptive, or unsupported report content.
-8. Controller creates or updates `.cflow/architecture.md` from the template shape and the validated report.
-9. Controller adds `.cflow/` to `.gitignore` only when missing.
-10. Controller returns the skill output summary and recommends `cf-start` for refactor planning.
+8. Controller applies the `Artifacts` bootstrap rule when the architecture artifact must be created, then creates or updates `.cflow/architecture.md` from the template shape and the validated report.
+9. Controller returns the skill output summary and recommends `cf-start` for refactor planning.
 
 ## Review Checks
 
@@ -31,4 +30,4 @@ Document the runtime flow for `cf-architecture` so maintainer reviews can catch 
 - `architecture.template.md` must remain both artifact shape and review rubric.
 - `.cflow/architecture.md` must stay observational: no recommendations, target shapes, future-work caveats, or planning notes.
 - Generated, vendored, dependency, cache, and build-output directories must not become top-level architecture areas unless intentionally tracked and architecturally relevant.
-- The controller owns artifact writes; the custom agent stays read-only.
+- The controller owns final writes; the custom agent stays read-only.

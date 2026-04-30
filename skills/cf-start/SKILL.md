@@ -9,6 +9,15 @@ Do not tell the user to invoke phase references directly.
 Do not behave like a router that only suggests another step.
 When the next phase is clear from repository state and Cflow artifacts, advance into it yourself.
 
+## Artifacts
+
+This skill works with these Cflow artifacts:
+
+- `.cflow/architecture.md`: input only; owned by `cf-architecture`.
+- `.cflow/refactor-brief.md`: owned here; update it through [references/artifacts.md](references/artifacts.md).
+
+Before creating an owned `.cflow/*` artifact, if `.cflow/` does not exist, create it and add `.cflow/` to `.gitignore`, creating `.gitignore` if needed.
+
 ## Goal
 
 Handle fresh assessment, artifact-backed resume, or review/verify re-entry through `cf-start`.
@@ -168,8 +177,3 @@ Return only:
 - **Reassessment result**: the decision and why.
 - **Artifacts**: created or updated files, one line.
 - **Next action**: one immediate action or `none`.
-
-## Artifact update baseline
-
-`cf-architecture` owns `.cflow/architecture.md`.
-`cf-start` owns `.cflow/refactor-brief.md`; update it through [references/artifacts.md](references/artifacts.md).

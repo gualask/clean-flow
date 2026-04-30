@@ -9,7 +9,7 @@ Document the runtime flow for `cf-trace`, the public path reconstruction and aud
 - Public skill: `skills/cf-trace/SKILL.md`
 - Custom agent source: `skills/_codex_agents/cflow_trace_recon.toml`
 - Artifact template and review rubric: `skills/cf-trace/assets/trace.template.md`
-- Target artifacts: `.cflow/trace.md`
+- Target artifact: `.cflow/trace.md`
 
 ## Flow
 
@@ -24,7 +24,7 @@ Document the runtime flow for `cf-trace`, the public path reconstruction and aud
 9. While the agent runs, controller does not scan manifests, docs, source directories, or implementation files.
 10. Controller checks the report against `trace.template.md` as the artifact rubric.
 11. Controller performs only targeted spot-checks for missing, contradictory, generic, prescriptive, or unsupported report content.
-12. Controller creates or updates `.cflow/trace.md` from the template shape and the validated report.
+12. Controller applies the `Artifacts` bootstrap rule when the trace artifact must be created, then creates or updates `.cflow/trace.md` from the template shape and the validated report.
 13. Controller audits the reconstructed path through the required lenses.
 14. Controller returns findings, lens coverage, artifact summary, open questions, and exactly one recommended route.
 

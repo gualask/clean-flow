@@ -60,7 +60,7 @@ When confidence is sufficient, choose exactly one outcome route in this order:
 ## Flow
 
 1. Entry: trigger `cf-mr-wolf` directly, or route from `cf-start` when the upstream problem is too unclear for Cflow assessment. If no concrete problem or task is present, ask exactly one question: what problem should be solved.
-2. Notes preflight: if a problem exists, read `.cflow/mr-wolf-notes.md` when present, or create it from the template when missing. Decide whether existing notes are relevant to the current request and repository state; reuse or reset it based on relevance.
+2. Notes preflight: if a problem exists, apply the `Artifacts` bootstrap rule when notes must be created, read `.cflow/mr-wolf-notes.md` when present, or create it from the template when missing. Decide whether existing notes are relevant to the current request and repository state; reuse or reset it based on relevance.
 3. Problem frame: frame the apparent goal, uncertainty, likely scope, and success criteria. Choose the smallest context slice that can confirm or reject the frame. For a clear goal with broad possible scope, ask one focused scoping question before broad inventory when the answer can reduce an unnecessarily large work area.
 4. Bounded analysis: run the problem-framing pass first, then the bounded analysis pass. Choose relevant evidence channels such as MCP resources/tools, system commands, bundled repo tree output, deterministic `/tmp` scripts, and specialist skills that clearly match the bounded problem. This keeps mechanical analysis in tools rather than model-only reasoning.
 5. Specialist lens: if a specialist skill is used, apply its review lens only to the selected context slice or a narrower one, and record only the specialist skills actually used plus why. Review checks must confirm the skill considers clearly matching specialist skills only after the problem frame or candidate area is bounded.
@@ -81,7 +81,7 @@ When confidence is sufficient, choose exactly one outcome route in this order:
 | Situation | Required behavior | May edit code |
 | --- | --- | --- |
 | invoked without a problem | ask what problem must be solved before inspecting repository context | no |
-| invoked with a problem | read or create `.cflow/mr-wolf-notes.md`, then reuse or reset it based on relevance | no |
+| invoked with a problem | read or create `.cflow/mr-wolf-notes.md`, applying the `Artifacts` bootstrap rule when notes must be created, then reuse or reset notes based on relevance | no |
 | ambiguous problem | inspect only the smallest relevant context slice, recap sufficiency, ask one focused question if needed | no |
 | clear goal with broad possible scope | ask one focused scoping question before broad inventory when the answer can materially narrow the work | no |
 | many deterministic inputs | use commands, bundled repo tree output, or temporary `/tmp` scripts for mechanical analysis, then interpret the compact output | no |
@@ -97,7 +97,7 @@ When confidence is sufficient, choose exactly one outcome route in this order:
 | completed handoff | separate confirmed, false-positive, and uncertain findings; include fix-fit before recommending implementation; name a specialized available skill when it clearly owns the follow-up | no |
 | false positives | record only important excluded false positives, not every non-candidate file | no |
 | explicit skip | note the biggest missing requirement or risk briefly, then hand off or proceed as authorized | only after handoff |
-| routed from `cf-start` | clarify upstream problem and return a handoff; keep notes current but do not write `.cflow/architecture.md` or `.cflow/refactor-brief.md` | no |
+| routed from `cf-start` | clarify upstream problem and return a handoff; keep notes current | no |
 
 ## Review Checks
 
@@ -122,5 +122,4 @@ When confidence is sufficient, choose exactly one outcome route in this order:
 - It states what context was excluded as noise and why.
 - It hands multi-file cleanup/refactor discovery to `cf-start` rather than starting execution skills directly.
 - It does not create large specs for small tasks.
-- It does not create or update `.cflow/architecture.md` or `.cflow/refactor-brief.md`.
 - `cf-start` remains the controller for Cflow assessment, planning, execution, review, verification, feedback intake, and resume.

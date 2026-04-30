@@ -57,6 +57,7 @@ node ./bin/cflow-skills.mjs install /path/to/repo --dry-run
 
 Syncing the pack only installs or updates packaged skills, shared support resources, and Cflow-owned Codex custom agents into the target location.
 It does not create `.cflow/` by itself.
+Runtime skills that create an owned `.cflow/*` artifact create `.cflow/` first when missing and add `.cflow/` to `.gitignore` only in that first-creation pass.
 
 For supported workflow first use and resume, start with `cf-start`.
 `cf-start` is the main public workflow entrypoint for assessment, decision checkpoints, resume, and work-unit selection.
@@ -65,7 +66,7 @@ For ambiguous ideas, unclear feature/refactor goals, or implementation tasks tha
 When `cf-start` cannot yet assess what problem a cleanup or refactor solves, it routes through `cf-mr-wolf` first.
 
 For standalone repository mapping, use `cf-architecture`.
-`cf-architecture` is the public entrypoint that bootstraps `.cflow/`, updates `.gitignore` for `.cflow/`, and creates or refreshes `.cflow/architecture.md`.
+`cf-architecture` is the public entrypoint that creates or refreshes `.cflow/architecture.md`.
 It uses the packaged `cflow_architecture_recon` Codex custom agent for read-only repository reconnaissance when available.
 
 For path reconstruction and workflow flaw analysis, use `cf-trace`.

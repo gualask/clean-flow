@@ -5,9 +5,18 @@ description: Reconstruct and audit an execution, product, or refactor path from 
 Use this skill to reconstruct one concrete path and audit it for orchestration flaws.
 Do not implement, move files, or write code patches in this skill.
 
+## Artifacts
+
+This skill works with these Cflow artifacts:
+
+- `.cflow/architecture.md`: input only; route to `cf-architecture` when missing, stale, or materially incomplete.
+- `.cflow/trace.md`: owned here; create it from `assets/trace.template.md` when missing, or refresh it in place when it already exists.
+
+Before creating an owned `.cflow/*` artifact, if `.cflow/` does not exist, create it and add `.cflow/` to `.gitignore`, creating `.gitignore` if needed.
+
 ## Goal
 
-Create or refresh `.cflow/trace.md`, then analyze the reconstructed path from multiple lenses.
+Produce a current path reconstruction, then analyze it from multiple lenses.
 
 You must determine:
 
@@ -52,7 +61,7 @@ If `.cflow/architecture.md` is missing, stale, or materially incomplete, route t
 
 ## Clean-Context Trace Reconstruction
 
-Before creating or refreshing `.cflow/trace.md`, use the `cflow_trace_recon` custom agent when available.
+Before writing the trace artifact, use the `cflow_trace_recon` custom agent when available.
 It is configured as a read-only, lower-cost reconnaissance agent for reconstructing one path.
 
 If the custom agent is unavailable, use one equivalent clean-context reconnaissance subagent to inspect the repository and return a read-only trace report.
@@ -65,7 +74,7 @@ Do not paste the custom agent's TOML instructions or full report format into the
 Expect the subagent report to contain these sections: **Trace Scope**, **Observed Sequence**, **Inputs and Triggers**, **State and Artifacts**, **External Effects**, **Failure and Resume Paths**, **Evidence**, **Unknowns**.
 
 Treat the subagent report as the primary path reconstruction.
-Use `assets/trace.template.md` as the review rubric for whether the report is good enough to write `.cflow/trace.md`.
+Use `assets/trace.template.md` as the review rubric for whether the report is good enough to write the trace artifact.
 While the subagent is running, do not read manifests, source directories, docs, or implementation files to build a parallel reconstruction.
 During that wait, the controller may only inspect `.cflow/architecture.md`, existing `.cflow/trace.md`, the trace template, and worktree status.
 Do not repeat full reconnaissance unless the report is incomplete, contradictory, or unsupported by its cited evidence.
@@ -74,19 +83,9 @@ If the report misses a required section or fills it with generic, prescriptive, 
 If a full controller-side scan becomes necessary, say why before doing it.
 
 The subagent produces reconstruction only.
-The controller owns artifact writes, audit findings, severity, recommended route, and user-facing output.
+The controller owns final trace and audit decisions, severity, recommended route, and user-facing output.
 
-## Artifact rules
-
-Use `assets/trace.template.md` as the source template for `.cflow/trace.md`.
-
-When bootstrapping or refreshing the trace artifact:
-
-- create `.cflow/` if it does not exist
-- create `.cflow/trace.md` from `assets/trace.template.md` when the file is missing
-- update `.cflow/trace.md` in place when it already exists
-- never create root-level `trace.md`
-- do not create or refresh `.cflow/architecture.md` or `.cflow/refactor-brief.md`
+## Reconstruction rules
 
 Keep the reconstruction section factual.
 Every reconstructed step must be marked as observed or inferred.
