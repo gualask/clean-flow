@@ -55,6 +55,7 @@
 
 ## De-risk checks
 
+- per-candidate matrix: `id | slice | evidence class | status | reachability | counter-evidence | scope fit | fix-fit | reason`
 - behavior/reachability checked:
 - counter-evidence checked:
 - scope/impact checked:

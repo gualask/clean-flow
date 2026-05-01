@@ -10,6 +10,7 @@ Stop at an evidence-backed handoff:
 - name candidate areas or files with short rationale
 - separate confirmed, false-positive, and uncertain findings when they materially affect the decision
 - separate behavioral findings from detector/static-rule/process observations
+- use the per-candidate de-risk matrix as the basis for confirmed/reduced/uncertain/false-positive classification
 - avoid recommending implementation for findings that are still `uncertain`
 - include the investigation confidence percentage
 - recommend whether `cf-start` should own the next work
@@ -19,6 +20,7 @@ If the work is multi-file, ordered, risky, or resumable, ask whether to preserve
 When handing off, say that `cf-start` should read `.cflow/mr-wolf-notes.md` as discovery input; do not imply that `.cflow/refactor-brief.md` will be written here.
 Use `cf-split`, `cf-cognitive`, or `cf-cohesion` directly only when the current request is one explicit local action and no broader Cflow planning or resume state is needed.
 When the notes contain a slice map, do not produce the final broad-request handoff while any in-scope slice is still `pending` or `in-progress`.
+Do not claim de-risk is complete when final-output candidates lack per-candidate reachability, counter-evidence, scope-fit, or fix-fit results.
 When the evidence points to an unclear multi-step path, ordering risk, state gap, or workflow flaw but not yet to a specific refactor, recommend `cf-trace`.
 When the notes show that architecture context blocks slice mapping, entrypoint discovery, ownership, or boundary interpretation, recommend `cf-architecture` before evidence or implementation.
 When the notes show unresolved `trace-needed` slices, recommend `cf-trace` for the concrete slice that blocks confirmation.

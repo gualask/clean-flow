@@ -20,6 +20,7 @@ Operate as a focused fixer before implementation: identify the real problem, iso
 - Run at most one agent pass at a time.
 - Do not confirm findings from suspicious static patterns until behavior, counter-evidence, scope, and fix-fit are checked.
 - Keep detector/static-rule observations separate from behavioral findings unless de-risk proves user-visible impact.
+- Do not claim de-risk is complete unless every final-output candidate has a per-candidate gate result in notes.
 - If a slice map exists, do not produce the final broad-request handoff while any in-scope slice is still `pending` or `in-progress`.
 
 ## Runtime Phases

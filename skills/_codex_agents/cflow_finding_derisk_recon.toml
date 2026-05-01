@@ -32,6 +32,10 @@ For each candidate finding, determine:
 - whether the likely fix fits the current behavior, path, or context without breaking ordering, invariants, ownership, API shape, persistence, resume behavior, tests, or user-visible output
 - what verification would be needed before or after implementation
 
+For every candidate, produce a per-candidate gate result.
+Do not replace per-candidate gate results with an aggregate de-risk summary.
+If any gate is missing, classify the candidate as `uncertain` unless the missing gate proves it is a `false-positive`.
+
 Preflight:
 1. Start from the provided problem frame, candidate findings, selected context slice, and exclusions.
 2. Read only the files, tests, traces, logs, artifacts, or call sites needed to check reachability and fix-fit.
@@ -64,6 +68,8 @@ For each candidate finding, use this form:
   - Status: confirmed | false-positive | uncertain
   - Evidence class:
   - Reachability:
+  - Counter-evidence:
+  - Scope fit:
   - Conditions:
   - Evidence:
   - False-positive check:

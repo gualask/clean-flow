@@ -17,12 +17,25 @@ For each candidate, include slice id, evidence class, suspected impact, and the 
 ## Confirmation Gate
 
 A candidate cannot become `confirmed` from a suspicious pattern or local absence alone.
-Before confirmation, require concrete evidence for:
+Do not use an aggregate de-risk summary as proof.
+Before confirmation, record a per-candidate gate result for:
 
 - Reachability: the affected behavior can actually occur in the stated context.
 - Counter-evidence: nearby paths, abstractions, generated sources, runtime wiring, or documented constraints do not already handle it.
 - Scope fit: the candidate matches the requested problem class and severity.
 - Fix-fit: the likely fix does not fight current ownership, invariants, constraints, or user-visible behavior.
+
+Each candidate that influences final output must have:
+
+- candidate id
+- slice id
+- evidence class
+- status: `confirmed`, `false-positive`, `uncertain`, or `reduced`
+- reachability result and evidence
+- counter-evidence result and evidence
+- scope-fit result
+- fix-fit result
+- final classification reason
 
 Classification must preserve evidence class.
 Detector output, lint/static-rule matches, style preferences, and process gaps cannot be confirmed as app defects unless behavioral reachability and user-visible impact are proven.
@@ -38,6 +51,7 @@ If the evidence only proves that a detector fired or a convention is missing, cl
 
 ## Controller Handling
 
-- Update notes with confirmed candidates, candidates to verify, and excluded false positives.
+- Update notes with the per-candidate de-risk matrix, confirmed candidates, candidates to verify, and excluded false positives.
 - Preserve slice id and evidence class when updating notes.
+- If a candidate lacks any gate result, keep it in `candidates to verify` or `uncertain`; do not include it as confirmed.
 - Do not recommend implementation for `uncertain` findings unless the next step is verification.
