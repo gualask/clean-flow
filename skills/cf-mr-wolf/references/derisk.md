@@ -12,6 +12,17 @@ Pass repository path, problem frame, `.cflow/mr-wolf-notes.md` path or compact n
 For large candidate sets, pass the smallest decision-blocking subset first.
 Keep unchecked candidates as `candidates to verify`, not confirmed findings.
 Start another sequential pass only when unchecked candidates can change the final output.
+For each candidate, include the suspected impact and the signal that created it, so the de-risk pass can test the signal against real behavior.
+
+## Confirmation Gate
+
+A candidate cannot become `confirmed` from a suspicious pattern or local absence alone.
+Before confirmation, require concrete evidence for:
+
+- Reachability: the affected behavior can actually occur in the stated context.
+- Counter-evidence: nearby paths, abstractions, generated sources, runtime wiring, or documented constraints do not already handle it.
+- Scope fit: the candidate matches the requested problem class and severity.
+- Fix-fit: the likely fix does not fight current ownership, invariants, constraints, or user-visible behavior.
 
 ## Expected Output
 

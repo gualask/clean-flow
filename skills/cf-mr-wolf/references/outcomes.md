@@ -17,7 +17,10 @@ If the work is multi-file, ordered, risky, or resumable, ask whether to preserve
 `cf-start` owns that brief, work-unit planning, safety net, execution, review, verification, and resume.
 When handing off, say that `cf-start` should read `.cflow/mr-wolf-notes.md` as discovery input; do not imply that `.cflow/refactor-brief.md` will be written here.
 Use `cf-split`, `cf-cognitive`, or `cf-cohesion` directly only when the current request is one explicit local action and no broader Cflow planning or resume state is needed.
+When the notes contain a slice map, do not produce the final broad-request handoff while any in-scope slice is still `pending` or `in-progress`.
 When the evidence points to an unclear multi-step path, ordering risk, state gap, or workflow flaw but not yet to a specific refactor, recommend `cf-trace`.
+When the notes show that architecture context blocks slice mapping, entrypoint discovery, ownership, or boundary interpretation, recommend `cf-architecture` before evidence or implementation.
+When the notes show unresolved `trace-needed` slices, recommend `cf-trace` for the concrete slice that blocks confirmation.
 When a follow-up skill owns required artifact writes or execution, hand off instead of doing that work here; if the current request continues into that skill and it needs subagent authorization, ask first.
 
 ## Decision and Options

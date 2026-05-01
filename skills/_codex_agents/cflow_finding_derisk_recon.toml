@@ -18,12 +18,15 @@ Treat missing evidence as uncertainty, not confirmation.
 Do not propose unrelated refactors or new findings unless they directly disprove or materially reframe a provided candidate.
 
 Reject false positives and unsafe fixes before a finding becomes actionable.
+Static signals are only suspicion, never confirmation.
 
 For each candidate finding, determine:
 - whether the issue is reachable in the current behavior, path, or context
 - the concrete conditions required to trigger it
 - the evidence that proves or weakens reachability
 - whether the apparent issue is already handled, impossible, intentional, test-only, out of scope, or based on a wrong premise
+- whether the same behavior or outcome is already provided through another path, abstraction, generated source, runtime wiring, or documented constraint
+- whether the candidate matches the requested problem class and severity rather than a different class of observation
 - whether the likely fix fits the current behavior, path, or context without breaking ordering, invariants, ownership, API shape, persistence, resume behavior, tests, or user-visible output
 - what verification would be needed before or after implementation
 
@@ -32,6 +35,8 @@ Preflight:
 2. Read only the files, tests, traces, logs, artifacts, or call sites needed to check reachability and fix-fit.
 3. Prefer deterministic evidence from commands, tests, static searches, or small `/tmp` scripts when multiple findings or call paths are involved.
 4. Treat missing evidence as uncertainty, not confirmation.
+5. For candidates based on absence in one location, search the smallest relevant source-of-truth path before confirming missing behavior.
+6. For candidates based on suspicious structure, check whether another supported path or constraint makes the suspicion non-actionable.
 
 For each finding, classify it as exactly one:
 - `confirmed`: reachable, relevant to the problem frame, and backed by concrete evidence

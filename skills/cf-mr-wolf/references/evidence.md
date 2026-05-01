@@ -17,11 +17,23 @@ After context collection, update the notes `Context` section with perimeter, sou
 ## Evidence Collection
 
 Evidence collection starts from `.cflow/mr-wolf-notes.md`.
+If `Work decomposition` selected a slice map, collect evidence for the selected slice or explicitly recorded slice group, not for the whole broad request at once.
+When a slice map exists, each evidence pass must name the active slice id, update only that slice's evidence and findings, and leave unrelated slices as `pending`, `deferred`, `blocked`, `out-of-scope`, or `routed`.
 Use available specialist skills as local analysis lenses when they clearly fit the evidence question.
 When many files, inputs, or records must be classified, use deterministic commands or a temporary `/tmp` script and inspect the compact result.
 Record what was checked and why it matters.
 Format notes for later machine reading: use one finding or candidate per bullet, and do not pack multiple candidates into one long line.
 In `evidence tools used`, list only tools and scripts that produced evidence; do not include tools used only to create or update `.cflow/mr-wolf-notes.md`.
+
+Before adding a candidate to `confirmed candidates`, record why it could affect real behavior in the stated problem frame.
+Static pattern matches stay in `candidates to verify` until de-risk proves reachability and fix-fit.
+When a candidate starts from absence or suspicious shape in one place, look for the smallest relevant counter-evidence before ranking it:
+
+- Is the affected behavior actually reachable?
+- Is the missing or suspicious behavior provided through another path, abstraction, generated source, or runtime wiring?
+- Does the candidate match the requested problem class, or is it a process, preference, or out-of-scope observation?
+- Would the likely fix fit current ownership, invariants, and user-visible behavior?
+
 Use `Findings` as:
 
 - `confirmed candidates`: evidenced candidates worth carrying forward
@@ -37,6 +49,7 @@ The percentage estimates confidence that the recorded context and evidence are c
 For repo-wide, multi-file, or multi-candidate investigations, keep confidence below 80% unless the evidence includes:
 
 - context collection recorded in `.cflow/mr-wolf-notes.md`
+- completed or explicitly deferred/blocked/routed status for every in-scope slice when a slice map exists
 - broad inventory from commands, MCP, repo tree output, or a temporary script when the search space is large
 - focused evidence collection for the strongest candidates or representative clusters
 - notes for used channels, important skipped high-value channels, agent reports, and no-agent reasons
