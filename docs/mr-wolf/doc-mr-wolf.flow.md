@@ -16,7 +16,7 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 ## High-Level Flow
 
 1. Start from the user request. If there is no concrete problem, ask what problem must be solved.
-2. Frame the problem: clarify intent, success criteria, constraints, non-goals, uncertainty, and useful perimeter.
+2. Frame the problem: clarify intent, success criteria, constraints, non-goals, uncertainty, and aggressively zoom in on the smallest useful perimeter.
 3. Read or create `.cflow/mr-wolf-notes.md`, then decide whether existing notes still match the current request and repository state.
 4. Decide whether the framed request is atomic or broad. Atomic requests go straight to evidence; broad requests are split into a compact slice map.
 5. If slice mapping depends on repository shape, entrypoints, boundaries, or ownership that are missing or stale, route to `cf-architecture`.

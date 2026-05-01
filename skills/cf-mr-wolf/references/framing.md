@@ -26,10 +26,19 @@ Request clarity:
 
 Perimeter clarity:
 
-- After request clarity, check whether the work area can be reduced before broad context gathering.
+- After request clarity, aggressively reduce the work area before broad context gathering.
+- Walk the decision tree one branch at a time: target area, user flow, quality lens, severity threshold, exclusions, validation, and acceptable risk.
 - Ask exactly one focused scoping question when the answer can reduce candidate areas, priority, success criteria, constraints, risk, or validation.
-- Continue only when confidence that the perimeter is clear and not usefully reducible is about 90%, or when the user explicitly asks to proceed despite the broader scope.
-- Skip the question when the target is already bounded or a cheap narrow pass can identify the slice.
+- For each scoping question, provide the recommended answer first, then 1-2 alternatives with trade-offs when useful.
+- If the answer can be discovered from existing notes or allowed repository inspection, inspect that source instead of asking.
+- Continue until no remaining question can materially reduce the perimeter, or until the user explicitly chooses to proceed with the broader scope.
+- Skip the question only when the target is already bounded, the next reduction would risk excluding relevant work, or a cheap narrow pass can identify the slice.
+
+Question format:
+
+- Recommendation: preferred narrowing and why.
+- Alternatives: 1-2 other viable scopes, only when real.
+- Question: one decision for the user.
 
 Treat context as noise when it cannot affect problem definition, success criteria, scope, constraints, risk, validation, or implementation handoff.
 Do not do whole-repository reconnaissance before the request and perimeter are clear enough.
