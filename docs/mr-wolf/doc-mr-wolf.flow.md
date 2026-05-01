@@ -22,7 +22,7 @@ Document the runtime flow for `cf-mr-wolf`, the public entrypoint for clarifying
 5. If slice mapping depends on repository shape, entrypoints, boundaries, or ownership that are missing or stale, route to `cf-architecture`.
 6. If a slice depends on ordered workflow behavior, state, resume, failure modes, or external effects, route that slice to `cf-trace`.
 7. Collect evidence for the active direct scope or slice only. Use tools, focused reads, or agents when they reduce mechanical work.
-8. Keep behavioral evidence separate from detector, static-rule, preference, and process observations unless de-risk proves user-visible impact.
-9. De-risk candidate findings before treating them as confirmed. Static signals stay candidates until real behavior, counter-evidence, scope, and fix-fit have been checked.
+8. Treat evidence findings as candidates, keeping behavioral evidence separate from detector, static-rule, preference, and process observations.
+9. Run de-risk for every candidate finding that can influence the final output, preferring `cflow_finding_derisk_recon`. Do not confirm findings without per-candidate reachability, counter-evidence, scope-fit, and fix-fit.
 10. When a slice map exists, repeat evidence and de-risk slice-by-slice until every in-scope slice is done, blocked, deferred, out of scope, or routed.
 11. Produce the smallest useful outcome: options, a bounded handoff, a `cf-start` handoff, a `cf-trace` route, a `cf-architecture` route, or a direct local-skill handoff.

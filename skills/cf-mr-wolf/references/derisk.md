@@ -5,6 +5,8 @@
 - Treat this as a packaged custom agent.
 - Do not read or paste the TOML instructions or full report format.
 - Keep the model and reasoning effort declared by the TOML.
+- Use this phase for every candidate finding that influences final output.
+- Prefer `cflow_finding_derisk_recon`; use local de-risk only when the agent is unavailable or the user explicitly chooses a degraded local pass.
 
 ## Agent Input
 
@@ -18,6 +20,7 @@ For each candidate, include slice id, evidence class, suspected impact, and the 
 
 A candidate cannot become `confirmed` from a suspicious pattern or local absence alone.
 Do not use an aggregate de-risk summary as proof.
+Existing notes can be passed as input, but they do not replace the current de-risk pass.
 Before confirmation, record a per-candidate gate result for:
 
 - Reachability: the affected behavior can actually occur in the stated context.

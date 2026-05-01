@@ -17,8 +17,9 @@ Operate as a focused fixer before implementation: identify the real problem, iso
 - If no concrete problem is provided, ask exactly one question: what problem should be solved?
 - For concrete requests without explicit agent authorization, ask one focused authorization question for sequential agent use and stop before repository inspection or `.cflow/*` reads or writes.
 - If agent use is declined, continue locally only when the user explicitly asks for a degraded local pass.
-- Run at most one agent pass at a time.
+- Run at most one agent pass at a time; this means sequential execution, not a one-pass limit.
 - Before evidence, reduce the perimeter aggressively; ask one scoped question at a time with a recommended answer, unless notes or allowed repository inspection can answer it.
+- Always run the de-risk phase for candidate findings that influence final output; prefer the packaged `cflow_finding_derisk_recon` agent when available.
 - Do not confirm findings from suspicious static patterns until behavior, counter-evidence, scope, and fix-fit are checked.
 - Keep detector/static-rule observations separate from behavioral findings unless de-risk proves user-visible impact.
 - Do not claim de-risk is complete unless every final-output candidate has a per-candidate gate result in notes.
