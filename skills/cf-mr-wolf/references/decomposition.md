@@ -27,12 +27,17 @@ Create a bounded slice map before evidence when the framed request spans multipl
 The slice map is not an execution plan.
 It is an evidence routing map that keeps later checks small and comparable.
 
+For broad quality audits, separate behavioral slices from signal-only slices.
+Do not mix detector output, lint/static-rule matches, style preferences, or suspicious code shapes into the same slice as user-visible behavior unless the evidence question explicitly connects them.
+Create a dedicated `static-signals` or equivalent slice when those signals are in scope, and give that slice a de-risk condition that requires behavioral proof before any app-defect confirmation.
+
 For each slice, record:
 
 - slice id and short name
 - status: `pending`, `in-progress`, `done`, `blocked`, `deferred`, `out-of-scope`, or `routed`
 - boundary or entrypoint, if known
 - evidence question
+- evidence class: `behavioral`, `static-signal`, `detector`, `process`, or `mixed`
 - why it belongs in scope
 - required source of truth or missing context
 - whether `cf-architecture`, `cf-trace`, local evidence, or a specialist skill is the best next lens
@@ -41,6 +46,7 @@ For each slice, record:
 
 Keep the map compact.
 Prefer 3-7 slices; group or defer lower-value areas when the map grows larger.
+Avoid `mixed` evidence class unless the slice intentionally compares static signals against behavior; otherwise split it.
 
 ## Architecture Routing
 

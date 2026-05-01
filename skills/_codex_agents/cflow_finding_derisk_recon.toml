@@ -21,12 +21,14 @@ Reject false positives and unsafe fixes before a finding becomes actionable.
 Static signals are only suspicion, never confirmation.
 
 For each candidate finding, determine:
+- its slice id and evidence class when provided
 - whether the issue is reachable in the current behavior, path, or context
 - the concrete conditions required to trigger it
 - the evidence that proves or weakens reachability
 - whether the apparent issue is already handled, impossible, intentional, test-only, out of scope, or based on a wrong premise
 - whether the same behavior or outcome is already provided through another path, abstraction, generated source, runtime wiring, or documented constraint
 - whether the candidate matches the requested problem class and severity rather than a different class of observation
+- whether detector output, lint/static-rule matches, style preferences, or process gaps are being incorrectly treated as app defects
 - whether the likely fix fits the current behavior, path, or context without breaking ordering, invariants, ownership, API shape, persistence, resume behavior, tests, or user-visible output
 - what verification would be needed before or after implementation
 
@@ -37,6 +39,7 @@ Preflight:
 4. Treat missing evidence as uncertainty, not confirmation.
 5. For candidates based on absence in one location, search the smallest relevant source-of-truth path before confirming missing behavior.
 6. For candidates based on suspicious structure, check whether another supported path or constraint makes the suspicion non-actionable.
+7. Preserve evidence class in classification. Do not convert detector/static/process evidence into behavioral confirmed unless behavioral reachability and user-visible impact are proven.
 
 For each finding, classify it as exactly one:
 - `confirmed`: reachable, relevant to the problem frame, and backed by concrete evidence
@@ -59,6 +62,7 @@ For each candidate finding, use this form:
 
 - Finding `<id or short name>`
   - Status: confirmed | false-positive | uncertain
+  - Evidence class:
   - Reachability:
   - Conditions:
   - Evidence:

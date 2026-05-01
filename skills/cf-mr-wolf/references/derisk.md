@@ -12,7 +12,7 @@ Pass repository path, problem frame, `.cflow/mr-wolf-notes.md` path or compact n
 For large candidate sets, pass the smallest decision-blocking subset first.
 Keep unchecked candidates as `candidates to verify`, not confirmed findings.
 Start another sequential pass only when unchecked candidates can change the final output.
-For each candidate, include the suspected impact and the signal that created it, so the de-risk pass can test the signal against real behavior.
+For each candidate, include slice id, evidence class, suspected impact, and the signal that created it, so the de-risk pass can test the signal against real behavior.
 
 ## Confirmation Gate
 
@@ -23,6 +23,10 @@ Before confirmation, require concrete evidence for:
 - Counter-evidence: nearby paths, abstractions, generated sources, runtime wiring, or documented constraints do not already handle it.
 - Scope fit: the candidate matches the requested problem class and severity.
 - Fix-fit: the likely fix does not fight current ownership, invariants, constraints, or user-visible behavior.
+
+Classification must preserve evidence class.
+Detector output, lint/static-rule matches, style preferences, and process gaps cannot be confirmed as app defects unless behavioral reachability and user-visible impact are proven.
+If the evidence only proves that a detector fired or a convention is missing, classify the candidate as detector/static/process scope, reduced severity, or uncertain rather than behavioral confirmed.
 
 ## Expected Output
 
@@ -35,4 +39,5 @@ Before confirmation, require concrete evidence for:
 ## Controller Handling
 
 - Update notes with confirmed candidates, candidates to verify, and excluded false positives.
+- Preserve slice id and evidence class when updating notes.
 - Do not recommend implementation for `uncertain` findings unless the next step is verification.

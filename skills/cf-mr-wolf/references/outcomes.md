@@ -9,6 +9,7 @@ Stop at an evidence-backed handoff:
 - list the evidence gathered and evidence-producing tools used
 - name candidate areas or files with short rationale
 - separate confirmed, false-positive, and uncertain findings when they materially affect the decision
+- separate behavioral findings from detector/static-rule/process observations
 - avoid recommending implementation for findings that are still `uncertain`
 - include the investigation confidence percentage
 - recommend whether `cf-start` should own the next work

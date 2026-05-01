@@ -32,6 +32,7 @@
 - trace dependency:
 - active slice:
 - slice statuses:
+- evidence classes:
 - selected next slice or route:
 - deferred or excluded slices:
 
@@ -44,6 +45,7 @@
 - key findings:
 - excluded noise:
 - confidence basis:
+- evidence class separation:
 
 ## Findings
 

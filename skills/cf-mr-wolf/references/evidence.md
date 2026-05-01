@@ -19,6 +19,8 @@ After context collection, update the notes `Context` section with perimeter, sou
 Evidence collection starts from `.cflow/mr-wolf-notes.md`.
 If `Work decomposition` selected a slice map, collect evidence for the selected slice or explicitly recorded slice group, not for the whole broad request at once.
 When a slice map exists, each evidence pass must name the active slice id, update only that slice's evidence and findings, and leave unrelated slices as `pending`, `deferred`, `blocked`, `out-of-scope`, or `routed`.
+Each evidence pass must label its evidence class: `behavioral`, `static-signal`, `detector`, `process`, or `mixed`.
+Do not merge `static-signal`, `detector`, or `process` evidence into behavioral findings unless the pass explicitly checks the behavioral impact.
 Use available specialist skills as local analysis lenses when they clearly fit the evidence question.
 When many files, inputs, or records must be classified, use deterministic commands or a temporary `/tmp` script and inspect the compact result.
 Record what was checked and why it matters.
@@ -27,6 +29,7 @@ In `evidence tools used`, list only tools and scripts that produced evidence; do
 
 Before adding a candidate to `confirmed candidates`, record why it could affect real behavior in the stated problem frame.
 Static pattern matches stay in `candidates to verify` until de-risk proves reachability and fix-fit.
+Detector output, lint/static-rule matches, style preferences, and process gaps stay labeled as detector/static/process observations unless de-risk proves they create a user-visible or requested-scope defect.
 When a candidate starts from absence or suspicious shape in one place, look for the smallest relevant counter-evidence before ranking it:
 
 - Is the affected behavior actually reachable?
@@ -36,7 +39,7 @@ When a candidate starts from absence or suspicious shape in one place, look for 
 
 Use `Findings` as:
 
-- `confirmed candidates`: evidenced candidates worth carrying forward
+- `confirmed candidates`: evidenced candidates worth carrying forward, labeled with slice id and evidence class
 - `candidates to verify`: plausible candidates that still need focused checks
 - `excluded false positives`: only important false positives that looked relevant but were excluded as noise
 
