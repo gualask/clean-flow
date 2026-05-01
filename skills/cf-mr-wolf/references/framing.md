@@ -1,10 +1,8 @@
 # cf-mr-wolf Framing
 
-Read when DOT reaches `notes_preflight`, `frame_problem`, `useful_scope_question`, or `ask_scope_question`.
+## Notes Preflight
 
-## Notes File
-
-Use the owned notes artifact for investigation notes.
+Use `.cflow/mr-wolf-notes.md` as the compact investigation source of truth for this pass.
 
 For every concrete problem:
 
@@ -13,32 +11,29 @@ For every concrete problem:
 3. Reuse and update relevant notes.
 4. Overwrite stale or unrelated notes with a fresh investigation from the template.
 
-`.cflow/mr-wolf-notes.md` is a compact source of truth for discovery evidence, not an execution plan or refactor backlog.
-Format notes for later machine reading: use one finding or candidate per bullet, and do not pack multiple candidates into one long line.
-In `evidence tools used`, list only tools and scripts that produced evidence; do not include tools used only to create or update `.cflow/mr-wolf-notes.md`.
-Use `Findings` as:
+Keep notes focused on investigation state; do not turn them into an execution plan, refactor backlog, handoff, or next-skill decision.
 
-- `confirmed candidates`: evidenced candidates worth carrying forward
-- `candidates to verify`: plausible candidates that still need focused checks
-- `excluded false positives`: only important false positives that looked relevant but were excluded as noise
+## Request and Scope Loop
 
-Do not list every non-candidate file.
-Do not add handoff, next skill, or workflow-decision sections to `.cflow/mr-wolf-notes.md`.
+First clarify the request, then reduce the perimeter.
 
-## Operating Loop
+Request clarity:
 
-Run a small loop until the problem is clear enough to hand off:
+- If no concrete request is present, ask what problem should be solved before repository inspection.
+- If the request can be interpreted materially differently, ask exactly one focused clarifying question.
+- Continue only when confidence in the intended request is about 90%, or when the user explicitly accepts the remaining ambiguity.
+- State the problem, success criteria, constraints, explicit non-goals, and current uncertainty in one or two sentences.
 
-- Problem-framing pass: state the current frame in one or two sentences, including the problem, success criteria, constraints, explicit non-goals, and smallest useful context slice.
-- Context check: inspect only that slice, separate signal from noise, and expand only when more context can change scope, risk, validation, or the handoff.
+Perimeter clarity:
 
-Scoping questions are part of problem framing.
-Ask exactly one focused scoping question before broad inventory when a clear goal still leaves a large work area and the answer can reduce candidate areas, priority, success criteria, constraints, or validation.
-Skip it when the target is already bounded, a cheap narrow pass can identify the slice, or the user explicitly asks to proceed despite the broad scope.
+- After request clarity, check whether the work area can be reduced before broad context gathering.
+- Ask exactly one focused scoping question when the answer can reduce candidate areas, priority, success criteria, constraints, risk, or validation.
+- Continue only when confidence that the perimeter is clear and not usefully reducible is about 90%, or when the user explicitly asks to proceed despite the broader scope.
+- Skip the question when the target is already bounded or a cheap narrow pass can identify the slice.
+
 Treat context as noise when it cannot affect problem definition, success criteria, scope, constraints, risk, validation, or implementation handoff.
-Do not do whole-repository reconnaissance unless the problem is repo-wide or the first narrow pass proves the scope is broader than expected.
-When the problem is genuinely repo-wide or a narrow pass proves broader scope, run broad inventory with deterministic commands or a temporary script unless a single standard command already produces the needed fact.
-For code repositories, derive the context slice from the problem:
+Do not do whole-repository reconnaissance before the request and perimeter are clear enough.
+For code repositories, derive the initial context slice from the clarified request and perimeter:
 
 - documentation restructure: docs, README, install guides, docs tests, and doc references
 - public API change: exported types, entrypoints, tests, and caller examples

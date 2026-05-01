@@ -1,7 +1,5 @@
 # cf-mr-wolf Outcomes
 
-Read when DOT reaches `cflow_handoff`, `trace_recommendation`, `direct_local_handoff`, or `options_or_handoff`.
-
 ## Cflow Handoff Boundary
 
 When the evidence points to behavior-preserving cleanup, refactor, file splitting, cognitive cleanup, local cohesion regrouping, or multiple candidate files, do not jump directly into execution skills such as `cf-split`, `cf-cognitive`, or `cf-cohesion`.
@@ -11,6 +9,7 @@ Stop at an evidence-backed handoff:
 - list the evidence gathered and evidence-producing tools used
 - name candidate areas or files with short rationale
 - separate confirmed, false-positive, and uncertain findings when they materially affect the decision
+- avoid recommending implementation for findings that are still `uncertain`
 - include the investigation confidence percentage
 - recommend whether `cf-start` should own the next work
 

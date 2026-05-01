@@ -16,7 +16,13 @@ Before creating an owned `.cflow/*` artifact, if `.cflow/` does not exist, creat
 
 ## Operating Principles
 
-Use available tools, MCP resources, and deterministic scripts for evidence at any phase instead of model-only mechanical analysis.
+- Prefer tools, MCP resources, and deterministic scripts over model-only mechanical analysis.
+- For evidence, execute locally for small explicit scopes or cheap checks; delegate the same active reference task when the scope is non-trivial, not small, or mechanically broad. [dynamic agents](references/dynamic-agents.md)
+- If an agent pass is needed and the current request did not explicitly authorize agent use, ask one focused authorization question and stop.
+- If agent use is declined, continue locally only when the user explicitly asks for a degraded local pass.
+- Run at most one agent pass at a time, wait for its report, and do not duplicate delegated work while waiting.
+- Use agent reports as evidence while keeping final judgment, notes, routing, and user-facing output here.
+- When delegated evidence is below 80%, decide whether to inspect another slice, delegate another bounded pass, or ask one user-facing question.
 
 ## Entry Behavior
 
@@ -25,79 +31,34 @@ Ask exactly one question: what problem should be solved?
 If the user explicitly asks to skip planning, call out the biggest missing requirement or risk in one short note and stop.
 Do not implement during clarification.
 
-## Runtime Flow
+## Runtime Phases
 
-DOT is first-match routing: stop after selecting a route or question.
+Use progressive disclosure: read each reference only when its phase becomes active and only if it has not already been read in this invocation; do not pre-load later-phase references.
 
-```dot
-digraph mr_wolf_runtime {
-  entry -> has_problem;
-  has_problem -> ask_problem [label="no"];
-  has_problem -> skip_planning [label="yes"];
-  skip_planning -> stop_with_risk [label="yes"];
-  skip_planning -> notes_preflight [label="no"];
-  notes_preflight -> frame_problem;
-  frame_problem -> useful_scope_question;
-  useful_scope_question -> ask_scope_question [label="yes"];
-  useful_scope_question -> bounded_analysis [label="no"];
-  bounded_analysis -> specialist_match;
-  specialist_match -> specialist_agent [label="yes"];
-  specialist_match -> context_heavy [label="no"];
-  specialist_agent -> merge_specialist_report;
-  merge_specialist_report -> has_candidates [label="candidate findings"];
-  merge_specialist_report -> sufficiency [label="enough/no candidates"];
-  merge_specialist_report -> next_context_or_question [label="missing required context"];
-  context_heavy -> candidate_agent [label="yes"];
-  context_heavy -> has_candidates [label="no"];
-  candidate_agent -> has_candidates;
-  has_candidates -> derisk_findings [label="yes"];
-  has_candidates -> sufficiency [label="no"];
-  derisk_findings -> sufficiency;
-  sufficiency -> next_context_or_question [label="<80/missing evidence"];
-  sufficiency -> choose_outcome [label=">=80"];
-  choose_outcome -> cflow_handoff [label="refactor/multi-file/risky/resumable"];
-  choose_outcome -> trace_recommendation [label="path/order/state unclear"];
-  choose_outcome -> direct_local_handoff [label="one local action"];
-  choose_outcome -> options_or_handoff [label="decision/design remains"];
-}
-```
-
-## Reference Map
-
-Read a reference only when its DOT nodes are reached:
-
-- `notes_preflight`, `frame_problem`, `useful_scope_question`, `ask_scope_question`: [references/framing.md](references/framing.md)
-- `bounded_analysis`, `sufficiency`, `next_context_or_question`: [references/evidence.md](references/evidence.md)
-- `specialist_match`, `specialist_agent`, `merge_specialist_report`, `context_heavy`, `candidate_agent`, `has_candidates`, `derisk_findings`: [references/agents.md](references/agents.md)
-- `cflow_handoff`, `trace_recommendation`, `direct_local_handoff`, `options_or_handoff`: [references/outcomes.md](references/outcomes.md)
+1. Framing: clarify the request, reduce the perimeter, and decide whether the problem is clear enough to inspect repository context. [framing](references/framing.md)
+2. Evidence: collect bounded context, gather focused evidence from the notes, carry forward candidate findings without treating them as final, and decide whether evidence is sufficient; execute locally or delegate the same reference task to a dynamic agent. [evidence](references/evidence.md)
+3. Finding de-risk: verify candidate findings that affect a fix, route, recommendation, or completed handoff. [derisk](references/derisk.md)
+4. Outcome: choose the first matching route from `Decision Priority`, then produce options or a completed handoff. [outcomes](references/outcomes.md)
 
 ## Decision Priority
 
-Choose the first matching route:
+Choose the first matching route from current request, evidence, confidence, and artifact state:
 
-1. `cflow_handoff`: cleanup/refactor candidates, multiple files, ordered work, risky work, or resumable work.
-2. `trace_recommendation`: unclear path, ordering, state, or workflow flaw without a specific refactor.
-3. `direct_local_handoff`: one explicit local action owned by `cf-split`, `cf-cognitive`, or `cf-cohesion`.
-4. `options_or_handoff`: unresolved directions or a bounded problem ready for handoff.
+1. Handoff to `cf-start`: cleanup/refactor candidates, multiple files, ordered work, risky work, or resumable work.
+2. Recommend `cf-trace`: unclear path, ordering, state, or workflow flaw without a specific refactor.
+3. Handoff to a local execution skill: one explicit local action owned by `cf-split`, `cf-cognitive`, or `cf-cohesion`.
+4. Present options or a bounded handoff: unresolved directions or a bounded problem ready for handoff.
 
-Base the route on current request, evidence, confidence, and artifact state.
+## User-Facing Output
 
-## Output Format
+Always answer in the current user language.
+Use 2-5 short bullets unless one of the formats below applies.
+When context was inspected, include confidence and the next needed action.
 
 For invocation without a problem, return only:
 
 - **Problem needed**: one sentence.
 - **Question**: exactly one focused question asking what problem must be solved.
-
-For an active context loop, return only:
-
-- **Problem frame**: current understanding and uncertainty.
-- **Context checked**: focused sources inspected, or `none yet`.
-- **Signal**: what matters.
-- **Noise excluded**: what was intentionally not inspected and why.
-- **Confidence**: percentage plus basis.
-- **Sufficiency**: `sufficient` or `needs more context`, with one sentence.
-- **Next question**: exactly one focused question, only if needed.
 
 For options, return only:
 
@@ -113,10 +74,3 @@ For a completed handoff, return only:
 - **Confidence**: percentage plus remaining uncertainty, if any.
 - **Notes**: `.cflow/mr-wolf-notes.md` updated, reset, or not used because no problem was provided.
 - **Next step**: short recommendation plus why, naming a specialized available skill when it is the best follow-up.
-
-## Anti-patterns
-
-Avoid:
-
-- inventing requirements to make the solution more impressive
-- hiding uncertainty

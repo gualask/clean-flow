@@ -12,7 +12,11 @@ For non-runtime files, check that the change does not move runtime behavior into
 
 - Keep runtime behavior in the relevant `SKILL.md` or a reference file directly linked from that skill.
 - Keep `docs/` maintainer-only; do not assume docs are visible at runtime.
-- Keep reference loading decisions in the consuming `SKILL.md`; a reference should contain the operational rules for an already-selected path, not the trigger logic needed to decide whether to read it.
+- Keep first-level reference loading decisions in the consuming `SKILL.md`; a reference should not decide whether it should have been read.
+- A reference may own local subpath selection after it is active, including agent paths bound to that reference.
+- Do not repeat phase-entry gates inside local subpath or agent selection; if the whole reference should not run yet, the gate belongs in the consuming `SKILL.md`.
+- Bind every agent contract to the smallest active reference that owns its phase or task; keep shared agent rules separate from phase-specific prompt, input, and output contracts.
+- In agent-bound references, prefer `Selection`, `Required Inputs`, `Valid Inputs`, `Assumptions`, `Prompt Contract`, and `Expected Output` sections over generic `Preconditions` headings.
 
 ## Runtime Skill Text
 
@@ -38,8 +42,8 @@ For non-runtime files, check that the change does not move runtime behavior into
 
 Use this checklist additively: when a changed file has multiple roles, apply every matching line plus the category rules above.
 
-- `SKILL.md`: trigger conditions, hard gates, essential routing, and reference loading decisions.
-- `references/*.md`: operational rules for an already-selected path, not trigger logic.
+- `SKILL.md`: trigger conditions, hard gates, essential routing, and first-level reference loading decisions.
+- `references/*.md`: operational rules, local subpath selection, agent binding, input contracts, prompt contracts, and output contracts for an already-active phase; not first-level loading logic.
 - `docs/*.md`: maintainer-only explanation; no runtime dependency.
 - `templates` and `assets`: artifact shape, examples, or review rubrics only.
 - `_shared`: runtime rules, references, scripts, or helpers consumed by multiple public skills or phase references.

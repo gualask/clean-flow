@@ -14,6 +14,15 @@
 - still relevant:
 - reset reason:
 
+## Context
+
+- perimeter:
+- sources checked:
+- relevant context:
+- excluded noise:
+- useful tools or skills:
+- unknowns:
+
 ## Evidence
 
 - evidence channels:

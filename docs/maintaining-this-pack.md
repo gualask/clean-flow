@@ -22,7 +22,8 @@ Cflow has two maintainer concerns:
    - it copies Cflow-owned Codex custom agents from `skills/_codex_agents`
    - it does not bootstrap `.cflow/`
 2. public runtime flows
-   - flow sequencing and review checks are maintained only in the per-public-skill flow references listed under [Source Of Truth](#source-of-truth)
+   - runtime contracts live in the public `SKILL.md` files and their directly linked references
+   - per-public-skill flow docs are maintainer mirrors used to review and validate the runtime contracts
 
 The former internal workflow skills are now `cf-start` phase references.
 They are not packaged as separate skill entrypoints.
@@ -85,7 +86,6 @@ Codex custom agents:
 
 - `skills/_codex_agents/cflow_architecture_recon.toml`
 - `skills/_codex_agents/cflow_trace_recon.toml`
-- `skills/_codex_agents/cflow_candidate_finding_recon.toml`
 - `skills/_codex_agents/cflow_finding_derisk_recon.toml`
 
 ## Golden Rules
@@ -105,7 +105,7 @@ Pack-wide golden rules live in [golden-rules.md](./golden-rules.md).
 
 For real target-repo validation, use [repo-trial-rules.md](./repo-trial-rules.md).
 
-Per-public-skill flow references:
+Maintainer flow mirrors:
 
 - `cf-start`: [start/doc-start.flow.md](./start/doc-start.flow.md), including internal phase contracts
 - `cf-mr-wolf`: [mr-wolf/doc-mr-wolf.flow.md](./mr-wolf/doc-mr-wolf.flow.md)
@@ -124,14 +124,16 @@ Keep in `SKILL.md`:
 - what the skill is for
 - when it should be used
 - hard gates and routing laws
-- DOT diagrams for branch-heavy runtime flow
-- reference loading map
+- phase order or branch-order contract
+- first-level reference loading decisions
 - output contracts
 
 Move to `references/`:
 
 - phase-specific preflight
 - detailed decision tables
+- local subpath and agent selection
+- prompt, input, and output contracts for agents selected by that reference
 - artifact field update lists
 - execution heuristics
 - review and verification lenses
