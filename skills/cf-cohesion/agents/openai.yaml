@@ -1,0 +1,6 @@
+interface:
+  display_name: "Cflow:cohesion"
+  short_description: "Evaluate or regroup scattered related files into a local slice"
+  default_prompt: "Use $cf-cohesion to evaluate or regroup related files that should live together."
+policy:
+  allow_implicit_invocation: true

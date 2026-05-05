@@ -1,0 +1,243 @@
+import assert from "node:assert/strict";
+import path from "node:path";
+import test from "node:test";
+import { mkdir } from "node:fs/promises";
+
+import { installCodexAgents } from "../src/commands/install-agents.mjs";
+import { installSkills } from "../src/commands/install.mjs";
+import { computeSkillFingerprint } from "../src/lib/fingerprint.mjs";
+import { readFileMarker, readMarker, writeFileMarker, writeMarker } from "../src/lib/marker.mjs";
+import {
+  listFileNames,
+  listDirectoryNames,
+  makeTempWorkspace,
+  readText,
+  writeCodexAgent,
+  writeSkill,
+  writeSupportDirectory,
+} from "./support/helpers.mjs";
+
+test("install copies new skills and support directories with owned markers", async () => {
+  const workspace = await makeTempWorkspace();
+  const sourceRoot = path.join(workspace, "source");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
+
+  await mkdir(sourceRoot, { recursive: true });
+  await writeSupportDirectory(sourceRoot);
+  await writeSupportDirectory(sourceRoot, "_draft");
+  await writeSkill(sourceRoot, "cf-start");
+  await writeSkill(sourceRoot, "cf-cognitive");
+
+  const result = await installSkills({ sourceRoot, destinationRoot });
+
+  assert.equal(result.added.length, 3);
+  assert.equal(result.updated.length, 0);
+  assert.equal(result.pruned.length, 0);
+  assert.equal(result.conflicts.length, 0);
+  assert.equal(result.applied, true);
+  assert.deepEqual(await listDirectoryNames(destinationRoot), [
+    "_shared",
+    "cf-cognitive",
+    "cf-start",
+  ]);
+
+  const marker = await readMarker(path.join(destinationRoot, "cf-start"));
+  assert.equal(marker.owner, "clean-flow");
+  assert.equal(marker.pack, "cflow");
+  assert.match(marker.fingerprint, /^sha256:/);
+
+  const supportMarker = await readMarker(path.join(destinationRoot, "_shared"));
+  assert.equal(supportMarker.owner, "clean-flow");
+  assert.equal(supportMarker.pack, "cflow");
+  assert.equal(supportMarker.sourceKind, "support");
+});
+
+test("install updates owned skills, prunes removed owned skills, and keeps foreign skills", async () => {
+  const workspace = await makeTempWorkspace();
+  const sourceRoot = path.join(workspace, "source");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
+
+  await mkdir(sourceRoot, { recursive: true });
+  await mkdir(destinationRoot, { recursive: true });
+
+  await writeSupportDirectory(sourceRoot, "_shared", {
+    "references/example.md": "# Updated shared reference\n",
+  });
+  await writeSkill(sourceRoot, "cf-start", {
+    "SKILL.md": `---\nname: "cf-start"\ndescription: "Updated"\n---\n\n# cf-start v2\n`,
+  });
+  await writeSkill(sourceRoot, "cf-cognitive");
+
+  const ownedShared = await writeSupportDirectory(destinationRoot, "_shared", {
+    "references/example.md": "# Old shared reference\n",
+  });
+  const ownedStart = await writeSkill(destinationRoot, "cf-start", {
+    "SKILL.md": `---\nname: "cf-start"\ndescription: "Old"\n---\n\n# cf-start v1\n`,
+  });
+  const ownedOld = await writeSkill(destinationRoot, "cf-old");
+  await writeSkill(destinationRoot, "foreign-skill", {
+    "SKILL.md": `---\nname: "foreign-skill"\ndescription: "Foreign"\n---\n\n# foreign\n`,
+  });
+
+  await writeMarker(ownedShared, {
+    sourceSkill: "_shared",
+    sourceKind: "support",
+    fingerprint: await computeSkillFingerprint(ownedShared),
+  });
+  await writeMarker(ownedStart, {
+    sourceSkill: "cf-start",
+    fingerprint: await computeSkillFingerprint(ownedStart),
+  });
+  await writeMarker(ownedOld, {
+    sourceSkill: "cf-old",
+    fingerprint: await computeSkillFingerprint(ownedOld),
+  });
+
+  const result = await installSkills({ sourceRoot, destinationRoot });
+
+  assert.equal(result.updated.length, 2);
+  assert.equal(result.added.length, 1);
+  assert.equal(result.pruned.length, 1);
+  assert.equal(result.conflicts.length, 0);
+  assert.deepEqual(await listDirectoryNames(destinationRoot), [
+    "_shared",
+    "cf-cognitive",
+    "cf-start",
+    "foreign-skill",
+  ]);
+
+  const updatedSharedBody = await readText(
+    path.join(destinationRoot, "_shared", "references", "example.md"),
+  );
+  assert.match(updatedSharedBody, /Updated shared reference/);
+
+  const updatedBody = await readText(path.join(destinationRoot, "cf-start", "SKILL.md"));
+  assert.match(updatedBody, /Updated/);
+
+  const foreignBody = await readText(path.join(destinationRoot, "foreign-skill", "SKILL.md"));
+  assert.match(foreignBody, /Foreign/);
+});
+
+test("install reports conflicts and leaves foreign same-name skills untouched", async () => {
+  const workspace = await makeTempWorkspace();
+  const sourceRoot = path.join(workspace, "source");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
+
+  await mkdir(sourceRoot, { recursive: true });
+  await mkdir(destinationRoot, { recursive: true });
+  await writeSkill(sourceRoot, "cf-start");
+  await writeSkill(destinationRoot, "cf-start", {
+    "SKILL.md": `---\nname: "cf-start"\ndescription: "Foreign"\n---\n\n# foreign copy\n`,
+  });
+
+  const before = await readText(path.join(destinationRoot, "cf-start", "SKILL.md"));
+  const result = await installSkills({ sourceRoot, destinationRoot });
+  const after = await readText(path.join(destinationRoot, "cf-start", "SKILL.md"));
+
+  assert.equal(result.conflicts.length, 1);
+  assert.equal(result.applied, false);
+  assert.equal(before, after);
+});
+
+test("install dry-run computes the plan without mutating the target", async () => {
+  const workspace = await makeTempWorkspace();
+  const sourceRoot = path.join(workspace, "source");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
+
+  await mkdir(sourceRoot, { recursive: true });
+  await writeSkill(sourceRoot, "cf-start");
+
+  const result = await installSkills({ sourceRoot, destinationRoot, dryRun: true });
+
+  assert.equal(result.added.length, 1);
+  assert.equal(result.applied, false);
+  assert.deepEqual(await listDirectoryNames(destinationRoot), []);
+});
+
+test("install copies Codex custom agents with owned markers", async () => {
+  const workspace = await makeTempWorkspace();
+  const sourceRoot = path.join(workspace, "source", ".codex", "agents");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "agents");
+
+  await writeCodexAgent(sourceRoot);
+  await writeCodexAgent(sourceRoot, "notes.md", "# Ignored\n");
+
+  const result = await installCodexAgents({ sourceRoot, destinationRoot });
+
+  assert.equal(result.added.length, 1);
+  assert.equal(result.updated.length, 0);
+  assert.equal(result.pruned.length, 0);
+  assert.equal(result.conflicts.length, 0);
+  assert.equal(result.applied, true);
+  assert.deepEqual(await listFileNames(destinationRoot), ["cflow_architecture_recon.toml"]);
+
+  const marker = await readFileMarker(destinationRoot, "cflow_architecture_recon.toml");
+  assert.equal(marker.owner, "clean-flow");
+  assert.equal(marker.pack, "cflow");
+  assert.equal(marker.sourceKind, "codex-agent");
+  assert.match(marker.fingerprint, /^sha256:/);
+});
+
+test("install updates owned Codex agents, prunes removed agents, and keeps foreign agents", async () => {
+  const workspace = await makeTempWorkspace();
+  const sourceRoot = path.join(workspace, "source", ".codex", "agents");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "agents");
+
+  await writeCodexAgent(
+    sourceRoot,
+    "cflow_architecture_recon.toml",
+    `name = "cflow_architecture_recon"\ndescription = "Updated"\ndeveloper_instructions = "Updated."\n`,
+  );
+  await writeCodexAgent(destinationRoot, "cflow_architecture_recon.toml");
+  await writeCodexAgent(destinationRoot, "old_cflow_agent.toml");
+  await writeCodexAgent(destinationRoot, "foreign_agent.toml");
+
+  await writeFileMarker(destinationRoot, "cflow_architecture_recon.toml", {
+    sourceSkill: "cflow_architecture_recon.toml",
+    fingerprint: "sha256:old",
+  });
+  await writeFileMarker(destinationRoot, "old_cflow_agent.toml", {
+    sourceSkill: "old_cflow_agent.toml",
+    fingerprint: "sha256:old",
+  });
+
+  const result = await installCodexAgents({ sourceRoot, destinationRoot });
+
+  assert.equal(result.updated.length, 1);
+  assert.equal(result.added.length, 0);
+  assert.equal(result.pruned.length, 1);
+  assert.equal(result.conflicts.length, 0);
+  assert.deepEqual(await listFileNames(destinationRoot), [
+    "cflow_architecture_recon.toml",
+    "foreign_agent.toml",
+  ]);
+
+  const updatedBody = await readText(
+    path.join(destinationRoot, "cflow_architecture_recon.toml"),
+  );
+  assert.match(updatedBody, /Updated/);
+
+  const foreignBody = await readText(path.join(destinationRoot, "foreign_agent.toml"));
+  assert.match(foreignBody, /Test Codex agent/);
+});
+
+test("install reports Codex agent conflicts and leaves foreign same-name agents untouched", async () => {
+  const workspace = await makeTempWorkspace();
+  const sourceRoot = path.join(workspace, "source", ".codex", "agents");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "agents");
+
+  await writeCodexAgent(sourceRoot, "cflow_architecture_recon.toml");
+  await writeCodexAgent(
+    destinationRoot,
+    "cflow_architecture_recon.toml",
+    `name = "cflow_architecture_recon"\ndescription = "Foreign"\ndeveloper_instructions = "Foreign."\n`,
+  );
+
+  const before = await readText(path.join(destinationRoot, "cflow_architecture_recon.toml"));
+  const result = await installCodexAgents({ sourceRoot, destinationRoot });
+  const after = await readText(path.join(destinationRoot, "cflow_architecture_recon.toml"));
+
+  assert.equal(result.conflicts.length, 1);
+  assert.equal(result.applied, false);
+  assert.equal(before, after);
+});

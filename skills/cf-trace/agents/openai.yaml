@@ -1,0 +1,6 @@
+interface:
+  display_name: "Cflow:trace"
+  short_description: "Reconstruct and audit one workflow path for orchestration flaws"
+  default_prompt: "Use $cf-trace to reconstruct and audit a workflow path for hidden flaws."
+policy:
+  allow_implicit_invocation: true

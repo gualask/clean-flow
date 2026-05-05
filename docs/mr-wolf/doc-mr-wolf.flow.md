@@ -1,0 +1,27 @@
+# cf-mr-wolf Flow
+
+## Purpose
+
+Document the runtime flow for `cf-mr-wolf`, the public entrypoint for lightweight technical framing before implementation or Cflow assessment.
+
+## Runtime Inputs
+
+- Public skill: `skills/cf-mr-wolf/SKILL.md`
+- Runtime references: `skills/cf-mr-wolf/references/framing.md`, `decomposition.md`, `evidence.md`, `dynamic-agents.md`, `derisk.md`, `outcomes.md`
+- Custom agent source: `skills/_codex_agents/cflow_finding_derisk_recon.toml`
+- Current conversation and user request
+- Focused repository context selected from the clarified request and bounded perimeter
+- Optional notes artifact: `.cflow/mr-wolf-notes.md`, created from `skills/cf-mr-wolf/assets/mr-wolf-notes.template.md` when evidence or decisions need durable handoff context
+
+## High-Level Flow
+
+1. Start from the user request. If there is no concrete problem, ask what problem must be solved.
+2. Frame the problem: clarify intent, success criteria, constraints, non-goals, uncertainty, and the smallest useful perimeter.
+3. Use `.cflow/mr-wolf-notes.md` only when context, evidence, a slice map, or a handoff should survive the current turn.
+4. If the framed request is broad, split it into a compact evidence slice map; otherwise continue with one direct pass.
+5. Route early when another skill owns the next lens: `cf-architecture` for unclear repository shape, `cf-simplify` for overengineering or simplification reviews, `cf-scenario` for concrete impact examples, or `cf-trace` for ordered workflow reconstruction.
+6. Collect evidence only for the active scope or slice. Use orientation tools before broad file reads: prefer MCP code-intelligence, then bundled/custom scripts, then focused system commands. Treat their output as direction, not proof, and verify decision-relevant conclusions against source, tests, or runtime evidence.
+7. Treat evidence findings as candidates, keeping behavioral evidence separate from detector, static-rule, preference, and process observations.
+8. De-risk only candidate findings that can influence the final output, preferring `cflow_finding_derisk_recon` when available and allowed. For behavioral or cross-flow risks, require a concrete `cf-scenario` check or recommend it as the next verification step before a fix decision.
+9. When a slice map exists, continue slice-by-slice until every in-scope slice is done, blocked, deferred, out of scope, or routed.
+10. Produce the smallest useful outcome: options, a bounded handoff, a `cf-start` handoff, a `cf-simplify` route, a `cf-scenario` explanation, a `cf-trace` route, a `cf-architecture` route, or a direct local-skill handoff.

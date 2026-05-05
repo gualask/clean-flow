@@ -1,0 +1,6 @@
+interface:
+  display_name: "Cflow:Mr Wolf"
+  short_description: "Clarify problems with minimal context and a focused handoff"
+  default_prompt: "Use $cf-mr-wolf to clarify an ambiguous problem before implementation."
+policy:
+  allow_implicit_invocation: true

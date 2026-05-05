@@ -1,0 +1,6 @@
+interface:
+  display_name: "Cflow:scenario"
+  short_description: "Explain real code impact through concrete scenarios"
+  default_prompt: "Use $cf-scenario to explain what really happens in this code path."
+policy:
+  allow_implicit_invocation: true
