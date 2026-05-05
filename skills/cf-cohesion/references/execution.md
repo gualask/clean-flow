@@ -15,6 +15,7 @@ Execute exactly one behavior-preserving local regrouping.
 - Choose placement by nearest existing ownership and local convention.
 - Prefer a local feature or workflow folder over generic `shared`, `common`, `utils`, `manager`, or new top-level architecture folders.
 - In flat type folders, root can remain the implicit common/shared layer.
+- Do not leave single-owner files in a broad type folder when a nearer owner is clear.
 - Keep broadly reused files outside the local slice.
 - Move tests only when repository convention supports colocated tests and the tests belong exclusively to the moved behavior.
 - Do not refactor file internals except import/export/path cleanup required by the move.

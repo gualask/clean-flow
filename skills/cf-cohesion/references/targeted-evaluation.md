@@ -22,6 +22,15 @@ Build a compact map with:
 - nearby precedent: local folders or conventions that support or weaken regrouping
 - navigation cost: how many locations a reader must visit to follow the behavior
 
+## Owner Locality
+
+Before reorganizing a type folder, check whether that folder is the right owner.
+
+- Files with one clear feature, workflow, adapter, endpoint, command, screen, or runtime owner should usually live beside that owner, not in a broad type folder.
+- Keep a file in the type folder only when it is reused across owners, provides shared infrastructure/runtime behavior, or nearby repository convention explicitly treats that type as shared.
+- If an item imports mostly from one owner area or has tests tied to one owner, treat that as evidence for local placement.
+- Do not solve a single-owner file by putting it in a more specific subfolder under the broad type folder when colocating with the owner would reduce navigation cost more.
+
 ## Placement Convention
 
 Before naming destination folders, state the smallest local convention that would make the area easier to navigate.
