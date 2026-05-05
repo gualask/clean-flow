@@ -22,6 +22,15 @@ Build a compact map with:
 - nearby precedent: local folders or conventions that support or weaken regrouping
 - navigation cost: how many locations a reader must visit to follow the behavior
 
+## Placement Convention
+
+Before naming destination folders, state the smallest local convention that would make the area easier to navigate.
+
+- For a flat type folder, prefer this convention when it fits the evidence: root files remain implicitly common/shared, and subfolders exist only for domains, workflows, or stable internal pairs with real cohesion.
+- Do not create `common`, `shared`, `utils`, or similar generic folders just to make every file live below one subdirectory.
+- A proposed folder needs a specific ownership name, such as a domain, workflow, feature, adapter, or tightly coupled mechanism.
+- If no file would remain at root, still avoid a generic bucket unless the repository already uses that exact convention nearby.
+
 ## Decision Rules
 
 - Recommend regrouping only when it removes real navigation cost now.
