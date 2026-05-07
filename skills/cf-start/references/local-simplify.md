@@ -6,11 +6,9 @@ Do not reopen repository architecture in this phase.
 
 ## Preflight
 
-- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture`.
-- Read architecture plus existing `.cflow/refactor-brief.md`.
+Use standard phase preflight.
 - If the touched area is not clearly anchored in a recently completed bounded structural step, stop and route to `cf-start` first.
-- Without a brief, continue only with an explicit, local touched area; otherwise route to `cf-start` or the correct Cflow phase.
-- Re-check the touched area and repository state before acting.
+- Without a brief, require an explicit local touched area.
 - Do not broaden scope in this step.
 
 ## Goal

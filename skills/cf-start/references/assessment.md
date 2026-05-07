@@ -16,9 +16,7 @@ You must determine:
 
 ## Preflight
 
-1. Require current `.cflow/architecture.md`; if missing, stale, or materially incomplete, stop and route to `cf-architecture`.
-2. Read architecture plus existing `.cflow/refactor-brief.md`.
-3. Re-check the repository and treat it as the source of truth.
+Use standard phase preflight.
 
 ## Premise check
 
@@ -32,7 +30,7 @@ Answer these honestly:
 For hard restructure also answer:
 
 5. Is repository shape itself the recurring cause of friction?
-6. Are existing global barrels, shared models, or layer boundaries part of the problem rather than constraints to preserve?
+6. Are existing global barrels, shared models, or layer boundaries hiding real ownership, boundary roles, or organizing axis?
 7. Would a good soft intervention remove the structural pain without preserving dirty ownership or unclear boundaries?
 
 ## Intervention mode framing

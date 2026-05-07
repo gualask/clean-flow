@@ -43,6 +43,9 @@
 
 ## Target direction
 
+- ownership model:
+- organizing axis:
+- boundary representation roles:
 - proposed local direction:
 - split / consolidate / mixed / hard-restructure rationale:
 - architectural rules to respect:

@@ -18,10 +18,13 @@ Before creating an owned `.cflow/*` artifact, if `.cflow/` does not exist, creat
 
 ## Preflight
 
-1. Read existing `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
-2. Check repository state relevant to the current request and artifacts.
-3. Treat the repository as the source of truth.
-4. When the current request questions whether a recorded completed unit is really finished, treat the brief as historical evidence, not as the closure verdict.
+Before running any phase reference, unless the reference says otherwise:
+
+1. Require current `.cflow/architecture.md` for workflow phases; route to `cf-architecture` when it is missing, stale, or materially incomplete.
+2. Read existing `.cflow/refactor-brief.md` when present.
+3. Check repository state relevant to the current request and phase; repository state is the source of truth.
+4. If a phase needs a brief, current unit, or clear touched scope and it is missing or unclear, continue only for an explicit local scope; otherwise route back to assessment or planning.
+5. For closure challenges, treat recorded `done`, `verified`, safe stopping points, and prior notes as claims to test, not conclusions.
 
 ## Flow Selection
 
@@ -97,6 +100,7 @@ Use when one active bounded unit is selected or explicit.
 Map unresolved split pressure with [concentration-map.md](references/concentration-map.md) or consolidation pressure with [fragmentation-map.md](references/fragmentation-map.md).
 Choose the behavior lock with [safety-net.md](references/safety-net.md) before structural edits.
 Execute by declared mode: `split` uses [split-execution.md](references/split-execution.md); `consolidate` uses [consolidation-execution.md](references/consolidation-execution.md).
+Before finishing split or consolidation execution, apply [structural-closure.md](references/structural-closure.md).
 [local-simplify.md](references/local-simplify.md) is optional after structural execution and only for the recently touched area.
 
 Do not jump from initial assessment directly into mapping or execution unless the next cohesive local unit is explicit in the brief or prompt.
@@ -110,6 +114,4 @@ Do not use generic reassessment output for closure challenges; use the review ou
 
 ## Language rules
 
-- Use the current conversation language for conversational output.
-- Use the repository's dominant documentation language for `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
-- If the repository has no dominant documentation language, use the current conversation language for those artifacts too.
+Write `.cflow/refactor-brief.md` in the repository's dominant documentation language; if none exists, use the current conversation language.

@@ -20,6 +20,7 @@ For broad or multi-step execution, route to `cf-start` with a concrete recommend
 - Recommend the cleanest evidence-backed shape by default, not the easiest or lowest-churn workaround.
 - Do not choose a workaround that preserves false ownership, accidental boundaries, or global glue just because it minimizes immediate code movement.
 - Do not list a dirty low-impact path as a refactor alternative. If explicit temporary containment is requested, label it as containment outside the cleanup recommendation.
+- For architecture or shared-layer reviews, identify ownership, boundary roles, and organizing axis before proposing packaging; define project-specific architectural terms only when relying on them.
 - Name the requirement or product behavior that makes each complex piece necessary.
 - Prefer deleting a costly requirement, state machine, lifecycle, abstraction, or boundary over reorganizing it when that produces the cleanest result.
 - Do not recommend a quick patch, cosmetic flattening, or file merge that leaves the same decision complexity hidden elsewhere.
@@ -37,8 +38,9 @@ Gather only enough evidence to answer:
 
 - which files belong to the area
 - where the area is entered from
-- which files are tests, UI, state/lifecycle, persistence, backend, adapters, or shared glue
+- which role each file plays in the area, and whether that role is local, boundary-facing, or shared
 - which public behavior or workflow the area supports
+- which shared concepts, boundary representations, re-export surfaces, and organizing axis explain the area
 - what constraints, risk appetite, non-goals, or acceptable ceremony the current request states
 - whether current git changes alter the picture
 
@@ -73,6 +75,8 @@ Group files by necessity, not by folder:
 - `accidental`: wrapper, duplicate, stale layer, over-specific policy, or ceremony without clear ownership
 - `uncertain`: not enough evidence yet
 
+For shared models or cross-boundary representations, classify by boundary role, not current folder, type name, or generic layer label.
+
 Be explicit about why each group exists. Avoid long inventories when a compact grouping is clearer.
 
 ### 4. Choose The Simplification Lever
@@ -84,6 +88,7 @@ Recommend the lever with the best complexity reduction:
 - collapse an unnecessary lifecycle/state machine
 - consolidate artificial boundaries
 - replace a false global owner or barrel with explicit local owners and boundary mapping
+- move models to their real owners and add mappers only at real ownership boundaries
 - split a dense owner only when it reveals real ownership
 - keep current behavior and accept the current complexity when simplification would damage the product
 
@@ -104,13 +109,12 @@ Use this decision order:
 
 ## Output Format
 
-Answer in the current conversation language.
 Use direct, decision-oriented sections:
 
 - **Verdict**: whether this is necessary complexity, likely overengineering, or mixed.
 - **Evidence checked**: compact list of files/searches/commands inspected.
 - **Complexity drivers**: the requirements or design choices creating the noise.
-- **Necessity map**: what is essential, justified-but-expensive, simplification target, accidental, or uncertain.
+- **Necessity map**: what is essential, justified-but-expensive, simplification target, accidental, or uncertain; include owner roles and organizing axis when shared representations are the issue.
 - **Recommendation**: the preferred simplification path and why it gives real cleanup.
 - **Alternatives**: 1-3 clean options with trade-offs; do not include dirty low-impact workarounds as refactor alternatives.
 - **Decision needed**: exactly one focused question when implementation requires a behavior, UX, or scope decision.

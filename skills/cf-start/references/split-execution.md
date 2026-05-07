@@ -2,12 +2,10 @@
 
 ## Preflight
 
-- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture`.
-- Read architecture plus existing `.cflow/refactor-brief.md`.
-- Without a brief, continue only with an explicit, local, behavior-preserving scope; otherwise route to `cf-start` or the correct Cflow phase.
+Use standard phase preflight.
+Without a brief, require explicit local behavior-preserving scope.
 - If there is no credible safety lock for the current structural move, stop and route to safety-net first.
 - If the seam is still not mapped enough to name the hidden workflows, role classification, and safe split direction, stop and route to concentration-map instead of guessing.
-- Re-check the touched area and treat repository state as the source of truth.
 
 ## Goal
 
@@ -65,35 +63,12 @@ Do not return `Next action: none` while a clear structural follow-up remains in 
 
 ## Before finishing
 
-Run risk-proportionate verification from this list when available. Start with the most targeted checks, and add broader checks when the split touches public API, file placement, lifecycle behavior, persistence, cross-flow behavior, or multiple owners:
-
-- targeted tests
-- lint
-- typecheck
-- build
-- runtime smoke check
-
-If no relevant verification is available, say that explicitly in `Checks run` or `What remains`.
-
-If you moved, renamed, split, or re-exported symbols, ensure you have read [reference-audit.md](../../_shared/references/reference-audit.md) in this invocation, then run that audit for the touched names and paths.
-
-## Output format
-
-Return sections: **Current state**, **Work unit executed**, **Checks run**, **Artifacts updated**, **What remains**, **Next action**.
+Apply [structural-closure.md](structural-closure.md).
 
 ## Artifact updates
-
-Apply `artifacts.md` before stopping when this step changes resumable state.
-Phase-specific fields:
-
-- `Work units` status labels
-- `Safety net` if assumptions changed
-- `Verification`
 
 If the actual implementation changed understanding, also update:
 
 - `Concentration pressure`
 - `Target direction`
 - `Decision notes`
-
-Record concrete follow-up questions in `Unknowns to re-check`.

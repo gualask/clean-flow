@@ -8,11 +8,9 @@ Turn the current assessed pressure into an evidence-backed ordered backlog of co
 
 ## Preflight
 
-1. Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture`.
-2. Read architecture plus existing `.cflow/refactor-brief.md`.
-3. If there is no assessed direction, candidate area, or explicit bounded scope to order, route to `cf-start`.
-4. If a broader boundary or packaging decision is unresolved, route to target-shape planning instead of faking bounded work-unit planning.
-5. Re-check candidate areas and treat repository state as the source of truth.
+Use standard phase preflight.
+If there is no assessed direction, candidate area, or explicit bounded scope to order, route to `cf-start`.
+If a broader boundary or packaging decision is unresolved, route to target-shape planning instead of faking bounded work-unit planning.
 
 ## Planning rules
 

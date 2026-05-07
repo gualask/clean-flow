@@ -22,6 +22,7 @@ Do not implement code changes.
 - Do not equate "smallest useful" with "lowest churn". Architectural cleanliness is the default for cleanup/refactor framing, even when the current request does not spell it out.
 - Do not recommend the easier or lower-impact option when evidence supports a cleaner structural option.
 - For architecture or refactor framing, separate target cleanliness from migration safety: the recommended target may be broad while the first execution step remains bounded.
+- For architecture or shared-layer framing, make ownership model and organizing axis explicit before naming packaging; define project-specific architectural terms only when relying on them.
 - For code questions, use orientation tools before broad file reads: prefer MCP code-intelligence tools, then bundled/custom scripts, then focused system commands.
 - Treat orientation-tool output as direction, not truth; verify important conclusions against the relevant source paths.
 - Prefer concrete examples or `cf-scenario` when the problem is understandable but still abstract.
@@ -55,7 +56,6 @@ Choose the first route that fits current evidence and uncertainty:
 
 ## Output
 
-Always answer in the current conversation language.
 Default to 2-5 short bullets.
 
 For missing problem context, return only:

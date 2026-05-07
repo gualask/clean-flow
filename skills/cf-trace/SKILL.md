@@ -42,9 +42,7 @@ Do not use this for broad refactor planning; use `cf-start` after trace findings
 
 ## Language rules
 
-- Use the user's language for conversational output.
-- Use the repository's dominant documentation language for `.cflow/trace.md`.
-- If the repository has no dominant documentation language, use the user's language for `.cflow/trace.md`.
+Write `.cflow/trace.md` in the repository's dominant documentation language; if none exists, use the current conversation language.
 
 ## Preflight
 
@@ -61,29 +59,10 @@ If `.cflow/architecture.md` is missing, stale, or materially incomplete, route t
 
 ## Clean-Context Trace Reconstruction
 
-Before writing the trace artifact, use the `cflow_trace_recon` custom agent when available.
-It is configured as a read-only, lower-cost reconnaissance agent for reconstructing one path.
-
-If the custom agent is unavailable, use one equivalent clean-context reconnaissance subagent to inspect the repository and return a read-only trace report.
-If the runtime requires explicit subagent authorization, ask and stop; blocked delegation is not custom-agent unavailability and must not trigger controller-side reconstruction.
-Do not continue with local-only trace reconstruction just because the custom agent could not be started under the current runtime rules.
-
-Start the custom agent with only the repository path and the current trace request.
-Do not paste the custom agent's TOML instructions or full report format into the spawn prompt.
-
-Expect the subagent report to contain these sections: **Trace Scope**, **Observed Sequence**, **Inputs and Triggers**, **State and Artifacts**, **External Effects**, **Failure and Resume Paths**, **Evidence**, **Unknowns**.
-
-Treat the subagent report as the primary path reconstruction.
-Use `assets/trace.template.md` as the review rubric for whether the report is good enough to write the trace artifact.
-While the subagent is running, do not read manifests, source directories, docs, or implementation files to build a parallel reconstruction.
-During that wait, the controller may only inspect `.cflow/architecture.md`, existing `.cflow/trace.md`, the trace template, and worktree status.
-Do not repeat full reconnaissance unless the report is incomplete, contradictory, or unsupported by its cited evidence.
-Spot-check only the evidence needed to trust the report, resolve contradictions, or fill unknowns.
-If the report misses a required section or fills it with generic, prescriptive, or off-scope content, ask the subagent one targeted follow-up or do the smallest evidence spot-check needed.
-If a full controller-side scan becomes necessary, say why before doing it.
-
-The subagent produces reconstruction only.
-The controller owns final trace and audit decisions, severity, recommended route, and user-facing output.
+Apply [clean-context-recon.md](../_shared/references/clean-context-recon.md) with `cflow_trace_recon` before writing the trace artifact.
+Expected report sections: **Trace Scope**, **Observed Sequence**, **Inputs and Triggers**, **State and Artifacts**, **External Effects**, **Failure and Resume Paths**, **Evidence**, **Unknowns**.
+Use `assets/trace.template.md` as the review rubric.
+Allowed controller context while the agent runs: `.cflow/architecture.md`, existing trace artifact, trace template, and worktree status.
 
 ## Reconstruction rules
 

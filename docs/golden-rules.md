@@ -29,6 +29,7 @@ For non-runtime files, check that the change does not move runtime behavior into
 - For composable skills, choose entry modes from the `current request`, not from whether the literal user or another skill made the request. Use `user explicitly asked` only for intentional user-level authorization gates.
 - Be strict only when the failure mode is concrete and costly.
 - Otherwise state the preferred direction plus the conditions that justify exceptions.
+- Prefer role/category language over example lists in runtime instructions. When examples are necessary, state that analogous project-specific forms must also be considered; do not let examples become a closed checklist.
 
 ## Refactor Decision Principle
 
@@ -36,6 +37,7 @@ For non-runtime files, check that the change does not move runtime behavior into
 - This cleanliness default is always active; the current request does not need to explicitly ask for a clean solution.
 - Do not recommend a workaround that preserves false ownership, accidental boundaries, global glue, or unclear architecture just because it reduces immediate churn.
 - Do not present a dirty low-impact path as a refactor alternative. If explicit temporary containment is requested, label it as containment outside the cleanup recommendation.
+- For architecture, refactor, or shared-layer framing, identify the real ownership model and organizing axis before choosing packaging. Define project-specific architectural terms when you rely on them; packaging follows ownership and axis, not the reverse.
 - Use cost, churn, and reviewability to choose migration order, safety nets, and unit size after the clean target is chosen; do not use them to prefer a dirtier target.
 - Keep behavior preservation as an execution and migration rule unless a behavior change is explicit. Do not let behavior-preserving execution narrow the target-shape analysis.
 

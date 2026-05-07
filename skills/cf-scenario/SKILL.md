@@ -28,7 +28,6 @@ Keep it lightweight. The goal is not a formal use-case document; the goal is to 
 
 ## Output Style
 
-Use the user's language.
 Prefer a human walkthrough over a formal template.
 Use short causal chains when helpful:
 

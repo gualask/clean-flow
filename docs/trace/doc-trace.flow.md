@@ -7,6 +7,7 @@ Document the runtime flow for `cf-trace`, the public path reconstruction and aud
 ## Runtime Inputs
 
 - Public skill: `skills/cf-trace/SKILL.md`
+- Shared reference: `skills/_shared/references/clean-context-recon.md`
 - Custom agent source: `skills/_codex_agents/cflow_trace_recon.toml`
 - Artifact template and review rubric: `skills/cf-trace/assets/trace.template.md`
 - Target artifact: `.cflow/trace.md`
@@ -16,7 +17,7 @@ Document the runtime flow for `cf-trace`, the public path reconstruction and aud
 1. Start from the requested path, scenario, command, entrypoint, or workflow.
 2. Ask one focused question if the path is too ambiguous to trace.
 3. Require current architecture context before tracing; route to `cf-architecture` when it is missing or stale.
-4. Spawn `cflow_trace_recon` with repository path and trace request when subagent use is allowed.
+4. Apply the shared clean-context reconnaissance protocol with `cflow_trace_recon`.
 5. While the agent runs, avoid duplicating the path scan locally.
 6. Check the returned reconstruction against `trace.template.md` and spot-check only unsupported, contradictory, or missing claims.
 7. Create or refresh `.cflow/trace.md` when durable trace state is needed.

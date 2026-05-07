@@ -2,10 +2,8 @@
 
 ## Preflight
 
-- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture`.
-- Read architecture plus existing `.cflow/refactor-brief.md`.
+Use standard phase preflight.
 - If the completed unit or touched area is not clear enough to verify, stop and route to `cf-start` first.
-- Re-check the touched area and treat repository state as the source of truth.
 
 ## Goal
 

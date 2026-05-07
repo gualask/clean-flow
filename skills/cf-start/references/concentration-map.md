@@ -28,10 +28,8 @@ Look for:
 
 ## Preflight
 
-- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture`.
-- Read architecture plus existing `.cflow/refactor-brief.md`.
-- Without a brief, continue only with an explicit local or repo-level scope; otherwise route to `cf-start`.
-- Re-check the repository and treat it as the source of truth.
+Use standard phase preflight.
+Without a brief, require explicit local or repo-level scope.
 
 ## Analyze in this order
 

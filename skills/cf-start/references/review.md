@@ -4,11 +4,8 @@ Do review only. Do not introduce new structural changes in this phase unless the
 
 ## Preflight
 
-- Require current `.cflow/architecture.md`; if missing, stop and route to `cf-architecture`.
-- Read architecture plus existing `.cflow/refactor-brief.md`.
+Use standard phase preflight.
 - If the completed step or touched area is not clear enough to review, stop and route to `cf-start` first.
-- Re-check the touched area and treat repository state as the source of truth.
-- For closure-challenge reviews, treat recorded `done`, `verified`, `safe stopping point`, and previous review notes as claims to test, not conclusions.
 - For closure-challenge reviews, rebuild the review from current files, including untracked files and the densest extracted owners.
 
 ## Goal

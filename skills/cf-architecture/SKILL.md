@@ -26,43 +26,26 @@ You must determine:
 - main external boundaries
 - domain gravity
 - current boundary and packaging model
+- observed ownership of named representations and global re-export surfaces
 - observed repository invariants that later Cflow skills may rely on
 
 ## Language rules
 
-- Use the user's language for conversational output.
-- Use the repository's dominant documentation language for `.cflow/architecture.md`.
-- If the repository has no dominant documentation language, use the user's language for `.cflow/architecture.md`.
+Write `.cflow/architecture.md` in the repository's dominant documentation language; if none exists, use the current conversation language.
 
 ## Preflight
 
 1. Read `.cflow/architecture.md` if it exists.
 2. Read `../cf-start/assets/architecture.template.md`.
-3. Check `git status --short` for user-change awareness.
+3. Check `git status --short` for worktree-change awareness.
 4. Do not map repository architecture during preflight; the reconnaissance subagent owns that scan.
 
 ## Clean-Context Reconnaissance
 
-Before writing the architecture map, use the `cflow_architecture_recon` custom agent when available.
-It is configured as a read-only, lower-cost reconnaissance agent for this specific scan.
-
-If the custom agent is unavailable, use one equivalent clean-context reconnaissance subagent to inspect the repository and return a read-only architecture report.
-If the runtime requires explicit subagent authorization, ask and stop; blocked delegation is not custom-agent unavailability and must not trigger controller-side architecture mapping.
-
-Start the custom agent with only the repository path and the current mapping request.
-Do not paste the custom agent's TOML instructions or full report format into the spawn prompt.
-
-Expect the subagent report to contain these sections: **Repository Context**, **Entry Points**, **Top-Level Map**, **External Boundaries**, **Boundary and Packaging Model**, **Observed Invariants**, **Evidence**, **Unknowns**.
-
-Treat the subagent report as the primary repository scan.
-Use `../cf-start/assets/architecture.template.md` as the review rubric for whether the report is good enough to write the architecture map.
-While the subagent is running, do not read manifests, source directories, docs, or implementation files to build a parallel architecture map.
-During that wait, the controller may only inspect the existing architecture artifact, the architecture template, and worktree status.
-Do not repeat full reconnaissance unless the report is incomplete, contradictory, or unsupported by its cited evidence.
-Spot-check only the evidence needed to trust the report, resolve contradictions, or fill unknowns.
-If the report misses a template section or fills it with generic, prescriptive, or off-scope content, ask the subagent one targeted follow-up or do the smallest evidence spot-check needed.
-If a full controller-side scan becomes necessary, say why before doing it.
-You still own final interpretation and the user-facing output.
+Apply [clean-context-recon.md](../_shared/references/clean-context-recon.md) with `cflow_architecture_recon` before writing the architecture map.
+Expected report sections: **Repository Context**, **Entry Points**, **Top-Level Map**, **External Boundaries**, **Boundary and Packaging Model**, **Observed Invariants**, **Evidence**, **Unknowns**.
+Use `../cf-start/assets/architecture.template.md` as the review rubric.
+Allowed controller context while the agent runs: existing architecture artifact, architecture template, and worktree status.
 
 ## Analysis rules
 
@@ -71,7 +54,7 @@ You still own final interpretation and the user-facing output.
 - Keep `.cflow/architecture.md` observational: do not add refactor recommendations, target shapes, prescriptive guidance, future-work caveats, or planning notes.
 - Map the current shape before judging whether refactor work is justified.
 - Do not choose work units, intervention modes, or target shape in this skill.
-- If the user also needs refactor planning or resume, recommend `cf-start` after the map is updated.
+- If the current request also needs refactor planning or resume, recommend `cf-start` after the map is updated.
 
 ## Output rules
 

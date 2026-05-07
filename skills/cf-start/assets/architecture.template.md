@@ -32,16 +32,7 @@ Must list the user-facing or system-facing entry points:
 
 ## External boundaries
 
-Must list the important runtime boundaries:
-- filesystem
-- database
-- network / HTTP
-- browser APIs
-- OS APIs
-- queues
-- storage
-- subprocesses
-- tool integrations
+Must list the important runtime boundaries and integrations observed in the repository.
 
 ## Boundary and packaging model
 
@@ -49,8 +40,9 @@ Must record only observed facts:
 
 - Runtime crossings: `<caller area>` -> `<runtime/API boundary>` -> `<owner area>`.
 - Ownership boundaries: `<area>` owns `<responsibility>`.
+- Type/model ownership: `<named representation or boundary payload>` appears owned or exposed by `<area>`; `<re-export surface>` exposes `<surface>`.
 - Dependency direction: `<area>` depends on `<area>`; `<area>` appears independent from `<area>`.
-- Physical packaging: code is organized mainly by `<feature/layer/capability/workflow/hybrid>`.
+- Physical packaging: code is organized mainly by `<observed organizing style>`.
 
 Should not repeat the top-level map directory by directory.
 

@@ -27,17 +27,18 @@ Main directories, packages, crates, apps, modules, or bounded areas and what eac
 Exclude generated, vendored, dependency, cache, and build-output directories such as dist, build, target, node_modules, coverage, or framework caches unless intentionally tracked and architecturally relevant.
 
 ## External Boundaries
-Filesystem, database, network, browser APIs, OS APIs, queues, storage, subprocesses, or tool integrations.
+Important runtime boundaries and integrations observed in the repository.
 
 ## Boundary and Packaging Model
-Observed runtime crossings, ownership boundaries, dependency directions, and physical packaging shape.
+Observed runtime crossings, ownership boundaries, type/model ownership, dependency directions, and physical packaging shape.
 
 Use this abstract form:
 
 - Runtime crossings: `<caller area>` -> `<runtime/API boundary>` -> `<owner area>`.
 - Ownership boundaries: `<area>` owns `<responsibility>`.
+- Type/model ownership: `<named representation or boundary payload>` appears owned or exposed by `<area>`; `<re-export surface>` exposes `<surface>`.
 - Dependency direction: `<area>` depends on `<area>`; `<area>` appears independent from `<area>`.
-- Physical packaging: code is organized mainly by `<feature/layer/capability/workflow/hybrid>`.
+- Physical packaging: code is organized mainly by `<observed organizing style>`.
 
 Do not repeat the top-level map directory by directory.
 
