@@ -10,7 +10,7 @@ Execute local cognitive cleanup only for explicit target files or a confirmed di
 
 ## Execution Rules
 
-- Keep changes inside the target file unless the user explicitly asks otherwise.
+- Keep changes inside the target file unless the current request explicitly asks otherwise.
 - Do not move responsibilities to new files or shared utilities.
 - Do not continue past the target files or past three files in one session.
 - Flatten the target function's main path first. For nested async actions, prefer a shallow caller that performs guards and invokes a named same-file task; move result-to-toast/error branching into a small same-file helper when that exposes the orchestration.

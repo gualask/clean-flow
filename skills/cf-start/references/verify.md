@@ -18,7 +18,7 @@ Collect risk-proportionate factual evidence that the touched area still works.
 - Prefer targeted checks first, but expand when the change touches public API, file placement, async/lifecycle behavior, persistence, cross-flow behavior, or multiple owners.
 - Prefer repository-native commands when possible.
 - Use the safety net and planned checks when they exist.
-- Passing checks prove factual behavior, not structural closure; if the user asks whether a refactor is truly concluded, route to review for closure judgment.
+- Passing checks prove factual behavior, not structural closure; if the current request asks whether a refactor is truly concluded, route to review for closure judgment.
 - Do not stop at the first passing check when another available check covers a materially different risk.
 - If the project has no formal checks, use credible smoke tests, inspections, or scenario checks that match the risk being verified.
 - If you cannot verify, say exactly what is missing.

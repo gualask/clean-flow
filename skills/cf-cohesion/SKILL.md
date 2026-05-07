@@ -38,7 +38,7 @@ Do not infer execution from words like "review", "check", "is this right", or "s
 
 - Treat repository state as the source of truth.
 - Do not create or update `.cflow/*`.
-- Keep the scope local unless the user explicitly asks for repository-level planning.
+- Keep the scope local unless the current request explicitly asks for repository-level planning.
 - If the work crosses repository boundaries, creates a new architectural layer, or needs ordered multi-step migration, route to `cf-start`.
 
 ## Cohesion Signals
@@ -64,13 +64,13 @@ Strong cohesion signals include:
 
 Use these labels in discovery or evaluation:
 
-- `recommended`: a local slice would make one workflow easier to find and follow now
-- `optional`: cohesion is real, but current placement is still easy enough to navigate
-- `keep as-is`: grouping would add churn or hide ownership more than it helps
+- `recommended`: a local slice would make one workflow cleaner to find and follow now
+- `optional`: cohesion is real, but current placement is already clear enough to navigate
+- `keep as-is`: grouping would hide ownership or reduce clarity more than it helps
 - `route`: the move crosses repository boundaries or needs broader planning through `cf-start`
 
 Prefer no move when files are merely similarly named, the current type-folder convention is stronger than the feature cohesion, or the target folder would become a grab bag.
-Do not treat "not wrong where it is" as proof that placement is optimal when the user's concern is navigation cost.
+Do not treat "not wrong where it is" as proof that placement is optimal when the current request's concern is navigation cost.
 
 ## Output Format
 

@@ -1,6 +1,6 @@
 # Review
 
-Do review only. Do not introduce new structural changes in this phase unless the user explicitly asks.
+Do review only. Do not introduce new structural changes in this phase unless the current request explicitly asks.
 
 ## Preflight
 

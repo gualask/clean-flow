@@ -12,6 +12,7 @@ You must determine:
 - candidate intervention areas worth carrying forward
 - which intervention modes are plausible
 - whether `.cflow/refactor-brief.md` must be created or refreshed in this pass
+- how Cflow's clean-by-default standard plus request-stated constraints, risk appetite, and acceptable ceremony affect the intervention frame
 
 ## Preflight
 
@@ -26,11 +27,13 @@ Answer these honestly:
 1. What concrete problem is this intervention solving now?
 2. What is the cost of leaving the current shape as-is for now?
 3. Why is the intervention proportionate rather than architecture theater?
+4. What constraints, risk appetite, acceptable ceremony, or non-goals does the current request state?
 
 For hard restructure also answer:
 
-4. Is repository shape itself the recurring cause of friction?
-5. Would a good soft intervention likely remove most of the pain anyway?
+5. Is repository shape itself the recurring cause of friction?
+6. Are existing global barrels, shared models, or layer boundaries part of the problem rather than constraints to preserve?
+7. Would a good soft intervention remove the structural pain without preserving dirty ownership or unclear boundaries?
 
 ## Intervention mode framing
 
@@ -41,6 +44,9 @@ Do not choose the final mode yet, but identify what is plausible:
 - soft-mixed
 - hard-restructure
 - no-structural-refactor
+
+Do not reject `hard-restructure` just because a lower-churn soft intervention exists. Reject it only when the premise check shows that a hard path would be disproportionate, detached from the repository, or unnecessary for the clean evidence-backed target.
+Rank plausible interventions by structural cleanliness first. Use cost, churn, and reviewability to judge proportionality and migration order, not to prefer a dirtier target.
 
 Treat `soft-mixed` as a repository-level outcome only.
 Later work units must still choose `split` or `consolidate`.

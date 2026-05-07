@@ -37,14 +37,14 @@ If placement is still not obvious, ask one focused question before editing.
 ## Execution rules
 
 - Preserve behavior unless behavior change is explicitly requested.
-- Stay within one bounded work unit or cohesive local unit unless the user explicitly broadens scope.
+- Stay within one bounded work unit or cohesive local unit unless the current request explicitly broadens scope.
 - Make the narrowest complete structural move that gives a responsibility a clearer home.
 - Add a file, module, type, or helper only when it reduces real complexity.
 - Preserve existing dataflow and avoid extra allocations, clones, or passes unless they clearly improve the seam.
 - Prefer local, named ownership over generic utilities or fake layers; avoid names like `helper`, `utils`, `common`, `shared`, `manager`, or `service` unless local convention gives them clear meaning.
 - If the safety lock breaks after a move, stop and investigate before stacking more changes on top.
 - If the implementation changes what the brief assumed, record the drift.
-- Report discovered bugs separately unless the user explicitly asked for a behavior fix.
+- Report discovered bugs separately unless the current request explicitly asks for a behavior fix.
 
 ## Post-change closure check
 

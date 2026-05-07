@@ -1,9 +1,13 @@
 ---
 name: cf-start
-description: Assess, plan, execute, review, verify, or resume behavior-preserving cleanup and refactor work in Cflow. Use for repository-level cleanup/refactor workflows, bounded work units, artifact-backed resume from existing `.cflow` state, and progress review or verification.
+description: Assess, plan, execute, review, verify, or resume cleanup and refactor work in Cflow, including hard-restructure planning and behavior-preserving migration units. Use for repository-level cleanup/refactor workflows, bounded work units, artifact-backed resume from existing `.cflow` state, and progress review or verification.
 ---
 
 Operate as the workflow controller: load and run the relevant phase reference when the next phase is clear from repository state and Cflow artifacts.
+
+Planning may challenge existing boundaries, modules, barrels, or global models when they are part of the problem. Execution and migration units preserve behavior unless a behavior change is explicit in the current request.
+Do not choose a soft or low-impact path solely because it is easier when a hard restructure is the cleaner and proportionate target.
+Do not require the current request to explicitly ask for architectural cleanliness; that is the default cleanup/refactor standard here.
 
 ## Artifacts
 
@@ -17,7 +21,7 @@ Before creating an owned `.cflow/*` artifact, if `.cflow/` does not exist, creat
 1. Read existing `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
 2. Check repository state relevant to the current request and artifacts.
 3. Treat the repository as the source of truth.
-4. When the user questions whether a recorded completed unit is really finished, treat the brief as historical evidence, not as the closure verdict.
+4. When the current request questions whether a recorded completed unit is really finished, treat the brief as historical evidence, not as the closure verdict.
 
 ## Flow Selection
 
@@ -40,9 +44,9 @@ Run [assessment.md](references/assessment.md), do not implement, and stop at a d
 
 At the checkpoint:
 
-- if the user replies with short approval and no new steering, continue with the proposed path
-- if the user asks a factual question that does not affect the path, answer briefly and continue only when the next step is still clear
-- if the user gives steering that materially changes scope, exclusions, invariants, risk appetite, direction, or whether to continue, reassess before proceeding and update `.cflow/refactor-brief.md` when resumable state matters
+- if the current reply gives short approval and no new steering, continue with the proposed path
+- if the current reply asks a factual question that does not affect the path, answer briefly and continue only when the next step is still clear
+- if the current reply gives steering that materially changes scope, exclusions, invariants, risk appetite, direction, or whether to continue, reassess before proceeding and update `.cflow/refactor-brief.md` when resumable state matters
 - if steering reopens problem framing enough to match the `cf-mr-wolf` rule, use the handoff flow
 
 A reply is non-trivial when it may materially change scope, exclusions, invariants, risk appetite, direction, or whether to continue.
@@ -63,7 +67,7 @@ Resume is not a phase; re-enter the correct flow using the brief and repository 
 - if structural work is already done, use the review or verify flow
 
 Do not silently switch direction without updating artifacts.
-Do not execute more than one cohesive bounded unit per invocation unless the user explicitly asked for a broader pass.
+Do not execute more than one cohesive bounded unit per invocation unless the current request explicitly asks for a broader pass.
 
 Default resume progress output: **Done**, **Checks**, **Artifacts**, **Remaining**, **Next action**.
 For reassessment without code changes: **Current state**, **Reassessment result**, **Artifacts**, **Next action**.
@@ -106,6 +110,6 @@ Do not use generic reassessment output for closure challenges; use the review ou
 
 ## Language rules
 
-- Use the user's language for conversational output.
+- Use the current conversation language for conversational output.
 - Use the repository's dominant documentation language for `.cflow/architecture.md` and `.cflow/refactor-brief.md`.
-- If the repository has no dominant documentation language, use the user's language for those artifacts too.
+- If the repository has no dominant documentation language, use the current conversation language for those artifacts too.

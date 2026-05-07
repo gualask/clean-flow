@@ -5,9 +5,9 @@ Use this reference only while editing local code for readability, cognitive load
 ## Behavior
 
 - Preserve exported APIs, return values, errors, side effects, evaluation order, and async behavior unless explicitly asked to change them.
-- Prefer the smallest change that makes the main flow easier to read.
+- Prefer the most focused change that makes the main flow cleaner and clearer.
 - Keep changes local unless the active skill explicitly allows broader movement.
-- Do not fix discovered behavior bugs inside a refactor unless the user asks; report them separately.
+- Do not fix discovered behavior bugs inside a refactor unless the current request explicitly asks; report them separately.
 
 ## When To Simplify
 
@@ -22,7 +22,7 @@ Prefer simplification when the touched code has real local pressure:
 - complex boolean expressions, regex construction, parsing, or small algorithms that are hard to read inline
 - repeated non-trivial local logic
 
-Avoid edits when the code is merely imperfect but still easy to follow.
+Avoid edits when the code is merely imperfect but already clear, cohesive, and proportionate.
 
 ## Extraction
 
@@ -30,18 +30,18 @@ Avoid edits when the code is merely imperfect but still easy to follow.
 - Prefer a shallow orchestrator: the caller shows the main sequence, and helpers are understandable without following a deep call chain.
 - Keep extracted functions file-local and near callers unless local convention says otherwise.
 - Extract from hot paths only when the readability gain clearly outweighs call-boundary, allocation, or extra-pass costs.
-- After editing, re-read the caller or target function first; inline or narrow helpers that do not make it easier to read.
+- After editing, re-read the caller or target function first; inline or narrow helpers that do not make it clearer.
 
 ## Operational Checks
 
-- Before extracting, name the branch, loop, try/catch body, policy decision, or invariant that the extraction will make easier to see.
+- Before extracting, name the branch, loop, try/catch body, policy decision, or invariant that the extraction will make clearer.
 - Prefer guard clauses, clearer names, or local reshaping before adding helpers when those make the main path clear enough.
 - A helper is justified only when its name carries useful intent that the code did not already express.
 - Keep important side effects visible at the level where ordering matters.
 - Treat anonymous callbacks passed to registration/lifecycle APIs as local cognitive load when they contain branching, state changes, cleanup-sensitive behavior, or multiple side effects.
-- Prefer named local handlers or a shallow subscription helper when that makes setup, teardown, and effect order easier to scan.
+- Prefer named local handlers or a shallow subscription helper when that makes setup, teardown, and effect order clearer.
 - For lifecycle, registration, framework/runtime wiring, and infrastructure APIs, keep setup, teardown, cancellation, and ordering visible at the call site.
-- Extract inline callback behavior into named file-local handlers only when the name makes the local behavior easier to scan without hiding ordering-sensitive side effects.
+- Extract inline callback behavior into named file-local handlers only when the name makes the local behavior clearer without hiding ordering-sensitive side effects.
 
 ## Naming
 

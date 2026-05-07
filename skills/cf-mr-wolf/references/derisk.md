@@ -4,7 +4,7 @@ De-risk only candidate findings that affect the final answer or next route.
 The goal is to avoid promoting suspicious patterns into confirmed problems too early.
 
 Prefer the packaged `cflow_finding_derisk_recon` agent when it is available and allowed.
-Use a local bounded pass when the agent is unavailable or the user chooses a degraded local pass.
+Use a local bounded pass when the agent is unavailable or the current request chooses a degraded local pass.
 
 ## Gate
 

@@ -2,8 +2,8 @@
 
 # Clean Flow
 
-Clean Flow is a Codex skill pack for cleanup and refactor work that must preserve behavior.
-It helps an agent understand the repository, choose the right refactor path, keep work resumable, and avoid turning a cleanup request into a risky rewrite.
+Clean Flow is a Codex skill pack for cleanup and refactor planning, migration, and execution.
+It helps an agent understand the repository, choose the right refactor path, keep work resumable, and avoid uncontrolled rewrites while still evaluating hard restructures when the architecture is the real problem.
 
 Use it when you want Codex to:
 
@@ -23,7 +23,8 @@ Clean Flow gives Codex a practical operating system for that work:
 
 - **Problem first**: unclear requests are framed before implementation.
 - **Repository aware**: architecture and path evidence are captured from the actual codebase.
-- **Behavior preserving**: execution phases require a credible safety net before structural edits.
+- **Clean target first**: recommendations optimize for the cleanest evidence-backed structure, not the easiest low-impact workaround.
+- **Migration-safe**: execution phases require a credible safety net before structural edits and preserve behavior unless a behavior change is explicit.
 - **Resumable**: longer flows store durable state in `.cflow/` artifacts.
 - **Scoped**: local cleanup, file splitting, cohesion work, and broad refactors use different entrypoints.
 
@@ -85,7 +86,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/gualask/cle
 
 ### `cf-start`
 
-The main workflow controller for behavior-preserving cleanup and refactor work.
+The main workflow controller for cleanup and refactor work, including hard-restructure planning and behavior-preserving migration units.
 Use it for fresh assessment, planning, bounded execution, review, verification, and resume.
 
 It can create and maintain:

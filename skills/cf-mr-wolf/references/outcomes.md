@@ -1,6 +1,10 @@
 # cf-mr-wolf Outcomes
 
-Produce the smallest useful result.
+Produce the most scope-appropriate result.
+Do not use low churn as the default decision criterion for cleanup or refactor framing.
+Do not present a low-churn workaround as the recommendation when a cleaner evidence-backed option is plausible.
+Do not list dirty low-impact workarounds as refactor options. If explicit temporary containment is requested, label it as containment outside the cleanup recommendation.
+Separate the target direction from the migration/execution step when they differ.
 Do not turn framing into an implementation plan.
 
 ## Handoff
@@ -34,6 +38,7 @@ When multiple credible directions remain, present 2-3 real options:
 - when each option fits
 - trade-offs and risks
 - expected effort, if useful
+- include the cleanest credible option by default
 
 Do not fake balance.
 Name a specialized skill only when it clearly owns the next step.

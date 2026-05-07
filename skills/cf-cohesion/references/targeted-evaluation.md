@@ -43,7 +43,7 @@ Before naming destination folders, state the smallest local convention that woul
 ## Decision Rules
 
 - Recommend regrouping only when it removes real navigation cost now.
-- Prefer `optional` when cohesion is real but current placement is still easy to follow.
+- Prefer `optional` when cohesion is real but current placement is already clear enough to follow.
 - Prefer `keep as-is` when the target folder would become a grab bag or current type-folder convention is stronger.
 - Use `route` when the move crosses repository boundaries, changes module ownership, or needs ordered planning through `cf-start`.
 - If placement is plausible but not clear, ask one focused question instead of inventing a folder.

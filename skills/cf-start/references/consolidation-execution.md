@@ -32,13 +32,13 @@ Do not consolidate just because files are small. Keep a boundary when it carries
 
 - Preserve behavior unless behavior change is explicitly requested.
 - Keep the resulting seam easier to read than the starting point.
-- Stay within one bounded work unit or cohesive local unit unless the user explicitly broadens scope.
+- Stay within one bounded work unit or cohesive local unit unless the current request explicitly broadens scope.
 - Prefer one complete, meaningful merge or collapse at a time.
 - Avoid replacing over-fragmentation with a new god file.
 - Preserve existing dataflow and avoid unnecessary allocations, clones, or passes over the same data unless they clearly reduce complexity.
 - Move ownership only when the caller gets simpler in a visible way.
 - If consolidation reveals a real autonomous sub-seam, keep it near the owning seam by default; move it broader only when reuse, cross-feature ownership, or repository convention justifies it.
-- Report likely bugs or behavior inconsistencies separately unless the user explicitly asked for a behavior fix.
+- Report likely bugs or behavior inconsistencies separately unless the current request explicitly asks for a behavior fix.
 
 ## Before finishing
 

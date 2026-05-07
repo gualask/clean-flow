@@ -31,7 +31,7 @@ When a candidate starts from absence or suspicious shape, check the smallest use
 
 - Is the behavior reachable?
 - Is it handled by another path, abstraction, generated source, or runtime wiring?
-- Does it match the user's problem class and severity?
+- Does it match the current request's problem class and severity?
 - Would the likely fix fit current ownership and behavior?
 
 ## Sufficiency
