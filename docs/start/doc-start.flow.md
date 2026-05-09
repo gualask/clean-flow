@@ -17,8 +17,8 @@ Document the runtime flow for `cf-start`, the public workflow controller for Cfl
 1. Start from the current request, repository state, and existing Cflow artifacts.
 2. Route before workflow work when another public entrypoint owns the request: `cf-mr-wolf` for unclear framing, `cf-simplify` for overengineering or simplification review, `cf-trace` for path audit, local skills for explicit bounded local cleanup, or `cf-architecture` for missing/stale architecture context.
 3. Apply standard phase preflight before each active phase reference.
-4. For fresh work, run assessment against Cflow's clean-by-default standard plus request-stated constraints and risk appetite, and stop at the decision checkpoint when the work is non-trivial.
+4. For explicit fresh planning work or clear repository or subsystem architecture evaluation, run assessment against Cflow's clean-by-default standard, returning `Domain` before candidate intervention areas or target tree examples; stop at the decision checkpoint before artifact-backed planning or work-unit creation.
 5. For resume, re-enter the correct flow from `.cflow/refactor-brief.md` and repository evidence.
-6. For soft work, plan or select one bounded split/consolidate unit; for hard work, resolve ownership model, organizing axis, boundary representation roles, and target shape that may challenge existing false owners, then plan migration units before execution.
+6. For soft work, plan or select one bounded split/consolidate unit; for hard work, resolve domain ownership model, organizing axis, boundary representation roles, and target shape that may challenge existing false owners, then plan migration units before execution.
 7. For one selected structural unit, map the seam, choose the safety net, execute the declared split or consolidation mode, apply structural closure, and optionally simplify only the recently touched area.
 8. After structural work, review or verify closure and keep `.cflow/refactor-brief.md` current when resumable state changes.

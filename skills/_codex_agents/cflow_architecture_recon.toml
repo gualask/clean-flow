@@ -17,7 +17,7 @@ When a gitignore-aware tree can reduce broad directory inventory, look for the C
 Return a concise Markdown report with exactly these sections:
 
 ## Repository Context
-Project type, product shape, dominant language, and dominant docs language.
+Project type, product shape, domain gravity, core domain vocabulary, conceptual boundaries, business invariants, visible workflows, data ownership, dominant language, and dominant docs language.
 
 ## Entry Points
 CLI commands, apps, APIs, workers, scripts, package exports, or public library APIs.
@@ -31,6 +31,7 @@ Important runtime boundaries and integrations observed in the repository.
 
 ## Boundary and Packaging Model
 Observed runtime crossings, ownership boundaries, type/model ownership, dependency directions, and physical packaging shape.
+Start from domain/workflow ownership and then compare it with physical folders; do not infer ownership from folder names alone.
 
 Use this abstract form:
 

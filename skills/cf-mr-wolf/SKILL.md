@@ -9,9 +9,9 @@ Do not implement code changes.
 
 ## Artifacts
 
-- Owns `.cflow/mr-wolf-notes.md` when evidence or decisions need to survive handoff.
+- Owns `.cflow/mr-wolf-notes.md` only when evidence or decisions need durable handoff; do not create or update it for a first-pass evaluation answer.
 - May read `.cflow/architecture.md` and `.cflow/trace.md`; never create or update them.
-- Never creates `.cflow/refactor-brief.md`; `cf-start` owns that artifact.
+- Do not read, create, or update `.cflow/refactor-brief.md` during first-pass evaluation; `cf-start` owns planning state.
 - Before creating `.cflow/mr-wolf-notes.md`, create `.cflow/` if needed and add `.cflow/` to `.gitignore`.
 
 ## Core Rules
@@ -19,17 +19,9 @@ Do not implement code changes.
 - If no concrete problem is provided, ask exactly one question: what problem should be solved?
 - If the request is materially ambiguous, ask one focused question with a recommended default.
 - Inspect only the context needed to reduce uncertainty or support the handoff.
-- Do not equate "smallest useful" with "lowest churn". Architectural cleanliness is the default for cleanup/refactor framing, even when the current request does not spell it out.
-- Do not recommend the easier or lower-impact option when evidence supports a cleaner structural option.
-- For architecture or refactor framing, separate target cleanliness from migration safety: the recommended target may be broad while the first execution step remains bounded.
-- For architecture or shared-layer framing, make ownership model and organizing axis explicit before naming packaging; define project-specific architectural terms only when relying on them.
-- For code questions, use orientation tools before broad file reads: prefer MCP code-intelligence tools, then bundled/custom scripts, then focused system commands.
-- Treat orientation-tool output as direction, not truth; verify important conclusions against the relevant source paths.
-- Prefer concrete examples or `cf-scenario` when the problem is understandable but still abstract.
-- Before a definitive fix recommendation for a behavioral risk, use or recommend `cf-scenario` if a concrete impacted/non-impacted flow has not already been checked.
-- Keep static signals, detector output, preferences, and process observations separate from behavioral findings.
-- Do not confirm a finding until reachability, counter-evidence, scope fit, and likely fix fit have been checked enough for the decision being made.
-- Use agents or packaged reconnaissance only when allowed by the current runtime or explicit authorization; otherwise keep the local pass bounded or ask for authorization when needed.
+- Route to the skill or active reference that owns the needed lens; do not carry specialist architecture, simplification, trace, scenario, split, cohesion, or cognitive rules here.
+- For cleanup, refactor, architecture, or implementation-direction requests, preserve the user's problem, scope, constraints, risk appetite, and unresolved decisions for handoff; let the routed skill own specialist evaluation.
+- Do not turn framing into implementation, architecture assessment, target-shape planning, or work-unit planning.
 
 ## Workflow
 
@@ -46,9 +38,9 @@ Read reference files only when their phase becomes active.
 
 Choose the first route that fits current evidence and uncertainty:
 
-1. `cf-architecture`: repository shape, ownership, entrypoints, or boundaries are unclear enough to block framing.
-2. `cf-simplify`: the current request asks whether an area has too many files, unnecessary complexity, overengineering, or whether changing behavior/UX could enable a cleaner simplification.
-3. `cf-start`: the next work is multi-step cleanup/refactor, risky, ordered, or should be resumable.
+1. `cf-architecture`: `.cflow/architecture.md` is missing, stale, or materially incomplete enough to block routing or handoff.
+2. `cf-simplify`: the current request asks whether an area has too many files, unnecessary complexity, overengineering, or whether changing behavior or interface contracts could enable a cleaner simplification.
+3. `cf-start`: the current request asks for repository-level cleanup/refactor assessment, architecture or structure evaluation, multi-step refactor work, risky or ordered work, or resumable work.
 4. `cf-scenario`: one or two concrete code-grounded scenarios would clarify real impact or compare similar flows.
 5. `cf-trace`: one concrete workflow/path needs ordered reconstruction for state, failure, resume, or ownership.
 6. `cf-split`, `cf-cognitive`, or `cf-cohesion`: one bounded local cleanup action clearly belongs to that skill.

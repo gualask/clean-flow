@@ -1,11 +1,13 @@
 ---
 name: cf-start
-description: Assess, plan, execute, review, verify, or resume cleanup and refactor work in Cflow, including hard-restructure planning and behavior-preserving migration units. Use for repository-level cleanup/refactor workflows, bounded work units, artifact-backed resume from existing `.cflow` state, and progress review or verification.
+description: Assess, plan, execute, review, verify, or resume cleanup and refactor work in Cflow. Use for repository-level cleanup/refactor assessment, architecture or structure evaluation, artifact-backed workflows, bounded work units, and resume from existing `.cflow` state; route unclear framing to `cf-mr-wolf` and missing or stale architecture maps to `cf-architecture`.
 ---
 
 Operate as the workflow controller: load and run the relevant phase reference when the next phase is clear from repository state and Cflow artifacts.
 
+The mission is maximum practical cleanliness: domain and ownership clarity first, no false owners or global glue, and no boilerplate unless a real boundary, integration, or risk justifies it.
 Planning may challenge existing boundaries, modules, barrels, or global models when they are part of the problem. Execution and migration units preserve behavior unless a behavior change is explicit in the current request.
+Treat current folders and layers as evidence, not as target-shape constraints; domain ownership, workflows, and external boundaries define the clean direction.
 Do not choose a soft or low-impact path solely because it is easier when a hard restructure is the cleaner and proportionate target.
 Do not require the current request to explicitly ask for architectural cleanliness; that is the default cleanup/refactor standard here.
 
@@ -29,21 +31,22 @@ Before running any phase reference, unless the reference says otherwise:
 ## Flow Selection
 
 Choose the first matching flow below. User-facing output is a progress summary, not a brief mirror.
+Select the flow before reading phase references; in handoff flow, do not read or run `assessment.md`.
 
 ### Handoff Flow
 
 Use when the request belongs to another public entrypoint before Cflow workflow work; do not create or update `.cflow/refactor-brief.md` during handoff.
 
-- `cf-mr-wolf`: problem, goal, success criteria, scope boundary, or explicit non-goals are not clear enough for repository-level intervention framing. State the missing framing answer and the checked evidence source that failed to provide it.
-- `cf-simplify`: the request asks whether an area is overengineered, whether all files are necessary, or whether changing behavior, UX, or boundaries could make a cleaner simplification possible before planning refactor work.
+- `cf-mr-wolf`: problem, goal, success criteria, scope boundary, or explicit non-goals are not clear enough for repository-level intervention framing.
+- `cf-simplify`: the request asks whether an area is overengineered, whether all files are necessary, or whether changing behavior, interface contracts, or boundaries could make a cleaner simplification possible before planning refactor work.
 - `cf-trace`: the request asks only to reconstruct or audit a path, workflow, sequence, state transition, or orchestration flaw before deciding on fixes.
 - `cf-cognitive`, `cf-split`, or `cf-cohesion`: the request asks only for local cognitive cleanup, one file-level split, or local cohesion regrouping.
 - `cf-architecture`: `.cflow/architecture.md` is missing, stale, or materially incomplete.
 
 ### Fresh Assessment Flow
 
-Use when there is no live brief, the task looks new, or repository-level intervention framing is still needed.
-Run [assessment.md](references/assessment.md), do not implement, and stop at a decision checkpoint for non-trivial fresh work even when the recommendation is clear.
+Use when the current request explicitly asks for Cflow assessment/planning, asks to evaluate repository or subsystem architecture structure with clear framing, or follows a framing handoff that recommends this workflow.
+Run [assessment.md](references/assessment.md), do not implement, do not add work units yet, and stop at a decision checkpoint for non-trivial fresh work even when the recommendation is clear.
 
 At the checkpoint:
 

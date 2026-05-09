@@ -3,7 +3,7 @@
 # Clean Flow
 
 Clean Flow is a Codex skill pack for cleanup and refactor planning, migration, and execution.
-It helps an agent understand the repository, choose the right refactor path, keep work resumable, and avoid uncontrolled rewrites while still evaluating hard restructures when the architecture is the real problem.
+It helps an agent understand the repository, choose the right refactor path, keep work resumable, and avoid uncontrolled rewrites while still treating hard restructures as first-class when the architecture is the real problem.
 
 Use it when you want Codex to:
 
@@ -23,7 +23,9 @@ Clean Flow gives Codex a practical operating system for that work:
 
 - **Problem first**: unclear requests are framed before implementation.
 - **Repository aware**: architecture and path evidence are captured from the actual codebase.
+- **Domain-led**: architecture reviews start from product workflows, ownership, and external boundaries before current folders.
 - **Clean target first**: recommendations optimize for the cleanest evidence-backed structure, not the easiest low-impact workaround.
+- **Low ceremony**: boundaries, abstractions, and layers are justified by real ownership, integration, or risk.
 - **Migration-safe**: execution phases require a credible safety net before structural edits and preserve behavior unless a behavior change is explicit.
 - **Resumable**: longer flows store durable state in `.cflow/` artifacts.
 - **Scoped**: local cleanup, file splitting, cohesion work, and broad refactors use different entrypoints.
@@ -106,7 +108,7 @@ Invoke it explicitly when the problem is hard, ambiguous, or needs careful reaso
 ### `cf-simplify`
 
 Reviews an area for overengineering, file sprawl, and accidental complexity.
-Use it when you are unsure whether the current behavior, UX, boundaries, or abstractions are worth their code cost.
+Use it when you are unsure whether the current behavior, interface contracts, boundaries, or abstractions are worth their code cost.
 
 ### `cf-architecture`
 

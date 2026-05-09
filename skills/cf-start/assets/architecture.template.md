@@ -13,6 +13,7 @@ Should not describe desired future architecture.
 Must record the high-level shape in repository terms:
 - project type
 - domain gravity
+- core domain vocabulary, conceptual boundaries, business invariants, workflows, and data ownership visible in code or docs
 - main operational style
 
 ## Top-level map

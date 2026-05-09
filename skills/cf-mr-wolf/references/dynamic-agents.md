@@ -2,6 +2,7 @@
 
 Use dynamic agents only when they are allowed and reduce mechanical work or improve independence.
 Do not use them for work that the controller can answer cheaply.
+If agent use requires explicit authorization, ask first or keep the pass local and bounded.
 
 ## Contract
 
@@ -13,5 +14,5 @@ Do not use them for work that the controller can answer cheaply.
 ## Model Guidance
 
 - Use a smaller model for mechanical inventory, file classification, or repetitive checks with clear criteria.
-- Use a stronger model for architecture, product, UX, ambiguous diagnosis, or false-positive evaluation.
+- Use a stronger model for architecture, product, interface, ambiguous diagnosis, or false-positive evaluation.
 - When the result can change routing or risk, prefer the stronger model.

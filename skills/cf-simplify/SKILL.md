@@ -1,6 +1,6 @@
 ---
 name: cf-simplify
-description: Diagnose overengineering, file sprawl, unnecessary lifecycle complexity, and whether an area can be made substantially cleaner by simplifying behavior, UX, boundaries, or architecture. Use when the current request questions whether files are necessary, suspects overengineering, wants a large simplification refactor, or asks whether to remove/replace an over-complex design instead of polishing it.
+description: Diagnose overengineering, file sprawl, unnecessary lifecycle complexity, and whether an area can be made substantially cleaner by simplifying behavior, interface contracts, boundaries, or architecture. Use when the current request questions whether files are necessary, suspects overengineering, wants a large simplification refactor, or asks whether to remove/replace an over-complex design instead of polishing it.
 ---
 
 Operate as a simplification reviewer before refactor execution.
@@ -14,19 +14,22 @@ For broad or multi-step execution, route to `cf-start` with a concrete recommend
 - Treat repository state as the source of truth.
 - Inspect the target area, its entry points, call sites, tests, and persistence or runtime boundaries before judging.
 - Treat request-stated constraints, risk appetite, and willingness to introduce boundaries or mapping as decision inputs, not as afterthoughts.
+- Start architecture simplification from domain ownership, workflows, and external boundaries before current folders; existing structure is evidence, not a preservation target.
 - Do not treat file count alone as overengineering.
 - Do not treat existing behavior as sacred when the behavior itself is the main source of accidental complexity.
 - Do not treat existing folders, global models, barrels, or shared layers as constraints when they may be the accidental complexity under review.
 - Recommend the cleanest evidence-backed shape by default, not the easiest or lowest-churn workaround.
 - Do not choose a workaround that preserves false ownership, accidental boundaries, or global glue just because it minimizes immediate code movement.
 - Do not list a dirty low-impact path as a refactor alternative. If explicit temporary containment is requested, label it as containment outside the cleanup recommendation.
-- For architecture or shared-layer reviews, identify ownership, boundary roles, and organizing axis before proposing packaging; define project-specific architectural terms only when relying on them.
+- For architecture or shared-layer reviews, identify domain ownership, boundary roles, and organizing axis before proposing packaging; define project-specific architectural terms only when relying on them.
+- When criticizing a broad bucket, global model surface, or shared layer, account for where each criticized responsibility belongs before naming target folders.
+- Do not keep catch-all ownership buckets just because contents are pure or reused; split directories or namespaces that only signal general importance, reuse, technical centrality, or broad sharing unless the name already represents one stable role.
 - Name the requirement or product behavior that makes each complex piece necessary.
 - Prefer deleting a costly requirement, state machine, lifecycle, abstraction, or boundary over reorganizing it when that produces the cleanest result.
 - Do not recommend a quick patch, cosmetic flattening, or file merge that leaves the same decision complexity hidden elsewhere.
 - Separate behavior-preserving cleanup from behavior-changing simplification.
 - Separate the clean target shape from the safe migration route. Broad target shapes may be valid even when execution must be staged through `cf-start`.
-- If the best simplification changes UX or runtime behavior, say so plainly and ask for that decision before implementation.
+- If the best simplification changes an interface contract or runtime behavior, say so plainly and ask for that decision before implementation.
 
 ## Workflow
 
@@ -53,7 +56,7 @@ Name the forces that require complexity. Common drivers:
 - async, concurrent, or implicit lifecycle behavior
 - retries, queues, batching, caching, debouncing, synchronization, or background work
 - distributed state, persistence, or multiple sources of truth
-- cross-process, cross-service, plugin, adapter, or frontend/backend contracts
+- cross-process, cross-service, plugin, adapter, or interface contracts
 - public API, data format, or backward-compatibility requirements
 - validation, migration, permissions, error recovery, offline behavior, or observability
 - framework, runtime, build, deployment, or test harness constraints
@@ -61,7 +64,7 @@ Name the forces that require complexity. Common drivers:
 For each driver, decide whether it is:
 
 - `required`: necessary for current behavior or contract
-- `self-imposed`: caused by a product/UX/design choice that could be changed
+- `self-imposed`: caused by a product, interface, or design choice that could be changed
 - `accidental`: complexity that no longer earns its place
 - `unknown`: needs one more targeted check
 
@@ -103,7 +106,7 @@ Use this decision order:
 
 1. If current behavior is valuable and complexity is proportionate, recommend keeping the design and only doing targeted cleanup.
 2. If the current boundary model is part of the problem, recommend the clean target shape and route broad execution through `cf-start` hard-restructure planning.
-3. If a behavior or UX choice creates most of the complexity and can reasonably change, recommend the behavior-changing simplification.
+3. If a behavior or interface choice creates most of the complexity and can reasonably change, recommend the behavior-changing simplification.
 4. If the behavior should stay but the shape is accidental, recommend a behavior-preserving refactor route through `cf-start`.
 5. If evidence is insufficient, ask for one focused decision or inspection needed next.
 
@@ -114,10 +117,11 @@ Use direct, decision-oriented sections:
 - **Verdict**: whether this is necessary complexity, likely overengineering, or mixed.
 - **Evidence checked**: compact list of files/searches/commands inspected.
 - **Complexity drivers**: the requirements or design choices creating the noise.
-- **Necessity map**: what is essential, justified-but-expensive, simplification target, accidental, or uncertain; include owner roles and organizing axis when shared representations are the issue.
+- **Necessity map**: what is essential, justified-but-expensive, simplification target, accidental, or uncertain.
+- **Domain**: include owner roles, organizing axis, and destinations for criticized shared buckets or representations when architecture, shared models, or packaging are the issue.
 - **Recommendation**: the preferred simplification path and why it gives real cleanup.
 - **Alternatives**: 1-3 clean options with trade-offs; do not include dirty low-impact workarounds as refactor alternatives.
-- **Decision needed**: exactly one focused question when implementation requires a behavior, UX, or scope decision.
+- **Decision needed**: exactly one focused question when implementation requires a behavior, interface, or scope decision.
 
 If the review leads to a refactor handoff, end with the exact route:
 

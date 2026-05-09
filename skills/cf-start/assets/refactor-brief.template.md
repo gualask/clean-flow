@@ -43,7 +43,7 @@
 
 ## Target direction
 
-- ownership model:
+- domain ownership model:
 - organizing axis:
 - boundary representation roles:
 - proposed local direction:

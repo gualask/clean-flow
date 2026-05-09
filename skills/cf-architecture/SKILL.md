@@ -25,6 +25,7 @@ You must determine:
 - project type
 - main external boundaries
 - domain gravity
+- core domain vocabulary, conceptual boundaries, business invariants, workflows, and data ownership visible in code or docs
 - current boundary and packaging model
 - observed ownership of named representations and global re-export surfaces
 - observed repository invariants that later Cflow skills may rely on
@@ -52,7 +53,7 @@ Allowed controller context while the agent runs: existing architecture artifact,
 - Keep this skill repository-level.
 - Describe the repository as it is now, not as an idealized architecture.
 - Keep `.cflow/architecture.md` observational: do not add refactor recommendations, target shapes, prescriptive guidance, future-work caveats, or planning notes.
-- Map the current shape before judging whether refactor work is justified.
+- Map domain gravity and current shape before judging whether refactor work is justified.
 - Do not choose work units, intervention modes, or target shape in this skill.
 - If the current request also needs refactor planning or resume, recommend `cf-start` after the map is updated.
 

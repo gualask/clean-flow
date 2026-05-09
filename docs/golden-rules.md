@@ -22,6 +22,7 @@ For non-runtime files, check that the change does not move runtime behavior into
 
 - Treat frontmatter `description` as discovery metadata, not procedure: front-load user-facing task words and trigger phrases, state when to use the skill plus its key non-use or routing boundary, and avoid internal implementation details or artifact names unless they are invocation signals such as existing `.cflow` work.
 - Polish every `SKILL.md` as if an LLM reads it from empty context: every sentence must be necessary runtime guidance, with no historical migration notes, maintainer-only labels, stale names, or decorative wording.
+- Write runtime guidance as context-shaping lenses by default; use hard prohibitions only for concrete safety, artifact, scope, or behavior-preservation failures.
 - In runtime skill instructions, do not refer to the current skill by its own skill name; use state, scope, artifact, or phase terms such as `here`, `this pass`, or the specific artifact instead.
 - Apply progressive disclosure for all runtime guidance: keep `SKILL.md` to trigger conditions, hard gates, and essential routing; move detailed procedures, reference material, examples, and helper usage instructions to the smallest linked resource that is loaded only when needed.
   Before splitting guidance into a reference, ask: if this section moves out of `SKILL.md`, in which realistic invocations should the agent not read it?
@@ -33,11 +34,16 @@ For non-runtime files, check that the change does not move runtime behavior into
 
 ## Refactor Decision Principle
 
+- Cflow's mission is obsessive pursuit of the cleanest practical structure: maximum domain and ownership clarity, minimum justified ceremony, and no boilerplate that does not pay for a real boundary or risk.
 - Cflow optimizes for the cleanest evidence-backed structure that fits the repository and request, not for the easiest or lowest-impact change.
 - This cleanliness default is always active; the current request does not need to explicitly ask for a clean solution.
+- Start architecture and structure reasoning from domain ownership, workflows, and external boundaries before current folders; current structure is evidence and a migration constraint, not a target to preserve.
+- For architecture refactors, define domain concepts, boundaries, business invariants, and allowed dependencies before choosing patterns, layers, modules, folders, abstractions, or technologies.
+- Treat broad refactor or hard restructure as the first-class recommendation when it is the cleanest proportionate target. Safety, cost, churn, and reviewability shape migration order after the target is chosen.
 - Do not recommend a workaround that preserves false ownership, accidental boundaries, global glue, or unclear architecture just because it reduces immediate churn.
 - Do not present a dirty low-impact path as a refactor alternative. If explicit temporary containment is requested, label it as containment outside the cleanup recommendation.
 - For architecture, refactor, or shared-layer framing, identify the real ownership model and organizing axis before choosing packaging. Define project-specific architectural terms when you rely on them; packaging follows ownership and axis, not the reverse.
+- Do not preserve catch-all ownership buckets as target architecture just because contents are pure or reused; decompose directories or namespaces that only signal general importance, reuse, technical centrality, or broad sharing unless the name already represents one stable role.
 - Use cost, churn, and reviewability to choose migration order, safety nets, and unit size after the clean target is chosen; do not use them to prefer a dirtier target.
 - Keep behavior preservation as an execution and migration rule unless a behavior change is explicit. Do not let behavior-preserving execution narrow the target-shape analysis.
 

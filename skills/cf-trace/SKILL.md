@@ -93,7 +93,7 @@ Recommend exactly one immediate route:
 
 - `cf-mr-wolf` when the problem, expected behavior, or success criteria need upstream clarification
 - `cf-architecture` when architecture context is missing or stale enough to block interpretation
-- `cf-simplify` when findings point to overengineering, unnecessary file sprawl, or a behavior/UX choice that may be worth simplifying before refactor planning
+- `cf-simplify` when findings point to overengineering, unnecessary file sprawl, or a behavior or interface choice that may be worth simplifying before refactor planning
 - `cf-start` when findings justify multi-step cleanup, refactor planning, or resumable execution
 - `cf-cognitive` when the issue is local cognitive complexity in up to three files
 - `cf-split` when the issue is one scoped file-level extraction

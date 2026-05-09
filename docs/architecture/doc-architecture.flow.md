@@ -18,6 +18,6 @@ Document the runtime flow for `cf-architecture`, the public repository mapping e
 2. Preflight only the existing architecture artifact, architecture template, and worktree state.
 3. Apply the shared clean-context reconnaissance protocol with `cflow_architecture_recon`.
 4. While the agent runs, avoid duplicating the repository scan locally.
-5. Check the returned report against `architecture.template.md`, including observed ownership of named representations and re-export surfaces, and spot-check only decision-relevant gaps or contradictions.
+5. Check the returned report against `architecture.template.md`, including domain gravity, concepts, boundaries, invariants, workflows, data ownership, observed ownership of named representations, and re-export surfaces; spot-check only decision-relevant gaps or contradictions.
 6. Create or refresh `.cflow/architecture.md` from the template shape when the report is good enough.
 7. Return the architecture summary and recommend the next route, usually `cf-start` when refactor planning is still needed.
