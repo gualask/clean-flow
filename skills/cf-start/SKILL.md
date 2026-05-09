@@ -1,6 +1,6 @@
 ---
 name: cf-start
-description: Control Cflow cleanup/refactor workflows: assess architecture, decide target shape, plan units, execute one accepted unit, review, verify, or resume. Use for repository-level structure, ownership, dependency direction, migration order, and `.cflow` resume; route unclear framing to `cf-mr-wolf` and stale maps to `cf-architecture`.
+description: "Control Cflow cleanup/refactor workflows: assess architecture, decide target shape, plan units, execute one accepted unit, review, verify, or resume. Use for repository-level structure, ownership, dependency direction, migration order, and `.cflow` resume; route unclear framing to `cf-mr-wolf` and stale maps to `cf-architecture`."
 ---
 
 Operate as the workflow controller. Pick one phase, run its reference, then stop at its gate.
