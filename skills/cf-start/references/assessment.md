@@ -6,38 +6,42 @@ Do assessment only. Do not implement, move files, or write patches.
 
 Decide the right **repository-level intervention frame** using the current architecture map.
 
-You must determine:
+Determine:
 
 - whether intervention is actually justified
-- candidate intervention areas worth carrying forward
-- which intervention modes are plausible
-- whether artifact-backed planning should be recommended after user approval
-- how Cflow's clean-by-default standard plus domain ownership, request-stated constraints, risk appetite, and acceptable ceremony affect the intervention frame
+- plausible intervention modes
+- whether target-shape must come before planning/execution
+- whether artifact-backed planning should follow user approval
+- how domain ownership, constraints, risk, and ceremony shape the path
 
-## Preflight
+## Required Inputs
 
-Use standard phase preflight.
-For broad repository or subsystem structure assessment, orient with the bundled `repo-tree.mjs` helper when available before ad hoc file inventory; use source reads to verify conclusions.
+- current architecture map
+- clear repository or subsystem assessment scope
+
+## Source Orientation
+
+For broad structure assessment, use `repo-tree.mjs` when available before ad hoc inventory. Verify conclusions from source.
 
 ## Premise check
 
 Answer these honestly:
 
-1. What concrete problem is this intervention solving now?
-2. What domain concepts, boundaries, business invariants, workflows, and allowed dependencies should shape the clean architecture if current folders were not treated as constraints?
-3. What is the cost of leaving the current shape as-is for now?
-4. Why is the intervention proportionate rather than architecture theater?
-5. What constraints, risk appetite, acceptable ceremony, or non-goals does the current request state?
+1. What problem is this solving now?
+2. Which domain concepts, boundaries, invariants, workflows, and dependencies matter?
+3. What is the cost of doing nothing?
+4. Why is the intervention proportionate?
+5. What constraints, risk appetite, ceremony, or non-goals did the user state?
 
 For hard restructure also answer:
 
 6. Is repository shape itself the recurring cause of friction?
-7. Are existing global barrels, shared models, or layer boundaries hiding real ownership, boundary roles, or organizing axis?
-8. Would a good soft intervention remove the structural pain without preserving dirty ownership or unclear boundaries?
+7. Are global barrels, shared models, or layers hiding ownership?
+8. Would a soft intervention fix the pain without preserving dirty boundaries?
 
 ## Intervention mode framing
 
-Do not choose the final mode yet, but identify what is plausible:
+Identify plausible modes, not the final unit:
 
 - soft-split
 - soft-consolidate
@@ -45,26 +49,26 @@ Do not choose the final mode yet, but identify what is plausible:
 - hard-restructure
 - no-structural-refactor
 
-Do not reject `hard-restructure` just because a lower-churn soft intervention exists. Reject it only when the premise check shows that a hard path would be disproportionate, detached from the repository, or unnecessary for the clean evidence-backed target.
-Rank plausible interventions by structural cleanliness first. Use cost, churn, and reviewability to judge proportionality and migration order, not to prefer a dirtier target.
-If the cleanest proportionate target is a broad architecture or repository reshape, carry `hard-restructure` as the leading plausible route and constrain the migration later.
-For architecture or structure assessment, present the domain concepts, boundaries, business invariants, workflows, and allowed dependencies before candidate intervention areas or target tree examples.
+Do not reject `hard-restructure` just because a softer path has lower churn. Rank by clean target first; use churn to stage migration.
+For architecture assessment, present domain, boundaries, invariants, workflows, and dependency rules before candidate areas.
 
-Treat `soft-mixed` as a repository-level outcome only.
-Later work units must still choose `split` or `consolidate`.
+State `Target-shape need`:
+
+- `required`: unresolved ownership, organizing axis, boundary model, domain placement, dependency direction, or packaging blocks cleanup.
+- `not required`: the next step preserves the current ownership/packaging, or is only containment.
+
+If both containment and structural cleanup are plausible, show both paths and ask. Do not call containment the cleanup target.
+
+`soft-mixed` is repository-level only. Later units must be `split` or `consolidate`.
 
 ## Artifact behavior
 
-Do not create or refresh `.cflow/architecture.md` in this phase.
-If the map is missing or stale, route to `cf-architecture` first.
-
-Do not create or update `.cflow/refactor-brief.md` during a first-pass check, evaluation, or discussion request.
-Create or update the brief only when the current request explicitly asks for planning/resume/proceed, or after the user approves the recommended intervention direction.
-Do not add work units during assessment; work-unit planning owns work-unit creation after the decision checkpoint.
+Do not write `.cflow/architecture.md` or `.cflow/refactor-brief.md`.
+Do not add work units.
 
 ## Output format
 
-Return sections: **Premise check**, **Domain**, **Candidate intervention areas**, **Plausible intervention modes**, **Artifact decision**, **Recommended next action**.
+Return sections: **Premise check**, **Domain**, **Target-shape need**, **Candidate intervention areas**, **Plausible intervention modes**, **Artifact decision**, **Recommended next action**.
 
 ## Anti-goals
 

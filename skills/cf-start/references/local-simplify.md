@@ -4,12 +4,12 @@ This phase belongs after split or consolidation execution.
 
 Do not reopen repository architecture in this phase.
 
-## Preflight
+## Required Inputs
 
-Use standard phase preflight.
-- If the touched area is not clearly anchored in a recently completed bounded structural step, stop and route to `cf-start` first.
-- Without a brief, require an explicit local touched area.
-- Do not broaden scope in this step.
+- recently completed bounded structural step, or explicit local touched area
+- clear local simplification scope
+
+If required inputs are missing, stop with `Next action: return to planning or review`.
 
 ## Goal
 

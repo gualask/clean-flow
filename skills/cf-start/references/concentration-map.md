@@ -26,10 +26,10 @@ Look for:
 - scattered I/O inside dense files
 - local policy trapped inside an oversized seam
 
-## Preflight
+## Required Inputs
 
-Use standard phase preflight.
-Without a brief, require explicit local or repo-level scope.
+- live brief or explicit local/repo-level scope
+- selected split-oriented pressure or unit
 
 ## Analyze in this order
 

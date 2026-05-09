@@ -1,9 +1,11 @@
 # Verify
 
-## Preflight
+## Required Inputs
 
-Use standard phase preflight.
-- If the completed unit or touched area is not clear enough to verify, stop and route to `cf-start` first.
+- completed unit or touched area
+- checks, risks, or behavior surface to verify
+
+If required inputs are missing, stop with `Recommended next action: return to planning or review`.
 
 ## Goal
 

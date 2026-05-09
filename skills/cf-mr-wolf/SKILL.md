@@ -16,12 +16,10 @@ Do not implement code changes.
 
 ## Core Rules
 
-- If no concrete problem is provided, ask exactly one question: what problem should be solved?
-- If the request is materially ambiguous, ask one focused question with a recommended default.
+- If no concrete problem is provided, ask exactly one question: what problem should be solved? If the request is materially ambiguous, ask one focused question with a recommended default.
 - Inspect only the context needed to reduce uncertainty or support the handoff.
-- Route to the skill or active reference that owns the needed lens; do not carry specialist architecture, simplification, trace, scenario, split, cohesion, or cognitive rules here.
-- For cleanup, refactor, architecture, or implementation-direction requests, preserve the user's problem, scope, constraints, risk appetite, and unresolved decisions for handoff; let the routed skill own specialist evaluation.
-- Do not turn framing into implementation, architecture assessment, target-shape planning, or work-unit planning.
+- When the request belongs to a specialist Cflow lens, stop at a compact handoff that preserves the user's problem, scope, constraints, risk appetite, and unresolved decisions; do not answer from general technical judgment or carry specialist architecture, simplification, trace, scenario, split, cohesion, or cognitive rules here.
+- Do not turn framing into implementation, specialist assessment, target-shape planning, or work-unit planning.
 
 ## Workflow
 
@@ -40,11 +38,11 @@ Choose the first route that fits current evidence and uncertainty:
 
 1. `cf-architecture`: `.cflow/architecture.md` is missing, stale, or materially incomplete enough to block routing or handoff.
 2. `cf-simplify`: the current request asks whether an area has too many files, unnecessary complexity, overengineering, or whether changing behavior or interface contracts could enable a cleaner simplification.
-3. `cf-start`: the current request asks for repository-level cleanup/refactor assessment, architecture or structure evaluation, multi-step refactor work, risky or ordered work, or resumable work.
+3. `cf-start`: the current request asks for cleanup/refactor architecture, structure, target direction, ownership, dependency direction, migration order, repository-level assessment, multi-step refactor work, risky or ordered work, or resumable work.
 4. `cf-scenario`: one or two concrete code-grounded scenarios would clarify real impact or compare similar flows.
 5. `cf-trace`: one concrete workflow/path needs ordered reconstruction for state, failure, resume, or ownership.
 6. `cf-split`, `cf-cognitive`, or `cf-cohesion`: one bounded local cleanup action clearly belongs to that skill.
-7. Direct bounded handoff or options: the problem is clear enough and no specialized route owns the next step.
+7. Direct bounded handoff or options: the problem is clear enough and no specialized route owns the decision lens.
 
 ## Output
 

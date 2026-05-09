@@ -1,119 +1,104 @@
 ---
 name: cf-start
-description: Assess, plan, execute, review, verify, or resume cleanup and refactor work in Cflow. Use for repository-level cleanup/refactor assessment, architecture or structure evaluation, artifact-backed workflows, bounded work units, and resume from existing `.cflow` state; route unclear framing to `cf-mr-wolf` and missing or stale architecture maps to `cf-architecture`.
+description: Control Cflow cleanup/refactor workflows: assess architecture, decide target shape, plan units, execute one accepted unit, review, verify, or resume. Use for repository-level structure, ownership, dependency direction, migration order, and `.cflow` resume; route unclear framing to `cf-mr-wolf` and stale maps to `cf-architecture`.
 ---
 
-Operate as the workflow controller: load and run the relevant phase reference when the next phase is clear from repository state and Cflow artifacts.
+Operate as the workflow controller. Pick one phase, run its reference, then stop at its gate.
 
-The mission is maximum practical cleanliness: domain and ownership clarity first, no false owners or global glue, and no boilerplate unless a real boundary, integration, or risk justifies it.
-Planning may challenge existing boundaries, modules, barrels, or global models when they are part of the problem. Execution and migration units preserve behavior unless a behavior change is explicit in the current request.
-Treat current folders and layers as evidence, not as target-shape constraints; domain ownership, workflows, and external boundaries define the clean direction.
-Do not choose a soft or low-impact path solely because it is easier when a hard restructure is the cleaner and proportionate target.
-Do not require the current request to explicitly ask for architectural cleanliness; that is the default cleanup/refactor standard here.
+Clean target first: domain and ownership clarity, no false owners, no global glue. Treat current folders as evidence, not constraints. Prefer the cleanest proportionate target; use churn only to stage migration. Preserve behavior unless the user asks for behavior change.
 
 ## Artifacts
 
 - `.cflow/architecture.md`: input only; owned by `cf-architecture`.
-- `.cflow/refactor-brief.md`: owned here; when creating or updating it, use [artifacts.md](references/artifacts.md).
+- `.cflow/refactor-brief.md`: accepted plan/resume state only. Use [artifacts.md](references/artifacts.md). Never use it as assessment notes.
 
-Before creating an owned `.cflow/*` artifact, if `.cflow/` does not exist, create it and add `.cflow/` to `.gitignore`, creating `.gitignore` if needed.
+Before creating `.cflow/*`, create `.cflow/` if needed and add `.cflow/` to `.gitignore`.
 
 ## Preflight
 
 Before running any phase reference, unless the reference says otherwise:
 
 1. Require current `.cflow/architecture.md` for workflow phases; route to `cf-architecture` when it is missing, stale, or materially incomplete.
-2. Read existing `.cflow/refactor-brief.md` when present.
-3. Check repository state relevant to the current request and phase; repository state is the source of truth.
-4. If a phase needs a brief, current unit, or clear touched scope and it is missing or unclear, continue only for an explicit local scope; otherwise route back to assessment or planning.
-5. For closure challenges, treat recorded `done`, `verified`, safe stopping points, and prior notes as claims to test, not conclusions.
+2. Ignore `.cflow/refactor-brief.md` in fresh assessment or fresh target-shape work unless the user asks to resume.
+3. Read `.cflow/refactor-brief.md` only for live resume, execution, review/verify, or accepted artifact-backed planning.
+4. Trust repository state over artifacts.
+5. If required state or scope is missing, route back to the right planning phase.
+6. Treat recorded completion as a claim to verify, not a conclusion.
 
 ## Flow Selection
 
-Choose the first matching flow below. User-facing output is a progress summary, not a brief mirror.
-Select the flow before reading phase references; in handoff flow, do not read or run `assessment.md`.
+Choose the first matching flow. Do not mirror the brief in user output.
 
-### Handoff Flow
+### Gates
 
-Use when the request belongs to another public entrypoint before Cflow workflow work; do not create or update `.cflow/refactor-brief.md` during handoff.
+Approval is phase-scoped.
+
+- After assessment: next analysis/planning phase only. No brief, no work units, no code.
+- After target-shape: work-unit planning only. No execution.
+- After work-unit planning: execute only if the user asks to execute the accepted unit.
+- Execution needs an explicit execute request, or a live resume unit plus a continue request.
+- Do not chain assessment -> target-shape -> planning -> execution unless the user asked for that full chain after seeing the plan.
+- If user steering reopens domain, ownership, boundary, target-shape, or risk, reassess instead of narrowing to a local step.
+
+### Handoff
+
+Use before Cflow workflow work. Do not touch `.cflow/refactor-brief.md`.
 
 - `cf-mr-wolf`: problem, goal, success criteria, scope boundary, or explicit non-goals are not clear enough for repository-level intervention framing.
-- `cf-simplify`: the request asks whether an area is overengineered, whether all files are necessary, or whether changing behavior, interface contracts, or boundaries could make a cleaner simplification possible before planning refactor work.
-- `cf-trace`: the request asks only to reconstruct or audit a path, workflow, sequence, state transition, or orchestration flaw before deciding on fixes.
-- `cf-cognitive`, `cf-split`, or `cf-cohesion`: the request asks only for local cognitive cleanup, one file-level split, or local cohesion regrouping.
+- `cf-simplify`: overengineering or simplification review comes first.
+- `cf-trace`: the user asks only to reconstruct or audit a path.
+- `cf-cognitive`, `cf-split`, `cf-cohesion`: the request is local and bounded to that lens.
 - `cf-architecture`: `.cflow/architecture.md` is missing, stale, or materially incomplete.
 
-### Fresh Assessment Flow
+### Fresh Assessment
 
-Use when the current request explicitly asks for Cflow assessment/planning, asks to evaluate repository or subsystem architecture structure with clear framing, or follows a framing handoff that recommends this workflow.
-Run [assessment.md](references/assessment.md), do not implement, do not add work units yet, and stop at a decision checkpoint for non-trivial fresh work even when the recommendation is clear.
+Use for clear repository/subsystem cleanup, structure, ownership, dependency, or migration questions.
 
-At the checkpoint:
+Run [assessment.md](references/assessment.md). Stop with one checkpoint question.
 
-- if the current reply gives short approval and no new steering, continue with the proposed path
-- if the current reply asks a factual question that does not affect the path, answer briefly and continue only when the next step is still clear
-- if the current reply gives steering that materially changes scope, exclusions, invariants, risk appetite, direction, or whether to continue, reassess before proceeding and update `.cflow/refactor-brief.md` when resumable state matters
-- if steering reopens problem framing enough to match the `cf-mr-wolf` rule, use the handoff flow
+### Resume
 
-A reply is non-trivial when it may materially change scope, exclusions, invariants, risk appetite, direction, or whether to continue.
-Do not implement while a material decision is open.
+Use only when the user asks to resume, continue, proceed with, or inspect existing Cflow work.
 
-Use the assessment output format and end with exactly one decision checkpoint question.
+A brief is live only when the user references it, the last accepted checkpoint used it, or the user asks to resume. File existence alone is not resume.
 
-### Resume Flow
+- stale or unreliable brief: reassess
+- unresolved hard target: target-shape
+- multiple candidates or ordering needed: work-unit planning
+- accepted unit plus execute/continue request: structural unit
+- completed work challenged or ready to check: review/verify
 
-Use when there is a live `.cflow/refactor-brief.md` and the request asks to resume, continue, proceed, or inspect current Cflow work.
-Resume is not a phase; re-enter the correct flow using the brief and repository evidence.
+Do not switch live direction until the user accepts the change. Execute at most one unit per invocation unless asked otherwise.
 
-- if the brief is stale, or repository changes made the recorded path or work-unit state unreliable, reassess
-- if hard-path direction is chosen but target shape is unresolved, use the hard restructure flow
-- if `current work unit` is `none` and there are multiple credible candidates, dependency or order decisions, cross-boundary scope, or resumable multi-step work, use the soft refactor flow
-- if `current work unit` is `none` but the prompt or brief gives one explicit, local, behavior-preserving cohesive unit, use the structural unit flow
-- if an active work unit exists, use the structural unit flow
-- if structural work is already done, use the review or verify flow
+### Soft Refactor
 
-Do not silently switch direction without updating artifacts.
-Do not execute more than one cohesive bounded unit per invocation unless the current request explicitly asks for a broader pass.
+Use after accepted soft-split, soft-consolidate, or soft-mixed direction.
 
-Default resume progress output: **Done**, **Checks**, **Artifacts**, **Remaining**, **Next action**.
-For reassessment without code changes: **Current state**, **Reassessment result**, **Artifacts**, **Next action**.
+- use [work-unit-planning.md](references/work-unit-planning.md) for multiple candidates, ordering, cross-boundary scope, or resumable work
+- `soft-mixed` is not executable; each unit is `split` or `consolidate`
+- use structural unit directly only for one explicit accepted local unit
 
-### Soft Refactor Flow
+### Hard Restructure
 
-Use when assessment or resume points to soft-split, soft-consolidate, or soft-mixed work.
-Use [work-unit-planning.md](references/work-unit-planning.md) when there are multiple credible units, ordering decisions, cross-boundary scope, or resumable multi-step work.
+Use when assessment/resume points to hard restructure.
 
-Treat `soft-mixed` as a repository-level assessment outcome, not as one executable step.
-In `soft-mixed`, select the next work unit by local dominant pressure and give each work unit exactly one `mode`: `split` or `consolidate`.
-Do not split one coherent local cleanup into multiple work units just to make the units smaller.
+- first use [target-shape.md](references/target-shape.md)
+- after user approval, use [migration-unit-planning.md](references/migration-unit-planning.md)
+- never execute before target and migration units are clear
 
-When the prompt or brief already names one explicit, local, behavior-preserving structural unit whose goal and boundary are clear, use the structural unit flow instead of adding a separate planning pass.
+### Structural Unit
 
-### Hard Restructure Flow
+Use only for an accepted unit with an execute request, or an explicit local behavior-preserving edit.
 
-Use when assessment or resume points to hard-restructure work.
-Resolve target direction with [target-shape.md](references/target-shape.md), then plan bounded migration units with [migration-unit-planning.md](references/migration-unit-planning.md).
+- map: [concentration-map.md](references/concentration-map.md) for split, [fragmentation-map.md](references/fragmentation-map.md) for consolidation
+- lock behavior: [safety-net.md](references/safety-net.md)
+- execute: [split-execution.md](references/split-execution.md) or [consolidation-execution.md](references/consolidation-execution.md)
+- close: [structural-closure.md](references/structural-closure.md)
+- optional touched-area cleanup: [local-simplify.md](references/local-simplify.md)
 
-Do not execute hard-path structural edits before target direction and migration units are clear.
-After one migration unit is selected, use the structural unit flow.
+### Review Or Verify
 
-### Structural Unit Flow
-
-Use when one active bounded unit is selected or explicit.
-Map unresolved split pressure with [concentration-map.md](references/concentration-map.md) or consolidation pressure with [fragmentation-map.md](references/fragmentation-map.md).
-Choose the behavior lock with [safety-net.md](references/safety-net.md) before structural edits.
-Execute by declared mode: `split` uses [split-execution.md](references/split-execution.md); `consolidate` uses [consolidation-execution.md](references/consolidation-execution.md).
-Before finishing split or consolidation execution, apply [structural-closure.md](references/structural-closure.md).
-[local-simplify.md](references/local-simplify.md) is optional after structural execution and only for the recently touched area.
-
-Do not jump from initial assessment directly into mapping or execution unless the next cohesive local unit is explicit in the brief or prompt.
-After structural work, use the review or verify flow.
-
-### Review Or Verify Flow
-
-Use when the request explicitly asks for review or verification, challenges whether a recorded completed unit is really finished, or structural work is done.
-Use [review.md](references/review.md) for closure judgment and [verify.md](references/verify.md) for factual checks.
-Do not use generic reassessment output for closure challenges; use the review output format.
+Use [review.md](references/review.md) for closure judgment and [verify.md](references/verify.md) for factual checks. Do not answer closure challenges with generic reassessment.
 
 ## Language rules
 

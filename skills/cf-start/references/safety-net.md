@@ -1,47 +1,46 @@
 # Safety Net
 
-This phase belongs after discovery/mapping and before structural edits.
+Use after mapping and before structural edits.
 
-## Preflight
+## Required Inputs
 
-Use standard phase preflight.
-Without a brief, require explicit local behavior-preserving scope.
-- If a brief exists but the current work unit, cohesive local unit, or refactoring surface is still too unclear to name the behavior to lock, stop and route back to the correct planning or map phase before designing checks.
-- Do not invent a broader cleanup direction in this phase.
+- live brief or explicit local behavior-preserving scope
+- named work unit, cohesive unit, or refactoring surface
+
+If required inputs are missing, stop with `Go / no-go: no-go; planning inputs missing`.
+Do not invent a broader cleanup direction in this phase.
 
 ## Goal
 
-Lock behavior proportionate to the risk of the planned structural change.
-
-Use protection that materially reduces refactor risk without turning this phase into a broad test strategy. The safety lock must be credible for the change shape, affected contracts, and plausible failure modes.
+Lock behavior proportionate to refactor risk. Keep it targeted to the change shape, affected contracts, and plausible failures.
 
 ## Refactoring surface
 
-Name exactly what the next move may disturb:
+Name what the next move may disturb:
 
-- current work unit if a brief exists
-- explicit cohesive local unit when the request is already scoped to one structural move
+- current work unit if a live brief exists
+- explicit local unit when the request is already scoped
 - touched workflow, module, or feature area
 - observable behavior that must remain stable
 
-If you cannot describe the refactoring surface clearly, route back instead of guessing.
+If the surface is unclear, route back.
 
 ## Choose the lock
 
-Prefer existing protection before adding anything:
+Prefer existing protection:
 
 1. existing targeted tests
 2. existing broader tests that already lock the relevant behavior
 3. targeted characterization tests
-4. runtime smoke checks or explicit invariants when automated tests are not practical
+4. smoke checks or explicit invariants
 
-Characterization tests lock current behavior, not ideal behavior. Do not weaken or rewrite tests just to make a refactor pass.
+Characterization tests lock current behavior, not ideal behavior.
 
 ## Go / no-go
 
-Return `go` only when the lock is credible for the planned move.
-Return `no-go` when behavior cannot be checked reasonably or the uncovered surface is too risky for structural execution.
-If the gap is acceptable, name it plainly instead of expanding into unrelated test work.
+- `go`: lock is credible.
+- `no-go`: behavior cannot be checked, or uncovered surface is too risky.
+- acceptable gap: name it plainly; do not expand into unrelated test work.
 
 ## Required output
 

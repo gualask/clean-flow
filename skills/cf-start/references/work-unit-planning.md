@@ -4,44 +4,46 @@ Do planning only. Do not implement in this phase.
 
 ## Goal
 
-Turn the current assessed pressure into an evidence-backed ordered backlog of cohesive bounded work units.
+Create an ordered backlog of cohesive bounded work units.
 
-## Preflight
+## Required Inputs
 
-Use standard phase preflight.
-If there is no assessed direction, candidate area, or explicit bounded scope to order, route to `cf-start`.
-If a broader boundary or packaging decision is unresolved, route to target-shape planning instead of faking bounded work-unit planning.
+- accepted direction or target shape
+- candidate area or bounded planning scope
+- resolved ownership, boundary, and packaging decisions for the planned area
 
 ## Planning rules
 
+- If required inputs are missing, stop with `Artifact decision: not updated; planning inputs missing`.
 - Keep planning proportionate and tied to the assessed scope.
-- Promote only credible, evidenced candidates into work units; put plausible but unproven candidates in `Unknowns to re-check`.
+- Promote only evidenced candidates; put unproven ones in `Unknowns to re-check`.
 - Do not split one clear local cleanup into smaller pieces just to create more work units.
-- Prefer the narrowest cohesive unit that still reduces real pressure now or makes later units easier.
-- A unit may touch several nearby files when they are part of one behavior-preserving structural move with one clear stop condition.
-- Split units only when ordering, ownership, risk, verification, or reviewability would materially improve.
+- Prefer the narrowest cohesive useful unit.
+- A unit may touch several nearby files when one structural move owns them.
+- Split units only for ordering, ownership, risk, verification, or reviewability.
 - Do not invent a repo-wide target shape in this phase.
 
 ## Selection rules
 
-- Keep each work unit explicitly `mode: split` or `mode: consolidate`.
-- Choose exactly one next unit, then record it using the `artifacts.md` execution-state rules.
-- Activate a unit only when its goal, mode, dependency order, and immediate next phase are explicit enough to proceed without another planning pass.
+- Each unit is `mode: split` or `mode: consolidate`.
+- Choose exactly one next unit and record it through `artifacts.md`.
+- Keep the chosen unit as `recommended next work unit`, not `current work unit`.
 - Name units by workflow or seam when that is more stable than a brittle file list.
+- Stop after planning. Do not map, safety-net, or execute.
 
 ## Output format
 
-Return sections: **Planning scope**, **Candidate work units**, **Ordering logic**, **Recommended next work unit**, **Artifacts updated**, **Recommended next action**.
+Return sections: **Planning scope**, **Candidate work units**, **Ordering logic**, **Recommended next work unit**, **Artifact decision**, **Recommended next action**.
 
 ## Artifact updates
 
-Apply `artifacts.md` before stopping when this pass creates or refreshes resumable state.
+Apply `artifacts.md` only for approved artifact-backed planning.
 Phase-specific fields:
 
 - `Work units`
 - `Unknowns to re-check`
 
-For this phase, the best next candidate is the `recommended next work unit` unless it is ready to become active.
+The chosen unit becomes active only in a later execution phase.
 
 If planning clarifies the near-term path, also update:
 

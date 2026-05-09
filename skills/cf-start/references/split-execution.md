@@ -1,64 +1,67 @@
 # Split Execution
 
-## Preflight
+## Required Inputs
 
-Use standard phase preflight.
-Without a brief, require explicit local behavior-preserving scope.
+- live brief or explicit local behavior-preserving scope
+- credible safety lock
+- mapped seam with workflows, roles, and split direction
+
+If required inputs are missing, stop with `Next action: complete mapping or safety net first`.
 - If there is no credible safety lock for the current structural move, stop and route to safety-net first.
-- If the seam is still not mapped enough to name the hidden workflows, role classification, and safe split direction, stop and route to concentration-map instead of guessing.
+- If the seam is not mapped enough to name workflows, roles, and split direction, route to concentration-map.
 
 ## Goal
 
-Apply the current bounded work unit or cohesive local unit without widening scope.
+Apply one bounded unit without widening scope.
 
-Concentration pressure has a clear split direction when:
+Split when:
 
 - one place hides multiple workflows or roles
-- orchestration, integration, policy, or pure logic are tangled enough to slow reading
-- a caller must understand too much local detail to follow the main behavior
-- the seam is mapped well enough to name what moves and what stays
+- roles are tangled enough to slow reading
+- callers must know too much local detail
+- what moves and what stays is clear
 
 Do not split just because a file is large. If the new boundary would be generic, speculative, or harder to follow than the current code, leave it alone or route back to mapping.
 
 ## Split criteria
 
-- Before splitting, name the workflow that should stay visible and the responsibility currently hiding it.
-- Split only when the caller, entry point, or main workflow becomes visibly simpler, or when the moved responsibility gets a real local owner.
-- If callers still need the same branching, mapping, or integration detail after the split, the boundary did not reduce pressure.
-- Do not treat "one file became two files" as completion by itself. The extracted owner must have a clearer home, a clearer name, or a clearer local workflow than the original inline block.
+- Name the visible workflow and the responsibility hiding it.
+- Split only when the caller/workflow gets simpler or moved code gets a real owner.
+- If callers still need the same branching/mapping/integration detail, pressure did not drop.
+- "One file became two" is not completion. The new owner needs a clearer home, name, or workflow.
 
 ## Placement criteria
 
-When this step creates or relocates files, ensure you have read [file-split-rules.md](../../_shared/references/file-split-rules.md) in this invocation before choosing placement.
-If placement is still not obvious, ask one focused question before editing.
+Before creating or moving files, read [file-split-rules.md](../../_shared/references/file-split-rules.md). If placement is unclear, ask one focused question.
 
 ## Execution rules
 
 - Preserve behavior unless behavior change is explicitly requested.
-- Stay within one bounded work unit or cohesive local unit unless the current request explicitly broadens scope.
-- Make the narrowest complete structural move that gives a responsibility a clearer home.
+- Stay within one bounded unit unless the request broadens scope.
+- Make the narrowest complete move that gives a responsibility a clearer home.
 - Add a file, module, type, or helper only when it reduces real complexity.
-- Preserve existing dataflow and avoid extra allocations, clones, or passes unless they clearly improve the seam.
-- Prefer local, named ownership over generic utilities or fake layers; avoid names like `helper`, `utils`, `common`, `shared`, `manager`, or `service` unless local convention gives them clear meaning.
-- If the safety lock breaks after a move, stop and investigate before stacking more changes on top.
+- Preserve dataflow; avoid extra allocations, clones, or passes unless they clearly improve the seam.
+- Prefer local named ownership over generic utilities or fake layers.
+- Avoid `helper`, `utils`, `common`, `shared`, `manager`, or `service` unless local convention gives clear meaning.
+- If the safety lock breaks, stop and investigate.
 - If the implementation changes what the brief assumed, record the drift.
-- Report discovered bugs separately unless the current request explicitly asks for a behavior fix.
+- Report bugs separately unless behavior fixes were requested.
 
 ## Post-change closure check
 
-Before declaring the unit complete, re-read the changed entry point, extracted files, containing directory, imports/exports, and relevant tests.
+Before completion, re-read changed entry points, extracted files, containing directory, imports/exports, and tests.
 
-Ask these questions after the code compiles, not only before editing:
+After compile/checks, ask:
 
 - Did the main workflow become easier to scan, or did the change only move bulk into a new file?
 - Does each new file have one stable local reason to exist?
 - Are private companion files grouped with their owner instead of advertised as broadly reusable peers?
-- Did the split reveal another natural capability inside the same touched area?
-- Would that revealed capability be a small continuation of this same bounded unit, or a separate follow-up unit?
+- Did the split reveal another capability in the same touched area?
+- Is it same-unit continuation or separate follow-up?
 
-If the answer reveals a clear placement fix caused by this split, apply it in this execution step when it is behavior-preserving and unambiguous.
-If the answer reveals another natural split that is still inside the same bounded unit and safety net, either apply it now or record the exact remaining split as real follow-up work.
-If the remaining split would widen scope, needs a new safety lock, or changes the intended unit, leave it for a new work unit and record it in `Remaining`, `Next action`, and `.cflow/refactor-brief.md`.
+Apply clear placement fixes caused by this split when behavior-preserving.
+Apply or record same-unit follow-up covered by the same safety net.
+If follow-up widens scope, needs new safety, or changes the unit, record it for a new unit.
 Do not return `Next action: none` while a clear structural follow-up remains in the touched area.
 
 ## Before finishing

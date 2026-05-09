@@ -15,10 +15,10 @@ Look for:
 - boundaries created for style rather than responsibility
 - indirection that hides the flow more than it clarifies it
 
-## Preflight
+## Required Inputs
 
-Use standard phase preflight.
-Without a brief, require explicit local or repo-level scope.
+- live brief or explicit local/repo-level scope
+- selected consolidation-oriented pressure or unit
 
 ## Analyze in this order
 

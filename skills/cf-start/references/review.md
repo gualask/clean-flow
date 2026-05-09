@@ -1,50 +1,52 @@
 # Review
 
-Do review only. Do not introduce new structural changes in this phase unless the current request explicitly asks.
+Do review only. Do not make structural edits unless explicitly asked.
 
-## Preflight
+## Required Inputs
 
-Use standard phase preflight.
-- If the completed step or touched area is not clear enough to review, stop and route to `cf-start` first.
-- For closure-challenge reviews, rebuild the review from current files, including untracked files and the densest extracted owners.
+- completed step or touched area
+- current files relevant to the completed work
+
+If required inputs are missing, stop with `Recommended next action: return to planning or verification`.
+For closure challenges, review current files, untracked files, and dense extracted owners.
 
 ## Goal
 
-Judge whether the refactor improved structure in a proportionate way.
+Judge whether the refactor improved structure proportionately.
 
 ## Review lens
 
-Ensure you have read [local-readability-review.md](../../_shared/references/local-readability-review.md) in this invocation before judging local readability.
-If the completed step moved, split, grouped, or renamed files, also ensure you have read [file-split-rules.md](../../_shared/references/file-split-rules.md) before judging final placement and owner shape.
+Read [local-readability-review.md](../../_shared/references/local-readability-review.md) before judging readability.
+If files moved, split, grouped, or renamed, read [file-split-rules.md](../../_shared/references/file-split-rules.md) before judging placement.
 
 Judge the result on four questions:
 
 - Did it reduce the pressure it was meant to reduce?
-- Did it keep boundaries and ownership clearer than before?
-- Did it avoid fake layers, dead wrappers, cleanup mania, and unnecessary scope growth?
+- Are boundaries and ownership clearer?
+- Did it avoid fake layers, dead wrappers, cleanup mania, and scope growth?
 - Is the remaining risk structural, or mostly a verification gap?
 
 ## Closure Sweep
 
-Before recommending closure for a non-trivial refactor, run a second pass using the lenses suggested by the actual change shape:
+Before closure, run a second pass shaped by the actual change:
 
 - moved, renamed, newly related, or newly private files -> placement and cohesion
-- touched owner folders, nearby feature folders, or call sites with suspicious ownership vocabulary -> cohesion scan for separate cleanup candidates
+- touched owner folders, nearby feature folders, or suspicious call-site vocabulary -> cohesion scan
 - large or dense extracted owners -> split and local readability
 - public API, exports, imports, or barrel changes -> reference audit
-- async, lifecycle, persistence, user-visible, or cross-flow behavior -> verification or `cf-scenario`
+- async, lifecycle, persistence, user-visible, or cross-flow behavior -> verification / `cf-scenario`
 
-Use judgment to follow evidence beyond the initially touched files when the repository shape points there.
-Report separate cleanup candidates apart from same-unit closure; do not treat them as blockers unless they belong to the completed unit.
-The sweep may still conclude no further action, but only after naming the lenses considered and the reason no blocking follow-up remains.
+Follow evidence beyond touched files when shape points there.
+Separate same-unit blockers from optional cleanup.
+Closure is allowed only after naming checked lenses and why no blocker remains.
 
 ## Recommendation rules
 
 - `verify`: use when structure is acceptable and only factual closure is missing.
-- `continue`: use when the closure sweep finds one concrete residual in the touched scope; name the exact next phase or action instead of generic follow-up.
-- `stop`: use only when the closure sweep found no blocking structural, placement, readability, safety-net, behavioral, lifecycle, user-visible, or cross-flow follow-up. Optional follow-up must be labeled optional.
+- `continue`: one concrete residual remains in touched scope; name the exact next phase/action.
+- `stop`: no blocking structural, placement, readability, safety, behavior, lifecycle, user-visible, or cross-flow follow-up remains. Label optional work as optional.
 
-For closure challenges, do not treat worktree finalization as the only remaining work until the sweep has ruled out blocking follow-up.
+For closure challenges, worktree finalization is not enough until the sweep rules out blockers.
 
 ## Output format
 
