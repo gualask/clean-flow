@@ -40,6 +40,7 @@ Write `.cflow/architecture.md` in the repository's dominant documentation langua
 2. Read `../cf-start/assets/architecture.template.md`.
 3. Check `git status --short` for worktree-change awareness.
 4. Do not map repository architecture during preflight; the reconnaissance subagent owns that scan.
+5. If explicit subagent authorization is required and has not been granted, ask the user for permission to use subagents before continuing.
 
 ## Clean-Context Reconnaissance
 

@@ -52,7 +52,7 @@ Write `.cflow/trace.md` in the repository's dominant documentation language; if 
 4. Read `assets/trace.template.md`.
 5. Check `git status --short` for user-change awareness.
 6. Do not reconstruct the path during preflight; the reconnaissance subagent owns that scan.
-7. If explicit subagent authorization is required and has not been granted, preflight is complete; ask for authorization and stop before reading source paths, updating `.cflow/trace.md`, or auditing.
+7. If explicit subagent authorization is required and has not been granted, ask the user for permission to use subagents before continuing.
 
 If the requested path is too ambiguous to trace, ask one focused question before spawning reconnaissance.
 If `.cflow/architecture.md` is missing, stale, or materially incomplete, route to `cf-architecture` before continuing.
