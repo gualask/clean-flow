@@ -18,6 +18,7 @@ Determine:
 
 - current architecture map
 - clear repository or subsystem assessment scope
+- concrete problem, evaluation lens, or framed decision to assess
 
 ## Source Orientation
 
@@ -73,6 +74,7 @@ Return sections: **Critical complexity**, **Premise check**, **Domain**, **Targe
 ## Anti-goals
 
 - Do not implement.
+- Do not run tests, lint, typecheck, format checks, build commands, or `git diff --check`; passing checks are not architecture assessment evidence unless a concrete verification risk was part of the confirmed frame.
 - Do not dive into work-unit splitting yet.
 - Do not create, rewrite, or reprioritize work units.
 - Do not rewrite the architecture map from this phase.

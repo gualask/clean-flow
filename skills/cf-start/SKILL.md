@@ -1,6 +1,6 @@
 ---
 name: cf-start
-description: "Control Cflow cleanup/refactor workflows: assess architecture, decide target shape, plan units, execute one accepted unit, review, verify, or resume. Use for repository-level structure, ownership, dependency direction, migration order, and `.cflow` resume; route unclear framing to `cf-mr-wolf` and stale maps to `cf-architecture`."
+description: "Assess and plan repository-level refactors: architecture, structure, ownership, dependency direction, target shape, migration order, execution, review, verification, and `.cflow` resume. Use after the diagnostic frame is confirmed; use `cf-mr-wolf` first when framing is unclear or unconfirmed, and `cf-architecture` when architecture context is missing or stale."
 ---
 
 Operate as the workflow controller. Pick one phase, run its reference, then stop at its gate.
@@ -13,6 +13,15 @@ For repository-level structure decisions, route through assessment or target-sha
 - `.cflow/refactor-brief.md`: accepted plan/resume state only. Use [artifacts.md](references/artifacts.md). Never use it as assessment notes.
 
 Before creating `.cflow/*`, create `.cflow/` if needed and add `.cflow/` to `.gitignore`.
+
+## Frame Gate
+
+Before any tool call, preflight, repository inventory, or phase reference, stop when the request asks for broad diagnostic work and the assessment frame has not already been confirmed in this conversation.
+In that case, answer only with one question asking which concern or lens should drive the check, plus 2-4 options with one recommended default. Do not inspect the repository, read `.cflow`, read specialist references, or infer the frame from code.
+
+## Verification Gate
+
+Run tests, lint, typecheck, format checks, build commands, or `git diff --check` only in execution, review, verify, or closure phases, or when the user explicitly asks for health verification or names a concrete runtime risk. Do not run them during framing, assessment, target-shape, or planning just to make a diagnostic answer look safer.
 
 ## Preflight
 
@@ -44,7 +53,6 @@ Approval is phase-scoped.
 
 Use before Cflow workflow work. Do not touch `.cflow/refactor-brief.md`.
 
-- `cf-mr-wolf`: problem, goal, success criteria, scope boundary, or explicit non-goals are not clear enough for repository-level intervention framing.
 - `cf-simplify`: overengineering or simplification review comes first.
 - `cf-trace`: the user asks only to reconstruct or audit a path.
 - `cf-cognitive`, `cf-split`, `cf-cohesion`: the request is local and bounded to that lens.

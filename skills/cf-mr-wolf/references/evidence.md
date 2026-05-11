@@ -8,12 +8,13 @@ Prefer compact, high-signal sources:
 - MCP resources or structured project context when available
 - bundled or custom scripts when they can summarize, classify, or measure the codebase more cheaply than manual reads
 - bundled `../../_shared/scripts/repo-tree.mjs` when a compact project-structure overview with file, directory, and approximate LOC metrics would help choose the next context slice
-- focused system commands such as `rg`, tests, package scripts, language tools, and read-only diagnostics
+- focused system commands such as `rg`, package metadata reads, language outline tools, and read-only diagnostics
 - specialist skills when they are the right lens
 - small temporary `/tmp` scripts only for mechanical classification across many inputs
 
 Use these sources to choose direction and reduce the search space.
-Do not treat MCP results, script output, or command output as final proof by themselves; verify decision-relevant conclusions against the relevant source, tests, or runtime evidence.
+Do not treat MCP results, script output, or command output as final proof by themselves; verify decision-relevant conclusions against the relevant source or runtime evidence.
+Run tests, lint, typecheck, format checks, build commands, or `git diff --check` only when the confirmed frame includes health/behavior verification or a concrete runtime risk that those checks can answer.
 
 Record what was checked, what was excluded, and why it matters.
 

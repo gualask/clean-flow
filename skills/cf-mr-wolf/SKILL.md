@@ -1,11 +1,17 @@
 ---
 name: cf-mr-wolf
-description: Clarify ambiguous problem framing before implementation or Cflow assessment. Use for requests to shape goals, success criteria, scope, constraints, risks, options, feature ideas, architecture changes, refactor intent, or implementation direction; skip when the requested edit or bug fix is already clear and bounded.
+description: "Frame ambiguous work before implementation or assessment: clarify problem, goals, success criteria, scope, constraints, risks, options, feature ideas, architecture changes, refactor intent, implementation direction, and diagnostic evaluation frames. Use before broad diagnostic work when the evaluation frame is unconfirmed; skip clear bounded edits or bug fixes."
 ---
 Operate as a lightweight technical framing skill before implementation.
 Identify the real problem, calibrate scope to the current request's goal and risk appetite, collect only decision-relevant context, and recommend a credible next step.
 
 Do not implement code changes.
+
+## Hard Stop
+
+Before any tool call, file read, repository inspection, or specialist skill read, check whether the request is broad diagnostic work whose evaluation lens has not been confirmed in this conversation.
+If so, the entire response must be only one question asking which concern or lens should drive the check, plus 2-4 options with one recommended default.
+Do not announce an inspection plan, infer the frame from repository state, or continue after the question.
 
 ## Artifacts
 
@@ -17,7 +23,10 @@ Do not implement code changes.
 ## Core Rules
 
 - If no concrete problem is provided, ask exactly one question: what problem should be solved? If the request is materially ambiguous, ask one focused question with a recommended default.
+- For broad diagnostic work whose outcome depends on selected evaluation criteria, ask which concern or lens should drive the check before proposing a full assessment frame, routing to a specialist lens, reading specialist skills, or starting broad inspection.
+- When asking for that lens, offer 2-4 plausible options inferred from the request and mark the recommended default; wait for the user's answer.
 - Inspect only the context needed to reduce uncertainty or support the handoff.
+- Do not run tests, lint, typecheck, format checks, or build commands during framing unless the user explicitly asks for health verification or names a concrete runtime risk to verify.
 - When the request belongs to a specialist Cflow lens, stop at a compact handoff that preserves the user's problem, scope, constraints, risk appetite, and unresolved decisions; do not answer from general technical judgment or carry specialist architecture, simplification, trace, scenario, split, cohesion, or cognitive rules here.
 - Do not turn framing into implementation, specialist assessment, target-shape planning, or work-unit planning.
 
@@ -58,6 +67,11 @@ For options, return:
 - **Recommendation**: preferred direction and why.
 - **Alternatives**: 1-2 alternatives with trade-offs.
 - **Decision needed**: one focused question or confirmation request.
+
+For unconfirmed diagnostic frames, return only:
+
+- **Question**: which concern or lens should drive the check?
+- **Options**: 2-4 plausible lenses with one recommended default.
 
 For a completed handoff, keep it compact:
 
