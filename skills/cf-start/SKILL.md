@@ -5,7 +5,7 @@ description: "Control Cflow cleanup/refactor workflows: assess architecture, dec
 
 Operate as the workflow controller. Pick one phase, run its reference, then stop at its gate.
 
-Clean target first: domain and ownership clarity, no false owners, no global glue. Treat current folders as evidence, not constraints. Prefer the cleanest proportionate target; use churn only to stage migration. Preserve behavior unless the user asks for behavior change.
+For repository-level structure decisions, route through assessment or target-shape before planning or execution; the selected reference owns the phase-specific decision rules.
 
 ## Artifacts
 
@@ -50,9 +50,17 @@ Use before Cflow workflow work. Do not touch `.cflow/refactor-brief.md`.
 - `cf-cognitive`, `cf-split`, `cf-cohesion`: the request is local and bounded to that lens.
 - `cf-architecture`: `.cflow/architecture.md` is missing, stale, or materially incomplete.
 
+### Target Shape
+
+Use when the open decision is the clean structural end state for a repository or subsystem, not whether intervention is justified. Choose this phase when ownership model, boundary model, dependency direction, organizing axis, or packaging direction must be selected or revised before work can be planned.
+
+Also use this phase when user feedback shows a previous structural recommendation may have preserved accidental structure or solved only a local symptom.
+
+Run [target-shape.md](references/target-shape.md). Stop with one checkpoint question.
+
 ### Fresh Assessment
 
-Use for clear repository/subsystem cleanup, structure, ownership, dependency, or migration questions.
+Use when the open decision is whether repository/subsystem intervention is justified, which intervention frame fits, or whether target-shape work is needed at all.
 
 Run [assessment.md](references/assessment.md). Stop with one checkpoint question.
 

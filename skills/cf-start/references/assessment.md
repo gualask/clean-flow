@@ -27,17 +27,16 @@ For broad structure assessment, use `repo-tree.mjs` when available before ad hoc
 
 Answer these honestly:
 
-1. What problem is this solving now?
-2. Which domain concepts, boundaries, invariants, workflows, and dependencies matter?
-3. What is the cost of doing nothing?
-4. Why is the intervention proportionate?
+1. Where does the repository's critical complexity live, and what evidence shows that?
+2. What problem is this solving now?
+3. Which ownership, boundary, dependency, workflow, or packaging decisions matter after that diagnosis?
+4. Why is intervention proportionate, considering the cost of doing nothing?
 5. What constraints, risk appetite, ceremony, or non-goals did the user state?
 
 For hard restructure also answer:
 
 6. Is repository shape itself the recurring cause of friction?
-7. Are global barrels, shared models, or layers hiding ownership?
-8. Would a soft intervention fix the pain without preserving dirty boundaries?
+7. Would a soft intervention fix the pain without preserving false ownership, accidental buckets, or unclear dependency direction?
 
 ## Intervention mode framing
 
@@ -49,14 +48,15 @@ Identify plausible modes, not the final unit:
 - hard-restructure
 - no-structural-refactor
 
-Do not reject `hard-restructure` just because a softer path has lower churn. Rank by clean target first; use churn to stage migration.
-For architecture assessment, present domain, boundaries, invariants, workflows, and dependency rules before candidate areas.
+Rank by clean target first; use churn only to stage migration.
+Open with the critical complexity location before candidate areas or intervention modes.
 
 State `Target-shape need`:
 
-- `required`: unresolved ownership, organizing axis, boundary model, domain placement, dependency direction, or packaging blocks cleanup.
+- `required`: unresolved ownership, boundary model, dependency direction, organizing axis, false ownership, accidental buckets, or packaging blocks cleanup.
 - `not required`: the next step preserves the current ownership/packaging, or is only containment.
 
+When `Target-shape need` is `required`, the recommended next action must be target-shape for the assessed scope. Do not recommend work units, local cleanup, or a smaller target-shape first.
 If both containment and structural cleanup are plausible, show both paths and ask. Do not call containment the cleanup target.
 
 `soft-mixed` is repository-level only. Later units must be `split` or `consolidate`.
@@ -68,7 +68,7 @@ Do not add work units.
 
 ## Output format
 
-Return sections: **Premise check**, **Domain**, **Target-shape need**, **Candidate intervention areas**, **Plausible intervention modes**, **Artifact decision**, **Recommended next action**.
+Return sections: **Critical complexity**, **Premise check**, **Domain**, **Target-shape need**, **Candidate intervention areas**, **Plausible intervention modes**, **Artifact decision**, **Recommended next action**.
 
 ## Anti-goals
 

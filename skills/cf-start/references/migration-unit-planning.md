@@ -16,9 +16,10 @@ Translate the accepted hard target into reviewable migration units.
 
 - If required inputs are missing, stop with `Artifact decision: not updated; migration inputs missing`.
 - No big-bang rewrite.
+- Do not downgrade, narrow, or relabel the accepted clean target to reduce churn.
 - Prefer the narrowest first unit that proves the target.
 - Keep units behavior-preserving unless requested otherwise.
-- Record what is intentionally deferred.
+- Record what is intentionally deferred as temporary staging against the accepted target, not as a revised target.
 - Choose exactly one first unit and record it through `artifacts.md`.
 - Keep the first unit as `recommended next work unit`, not active execution state.
 - Stop after planning. Do not map, safety-net, or execute.

@@ -43,12 +43,11 @@
 
 ## Target direction
 
-- domain ownership model:
-- organizing axis:
-- boundary representation roles:
-- proposed local direction:
+- reference target: scope, architecture, standard/custom decision, included/excluded ceremony
+- ownership and boundary model:
+- packaging direction and architectural rules:
 - split / consolidate / mixed / hard-restructure rationale:
-- architectural rules to respect:
+- temporary staging only:
 
 ## Work units
 
