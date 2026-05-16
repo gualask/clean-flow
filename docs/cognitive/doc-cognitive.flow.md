@@ -20,4 +20,6 @@ Document the runtime flow for `cf-cognitive`, the public local cleanup entrypoin
 5. In execution, read the whole target file plus relevant tests, call sites, and local conventions.
 6. Apply shared local refactor rules, edit only real cognitive pressure, and keep behavior stable.
 7. Process files sequentially, stopping after the explicit target set or at most three files.
-8. Run the smallest relevant check after edits and report any `cf-split` or `cf-cohesion` follow-up when the remaining cost is structural.
+8. Run the smallest relevant check after edits.
+9. After editing a target file, route through `cf-split` evaluation for that file before continuing to another target.
+10. If the remaining readability cost is caused by related files scattered across folders, route through `cf-cohesion` targeted evaluation before continuing to another target.
