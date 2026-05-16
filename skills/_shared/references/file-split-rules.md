@@ -5,6 +5,9 @@ Use this reference when evaluating or executing a behavior-preserving file-level
 ## Candidate Review
 
 A file-level split candidate is a natural owner that can be named without describing implementation steps.
+Evaluate split value on two axes: source readability and maintenance navigation.
+Maintenance navigation means a maintainer new to this area can use file names and local module structure to choose the likely file for a bug fix or feature change without first reading the whole source file.
+A split can be worthwhile when it materially improves either axis.
 
 Good candidates include:
 
@@ -19,7 +22,7 @@ Do not recommend extraction just because a file is long, a helper exists, or a s
 
 Classify each visible boundary:
 
-- `recommended`: extraction would make the source file easier to scan now
+- `recommended`: extraction would materially improve source readability or maintenance navigation now
 - `optional`: ownership is clear, but keeping it local is also reasonable
 - `keep local`: the boundary is visible but too small, too coupled, or not worth a file yet
 

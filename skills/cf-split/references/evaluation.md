@@ -18,7 +18,7 @@ Evaluate only. Do not edit files.
 - When recommending extraction, name the exact new file set and what stays grouped inside each file.
 - Name what should stay in the source file.
 - Recommend `none` only when no natural file-level boundary is visible.
-- Prefer no split when extraction would add navigation cost without simplifying the source file.
+- Prefer no split when extraction would add navigation cost without improving source readability or maintenance navigation.
 
 ## Output
 
