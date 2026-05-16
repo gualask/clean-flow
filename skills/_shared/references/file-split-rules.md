@@ -38,27 +38,28 @@ Use those locations only when reuse already exists, the extracted owner is truly
 
 ## Placement
 
-Place new files by nearest existing ownership and repository convention, not by generic type.
+Place new files by nearest existing ownership, not by generic type.
 Choose placement for the resulting local cluster, not only for the one file being created now.
-When deciding whether a local cluster exists, count the original public entry point too. A private extracted companion plus its sole public entry point is a related owner cluster when they are tightly coupled inside a broad type folder or reusable public surface.
+For placement counts, a real source file is a non-generated implementation source file in the target language. Do not count `mod.rs`, `index.ts`, barrel or re-export-only files, generated files, snapshots, fixtures, or tests.
 
-Choose placement in this order:
+Default to flat placement next to the source file.
+Create a new local subfolder only when all of these checks pass:
 
-- an existing local path or subfolder when it already owns the same seam
-- flat next to the caller when creating one local extracted file and no owner cluster exists
-- a new local subfolder when the split creates or extends at least two related files that should stay together
-- shared or global locations only when the grouping rules justify promotion
+- the owner group that would move into the subfolder contains at least three real source files
+- after moving that owner group, the parent directory would still contain at least two other direct real source-file peers
+- before the move, the parent directory contains at least six direct real source files
+
+If any check fails, keep the files flat in the parent directory.
+Use shared or global locations only when the grouping rules justify promotion.
 
 Do not create a new top-level architectural folder during a local split.
 Do not move to `shared`, `common`, or `utils` because reuse is only theoretical.
 
 After every executed split, re-check the containing directory:
 
-- if the extracted owner now spans multiple related files, keep those files together in one local subfolder
-- if a private extracted companion has no callers outside the original public entry point, do not treat "not exported from the barrel" as enough; check whether the directory level still advertises it as a reusable peer
-- if a previous split left one extracted file flat, move it with the new related files when the second split turns them into a cluster
-- if nearby conventions already group component clusters in subfolders, prefer the same shape over a flat pile of related files
-- if the remaining sibling files are unrelated peers, do not leave the extracted cluster mixed flat among them
+- if the new subfolder checks pass, move the owner group into one local subfolder
+- if the new subfolder checks fail, keep or return the owner group flat in the parent directory
+- if a previous split left one extracted file flat, move it only when the current split makes the full owner group pass the new subfolder checks
 
 If more than one placement is plausible, ask one focused question before editing.
 Offer only applicable options: flat next to the caller, an existing subfolder, or a new subfolder, with a recommendation.
