@@ -17,8 +17,6 @@ Execute exactly one cohesive behavior-preserving file-level split.
 - Move only the selected owned unit or related group.
 - Keep the source file as the readable entry point for the local workflow.
 - Follow shared grouping and placement rules before creating files, and choose placement for the resulting local cluster rather than only for the new file.
-- After the split, re-check the shared placement counts. Create or move into a local subfolder only when those checks pass.
-- If a previous split left one extracted file flat, include it in the placement adjustment only when the full owner group passes the shared placement counts.
 - Do not promote code to shared, global hooks, common, or utils locations unless the shared grouping rules justify it.
 - After moving code, ensure you have read [reference-audit.md](../../_shared/references/reference-audit.md) in this invocation, then audit moved names and paths.
 

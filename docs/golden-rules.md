@@ -36,6 +36,7 @@ For non-runtime files, check that the change does not move runtime behavior into
 
 - Cflow's mission is obsessive pursuit of the cleanest practical structure: maximum domain and ownership clarity, minimum justified ceremony, and no boilerplate that does not pay for a real boundary or risk.
 - Cleanliness is the default: optimize for the cleanest evidence-backed structure that fits the repository and request, not for the easiest or lowest-impact change.
+- Treat cognitive impact as bug-localization cost first: stable named owners that show where to inspect for likely bugs can override anti-overengineering heuristics such as flat defaults, file-count thresholds, or low-churn preference.
 - Open architecture reasoning by locating critical complexity; then define ownership, workflows, boundaries, invariants, dependency pressure, and packaging. Current structure is evidence and migration inventory, not the target to preserve.
 - Choose architecture from that diagnosis. Prefer the closest recognized reference architecture in the pragmatic form the repository needs, and involve the user before choosing custom top-level deviations.
 - Treat target shape as the clean end state for the assessed scope, not the first safe migration step. Do not shrink target scope or preserve current buckets because migration is risky.

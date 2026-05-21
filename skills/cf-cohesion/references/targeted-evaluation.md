@@ -20,7 +20,7 @@ Build a compact map with:
 - outliers: similarly named files that should not move
 - shared files: reusable utilities, adapters, or framework glue that should stay outside
 - nearby precedent: local folders or conventions that support or weaken regrouping
-- navigation cost: how many locations a reader must visit to follow the behavior
+- navigation cost: how many locations a reader must visit, and which likely bugs or changes should point to the candidate folder or file names before reading implementation
 
 ## Owner Locality
 
@@ -42,7 +42,7 @@ Before naming destination folders, state the smallest local convention that woul
 
 ## Decision Rules
 
-- Recommend regrouping only when it removes real navigation cost now.
+- Recommend regrouping only when it removes real navigation cost now, especially when the request is about where to debug or who owns a behavior.
 - Prefer `optional` when cohesion is real but current placement is already clear enough to follow.
 - Prefer `keep as-is` when the target folder would become a grab bag or current type-folder convention is stronger.
 - Use `route` when the move crosses repository boundaries, changes module ownership, or needs ordered planning through `cf-start`.
