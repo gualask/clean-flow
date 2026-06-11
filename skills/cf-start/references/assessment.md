@@ -1,6 +1,7 @@
 # Assessment
 
 Do assessment only. Do not implement, move files, or write patches.
+First bias to defeat: do not protect existing code from change. Integrating around the current shape to avoid touching it is how architecture rots; the cleanest target decides, and current code is inventory, not a constraint.
 
 ## Goal
 
@@ -49,7 +50,7 @@ Identify plausible modes, not the final unit:
 - hard-restructure
 - no-structural-refactor
 
-Rank by clean target first; use churn only to stage migration.
+Use churn only to stage migration, never to rank targets.
 Open with the critical complexity location before candidate areas or intervention modes.
 
 State `Target-shape need`:

@@ -59,7 +59,7 @@ If `.cflow/architecture.md` is missing, stale, or materially incomplete, route t
 
 ## Clean-Context Trace Reconstruction
 
-Apply [clean-context-recon.md](../_shared/references/clean-context-recon.md) with `cflow_trace_recon` before writing the trace artifact.
+Apply ../_shared/references/clean-context-recon.md with `cflow_trace_recon` before writing the trace artifact.
 Expected report sections: **Trace Scope**, **Observed Sequence**, **Inputs and Triggers**, **State and Artifacts**, **External Effects**, **Failure and Resume Paths**, **Evidence**, **Unknowns**.
 Use `assets/trace.template.md` as the review rubric.
 Allowed controller context while the agent runs: `.cflow/architecture.md`, existing trace artifact, trace template, and worktree status.

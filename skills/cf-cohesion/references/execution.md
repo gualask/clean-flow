@@ -19,7 +19,7 @@ Execute exactly one behavior-preserving local regrouping.
 - Keep broadly reused files outside the local slice.
 - Move tests only when repository convention supports colocated tests and the tests belong exclusively to the moved behavior.
 - Do not refactor file internals except import/export/path cleanup required by the move.
-- After moving code, ensure you have read [reference-audit.md](../../_shared/references/reference-audit.md) in this invocation, then audit moved names and paths.
+- After moving code, ensure you have read ../../_shared/references/reference-audit.md in this invocation, then audit moved names and paths.
 
 ## Verification
 

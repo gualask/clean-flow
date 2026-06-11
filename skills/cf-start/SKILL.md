@@ -10,7 +10,7 @@ For repository-level structure decisions, route through assessment or target-sha
 ## Artifacts
 
 - `.cflow/architecture.md`: input only; owned by `cf-architecture`.
-- `.cflow/refactor-brief.md`: accepted plan/resume state only. Use [artifacts.md](references/artifacts.md). Never use it as assessment notes.
+- `.cflow/refactor-brief.md`: accepted plan/resume state only. Use references/artifacts.md. Never use it as assessment notes.
 
 Before creating `.cflow/*`, create `.cflow/` if needed and add `.cflow/` to `.gitignore`.
 
@@ -64,13 +64,13 @@ Use when the open decision is the clean structural end state for a repository or
 
 Also use this phase when user feedback shows a previous structural recommendation may have preserved accidental structure or solved only a local symptom.
 
-Run [target-shape.md](references/target-shape.md). Stop with one checkpoint question.
+Run references/target-shape.md. Stop with one checkpoint question.
 
 ### Fresh Assessment
 
 Use when the open decision is whether repository/subsystem intervention is justified, which intervention frame fits, or whether target-shape work is needed at all.
 
-Run [assessment.md](references/assessment.md). Stop with one checkpoint question.
+Run references/assessment.md. Stop with one checkpoint question.
 
 ### Resume
 
@@ -90,7 +90,7 @@ Do not switch live direction until the user accepts the change. Execute at most 
 
 Use after accepted soft-split, soft-consolidate, or soft-mixed direction.
 
-- use [work-unit-planning.md](references/work-unit-planning.md) for multiple candidates, ordering, cross-boundary scope, or resumable work
+- use references/work-unit-planning.md for multiple candidates, ordering, cross-boundary scope, or resumable work
 - `soft-mixed` is not executable; each unit is `split` or `consolidate`
 - use structural unit directly only for one explicit accepted local unit
 
@@ -98,23 +98,23 @@ Use after accepted soft-split, soft-consolidate, or soft-mixed direction.
 
 Use when assessment/resume points to hard restructure.
 
-- first use [target-shape.md](references/target-shape.md)
-- after user approval, use [migration-unit-planning.md](references/migration-unit-planning.md)
+- first use references/target-shape.md
+- after user approval, use references/migration-unit-planning.md
 - never execute before target and migration units are clear
 
 ### Structural Unit
 
 Use only for an accepted unit with an execute request, or an explicit local behavior-preserving edit.
 
-- map: [concentration-map.md](references/concentration-map.md) for split, [fragmentation-map.md](references/fragmentation-map.md) for consolidation
-- lock behavior: [safety-net.md](references/safety-net.md)
-- execute: [split-execution.md](references/split-execution.md) or [consolidation-execution.md](references/consolidation-execution.md)
-- close: [structural-closure.md](references/structural-closure.md)
-- optional touched-area cleanup: [local-simplify.md](references/local-simplify.md)
+- map: references/concentration-map.md for split, references/fragmentation-map.md for consolidation
+- lock behavior: references/safety-net.md
+- execute: references/split-execution.md or references/consolidation-execution.md
+- close: references/structural-closure.md
+- optional touched-area cleanup: references/local-simplify.md
 
 ### Review Or Verify
 
-Use [review.md](references/review.md) for closure judgment and [verify.md](references/verify.md) for factual checks. Do not answer closure challenges with generic reassessment.
+Use references/review.md for closure judgment and references/verify.md for factual checks. Do not answer closure challenges with generic reassessment.
 
 ## Language rules
 

@@ -32,7 +32,7 @@ Do not split just because a file is large. If the new boundary would be generic,
 
 ## Placement criteria
 
-Before creating or moving files, read [file-split-rules.md](../../_shared/references/file-split-rules.md). If placement is unclear, ask one focused question.
+Before creating or moving files, read ../../_shared/references/file-split-rules.md. If placement is unclear, ask one focused question.
 
 ## Execution rules
 
@@ -66,7 +66,7 @@ Do not return `Next action: none` while a clear structural follow-up remains in 
 
 ## Before finishing
 
-Apply [structural-closure.md](structural-closure.md).
+Apply structural-closure.md.
 
 ## Artifact updates
 

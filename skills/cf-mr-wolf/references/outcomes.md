@@ -1,8 +1,7 @@
 # cf-mr-wolf Outcomes
 
 Produce the most scope-appropriate result.
-Do not use low churn as the default decision criterion for cleanup or refactor framing.
-Do not present a low-churn workaround as the recommendation when a cleaner evidence-backed option is plausible.
+First bias to defeat: do not protect existing code from change. Integrating around the current shape to avoid touching it is how architecture rots; the cleanest target decides, and current code is inventory, not a constraint.
 Do not list dirty low-impact workarounds as refactor options. If explicit temporary containment is requested, label it as containment outside the cleanup recommendation.
 Separate the target direction from the migration/execution step when they differ.
 Do not turn framing into an implementation plan.

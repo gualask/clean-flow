@@ -43,7 +43,7 @@ Do not consolidate just because files are small. Keep boundaries with real domai
 
 ## Before finishing
 
-Apply [structural-closure.md](structural-closure.md).
+Apply structural-closure.md.
 
 ## Artifact updates
 

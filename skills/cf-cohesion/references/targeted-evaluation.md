@@ -8,6 +8,7 @@ Decide whether already-related files should stay where they are or live together
 
 ## Preflight
 
+- Ensure you have read ../../_shared/references/navigation-cost.md in this invocation; it owns the test that decides regrouping value.
 - Read the local directory tree around the target.
 - Read candidate files, imports/exports, call sites, tests, and nearby grouping conventions.
 - Identify the current owner area and any sibling feature folders that set precedent.
@@ -20,7 +21,7 @@ Build a compact map with:
 - outliers: similarly named files that should not move
 - shared files: reusable utilities, adapters, or framework glue that should stay outside
 - nearby precedent: local folders or conventions that support or weaken regrouping
-- navigation cost: how many locations a reader must visit, and which likely bugs or changes should point to the candidate folder or file names before reading implementation
+- navigation cost: how much a reader must read to follow the behavior, and which likely bugs or changes should point to the candidate folder or file names before reading implementation
 
 ## Owner Locality
 

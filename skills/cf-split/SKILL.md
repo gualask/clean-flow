@@ -25,12 +25,12 @@ Evaluation flow does not edit repository files.
 ### Evaluation Flow
 
 Use when the current request asks whether a split is worthwhile.
-Read [evaluation.md](references/evaluation.md).
+Read references/evaluation.md.
 
 ### Execution Flow
 
 Use when the current request explicitly asks to perform the split.
-Read [execution.md](references/execution.md).
+Read references/execution.md.
 
 Do not infer execution from words like "review", "check", "is this worth splitting", or "should this be extracted".
 

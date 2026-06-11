@@ -21,17 +21,17 @@ Discovery and targeted evaluation flows do not edit repository files.
 ### Discovery Flow
 
 Use when no explicit file target was provided.
-Read [discovery.md](references/discovery.md).
+Read references/discovery.md.
 
 ### Targeted Evaluation Flow
 
 Use when one or more explicit file targets were provided and the current request asks to review, assess, evaluate, or decide whether cleanup is worthwhile.
-Read [targeted-evaluation.md](references/targeted-evaluation.md).
+Read references/targeted-evaluation.md.
 
 ### Execution Flow
 
 Use when the current request explicitly asks to refactor, reduce, clean up, fix cognitive complexity, or proceed on explicit target files or a confirmed discovery candidate.
-Read [execution.md](references/execution.md).
+Read references/execution.md.
 
 If the target, flow, or requested outcome is ambiguous, ask one focused question.
 Do not infer execution from words like "review", "check", "is this complex", or "should we clean this up".

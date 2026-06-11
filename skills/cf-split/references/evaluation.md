@@ -9,7 +9,7 @@ Evaluate only. Do not edit files.
 - If the target is an area rather than one file, consider bundled `../../_shared/scripts/repo-tree.mjs`; run it with `--help` first when a gitignore-aware file-name tree may reduce context before choosing the target file.
 - Read the whole target file, nearby imports/exports, call sites, tests, and local naming or folder conventions.
 - Treat repository state as the source of truth.
-- Before evaluating candidates, ensure you have read [file-split-rules.md](../../_shared/references/file-split-rules.md) in this invocation.
+- Before evaluating candidates, ensure you have read ../../_shared/references/file-split-rules.md in this invocation.
 
 ## Evaluation Rules
 

@@ -11,9 +11,11 @@ Look for:
 - too many tiny files with no real ownership
 - pass-through wrappers
 - one-hop functions or adapters that add no semantic value
-- high hop count for simple workflows
+- workflows whose units cannot be judged and skipped from their names, so each hop forces reading
 - boundaries created for style rather than responsibility
 - indirection that hides the flow more than it clarifies it
+
+Judge candidates with ../../_shared/references/navigation-cost.md: jumps into skippable single-responsibility units are cheap. Do not consolidate units a reader can already skip by name and role just to cut hops; consolidate when the boundary itself is artificial.
 
 ## Required Inputs
 
@@ -25,7 +27,7 @@ Look for:
 1. Identify fragmented seams or awkward chains.
 2. Identify which files or modules do too little to justify their existence.
 3. Identify whether the boundary is semantically real or artificial.
-4. Measure the indirection cost in human terms: how many hops are needed to understand one simple workflow.
+4. Measure the indirection cost in human terms: how much must be read to understand one simple workflow, counting only hops the reader cannot skip from names and roles.
 5. Decide whether the safest action is:
    - consolidate
    - leave it alone

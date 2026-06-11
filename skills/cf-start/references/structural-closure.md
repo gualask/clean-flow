@@ -12,7 +12,7 @@ If no relevant verification is available, say that explicitly in `Checks run` or
 
 ## Reference Audit
 
-If files or symbols were moved, renamed, split, merged, removed, relocated, or re-exported, read [reference-audit.md](../../_shared/references/reference-audit.md), then audit the touched names and paths.
+If files or symbols were moved, renamed, split, merged, removed, relocated, or re-exported, read ../../_shared/references/reference-audit.md, then audit the touched names and paths.
 
 ## Output Format
 

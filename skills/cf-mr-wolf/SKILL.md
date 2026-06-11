@@ -34,12 +34,12 @@ Do not announce an inspection plan, infer the frame from repository state, or co
 
 Read reference files only when their phase becomes active.
 
-1. Frame the request and perimeter. [framing](references/framing.md)
-2. Read or update `.cflow/mr-wolf-notes.md` when context, evidence, or a handoff should be retained. [framing](references/framing.md)
-3. If the framed request is broad, split it into a small evidence slice map. [decomposition](references/decomposition.md)
-4. Gather focused evidence for the active scope or slice. [evidence](references/evidence.md), [dynamic agents](references/dynamic-agents.md)
-5. De-risk candidate findings that affect the final answer. [derisk](references/derisk.md)
-6. Recommend the most scope-appropriate route or decision. [outcomes](references/outcomes.md)
+1. Frame the request and perimeter. references/framing.md
+2. Read or update `.cflow/mr-wolf-notes.md` when context, evidence, or a handoff should be retained. references/framing.md
+3. If the framed request is broad, split it into a small evidence slice map. references/decomposition.md
+4. Gather focused evidence for the active scope or slice. references/evidence.md, references/dynamic-agents.md
+5. De-risk candidate findings that affect the final answer. references/derisk.md
+6. Recommend the most scope-appropriate route or decision. references/outcomes.md
 
 ## Routing
 

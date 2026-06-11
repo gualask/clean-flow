@@ -38,7 +38,7 @@ Use whichever are relevant and available:
 - diff inspection for obviously dangerous drift
 - reference audit when names or files moved
 
-If a move, rename, split, merge, or re-export happened, ensure you have read [reference-audit.md](../../_shared/references/reference-audit.md) in this invocation, then run that audit for the touched names and paths.
+If a move, rename, split, merge, or re-export happened, ensure you have read ../../_shared/references/reference-audit.md in this invocation, then run that audit for the touched names and paths.
 
 ## Output format
 

@@ -73,6 +73,7 @@ Public skill entrypoints:
 
 Shared support references:
 
+- `skills/_shared/references/navigation-cost.md`
 - `skills/_shared/references/local-refactor-rules.md`
 - `skills/_shared/references/local-readability-review.md`
 - `skills/_shared/references/file-split-rules.md`

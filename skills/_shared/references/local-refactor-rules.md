@@ -1,6 +1,7 @@
 # Local Refactor Rules
 
 Use this reference only while editing local code for readability, cognitive load, or post-structural cleanup.
+Judge every edit with navigation-cost.md; the triggers below are smells that prompt that test, not the verdict.
 
 ## Behavior
 
@@ -27,7 +28,7 @@ Avoid edits when the code is merely imperfect but already clear, cohesive, and p
 ## Extraction
 
 - Extract validation, error creation, difficult local algorithms, parser or regex setup, domain calculations, long try/catch bodies, long loop bodies, or case-specific handling from a long branch or switch.
-- Prefer a shallow orchestrator: the caller shows the main sequence, and helpers are understandable without following a deep call chain.
+- Prefer an orchestrating caller that reads as the main sequence; a jump into a helper is cheap when its name lets the reader skip it or dive deliberately.
 - Keep extracted functions file-local and near callers unless local convention says otherwise.
 - Extract from hot paths only when the readability gain clearly outweighs call-boundary, allocation, or extra-pass costs.
 - After editing, re-read the caller or target function first; inline or narrow helpers that do not make it clearer.
@@ -55,7 +56,6 @@ Avoid edits when the code is merely imperfect but already clear, cohesive, and p
 - pass-through wrappers
 - generic `process`, `handle`, `helper`, `util`, or `common` names
 - todo-list names like `promoteAndFinalizeCreate` or `loadOrCleanupIfMissing`
-- many tiny helpers
 - single-use helpers that only unpack a regex or match result
 - single-use helpers that only loop over a range to push or add into a caller-owned collection
 - helpers that hide important side effects

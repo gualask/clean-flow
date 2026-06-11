@@ -9,7 +9,7 @@ Execute exactly one cohesive behavior-preserving file-level split.
 - If the target is an area rather than one file, consider bundled `../../_shared/scripts/repo-tree.mjs`; run it with `--help` first when a gitignore-aware file-name tree may reduce context before choosing the target file.
 - Read the whole target file, nearby imports/exports, call sites, tests, and local naming or folder conventions.
 - Treat repository state as the source of truth.
-- Before choosing placement, ensure you have read [file-split-rules.md](../../_shared/references/file-split-rules.md) in this invocation.
+- Before choosing placement, ensure you have read ../../_shared/references/file-split-rules.md in this invocation.
 
 ## Execution Rules
 
@@ -18,7 +18,7 @@ Execute exactly one cohesive behavior-preserving file-level split.
 - Keep the source file as the readable entry point for the local workflow.
 - Follow shared grouping and placement rules before creating files, and choose placement for the resulting local cluster rather than only for the new file.
 - Do not promote code to shared, global hooks, common, or utils locations unless the shared grouping rules justify it.
-- After moving code, ensure you have read [reference-audit.md](../../_shared/references/reference-audit.md) in this invocation, then audit moved names and paths.
+- After moving code, ensure you have read ../../_shared/references/reference-audit.md in this invocation, then audit moved names and paths.
 
 ## Verification
 

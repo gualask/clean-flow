@@ -44,7 +44,7 @@ Write `.cflow/architecture.md` in the repository's dominant documentation langua
 
 ## Clean-Context Reconnaissance
 
-Apply [clean-context-recon.md](../_shared/references/clean-context-recon.md) with `cflow_architecture_recon` before writing the architecture map.
+Apply ../_shared/references/clean-context-recon.md with `cflow_architecture_recon` before writing the architecture map.
 Expected report sections: **Repository Context**, **Entry Points**, **Top-Level Map**, **External Boundaries**, **Boundary and Packaging Model**, **Observed Invariants**, **Evidence**, **Unknowns**.
 Use `../cf-start/assets/architecture.template.md` as the review rubric.
 Allowed controller context while the agent runs: existing architecture artifact, architecture template, and worktree status.
