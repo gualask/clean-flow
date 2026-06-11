@@ -67,6 +67,7 @@ Public skill entrypoints:
 - `skills/cf-start/references/safety-net.md`
 - `skills/cf-start/references/split-execution.md`
 - `skills/cf-start/references/consolidation-execution.md`
+- `skills/cf-start/references/structural-closure.md`
 - `skills/cf-start/references/local-simplify.md`
 - `skills/cf-start/references/review.md`
 - `skills/cf-start/references/verify.md`
@@ -78,6 +79,7 @@ Shared support references:
 - `skills/_shared/references/local-readability-review.md`
 - `skills/_shared/references/file-split-rules.md`
 - `skills/_shared/references/reference-audit.md`
+- `skills/_shared/references/clean-context-recon.md`
 
 Shared support scripts:
 

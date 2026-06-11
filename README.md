@@ -11,6 +11,7 @@ Use it when you want Codex to:
 - map the current repository shape before planning changes
 - trace a workflow or command path and find sequence, ownership, or failure-mode issues
 - explain the real impact of a bug, behavior, or change through concrete code-grounded scenarios
+- review an area for overengineering, duplicated parallel flows, or complexity that no longer earns its place
 - split an overloaded file into nearby owned files
 - reduce local cognitive complexity in a source file
 - regroup related files into a more cohesive local feature slice
@@ -107,8 +108,8 @@ Invoke it explicitly when the problem is hard, ambiguous, or needs careful reaso
 
 ### `cf-simplify`
 
-Reviews an area for overengineering, file sprawl, and accidental complexity.
-Use it when you are unsure whether the current behavior, interface contracts, boundaries, or abstractions are worth their code cost.
+Reviews an area for overengineering, file sprawl, duplicated or parallel near-identical flows, and accidental complexity.
+Use it when you are unsure whether the current behavior, interface contracts, boundaries, or abstractions are worth their code cost, or whether similar flows should be consolidated behind one abstraction.
 
 ### `cf-architecture`
 
