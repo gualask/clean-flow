@@ -1,6 +1,6 @@
 ---
 name: cf-simplify
-description: Diagnose overengineering, file sprawl, unnecessary lifecycle complexity, and whether an area can be made substantially cleaner by simplifying behavior, interface contracts, boundaries, or architecture. Use when the current request questions whether files are necessary, suspects overengineering, wants a large simplification refactor, or asks whether to remove/replace an over-complex design instead of polishing it.
+description: Diagnose overengineering, file sprawl, duplicated or parallel near-identical flows, unnecessary lifecycle complexity, and whether an area gets substantially cleaner by simplifying behavior, interface contracts, boundaries, or architecture. Use when the request questions whether files are necessary, suspects overengineering or duplication, wants a large simplification, or asks whether to remove/replace an over-complex design instead of polishing it.
 ---
 
 Operate as a simplification reviewer before refactor execution.
@@ -29,6 +29,8 @@ For broad or multi-step execution, route to `cf-start` with a concrete recommend
 
 Identify the concrete area under review from the prompt. If no area is clear, ask one focused question.
 
+If the framed area exceeds what one pass can credibly read and hold, split it into sub-areas and complete each verdict sequentially before starting the next. When the perimeter is effectively repository-level, route to `cf-start` assessment instead of stretching one pass.
+
 Gather only enough evidence to answer:
 
 - which files belong to the area, where it is entered from, and which public behavior or workflow it supports
@@ -38,6 +40,8 @@ Gather only enough evidence to answer:
 - whether current git changes alter the picture
 
 ### 2. Identify Complexity Drivers
+
+When the request involves duplicated logic or parallel near-identical flows, read references/parallel-flows.md before classifying drivers; it owns the accidental-vs-essential divergence judgment.
 
 Name the forces that require complexity: lifecycle or concurrency behavior, retries/queues/caching/background work, distributed state or persistence, cross-process or plugin contracts, compatibility requirements, validation/migration/permissions/recovery/observability, framework or harness constraints, and analogous project-specific forces.
 
@@ -68,6 +72,7 @@ Recommend the lever with the best complexity reduction:
 - remove or relax a costly behavior, or make an implicit action explicit
 - collapse an unnecessary lifecycle or state machine
 - consolidate artificial boundaries
+- unify parallel near-duplicate flows behind one abstraction when their divergence is accidental, per references/parallel-flows.md
 - replace a false global owner or barrel with explicit local owners and mapping only at real ownership boundaries
 - split a dense owner only when it reveals real ownership
 - keep current behavior and accept the complexity when simplification would damage the product

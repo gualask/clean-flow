@@ -46,7 +46,7 @@ Read reference files only when their phase becomes active.
 Choose the first route that fits current evidence and uncertainty:
 
 1. `cf-architecture`: `.cflow/architecture.md` is missing, stale, or materially incomplete enough to block routing or handoff.
-2. `cf-simplify`: the current request asks whether an area has too many files, unnecessary complexity, overengineering, or whether changing behavior or interface contracts could enable a cleaner simplification.
+2. `cf-simplify`: the current request asks whether an area has too many files, unnecessary complexity, overengineering, duplicated or parallel near-identical flows, or whether changing behavior or interface contracts could enable a cleaner simplification.
 3. `cf-start`: the current request asks for cleanup/refactor architecture, structure, target direction, ownership, dependency direction, migration order, repository-level assessment, multi-step refactor work, risky or ordered work, or resumable work.
 4. `cf-scenario`: one or two concrete code-grounded scenarios would clarify real impact or compare similar flows.
 5. `cf-trace`: one concrete workflow/path needs ordered reconstruction for state, failure, resume, or ownership.
