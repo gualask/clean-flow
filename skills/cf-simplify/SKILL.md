@@ -85,6 +85,15 @@ Prefer one clear recommendation over a menu of equal choices, in this order:
 4. Behavior should stay but the shape is accidental: recommend a behavior-preserving refactor route through `cf-start`.
 5. Evidence is insufficient: ask for the one focused decision or inspection needed next.
 
+## Applying The Simplification
+
+Only when applying the chosen simplification is explicit in the current request:
+
+- Stay within the chosen lever; if the work widens beyond it, stop and return to recommendation.
+- Before editing code, ensure you have read ../_shared/references/local-refactor-rules.md in this invocation.
+- After moving, renaming, or deleting files or symbols, read ../_shared/references/reference-audit.md, then audit the touched names and paths.
+- Run the smallest relevant check: targeted tests, typecheck or compile, lint, or a narrow smoke check; if none can run, say that explicitly.
+
 ## Output Format
 
 Use direct, decision-oriented sections:

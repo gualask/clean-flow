@@ -6,7 +6,7 @@ Evaluate only. Do not edit files.
 
 - Identify one target source file or one explicitly touched local file area.
 - If the target file is ambiguous, ask one focused question.
-- If the target is an area rather than one file, consider bundled `../../_shared/scripts/repo-tree.mjs`; run it with `--help` first when a gitignore-aware file-name tree may reduce context before choosing the target file.
+- If the target is an area rather than one file, run bundled `../../_shared/scripts/repo-tree.mjs` (`--help` first) and use its gitignore-aware file-name tree to choose the target file before reading implementation.
 - Read the whole target file, nearby imports/exports, call sites, tests, and local naming or folder conventions.
 - Treat repository state as the source of truth.
 - Before evaluating candidates, ensure you have read ../../_shared/references/file-split-rules.md in this invocation.
@@ -19,6 +19,7 @@ Evaluate only. Do not edit files.
 - Name what should stay in the source file.
 - Recommend `none` only when no natural file-level boundary is visible.
 - Prefer no split when extraction would add navigation cost without improving source readability or maintenance navigation.
+- When the dominant cost is cross-file placement or repository structure rather than boundaries inside this file, say so and name `cf-cohesion` or `cf-start` as the next action in **Result**.
 
 ## Output
 

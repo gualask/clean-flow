@@ -9,6 +9,7 @@
 If required inputs are missing, stop with `Next action: complete mapping or safety net first`.
 - If there is no credible safety lock for the current structural move, stop and route to safety-net first.
 - If the target boundary may be real, route to fragmentation-map before editing.
+- Before editing, ensure you have read ../../_shared/references/navigation-cost.md in this invocation; that test decides consolidation value, not hop count.
 
 ## Goal
 
@@ -17,7 +18,7 @@ Reduce fragmentation pressure without widening scope.
 Consolidate when:
 
 - tiny files, wrappers, or adapters add hops without real ownership
-- a simple workflow takes too many jumps
+- a simple workflow forces hops the reader cannot skip from names and roles
 - a boundary exists for style rather than responsibility
 - callers still perform nearly the same branching or mapping after crossing the boundary
 
@@ -25,8 +26,8 @@ Do not consolidate just because files are small. Keep boundaries with real domai
 
 ## Consolidation criteria
 
-- Name the workflow with too many jumps and the artificial boundary to collapse.
-- Consolidate only when a visible hop disappears or caller code gets simpler.
+- Name the workflow whose hops force reading and the artificial boundary to collapse.
+- Consolidate only when reading cost drops: an unskippable hop disappears or caller code gets simpler. Do not consolidate units a reader can already skip by name and role.
 - The resulting file/module still needs one clear reason to exist.
 
 ## Execution rules

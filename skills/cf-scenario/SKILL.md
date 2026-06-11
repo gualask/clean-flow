@@ -3,6 +3,7 @@ name: cf-scenario
 description: Frame, validate, or explain a bug, code change, architectural concern, or behavior through concrete code-grounded scenarios. Use when the user or another agent needs to understand real impact across direct and indirect flows, especially before a fix or after an implementation.
 ---
 Use this skill to make technical behavior concrete through scenarios grounded in the repository.
+Do not implement, move files, or write patches in this skill.
 
 Keep it lightweight. The goal is not a formal use-case document; the goal is to answer "what actually happens?" in a way a human can follow.
 

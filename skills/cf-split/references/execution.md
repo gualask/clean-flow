@@ -6,7 +6,7 @@ Execute exactly one cohesive behavior-preserving file-level split.
 
 - Identify one target source file or one explicitly touched local file area.
 - If the target file or placement is ambiguous, ask one focused question before editing.
-- If the target is an area rather than one file, consider bundled `../../_shared/scripts/repo-tree.mjs`; run it with `--help` first when a gitignore-aware file-name tree may reduce context before choosing the target file.
+- If the target is an area rather than one file, run bundled `../../_shared/scripts/repo-tree.mjs` (`--help` first) and use its gitignore-aware file-name tree to choose the target file before reading implementation.
 - Read the whole target file, nearby imports/exports, call sites, tests, and local naming or folder conventions.
 - Treat repository state as the source of truth.
 - Before choosing placement, ensure you have read ../../_shared/references/file-split-rules.md in this invocation.
@@ -23,6 +23,7 @@ Execute exactly one cohesive behavior-preserving file-level split.
 ## Verification
 
 Run the smallest relevant check: targeted tests, typecheck or compile, lint, or a narrow smoke check.
+Use native success criteria; do not require `failed=0` unless that is how the runner reports results.
 If a relevant check fails, decide whether the split caused it, fix split-caused failures, and re-run the check.
 If no relevant check can be run, say that explicitly.
 

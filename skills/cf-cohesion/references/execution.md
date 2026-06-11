@@ -24,6 +24,7 @@ Execute exactly one behavior-preserving local regrouping.
 ## Verification
 
 Run the smallest relevant check: targeted tests, typecheck or compile, lint, or a narrow smoke check.
+Use native success criteria; do not require `failed=0` unless that is how the runner reports results.
 If a relevant check fails, decide whether the regrouping caused it, fix regrouping-caused failures, and re-run the check.
 If no relevant check can be run, say that explicitly.
 
