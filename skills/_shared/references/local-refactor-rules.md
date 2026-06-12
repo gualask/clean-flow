@@ -1,7 +1,8 @@
 # Local Refactor Rules
 
 Use this reference only while editing local code for readability, cognitive load, or post-structural cleanup.
-Judge every edit with navigation-cost.md; the triggers below are smells that prompt that test, not the verdict.
+Judge every edit with navigation-cost.md; its hard triggers (nesting depth, function length, file LOC) decide on their own that work is needed, while the remaining triggers below are smells that prompt that test.
+Prefer remedies in this order: guard clauses or early returns first, then named same-file helpers when flattening is not enough.
 
 ## Behavior
 

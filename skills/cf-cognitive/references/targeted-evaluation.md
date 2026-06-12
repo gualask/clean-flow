@@ -16,6 +16,9 @@ Decide whether the explicit target files have real local cognitive pressure wort
 ## Evaluation Rules
 
 - Classify each target as `recommended`, `optional`, `keep as-is`, or `route`.
+- Default to `recommended` whenever a hard trigger from navigation-cost.md is past its threshold; use `optional` or `keep as-is` for such a target only by naming one of its recognized exemptions.
+- When the target file is past the roughly-300-LOC bell, include an explicit file-size verdict in **Result**: `route` to `cf-split`, or the named exemption that justifies its size.
+- Do not minimize findings past a hard trigger with qualifiers like "light", "minor", "not yet serious", or "someday"; state the hotspot plainly and name the remedy.
 - Use `recommended` only when local control flow, nesting, callbacks, parsing, branching, or repeated non-trivial logic materially slows reading.
 - Use `recommended`, not `optional`, when a function's main path is hidden behind multiple indentation layers such as guard or branch -> runner/callback -> try/catch -> result branching, and a same-file task or result helper would make the caller read as guard plus orchestration.
 - When lifecycle, registration, framework/runtime wiring, or infrastructure callbacks contain real behavior such as branching, multiple state updates, mutable state changes, cleanup-sensitive ordering, or promise/error handling, do not classify the target as `keep as-is` only because it is not split-worthy.

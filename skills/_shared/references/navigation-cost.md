@@ -1,7 +1,7 @@
 # Navigation Cost
 
 Use this lens whenever judging whether code is structured well enough to maintain, inside one file, across files, or across folders.
-It is the objective that ranks every other readability, split, or cohesion signal.
+It is the objective that ranks every other readability, split, or cohesion signal, with one carve-out: the hard triggers below decide on their own that a finding exists; the test then decides only the remedy.
 
 ## The Test
 
@@ -35,11 +35,30 @@ A unit's name is its skippability test: if it cannot be named by its result or r
 - predictable placement, through a recognized architecture or a consistent local convention, so the likely location is guessable
 - grouping what is read together and separating what is not
 
-## Signals Are Not the Verdict
+## Hard Triggers
 
-Treat long functions, file length, deep nesting, line-count thresholds, hop count, and scattered files as smells that prompt the test, never as the decision.
-When a smell and the test disagree, the test wins.
-A stable, well-named owner that tells a maintainer where to look can stay even if a threshold calls it too long; a short file can still fail the test when it hides where behavior lives.
+Three signals are alarm bells, not mere smells. Past these thresholds the default verdict is that cleanup, extraction, or routing is needed, and the burden of proof inverts onto keeping the code as-is:
+
+- nesting deeper than function -> block -> block
+- a function or method past roughly 20-30 logical lines
+- a file past roughly 300 LOC (read it from `repo-tree.mjs` output; the number is a bell, not a sentence)
+
+Past a hard trigger, `keep as-is` or "no finding" is allowed only by explicitly naming one of these exemptions:
+
+- a flat demux match/switch whose arms are each a single thin delegation
+- a linear, branch-free sequence such as config, builder, or setup code
+- data tables, constants, schemas, or generated code
+- one indivisible behavior that flattening or splitting would force readers to reassemble across units
+- for file length only: a single stable owner made of small, skippable, well-named units, after confirming no natural boundary exists
+
+No named exemption, no absolution. The test below still decides the remedy — guard clause first, then named same-file helper, then extraction or routing to a split — but never whether the finding exists.
+Report any finding past a hard trigger as a real hotspot. Do not minimize it with words like "minor", "light", "not yet serious", or "someday"; severity hedging is a form of downranking and is treated as a violation of this rule.
+
+## Soft Signals Are Not the Verdict
+
+Treat hop count, scattered files, and other distance or count signals as smells that prompt the test, never as the decision.
+When a soft signal and the test disagree, the test wins.
+A stable, well-named owner that tells a maintainer where to look can stay even when counts look high; a short file can still fail the test when it hides where behavior lives.
 
 ## What Counts as a Regression
 

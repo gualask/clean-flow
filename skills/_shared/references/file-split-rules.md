@@ -16,7 +16,8 @@ Good candidates include:
 - substantial self-contained subcomponents
 - focused policy or domain logic with a stable name
 
-Do not recommend extraction just because a file is long, a helper exists, or a small component could technically live elsewhere.
+File length alone does not pick what to extract, but past the roughly-300-LOC bell in navigation-cost.md the default verdict is that a boundary exists: conclude `none` or `keep local` for such a file only by naming one of its recognized exemptions.
+Below that bell, do not recommend extraction just because a helper exists or a small component could technically live elsewhere.
 
 Classify each visible boundary:
 
