@@ -49,8 +49,8 @@ Refactor only when the target has clear local cognitive pressure:
 - complex boolean expressions, regex construction, parsing, or small algorithms that are hard to read inline
 - repeated non-trivial local logic
 
-Nesting deeper than function -> block -> block and functions past the 20-30 logical-line bell are hard triggers as defined in ../_shared/references/navigation-cost.md: default to cleanup, and keep code as-is only by naming one of its recognized exemptions.
-Prefer remedies in this order: guard clauses or early returns to flatten the path first, then extraction into named same-file helpers when flattening is not enough.
+Nesting deeper than function -> block -> block and functions past the 20-30 logical-line bell are hard triggers as defined in references/navigation-cost.md: default to cleanup, and keep code as-is only by naming one of its recognized exemptions.
+For function-level pressure, prefer remedies in this order: guard clauses or early returns to flatten the path first, then extraction into named same-file helpers when flattening is not enough.
 When a target file is past roughly 300 LOC, also state an explicit file-size verdict: `route` to `cf-split`, or name the exemption that justifies its current size.
 
 Before classifying nested code as `optional` or `keep as-is`, trace the deepest main-path stack. A small method is still a cleanup candidate when the reader must pass through guard/branch, runner or callback, try/catch, and result branching before seeing the intent. Do not downrank this only because behavior is correct, the code is local, or no file split is needed. Do not downrank verbally either: report a finding past a hard trigger as a real hotspot, never as "light", "minor", or "not yet serious".

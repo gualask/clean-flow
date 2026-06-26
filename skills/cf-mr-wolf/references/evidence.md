@@ -7,7 +7,7 @@ Prefer compact, high-signal sources:
 - MCP code-intelligence tools when available: semantic code search/RAG for concepts and indirect flows, symbol definition for exact names, and file outline for structure
 - MCP resources or structured project context when available
 - bundled or custom scripts when they can summarize, classify, or measure the codebase more cheaply than manual reads
-- bundled `repo-tree.mjs` (resolve `../../_shared/scripts/repo-tree.mjs` from this reference file's own directory, never from the project working directory) when a compact project-structure overview with file, directory, and approximate LOC metrics would help choose the next context slice
+- bundled `scripts/repo-tree.mjs` (resolve it from the active skill root, never from the project working directory) when a compact project-structure overview with file, directory, and approximate LOC metrics would help choose the next context slice
 - focused system commands such as `rg`, package metadata reads, language outline tools, and read-only diagnostics
 - specialist skills when they are the right lens
 - small temporary `/tmp` scripts only for mechanical classification across many inputs

@@ -17,7 +17,7 @@ import {
   writeSupportDirectory,
 } from "./support/helpers.mjs";
 
-test("install copies new skills and support directories with owned markers", async () => {
+test("install copies new skills with owned markers", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
   const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
@@ -30,13 +30,12 @@ test("install copies new skills and support directories with owned markers", asy
 
   const result = await installSkills({ sourceRoot, destinationRoot });
 
-  assert.equal(result.added.length, 3);
+  assert.equal(result.added.length, 2);
   assert.equal(result.updated.length, 0);
   assert.equal(result.pruned.length, 0);
   assert.equal(result.conflicts.length, 0);
   assert.equal(result.applied, true);
   assert.deepEqual(await listDirectoryNames(destinationRoot), [
-    "_shared",
     "cf-cognitive",
     "cf-start",
   ]);
@@ -45,14 +44,9 @@ test("install copies new skills and support directories with owned markers", asy
   assert.equal(marker.owner, "clean-flow");
   assert.equal(marker.pack, "cflow");
   assert.match(marker.fingerprint, /^sha256:/);
-
-  const supportMarker = await readMarker(path.join(destinationRoot, "_shared"));
-  assert.equal(supportMarker.owner, "clean-flow");
-  assert.equal(supportMarker.pack, "cflow");
-  assert.equal(supportMarker.sourceKind, "support");
 });
 
-test("install updates owned skills, prunes removed owned skills, and keeps foreign skills", async () => {
+test("install updates owned skills, prunes removed owned directories, and keeps foreign skills", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
   const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
@@ -60,9 +54,6 @@ test("install updates owned skills, prunes removed owned skills, and keeps forei
   await mkdir(sourceRoot, { recursive: true });
   await mkdir(destinationRoot, { recursive: true });
 
-  await writeSupportDirectory(sourceRoot, "_shared", {
-    "references/example.md": "# Updated shared reference\n",
-  });
   await writeSkill(sourceRoot, "cf-start", {
     "SKILL.md": `---\nname: "cf-start"\ndescription: "Updated"\n---\n\n# cf-start v2\n`,
   });
@@ -95,21 +86,15 @@ test("install updates owned skills, prunes removed owned skills, and keeps forei
 
   const result = await installSkills({ sourceRoot, destinationRoot });
 
-  assert.equal(result.updated.length, 2);
+  assert.equal(result.updated.length, 1);
   assert.equal(result.added.length, 1);
-  assert.equal(result.pruned.length, 1);
+  assert.equal(result.pruned.length, 2);
   assert.equal(result.conflicts.length, 0);
   assert.deepEqual(await listDirectoryNames(destinationRoot), [
-    "_shared",
     "cf-cognitive",
     "cf-start",
     "foreign-skill",
   ]);
-
-  const updatedSharedBody = await readText(
-    path.join(destinationRoot, "_shared", "references", "example.md"),
-  );
-  assert.match(updatedSharedBody, /Updated shared reference/);
 
   const updatedBody = await readText(path.join(destinationRoot, "cf-start", "SKILL.md"));
   assert.match(updatedBody, /Updated/);
@@ -152,6 +137,22 @@ test("install dry-run computes the plan without mutating the target", async () =
   assert.equal(result.added.length, 1);
   assert.equal(result.applied, false);
   assert.deepEqual(await listDirectoryNames(destinationRoot), []);
+});
+
+test("install rejects raw vendored skill sources", async () => {
+  const workspace = await makeTempWorkspace();
+  const sourceRoot = path.join(workspace, "source");
+  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
+
+  await writeSupportDirectory(sourceRoot, "_shared", {
+    "vendor.json": JSON.stringify({ version: 1, skills: {} }),
+  });
+  await writeSkill(sourceRoot, "cf-start");
+
+  await assert.rejects(
+    () => installSkills({ sourceRoot, destinationRoot }),
+    /Install source must be materialized before sync/,
+  );
 });
 
 test("install copies Codex custom agents with owned markers", async () => {

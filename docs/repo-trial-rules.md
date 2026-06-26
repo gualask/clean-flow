@@ -2,7 +2,7 @@
 
 This document is the collaboration protocol for validating Cflow on real target repositories.
 
-It is separate from [maintaining-this-pack.md](/Users/blazar/Dev/clean-flow/docs/maintaining-this-pack.md) because real-repo trials are not just pack maintenance.
+It is separate from [maintaining-this-pack.md](./maintaining-this-pack.md) because real-repo trials are not just pack maintenance.
 They are a joint debugging and validation loop between:
 
 - the user running or observing Cflow on a real repository
@@ -36,7 +36,7 @@ Do not use this document as the source of truth for skill contracts.
 For that, use:
 
 - the relevant per-public-skill flow doc under `docs/<public-skill>/doc-*.flow.md`
-- [maintaining-this-pack.md](/Users/blazar/Dev/clean-flow/docs/maintaining-this-pack.md)
+- [maintaining-this-pack.md](./maintaining-this-pack.md)
 - the relevant `skills/*/SKILL.md`
 
 ## Trial Model
@@ -75,9 +75,11 @@ Before suggesting a skill change, collect as much of this packet as possible:
   - `cf-simplify`
   - `cf-architecture`
   - `cf-trace`
+  - `cf-scenario`
   - `cf-cognitive`
   - `cf-split`
   - `cf-cohesion`
+  - `cf-docs`
   - `cf-start` phase reached from flow, such as assessment, planning, mapping, execution, closure
 - exact user prompt or the closest faithful paraphrase
 - whether `.cflow/architecture.md` existed
@@ -97,7 +99,7 @@ If a field is unknown, mark it as unknown rather than guessing.
 3. Check the current contract in:
    - the skill file
    - the relevant per-public-skill flow doc
-   - [maintaining-this-pack.md](/Users/blazar/Dev/clean-flow/docs/maintaining-this-pack.md)
+   - [maintaining-this-pack.md](./maintaining-this-pack.md)
 4. Separate:
    - observed facts
    - repository-specific inferences
@@ -192,7 +194,7 @@ If a real-repo trial changes the actual skill contract, update all relevant sour
 
 - the affected `skills/*/SKILL.md`
 - the affected `docs/<public-skill>/doc-*.flow.md`
-- [maintaining-this-pack.md](/Users/blazar/Dev/clean-flow/docs/maintaining-this-pack.md) when maintainer rules changed
+- [maintaining-this-pack.md](./maintaining-this-pack.md) when maintainer rules changed
 
 If the trial changes only local wording and not the contract, update only the necessary file.
 

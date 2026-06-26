@@ -8,7 +8,7 @@ Decide whether the explicit target files have real local cognitive pressure wort
 
 ## Preflight
 
-- Ensure you have read ../../_shared/references/navigation-cost.md in this invocation; it owns the test that decides whether cleanup is worth it.
+- Ensure you have read references/navigation-cost.md in this invocation; it owns the test that decides whether cleanup is worth it.
 - Use explicit file targets only, up to three per session.
 - Read each whole target file, relevant tests or call sites, and local helper/error/async/performance conventions.
 - Process target files sequentially.
@@ -16,7 +16,7 @@ Decide whether the explicit target files have real local cognitive pressure wort
 ## Evaluation Rules
 
 - Classify each target as `recommended`, `optional`, `keep as-is`, or `route`.
-- Default to `recommended` whenever a hard trigger from navigation-cost.md is past its threshold; use `optional` or `keep as-is` for such a target only by naming one of its recognized exemptions.
+- Default to `recommended` whenever a hard trigger from `references/navigation-cost.md` is past its threshold; use `optional` or `keep as-is` for such a target only by naming one of its recognized exemptions.
 - When the target file is past the roughly-300-LOC bell, include an explicit file-size verdict in **Result**: `route` to `cf-split`, or the named exemption that justifies its size.
 - Do not minimize findings past a hard trigger with qualifiers like "light", "minor", "not yet serious", or "someday"; state the hotspot plainly and name the remedy.
 - Use `recommended` only when local control flow, nesting, callbacks, parsing, branching, or repeated non-trivial logic materially slows reading.

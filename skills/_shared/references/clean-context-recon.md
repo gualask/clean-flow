@@ -1,11 +1,12 @@
 # Clean-Context Reconnaissance
 
-Use when an active skill delegates repository scanning or path reconstruction before writing an artifact.
+Scope: active-skill delegation of repository scanning or path reconstruction before writing an artifact.
 
 ## Protocol
 
+- Prerequisite: the consuming skill has selected `subagent`.
 - Use the configured read-only custom agent when available; otherwise use one equivalent clean-context reconnaissance subagent.
-- If the runtime requires explicit subagent authorization, ask the user for permission to use subagents before continuing.
+- If no gate has run, ask `Use subagents? Reply y/n.` before starting the agent; `y` means subagent, `n` means local.
 - Start the agent with only the repository path and current request. Do not paste TOML instructions or the full report format into the prompt.
 - Treat the report as the primary scan or reconstruction.
 - While the agent runs, inspect only the artifacts, templates, and worktree state named by the consuming skill; do not build a parallel map locally.

@@ -11,6 +11,7 @@ Use it when you want Codex to:
 - map the current repository shape before planning changes
 - trace a workflow or command path and find sequence, ownership, or failure-mode issues
 - explain the real impact of a bug, behavior, or change through concrete code-grounded scenarios
+- generate or review docs against the code
 - review an area for overengineering, duplicated parallel flows, or complexity that no longer earns its place
 - split an overloaded file into nearby owned files
 - reduce local cognitive complexity in a source file
@@ -53,7 +54,7 @@ node ./bin/cflow-skills.mjs install --global
 node ./bin/cflow-skills.mjs install /path/to/repo --dry-run
 ```
 
-The installer syncs packaged skills, shared support resources, and packaged Codex custom agents.
+The installer materializes packaged skills, vendors shared authoring files into the consuming skill directories, and syncs packaged Codex custom agents.
 Global install writes to `$CODEX_HOME/skills` and `$CODEX_HOME/agents`, or falls back to `~/.codex/skills` and `~/.codex/agents`.
 
 After installation, ask Codex to use one of the public entrypoints below.
@@ -66,7 +67,7 @@ Use cf-start to assess this cleanup/refactor and recommend the next step.
 <details>
 <summary>Uninstall</summary>
 
-Remove only Clean Flow-owned skill and support directories:
+Remove only Clean Flow-owned skill directories and Codex custom agents:
 
 ```bash
 node ./bin/cflow-skills.mjs remove /path/to/repo
@@ -141,9 +142,14 @@ Use it when a file has grown past its natural responsibilities.
 Evaluates or performs local regrouping of already-related files.
 Use it when a workflow or feature is scattered across folders and navigation cost is the problem.
 
+### `cf-docs`
+
+Generates or reviews Markdown docs, READMEs, and design notes against the code.
+Use it when docs may be stale, too verbose, duplicated, or structurally out of sync.
+
 ## First Use And Resume
 
-Installing the pack only syncs the skills and support resources.
+Installing the pack only syncs materialized skills and Codex custom agents.
 It does not create `.cflow/` immediately.
 
 Skills that own durable artifacts create `.cflow/` only when they need it.
@@ -167,10 +173,13 @@ For path reconstruction or workflow audit, use `cf-trace`.
 ## Documentation
 
 - [Start flow](./docs/start/doc-start.flow.md)
+- [Mr Wolf flow](./docs/mr-wolf/doc-mr-wolf.flow.md)
 - [Architecture flow](./docs/architecture/doc-architecture.flow.md)
 - [Simplify flow](./docs/simplify/doc-simplify.flow.md)
 - [Trace flow](./docs/trace/doc-trace.flow.md)
+- [Scenario flow](./docs/scenario/doc-scenario.flow.md)
 - [Cognitive flow](./docs/cognitive/doc-cognitive.flow.md)
 - [Split flow](./docs/split/doc-split.flow.md)
 - [Cohesion flow](./docs/cohesion/doc-cohesion.flow.md)
+- [Docs flow](./docs/docs/doc-docs.flow.md)
 - [Maintaining this pack](./docs/maintaining-this-pack.md)

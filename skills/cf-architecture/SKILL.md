@@ -34,17 +34,29 @@ You must determine:
 
 Write `.cflow/architecture.md` in the repository's dominant documentation language; if none exists, use the current conversation language.
 
+## Reconnaissance Gate
+
+Stop before source scanning and ask:
+
+Use subagents? Reply `y` or `n`.
+
+- `y`: use read-only `cflow_architecture_recon` for independent mapping.
+- `n`: map in this context and report no clean-context independence.
+
+Use `subagent` mode for `y` and `local` mode for `n`. Include the selected mode in the final summary.
+
 ## Preflight
 
 1. Read `.cflow/architecture.md` if it exists.
 2. Read `../cf-start/assets/architecture.template.md`.
 3. Check `git status --short` for worktree-change awareness.
-4. Do not map repository architecture during preflight; the reconnaissance subagent owns that scan.
-5. If explicit subagent authorization is required and has not been granted, ask the user for permission to use subagents before continuing.
+4. Run the Reconnaissance Gate before reading implementation files or mapping repository architecture.
+5. Do not map repository architecture during preflight.
 
 ## Clean-Context Reconnaissance
 
-Apply ../_shared/references/clean-context-recon.md with `cflow_architecture_recon` before writing the architecture map.
+When `subagent` mode is selected, apply `references/clean-context-recon.md` with `cflow_architecture_recon` before writing the architecture map.
+When `local` mode is selected, produce the same report shape locally and mark the final summary as local-mode reconnaissance.
 Expected report sections: **Repository Context**, **Entry Points**, **Top-Level Map**, **External Boundaries**, **Boundary and Packaging Model**, **Observed Invariants**, **Evidence**, **Unknowns**.
 Use `../cf-start/assets/architecture.template.md` as the review rubric.
 Allowed controller context while the agent runs: existing architecture artifact, architecture template, and worktree status.

@@ -15,7 +15,7 @@ Look for:
 - boundaries created for style rather than responsibility
 - indirection that hides the flow more than it clarifies it
 
-Judge candidates with ../../_shared/references/navigation-cost.md: jumps into skippable single-responsibility units are cheap. Do not consolidate units a reader can already skip by name and role just to cut hops; consolidate when the boundary itself is artificial.
+Judge candidates with references/navigation-cost.md: jumps into skippable single-responsibility units are cheap. Do not consolidate units a reader can already skip by name and role just to cut hops; consolidate when the boundary itself is artificial.
 
 ## Required Inputs
 

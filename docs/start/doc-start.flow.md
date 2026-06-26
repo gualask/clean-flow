@@ -8,7 +8,7 @@ Maintainer summary for `cf-start`. Runtime behavior belongs to `skills/cf-start/
 
 - Public skill: `skills/cf-start/SKILL.md`
 - Phase references: `skills/cf-start/references/*.md`
-- Shared references: `skills/_shared/references/*.md` when linked by an active phase
+- Shared sources vendored into runtime paths: configured `skills/_shared/references/*.md` and `skills/_shared/scripts/repo-tree.mjs` when linked by an active phase
 - Artifact templates: `skills/cf-start/assets/architecture.template.md`, `skills/cf-start/assets/refactor-brief.template.md`
 - Target artifacts: `.cflow/architecture.md`, `.cflow/refactor-brief.md`
 

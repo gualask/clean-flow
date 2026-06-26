@@ -1,6 +1,6 @@
 # Local Readability Review
 
-Use this as a review lens for touched code only.
+Scope: touched-code readability review only.
 Do not refactor untouched code just because it violates a preference.
 
 Look for real readability pressure:

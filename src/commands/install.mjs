@@ -5,13 +5,19 @@ import {
   ensureDirectory,
   listDirectories,
   listPackageDirectories,
+  pathExists,
   removeDirectory,
   removeTempDirectories,
   replaceDirectoryFromSource,
 } from "../lib/fs.mjs";
+import { VENDOR_CONFIG_RELATIVE_PATH } from "../lib/materialize-skills.mjs";
 import { isOwnedMarker, readMarker, writeMarker } from "../lib/marker.mjs";
 
 export async function installSkills({ sourceRoot, destinationRoot, dryRun = false }) {
+  if (await pathExists(path.join(sourceRoot, VENDOR_CONFIG_RELATIVE_PATH))) {
+    throw new Error(`Install source must be materialized before sync: ${sourceRoot}`);
+  }
+
   const sourcePackages = await listPackageDirectories(sourceRoot);
   const sourceSkills = sourcePackages.filter((entry) => entry.kind === "skill");
   if (sourceSkills.length === 0) {

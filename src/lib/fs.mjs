@@ -1,8 +1,6 @@
 import path from "node:path";
 import { cp, mkdtemp, mkdir, readdir, rename, rm, stat } from "node:fs/promises";
 
-const SUPPORT_DIRECTORY_NAMES = new Set(["_shared"]);
-
 export async function pathExists(pathname) {
   try {
     await stat(pathname);
@@ -62,15 +60,8 @@ export async function listPackageDirectories(root) {
   const packages = [];
 
   for (const directory of directories) {
-    const hasSkillFile = await pathExists(path.join(directory.path, "SKILL.md"));
-
-    if (hasSkillFile) {
+    if (await pathExists(path.join(directory.path, "SKILL.md"))) {
       packages.push({ ...directory, kind: "skill" });
-      continue;
-    }
-
-    if (SUPPORT_DIRECTORY_NAMES.has(directory.name)) {
-      packages.push({ ...directory, kind: "support" });
     }
   }
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-06-26
+
+- Materialized skill install: `_shared/vendor.json` vendors shared references/scripts into consuming skills, no `_shared` runtime directory is installed, install/remove/token-report/tests/docs were aligned, `cf-docs` was added, and subagent/doc gates plus split/navigation-cost guidance were tightened.
+
 ## 2026-06-12
 
 - Hard triggers in navigation-cost (nesting, function length, ~300-LOC file bell) with inverted burden of proof, closed exemption list, and ban on minimizing language; guard-clause-first remedy order; repo-tree.mjs references now resolve from the reference file's directory instead of the project working directory.

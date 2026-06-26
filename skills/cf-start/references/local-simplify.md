@@ -15,8 +15,8 @@ If required inputs are missing, stop with `Next action: return to planning or re
 
 Improve local readability without changing the chosen structural direction.
 
-When deciding whether simplification is warranted, use ../../_shared/references/local-readability-review.md.
-Before editing code, ensure you have read ../../_shared/references/local-refactor-rules.md in this invocation.
+When deciding whether simplification is warranted, use references/local-readability-review.md.
+Before editing code, ensure you have read references/local-refactor-rules.md in this invocation.
 
 ## Rules
 

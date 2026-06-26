@@ -8,7 +8,7 @@ Document the runtime flow for `cf-cognitive`, the public local cleanup entrypoin
 
 - Public skill: `skills/cf-cognitive/SKILL.md`
 - Runtime references: `skills/cf-cognitive/references/discovery.md`, `targeted-evaluation.md`, `execution.md`
-- Shared references: `skills/_shared/references/local-refactor-rules.md`, `local-readability-review.md`
+- Shared sources vendored into runtime paths: `skills/_shared/references/local-refactor-rules.md`, `navigation-cost.md`; `skills/_shared/scripts/repo-tree.mjs`
 - Target artifacts: none
 
 ## High-Level Flow

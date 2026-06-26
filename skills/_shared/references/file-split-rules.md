@@ -1,10 +1,10 @@
 # File Split Rules
 
-Use this reference when evaluating or executing a behavior-preserving file-level extraction.
+Scope: behavior-preserving file-level extraction evaluation or execution.
 
 ## Candidate Review
 
-Judge every candidate with navigation-cost.md; that test decides split value, ahead of churn, file count, or flat-placement defaults.
+Judge every candidate with `references/navigation-cost.md`; that test decides split value, ahead of churn, file count, or flat-placement defaults.
 A file-level split candidate is a natural owner that can be named without describing implementation steps.
 
 Good candidates include:
@@ -16,7 +16,7 @@ Good candidates include:
 - substantial self-contained subcomponents
 - focused policy or domain logic with a stable name
 
-File length alone does not pick what to extract, but past the roughly-300-LOC bell in navigation-cost.md the default verdict is that a boundary exists: conclude `none` or `keep local` for such a file only by naming one of its recognized exemptions.
+File length alone does not pick what to extract, but past the roughly-300-LOC bell in `references/navigation-cost.md` the default verdict is that a boundary exists: conclude `none` or `keep local` for such a file only by naming one of its recognized exemptions.
 Below that bell, do not recommend extraction just because a helper exists or a small component could technically live elsewhere.
 
 Classify each visible boundary:
@@ -33,6 +33,7 @@ When recommending or executing a split, name the exact new file set.
 
 Keep extracted hooks, helpers, constants, and small private units inside the extracted owner file when that remains one readable local concern.
 If that owner file would still be too large or would contain multiple stable units, split those units into additional local files instead of promoting them upward.
+Prefer one local file per stable subunit when the subunit name is a likely bug or change target. Use a single local file for tiny fragments that are tightly coupled, not independently searchable, and unlikely to be edited by name.
 During review of a completed split, apply this rule to the extracted owner too. A behavior-preserving move is not enough evidence that the extracted owner is finished when it still hides multiple named lifecycle, policy, orchestration, or integration units.
 After extracting multiple local units from one owner, run a second cohesion pass before finishing. If the remaining source file and extracted files now form a stable owner with clear internal bug targets, group them as that owner instead of leaving the result as unrelated flat siblings.
 
@@ -54,6 +55,7 @@ Use these placement counts as guardrails, not hard overrides for a stable owner 
 - before the move, the parent directory contains at least six direct real source files
 
 If a guardrail fails and the bug-localization gain is not concrete, keep the files flat.
+A concrete exception can be a named local owner folder containing several subunit files whose names match likely bug reports or change requests. This is locality, not file sprawl, when the parent directory becomes easier to scan and the owner folder is the obvious inspection point.
 Use shared or global locations only when the grouping rules justify promotion.
 
 Do not create a new top-level architectural folder during a local split.

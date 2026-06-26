@@ -6,6 +6,7 @@ import { installCodexAgents } from "./commands/install-agents.mjs";
 import { installSkills } from "./commands/install.mjs";
 import { removeCodexAgents } from "./commands/remove-agents.mjs";
 import { removeSkills } from "./commands/remove.mjs";
+import { createMaterializedSkills } from "./lib/materialize-skills.mjs";
 
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SKILLS_SOURCE_ROOT = path.join(PACKAGE_ROOT, "skills");
@@ -18,10 +19,10 @@ const HELP_TEXT = `Usage:
   cflow-skills remove --global [--dry-run]
 
 Notes:
-  - install syncs packaged skills/support resources into <repo>/.codex/skills
+  - install syncs packaged, materialized skills into <repo>/.codex/skills
   - install syncs packaged Codex custom agents into <repo>/.codex/agents
   - --global targets $CODEX_HOME/skills and $CODEX_HOME/agents, or ~/.codex/*
-  - remove deletes only Cflow-owned skills, support directories, and Codex custom agents
+  - remove deletes only Cflow-owned skill directories and Codex custom agents
 `;
 
 export async function main(argv, io = { stdout: process.stdout, stderr: process.stderr }) {
@@ -125,38 +126,48 @@ function parseArgs(argv) {
 }
 
 async function installAll({ skillsDestinationRoot, codexAgentsDestinationRoot, dryRun }) {
-  const skillsPlan = await installSkills({
-    sourceRoot: SKILLS_SOURCE_ROOT,
-    destinationRoot: skillsDestinationRoot,
-    dryRun: true,
-  });
-  const agentsPlan = await installCodexAgents({
-    sourceRoot: CODEX_AGENTS_SOURCE_ROOT,
-    destinationRoot: codexAgentsDestinationRoot,
-    dryRun: true,
-  });
+  const materialized = await createMaterializedSkills(SKILLS_SOURCE_ROOT);
 
-  if (dryRun || skillsPlan.conflicts.length > 0 || agentsPlan.conflicts.length > 0) {
-    return combineInstallResults(skillsPlan, agentsPlan, dryRun, false);
+  try {
+    const skillsPlan = await installSkills({
+      sourceRoot: materialized.skillsRoot,
+      destinationRoot: skillsDestinationRoot,
+      dryRun: true,
+    });
+    const agentsPlan = await installCodexAgents({
+      sourceRoot: CODEX_AGENTS_SOURCE_ROOT,
+      destinationRoot: codexAgentsDestinationRoot,
+      dryRun: true,
+    });
+
+    if (dryRun || skillsPlan.conflicts.length > 0 || agentsPlan.conflicts.length > 0) {
+      return withPackagedSkillsSource(
+        combineInstallResults(skillsPlan, agentsPlan, dryRun, false),
+      );
+    }
+
+    const skillsResult = await installSkills({
+      sourceRoot: materialized.skillsRoot,
+      destinationRoot: skillsDestinationRoot,
+      dryRun: false,
+    });
+    const agentsResult = await installCodexAgents({
+      sourceRoot: CODEX_AGENTS_SOURCE_ROOT,
+      destinationRoot: codexAgentsDestinationRoot,
+      dryRun: false,
+    });
+
+    return withPackagedSkillsSource(
+      combineInstallResults(
+        skillsResult,
+        agentsResult,
+        dryRun,
+        skillsResult.applied && agentsResult.applied,
+      ),
+    );
+  } finally {
+    await materialized.cleanup();
   }
-
-  const skillsResult = await installSkills({
-    sourceRoot: SKILLS_SOURCE_ROOT,
-    destinationRoot: skillsDestinationRoot,
-    dryRun: false,
-  });
-  const agentsResult = await installCodexAgents({
-    sourceRoot: CODEX_AGENTS_SOURCE_ROOT,
-    destinationRoot: codexAgentsDestinationRoot,
-    dryRun: false,
-  });
-
-  return combineInstallResults(
-    skillsResult,
-    agentsResult,
-    dryRun,
-    skillsResult.applied && agentsResult.applied,
-  );
 }
 
 async function removeAll({ skillsDestinationRoot, codexAgentsDestinationRoot, dryRun }) {
@@ -198,6 +209,14 @@ function combineInstallResults(skillsResult, agentsResult, dryRun, applied) {
     pruned: [...skillsResult.pruned, ...agentsResult.pruned],
     conflicts: [...skillsResult.conflicts, ...agentsResult.conflicts],
     applied,
+  };
+}
+
+function withPackagedSkillsSource(result) {
+  return {
+    ...result,
+    sourceRoot: SKILLS_SOURCE_ROOT,
+    skillsSourceRoot: SKILLS_SOURCE_ROOT,
   };
 }
 

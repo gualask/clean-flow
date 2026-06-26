@@ -8,7 +8,7 @@ Decide whether already-related files should stay where they are or live together
 
 ## Preflight
 
-- Ensure you have read ../../_shared/references/navigation-cost.md in this invocation; it owns the test that decides regrouping value.
+- Ensure you have read references/navigation-cost.md in this invocation; it owns the test that decides regrouping value.
 - Read the local directory tree around the target.
 - Read candidate files, imports/exports, call sites, tests, and nearby grouping conventions.
 - Identify the current owner area and any sibling feature folders that set precedent.

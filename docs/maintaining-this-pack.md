@@ -18,11 +18,13 @@ Cflow has two maintainer concerns:
 
 1. distribution
    - `cflow-skills install` is an idempotent sync for both first install and later updates
-   - it copies public skill directories plus `_shared` support resources
+   - it materializes public skill directories before syncing them
+   - it vendors configured `_shared` files into the consuming skill's `references/` and `scripts/` paths
    - it copies Cflow-owned Codex custom agents from `skills/_codex_agents`
+   - it does not install `_shared` as a runtime skill directory
    - it does not bootstrap `.cflow/`
 2. public runtime flows
-   - runtime contracts live in the public `SKILL.md` files and their directly linked references
+   - runtime contracts live in the public `SKILL.md` files, first-level linked references, and vendored shared references loaded by an active runtime reference
    - per-public-skill flow docs are maintainer mirrors used to review and validate the runtime contracts
 
 The former internal workflow skills are now `cf-start` phase references.
@@ -31,11 +33,11 @@ They are not packaged as separate skill entrypoints.
 ## Repository Layout
 
 ```text
-skills/          canonical runtime source, including skill dirs and installable support files
+skills/          authoring source for public skill dirs, shared sources, and custom agents
 skills/_codex_agents/
                  canonical Codex custom agent source
-skills/_shared/  shared runtime references and scripts used by multiple skills
-src/             sync and fingerprint logic
+skills/_shared/  shared authoring references, scripts, and vendoring config
+src/             materialization, sync, and fingerprint logic
 bin/             CLI entrypoint
 test/            filesystem and structure tests
 docs/            maintainer documentation
@@ -54,6 +56,7 @@ Public skill entrypoints:
 - `cf-cognitive`
 - `cf-split`
 - `cf-cohesion`
+- `cf-docs`
 
 `cf-start` phase references:
 
@@ -72,7 +75,7 @@ Public skill entrypoints:
 - `skills/cf-start/references/review.md`
 - `skills/cf-start/references/verify.md`
 
-Shared support references:
+Shared authoring references vendored into consuming skills:
 
 - `skills/_shared/references/navigation-cost.md`
 - `skills/_shared/references/local-refactor-rules.md`
@@ -81,7 +84,7 @@ Shared support references:
 - `skills/_shared/references/reference-audit.md`
 - `skills/_shared/references/clean-context-recon.md`
 
-Shared support scripts:
+Shared authoring scripts vendored into consuming skills:
 
 - `skills/_shared/scripts/repo-tree.mjs`
 
@@ -99,11 +102,12 @@ Pack-wide golden rules live in [golden-rules.md](./golden-rules.md).
 
 - Public skill contracts live in `skills/*/SKILL.md`.
 - `cf-start` flow selection lives in `skills/cf-start/SKILL.md`; phase contracts live in `skills/cf-start/references/*.md`.
-- Shared runtime rules live in `skills/_shared/references/`.
-- Shared deterministic runtime helpers live in `skills/_shared/scripts/`.
+- Shared authoring rules live in `skills/_shared/references/`; installed runtime copies live under the consuming skill's `references/` directory.
+- Shared deterministic helpers live in `skills/_shared/scripts/`; installed runtime copies live under the consuming skill's `scripts/` directory.
+- Shared vendoring configuration lives in `skills/_shared/vendor.json`.
 - Bootstrap and artifact templates live in the owning public skill's `assets/` directory.
 - Codex custom agent sources live in `skills/_codex_agents/`.
-- Agent-specific install instructions live in `install/<agent>/`.
+- Codex install prompts live in `install/codex/`.
 - Pack-wide maintainer rules live in [golden-rules.md](./golden-rules.md).
 
 For real target-repo validation, use [repo-trial-rules.md](./repo-trial-rules.md).
@@ -115,9 +119,11 @@ Maintainer flow mirrors:
 - `cf-simplify`: [simplify/doc-simplify.flow.md](./simplify/doc-simplify.flow.md)
 - `cf-architecture`: [architecture/doc-architecture.flow.md](./architecture/doc-architecture.flow.md)
 - `cf-trace`: [trace/doc-trace.flow.md](./trace/doc-trace.flow.md)
+- `cf-scenario`: [scenario/doc-scenario.flow.md](./scenario/doc-scenario.flow.md)
 - `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
 - `cf-split`: [split/doc-split.flow.md](./split/doc-split.flow.md)
 - `cf-cohesion`: [cohesion/doc-cohesion.flow.md](./cohesion/doc-cohesion.flow.md)
+- `cf-docs`: [docs/doc-docs.flow.md](./docs/doc-docs.flow.md)
 
 ## Runtime Reference Rules
 
@@ -142,8 +148,8 @@ Move to `references/`:
 - execution heuristics
 - review and verification lenses
 
-Every reference file must be linked directly from `SKILL.md` with a trigger condition.
-Keep references one level deep from `SKILL.md`.
+Every first-level runtime reference loaded by `SKILL.md` must be linked from `SKILL.md` with its loading condition.
+Vendored shared references may be loaded by an already-active consuming reference, but runtime text must use installed-local paths such as `references/...` or `scripts/...`.
 Do not duplicate the same rule in both `SKILL.md` and a reference unless `SKILL.md` needs a compact summary for routing.
 
 ## Key Design Decisions
@@ -151,7 +157,7 @@ Do not duplicate the same rule in both `SKILL.md` and a reference unless `SKILL.
 - Cflow does not depend on `AGENTS.md` for manual start or artifact-backed resume.
 - Public skill flow rules live in `docs/<public-skill>/doc-*.flow.md`; do not keep duplicate flow copies in maintainer overview docs.
 - The former internal workflow skills remain `cf-start` phase references, not separately packaged entrypoints.
-- `_shared` is for runtime rules consumed by multiple public skills or phase references.
+- `_shared` is authoring source for references and scripts vendored into multiple runtime skill directories.
 - `skills/_codex_agents` is for real Codex custom agents that should be installed, not notes or examples.
 
 ## Skill Change Validation
@@ -207,13 +213,13 @@ Current automated coverage checks:
 - install on empty target
 - update + prune + preserve foreign skills
 - conflict detection on foreign same-name skills
-- remove of Cflow-owned skill and support directories only
+- remove of Cflow-owned skill dirs, legacy support dirs, and custom agents while preserving foreign entries
 - install, update, prune, and remove behavior for Cflow-owned Codex custom agents
 - structural checks for packaged public skills
 - Codex implicit invocation policy for shipped public skills
 - presence of `cf-start` bootstrap assets and phase references
 - presence of `cf-trace` trace artifact template and read-only reconstruction agent
-- shared reference links from consuming skills and phase references
+- materialized shared reference and script links from consuming skills and phase references
 - presence of per-public-skill flow docs
 
 ## Manual Smoke Checks
@@ -223,5 +229,7 @@ The most important manual validation is a real target-repo run:
 1. install the pack into a target repo
 2. exercise each public skill according to its `docs/<public-skill>/doc-*.flow.md` reference
 3. confirm the target repo gets `.codex/skills/...`
-4. confirm the target repo gets Cflow-owned custom agents under `.codex/agents/`
-5. confirm runtime artifacts match the owning public flow docs
+4. confirm no `.codex/skills/_shared` directory is installed
+5. confirm vendored shared files exist inside the consuming skill directories
+6. confirm the target repo gets Cflow-owned custom agents under `.codex/agents/`
+7. confirm runtime artifacts match the owning public flow docs

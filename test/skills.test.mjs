@@ -10,6 +10,7 @@ import {
   collectSkillTokenBudgetWarnings,
   skillTokenBudgetsFromEnv,
 } from "../src/lib/skill-token-report.mjs";
+import { createMaterializedSkills } from "../src/lib/materialize-skills.mjs";
 import {
   DEFAULT_TOKEN_MODEL,
   resolveTokenEncoding,
@@ -72,17 +73,23 @@ test("packaged skill runtime files stay within token budget warnings", async () 
   });
 
   try {
-    const report = await buildSkillTokenReport({
-      skillsRoot: SKILLS_ROOT,
-      rootForLabels: REPO_ROOT,
-      encoder: resolved.encoder,
-      budgets: skillTokenBudgetsFromEnv(),
-    });
+    const materialized = await createMaterializedSkills(SKILLS_ROOT);
 
-    assert.ok(report.skills.length > 0, "expected at least one packaged skill");
+    try {
+      const report = await buildSkillTokenReport({
+        skillsRoot: materialized.skillsRoot,
+        rootForLabels: materialized.skillsRoot,
+        encoder: resolved.encoder,
+        budgets: skillTokenBudgetsFromEnv(),
+      });
 
-    for (const warning of collectSkillTokenBudgetWarnings(report)) {
-      process.emitWarning(warning.message, { code: warning.code });
+      assert.ok(report.skills.length > 0, "expected at least one packaged skill");
+
+      for (const warning of collectSkillTokenBudgetWarnings(report)) {
+        process.emitWarning(warning.message, { code: warning.code });
+      }
+    } finally {
+      await materialized.cleanup();
     }
   } finally {
     resolved.encoder.free();

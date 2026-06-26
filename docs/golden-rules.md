@@ -6,11 +6,11 @@ Use these rules when changing Cflow runtime skills, references, templates, docs,
 
 Before changing any Cflow pack file, identify which rules apply by file type, runtime role, and public or installable surface; evaluate the full change against all of them and do not stop at the first matching issue.
 For runtime guidance, review each changed sentence for empty-context clarity, state-based or current-request gates, progressive disclosure, proportionality, and current-skill self-reference.
-For non-runtime files, check that the change does not move runtime behavior into maintainer-only docs, duplicate guidance that belongs in a linked reference, or create installable/public surfaces that the rules reserve for skills, `_shared`, or `_codex_agents`.
+For non-runtime files, check that the change does not move runtime behavior into maintainer-only docs, duplicate guidance that belongs in a linked reference, or create installable/public surfaces that the rules reserve for skills, `_shared` authoring sources, or `_codex_agents`.
 
 ## Runtime Placement
 
-- Keep runtime behavior in the relevant `SKILL.md` or a reference file directly linked from that skill.
+- Keep runtime behavior in the relevant `SKILL.md`, a first-level reference linked from that skill, or a vendored shared reference loaded by an active runtime reference.
 - Keep `docs/` maintainer-only; do not assume docs are visible at runtime.
 - Keep first-level reference loading decisions in the consuming `SKILL.md`; a reference should not decide whether it should have been read.
 - A reference may own local subpath selection after it is active, including agent paths bound to that reference.
@@ -47,7 +47,7 @@ For non-runtime files, check that the change does not move runtime behavior into
 
 - Keep `cf-start/SKILL.md` as the controller: identity, hard gates, flow selection slices, phase reference links, and output contracts.
 - Put phase-specific operational detail in `cf-start/references/*.md`.
-- Keep `_shared` only for runtime rules consumed by multiple public skills or phase references.
+- Keep `_shared` only for shared authoring references, scripts, and vendoring config consumed by multiple public skills or phase references.
 - Keep `skills/_codex_agents` only for real Codex custom agents that should be installed, not for notes or examples.
 - Do not create separate internal skills unless a phase needs independent triggering as a real user-facing entrypoint.
 
@@ -59,6 +59,6 @@ Use this checklist additively: when a changed file has multiple roles, apply eve
 - `references/*.md`: operational rules, local subpath selection, agent binding, input contracts, prompt contracts, and output contracts for an already-active phase; not first-level loading logic.
 - `docs/*.md`: maintainer-only explanation; no runtime dependency.
 - `templates` and `assets`: artifact shape, examples, or review rubrics only.
-- `_shared`: runtime rules, references, scripts, or helpers consumed by multiple public skills or phase references.
+- `_shared`: shared authoring references, scripts, helpers, and vendoring config consumed by multiple public skills or phase references.
 - `_codex_agents`: real installable custom agent definitions only.
 - tests: guard contracts and package behavior; never act as an alternate source of runtime behavior.

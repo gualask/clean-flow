@@ -1,6 +1,6 @@
 # Reference Audit
 
-Use this reference after moving, renaming, splitting, merging, removing, or re-exporting files or symbols.
+Scope: moved, renamed, split, merged, removed, or re-exported files or symbols.
 
 Run separate searches for the categories that apply instead of relying on one broad search:
 

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Cflow:docs"
+  short_description: "Review or generate accurate, lean docs"
+  default_prompt: "Use $cf-docs to generate documentation or review it against the code for accuracy, redundancy, and leanness."
+policy:
+  allow_implicit_invocation: true

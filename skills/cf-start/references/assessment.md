@@ -23,7 +23,7 @@ Determine:
 
 ## Source Orientation
 
-For broad structure assessment, use `repo-tree.mjs` when available before ad hoc inventory. Verify conclusions from source.
+For broad structure assessment, use `scripts/repo-tree.mjs` when available before ad hoc inventory. Verify conclusions from source.
 
 ## Premise check
 

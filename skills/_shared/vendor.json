@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "skills": {
+    "cf-architecture": {
+      "references": ["clean-context-recon.md"],
+      "scripts": ["repo-tree.mjs"]
+    },
+    "cf-cognitive": {
+      "references": ["local-refactor-rules.md", "navigation-cost.md"],
+      "scripts": ["repo-tree.mjs"]
+    },
+    "cf-cohesion": {
+      "references": ["navigation-cost.md", "reference-audit.md"],
+      "scripts": ["repo-tree.mjs"]
+    },
+    "cf-mr-wolf": {
+      "scripts": ["repo-tree.mjs"]
+    },
+    "cf-simplify": {
+      "references": ["local-refactor-rules.md", "navigation-cost.md", "reference-audit.md"]
+    },
+    "cf-split": {
+      "references": ["file-split-rules.md", "navigation-cost.md", "reference-audit.md"],
+      "scripts": ["repo-tree.mjs"]
+    },
+    "cf-start": {
+      "references": [
+        "file-split-rules.md",
+        "local-readability-review.md",
+        "local-refactor-rules.md",
+        "navigation-cost.md",
+        "reference-audit.md"
+      ],
+      "scripts": ["repo-tree.mjs"]
+    },
+    "cf-trace": {
+      "references": ["clean-context-recon.md"],
+      "scripts": ["repo-tree.mjs"]
+    }
+  }
+}

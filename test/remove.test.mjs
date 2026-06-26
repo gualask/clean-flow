@@ -16,7 +16,7 @@ import {
   writeSupportDirectory,
 } from "./support/helpers.mjs";
 
-test("remove deletes only Cflow-owned skill and support directories", async () => {
+test("remove deletes only Cflow-owned skill and legacy support directories", async () => {
   const workspace = await makeTempWorkspace();
   const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
 

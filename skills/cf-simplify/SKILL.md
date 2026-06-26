@@ -15,7 +15,7 @@ For broad or multi-step execution, route to `cf-start` with a concrete recommend
 - Treat repository state as the source of truth: inspect the area, its entry points, call sites, tests, and persistence or runtime boundaries before judging.
 - Treat request-stated constraints, risk appetite, and acceptable ceremony as decision inputs, not afterthoughts.
 - Start from domain ownership, workflows, and external boundaries. Current folders, shared layers, global models, and barrels are evidence under review.
-- Judge structural cost with ../_shared/references/navigation-cost.md; file count alone is not overengineering.
+- Judge structural cost with references/navigation-cost.md; file count alone is not overengineering.
 - Do not list a dirty low-impact path as a refactor alternative; if temporary containment is explicitly requested, label it as containment outside the cleanup recommendation.
 - Treat false ownership, accidental boundaries, global glue, and catch-all buckets as cleanup targets; split directories or namespaces that only signal importance, reuse, or broad sharing unless the name already represents one stable role.
 - Name the requirement or product behavior that makes each complex piece necessary. When criticizing a shared bucket or global surface, state where each criticized responsibility belongs before naming target folders.
@@ -95,8 +95,8 @@ Prefer one clear recommendation over a menu of equal choices, in this order:
 Only when applying the chosen simplification is explicit in the current request:
 
 - Stay within the chosen lever; if the work widens beyond it, stop and return to recommendation.
-- Before editing code, ensure you have read ../_shared/references/local-refactor-rules.md in this invocation.
-- After moving, renaming, or deleting files or symbols, read ../_shared/references/reference-audit.md, then audit the touched names and paths.
+- Before editing code, ensure you have read references/local-refactor-rules.md in this invocation.
+- After moving, renaming, or deleting files or symbols, read references/reference-audit.md, then audit the touched names and paths.
 - Run the smallest relevant check: targeted tests, typecheck or compile, lint, or a narrow smoke check; if none can run, say that explicitly.
 
 ## Output Format

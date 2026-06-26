@@ -6,7 +6,7 @@ Execute local cognitive cleanup only for explicit target files or a confirmed di
 
 - Use up to three target files per session, processed one file at a time.
 - Read each whole target file, relevant tests or call sites, and local helper/error/async/performance conventions before editing.
-- Before editing any target file, ensure you have read ../../_shared/references/local-refactor-rules.md in this invocation.
+- Before editing any target file, ensure you have read references/local-refactor-rules.md in this invocation.
 
 ## Execution Rules
 

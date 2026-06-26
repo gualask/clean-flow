@@ -44,6 +44,17 @@ Do not use this for broad refactor planning; use `cf-start` after trace findings
 
 Write `.cflow/trace.md` in the repository's dominant documentation language; if none exists, use the current conversation language.
 
+## Reconnaissance Gate
+
+Stop before implementation scanning and ask:
+
+Use subagents? Reply `y` or `n`.
+
+- `y`: use read-only `cflow_trace_recon` for independent reconstruction.
+- `n`: reconstruct in this context and report no clean-context independence.
+
+Use `subagent` mode for `y` and `local` mode for `n`. Include the selected mode in **Trace**.
+
 ## Preflight
 
 1. Identify the requested path, workflow, scenario, or entrypoint.
@@ -51,15 +62,16 @@ Write `.cflow/trace.md` in the repository's dominant documentation language; if 
 3. Read `.cflow/trace.md` if it exists.
 4. Read `assets/trace.template.md`.
 5. Check `git status --short` for user-change awareness.
-6. Do not reconstruct the path during preflight; the reconnaissance subagent owns that scan.
-7. If explicit subagent authorization is required and has not been granted, ask the user for permission to use subagents before continuing.
+6. Run the Reconnaissance Gate before reading implementation files or reconstructing the path.
+7. Do not reconstruct the path during preflight.
 
 If the requested path is too ambiguous to trace, ask one focused question before spawning reconnaissance.
 If `.cflow/architecture.md` is missing, stale, or materially incomplete, route to `cf-architecture` before continuing.
 
 ## Clean-Context Trace Reconstruction
 
-Apply ../_shared/references/clean-context-recon.md with `cflow_trace_recon` before writing the trace artifact.
+When `subagent` mode is selected, apply `references/clean-context-recon.md` with `cflow_trace_recon` before writing the trace artifact.
+When `local` mode is selected, reconstruct the same report shape locally and mark **Trace** as local-mode reconstruction.
 Expected report sections: **Trace Scope**, **Observed Sequence**, **Inputs and Triggers**, **State and Artifacts**, **External Effects**, **Failure and Resume Paths**, **Evidence**, **Unknowns**.
 Use `assets/trace.template.md` as the review rubric.
 Allowed controller context while the agent runs: `.cflow/architecture.md`, existing trace artifact, trace template, and worktree status.

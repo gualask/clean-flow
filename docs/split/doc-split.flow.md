@@ -8,7 +8,7 @@ Document the runtime flow for `cf-split`, the public local entrypoint for evalua
 
 - Public skill: `skills/cf-split/SKILL.md`
 - Runtime references: `skills/cf-split/references/evaluation.md`, `execution.md`
-- Shared references: `skills/_shared/references/file-split-rules.md`, `reference-audit.md`
+- Shared sources vendored into runtime paths: `skills/_shared/references/file-split-rules.md`, `navigation-cost.md`, `reference-audit.md`; `skills/_shared/scripts/repo-tree.mjs`
 - Target artifacts: none
 
 ## High-Level Flow

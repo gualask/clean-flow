@@ -8,7 +8,7 @@ Find likely cross-file cohesion candidates without turning the whole repository 
 
 ## Preflight
 
-- Default to bundled `repo-tree.mjs` (resolve `../../_shared/scripts/repo-tree.mjs` from this reference file's own directory, never from the project working directory) before manual exploration: run it with `--help` first, then use its gitignore-aware file-name tree to spot related files scattered across folders. Skip it only when the script cannot run or the target area is already explicit and small enough to read directly.
+- Default to bundled `scripts/repo-tree.mjs` (resolve it from the active skill root, never from the project working directory) before manual exploration: run it with `--help` first, then use its gitignore-aware file-name tree to spot related files scattered across folders. Skip it only when the script cannot run or the target area is already explicit and small enough to read directly.
 - Use repository-native search to identify repeated feature/workflow vocabulary across nearby folders.
 - Read only enough local context to validate the strongest candidates.
 
