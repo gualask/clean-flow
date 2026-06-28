@@ -37,6 +37,8 @@ Before reorganizing a type folder, check whether that folder is the right owner.
 Before naming destination folders, state the smallest local convention that would make the area easier to navigate.
 
 - For a flat type folder, prefer this convention when it fits the evidence: root files remain implicitly common/shared, and subfolders exist only for domains, workflows, or stable internal pairs with real cohesion.
+- When files are private children of one owner file, component, workflow, adapter, or analogous local owner, and the same parent also contains unrelated sibling owners, recommend grouping that owner and its children in a named owner directory.
+- Do not apply this owner-directory rule when the child files are shared across owners, the parent already belongs only to that owner, or framework/local convention forbids the folder.
 - Do not create `common`, `shared`, `utils`, or similar generic folders just to make every file live below one subdirectory.
 - A proposed folder needs a specific ownership name, such as a domain, workflow, feature, adapter, or tightly coupled mechanism.
 - If no file would remain at root, still avoid a generic bucket unless the repository already uses that exact convention nearby.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-06-28
+
+- Clarified split/cohesion guidance: the 300-LOC file-size bell is not a minimum split threshold, `cf-cognitive` must route smaller stable owners to `cf-split`, and private child files of an owner must be grouped into an owner directory when unrelated sibling owners share the parent.
+
 ## 2026-06-26
 
 - Materialized skill install: `_shared/vendor.json` vendors shared references/scripts into consuming skills, no `_shared` runtime directory is installed, install/remove/token-report/tests/docs were aligned, `cf-docs` was added, and subagent/doc gates plus split/navigation-cost guidance were tightened.

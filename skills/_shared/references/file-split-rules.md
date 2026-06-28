@@ -17,7 +17,7 @@ Good candidates include:
 - focused policy or domain logic with a stable name
 
 File length alone does not pick what to extract, but past the roughly-300-LOC bell in `references/navigation-cost.md` the default verdict is that a boundary exists: conclude `none` or `keep local` for such a file only by naming one of its recognized exemptions.
-Below that bell, do not recommend extraction just because a helper exists or a small component could technically live elsewhere.
+The 300-LOC bell is not a minimum split threshold: below it, recommend extraction when a stable named owner, subcomponent, policy, or workflow would materially lower navigation cost; do not extract code just because a helper exists or a small component could technically live elsewhere.
 
 Classify each visible boundary:
 
@@ -55,7 +55,8 @@ Use these placement counts as guardrails, not hard overrides for a stable owner 
 - before the move, the parent directory contains at least six direct real source files
 
 If a guardrail fails and the bug-localization gain is not concrete, keep the files flat.
-A concrete exception can be a named local owner folder containing several subunit files whose names match likely bug reports or change requests. This is locality, not file sprawl, when the parent directory becomes easier to scan and the owner folder is the obvious inspection point.
+When files are private children of one owner file, component, workflow, adapter, or analogous local owner, and the same parent also contains unrelated sibling owners, group that owner and its children in a named owner directory.
+Do not apply this owner-directory rule when the child files are shared across owners, the parent already belongs only to that owner, or framework/local convention forbids the folder.
 Use shared or global locations only when the grouping rules justify promotion.
 
 Do not create a new top-level architectural folder during a local split.
