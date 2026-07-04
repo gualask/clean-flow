@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-07-04
+
+- `cf-mr-wolf` evolved into the decisional entrypoint with flow selection (framing, planning, evaluation) and new `planning.md`/`evaluation.md` references; shared `regression-handling.md` gates further edits when a safety lock breaks in `cf-start`/`cf-split` execution; target-shape and migration planning must surface the plan's fragile assumption; new skill-contract tests (reference links, description constraints, routing targets) which also caught and fixed `cf-simplify` missing its vendored `repo-tree.mjs`; `AGENTS.md` added and `cf-mr-wolf` description tightened to budget.
+
 ## 2026-06-28
 
 - Clarified split/cohesion guidance: the 300-LOC file-size bell is not a minimum split threshold, `cf-cognitive` must route smaller stable owners to `cf-split`, and private child files of an owner must be grouped into an owner directory when unrelated sibling owners share the parent.

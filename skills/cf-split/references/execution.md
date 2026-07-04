@@ -24,7 +24,7 @@ Execute exactly one cohesive behavior-preserving file-level split.
 
 Run the smallest relevant check: targeted tests, typecheck or compile, lint, or a narrow smoke check.
 Use native success criteria; do not require `failed=0` unless that is how the runner reports results.
-If a relevant check fails, decide whether the split caused it, fix split-caused failures, and re-run the check.
+If a relevant check fails, apply references/regression-handling.md: state the root cause before editing again, fix split-caused failures, and re-run the check.
 If no relevant check can be run, say that explicitly.
 
 ## Output

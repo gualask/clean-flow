@@ -14,6 +14,7 @@ Prefer compact, high-signal sources:
 
 Use these sources to choose direction and reduce the search space.
 Do not treat MCP results, script output, or command output as final proof by themselves; verify decision-relevant conclusions against the relevant source or runtime evidence.
+Quote configuration values, defaults, versions, and names from the current repository state, never from memory.
 Run tests, lint, typecheck, format checks, build commands, or `git diff --check` only when the confirmed frame includes health/behavior verification or a concrete runtime risk that those checks can answer.
 
 Record what was checked, what was excluded, and why it matters.

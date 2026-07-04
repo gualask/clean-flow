@@ -17,10 +17,11 @@
       "scripts": ["repo-tree.mjs"]
     },
     "cf-simplify": {
-      "references": ["local-refactor-rules.md", "navigation-cost.md", "reference-audit.md"]
+      "references": ["local-refactor-rules.md", "navigation-cost.md", "reference-audit.md"],
+      "scripts": ["repo-tree.mjs"]
     },
     "cf-split": {
-      "references": ["file-split-rules.md", "navigation-cost.md", "reference-audit.md"],
+      "references": ["file-split-rules.md", "navigation-cost.md", "reference-audit.md", "regression-handling.md"],
       "scripts": ["repo-tree.mjs"]
     },
     "cf-start": {
@@ -29,7 +30,8 @@
         "local-readability-review.md",
         "local-refactor-rules.md",
         "navigation-cost.md",
-        "reference-audit.md"
+        "reference-audit.md",
+        "regression-handling.md"
       ],
       "scripts": ["repo-tree.mjs"]
     },

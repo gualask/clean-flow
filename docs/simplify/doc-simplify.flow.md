@@ -8,7 +8,7 @@ Document the runtime flow for `cf-simplify`, the public simplification review en
 
 - Public skill: `skills/cf-simplify/SKILL.md`
 - Runtime reference: `skills/cf-simplify/references/parallel-flows.md`
-- Shared sources vendored into runtime paths: `skills/_shared/references/local-refactor-rules.md`, `navigation-cost.md`, `reference-audit.md`
+- Shared sources vendored into runtime paths: `skills/_shared/references/local-refactor-rules.md`, `navigation-cost.md`, `reference-audit.md`; `skills/_shared/scripts/repo-tree.mjs`
 - Current request, repository files, worktree state, and relevant architecture context when available
 
 ## High-Level Flow

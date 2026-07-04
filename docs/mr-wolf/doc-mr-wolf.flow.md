@@ -7,7 +7,7 @@ Maintainer summary for `cf-mr-wolf`. Runtime behavior belongs to `skills/cf-mr-w
 ## Runtime Inputs
 
 - Public skill: `skills/cf-mr-wolf/SKILL.md`
-- Runtime references: `skills/cf-mr-wolf/references/framing.md`, `decomposition.md`, `evidence.md`, `dynamic-agents.md`, `derisk.md`, `outcomes.md`
+- Runtime references: `skills/cf-mr-wolf/references/framing.md`, `decomposition.md`, `evidence.md`, `dynamic-agents.md`, `derisk.md`, `outcomes.md`, `planning.md`, `evaluation.md`
 - Shared source vendored into runtime paths: `skills/_shared/scripts/repo-tree.mjs`
 - Custom agent source: `skills/_codex_agents/cflow_finding_derisk_recon.toml`
 - Current conversation and request
@@ -16,8 +16,9 @@ Maintainer summary for `cf-mr-wolf`. Runtime behavior belongs to `skills/cf-mr-w
 
 ## Maintainer Notes
 
-- Runtime routing stays in `skills/cf-mr-wolf/SKILL.md`.
-- Framing, evidence, de-risking, and outcome rules stay in linked references.
+- Runtime routing and flow selection (framing, planning, evaluation) stay in `skills/cf-mr-wolf/SKILL.md`.
+- Framing, evidence, de-risking, outcome, planning, and evaluation rules stay in linked references.
+- Planning flow owns generic decision-complete plans only; repository-level refactor planning routes to `cf-start`, and code-structure value judgments route to `cf-simplify`.
 - `.cflow/mr-wolf-notes.md` is optional handoff memory.
 - `.cflow/refactor-brief.md` remains owned by `cf-start`.
 - Keep this doc aligned with runtime files, but do not rely on it at runtime.

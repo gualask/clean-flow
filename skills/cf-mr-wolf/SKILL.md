@@ -1,11 +1,34 @@
 ---
 name: cf-mr-wolf
-description: "Frame ambiguous work before implementation or assessment: clarify problem, goals, success criteria, scope, constraints, risks, options, feature ideas, architecture changes, refactor intent, implementation direction, and diagnostic evaluation frames. Use before broad diagnostic work when the evaluation frame is unconfirmed; skip clear bounded edits or bug fixes."
+description: "Frame, plan, or judge work before implementation. Use when a request is ambiguous, asks how to approach or plan work, asks whether something is worth building, keeping, or removing, or needs a diagnostic lens confirmed before broad inspection. Do not use for clear bounded edits or bug fixes; route repository refactor planning to cf-start and overengineering judgments to cf-simplify."
 ---
-Operate as a lightweight technical framing skill before implementation.
-Identify the real problem, calibrate scope to the current request's goal and risk appetite, collect only decision-relevant context, and recommend a credible next step.
+Operate as the decisional entrypoint before implementation: frame unclear work, plan framed work, or judge whether work is worth doing.
+Identify the real problem, calibrate scope to the current request's goal and risk appetite, collect only decision-relevant context, and recommend a credible next step, plan, or verdict.
 
 Do not implement code changes.
+
+## Flow Selection
+
+Choose exactly one flow from the current request:
+
+### Evaluation Flow
+
+Use when the current request asks whether something should exist, be built, kept, exposed, or removed — a value judgment, not a method question.
+Read references/evaluation.md.
+Route judgments about code structure, overengineering, or file necessity to `cf-simplify`.
+
+### Planning Flow
+
+Use when the problem is already clear or framed in this conversation and the current request asks for an implementation plan, an approach decision, or an executable handoff.
+Read references/planning.md.
+Route repository-level refactor planning — structure, ownership, migration order, resumable multi-step refactor work — to `cf-start`.
+
+### Framing Flow
+
+Use when the request is ambiguous, the problem is unconfirmed, or a diagnostic lens must be selected. This is the default when neither flow above clearly fits.
+Follow the workflow below.
+
+Flows may chain within one invocation: when framing concludes and the current request asks for a plan or verdict, continue into that flow with the confirmed frame instead of re-asking.
 
 ## Hard Stop
 
@@ -28,9 +51,9 @@ Do not announce an inspection plan, infer the frame from repository state, or co
 - Inspect only the context needed to reduce uncertainty or support the handoff.
 - Do not run tests, lint, typecheck, format checks, or build commands during framing unless the user explicitly asks for health verification or names a concrete runtime risk to verify.
 - When the request belongs to a specialist Cflow lens, stop at a compact handoff that preserves the user's problem, scope, constraints, risk appetite, and unresolved decisions; do not answer from general technical judgment or carry specialist architecture, simplification, trace, scenario, split, cohesion, or cognitive rules here.
-- Do not turn framing into implementation, specialist assessment, target-shape planning, or work-unit planning.
+- Do not turn framing into implementation or specialist assessment; produce plans only in the planning flow, and leave target-shape and work-unit planning to `cf-start`.
 
-## Workflow
+## Framing Workflow
 
 Read reference files only when their phase becomes active.
 
@@ -55,7 +78,9 @@ Choose the first route that fits current evidence and uncertainty:
 
 ## Output
 
-Default to 2-5 short bullets.
+For a plan or a value verdict, use the output contract in the active flow's reference.
+
+For framing, default to 2-5 short bullets.
 
 For missing problem context, return only:
 

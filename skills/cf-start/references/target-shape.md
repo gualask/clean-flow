@@ -27,10 +27,11 @@ Select the reference architecture and define target ownership, boundaries, and p
 4. Define the clean end state for the assessed scope. Do not shrink target-shape to a hotspot because full migration is risky; scoped areas become migration units after target approval.
 5. Place current folders, shared buckets, protocol surfaces, boundary DTOs, event ports, adapters, infrastructure implementations, and analogous forms into the selected reference roles. Keep a current bucket only when it belongs to the target or is an accepted custom deviation.
 6. Name the false owners or dirty boundaries removed, the boundary model, the packaging direction, rejected alternatives, and the target tree when packaging changes.
+7. State the most fragile assumption behind the proposed target: what must hold, what breaks if it does not, and the cheapest check that would confirm it before migration.
 
 ## Output format
 
-Return sections: **Critical complexity**, **Reference target**, **Standard vs custom decision**, **Current-code migration map**, **Rejected alternatives**, **Target tree**, **Artifact decision**, **Recommended next action**.
+Return sections: **Critical complexity**, **Reference target**, **Standard vs custom decision**, **Current-code migration map**, **Rejected alternatives**, **Target tree**, **Fragile assumption**, **Artifact decision**, **Recommended next action**.
 
 ## Artifact updates
 

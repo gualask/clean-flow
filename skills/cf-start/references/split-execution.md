@@ -43,7 +43,7 @@ Before creating or moving files, read references/file-split-rules.md. If placeme
 - Preserve dataflow; avoid extra allocations, clones, or passes unless they clearly improve the seam.
 - Prefer local named ownership over generic utilities or fake layers.
 - Avoid `helper`, `utils`, `common`, `shared`, `manager`, or `service` unless local convention gives clear meaning.
-- If the safety lock breaks, stop and investigate.
+- If the safety lock or a relevant check breaks, stop editing and apply references/regression-handling.md before any further change.
 - If the implementation changes what the brief assumed, record the drift.
 - Report bugs separately unless behavior fixes were requested.
 

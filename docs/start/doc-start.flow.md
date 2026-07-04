@@ -19,3 +19,5 @@ Maintainer summary for `cf-start`. Runtime behavior belongs to `skills/cf-start/
 - `.cflow/architecture.md` is map input from `cf-architecture`.
 - `.cflow/refactor-brief.md` is accepted plan/resume state, not assessment notes.
 - Keep assessment, target shape, unit planning, and execution as separate gates.
+- Target-shape and migration-unit planning must surface the plan's most fragile assumption before approval.
+- When a safety lock or check breaks during execution, `regression-handling.md` (shared, vendored) gates further edits: root-cause sentence, three-hypothesis hard stop, scope blast after the fix.

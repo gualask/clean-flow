@@ -39,6 +39,7 @@ Do not consolidate just because files are small. Keep boundaries with real domai
 - Avoid replacing over-fragmentation with a new god file.
 - Preserve dataflow; avoid extra allocations, clones, or passes unless they reduce complexity.
 - Move ownership only when caller code visibly gets simpler.
+- If the safety lock or a relevant check breaks, stop editing and apply references/regression-handling.md before any further change.
 - If a real sub-seam appears, keep it near the owner unless reuse or cross-feature ownership justifies broader placement.
 - Report bugs separately unless behavior fixes were requested.
 
