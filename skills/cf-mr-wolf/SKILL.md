@@ -41,7 +41,7 @@ Do not announce an inspection plan, infer the frame from repository state, or co
 - Owns `.cflow/mr-wolf-notes.md` only when evidence or decisions need durable handoff; do not create or update it for a first-pass evaluation answer.
 - May read `.cflow/architecture.md` and `.cflow/trace.md`; never create or update them.
 - Do not read, create, or update `.cflow/refactor-brief.md` during first-pass evaluation; `cf-start` owns planning state.
-- Before creating `.cflow/mr-wolf-notes.md`, create `.cflow/` if needed and add `.cflow/` to `.gitignore`.
+- Before creating `.cflow/mr-wolf-notes.md`, create `.cflow/` if needed and write `.cflow/.gitignore` containing a single `*` line if missing; never edit the repository `.gitignore`.
 
 ## Core Rules
 

@@ -30,7 +30,9 @@ When creating or updating the refactor brief:
 - update the phase-specific fields named by the active phase
 - preserve unrelated live-resume fields unless evidence makes them stale
 - keep user decisions, constraints, exclusions, and open unknowns explicit
+- record constraints verbatim (exact values, versions, names, and user wording), not paraphrased; a resumed session reads them without this conversation's context
 - keep speculative candidates out
+- keep Execution state consistent with unit statuses: `current work unit` must name an `active` unit or `none`, and `recommended next work unit` must not name a `done` unit
 
 ## Execution State
 

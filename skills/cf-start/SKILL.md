@@ -12,7 +12,7 @@ For repository-level structure decisions, route through assessment or target-sha
 - `.cflow/architecture.md`: input only; owned by `cf-architecture`.
 - `.cflow/refactor-brief.md`: accepted plan/resume state only. Use references/artifacts.md. Never use it as assessment notes.
 
-Before creating `.cflow/*`, create `.cflow/` if needed and add `.cflow/` to `.gitignore`.
+Before creating `.cflow/*`, create `.cflow/` if needed and write `.cflow/.gitignore` containing a single `*` line if missing; never edit the repository `.gitignore`.
 
 ## Frame Gate
 

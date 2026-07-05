@@ -153,7 +153,7 @@ Installing the pack only syncs materialized skills and Codex custom agents.
 It does not create `.cflow/` immediately.
 
 Skills that own durable artifacts create `.cflow/` only when they need it.
-When `.cflow/` is created for the first time, Clean Flow also adds it to `.gitignore`.
+When `.cflow/` is created for the first time, Clean Flow writes a `.cflow/.gitignore` containing `*`, so the directory ignores itself and the repository `.gitignore` is never touched.
 
 Use `cf-start` when you want the normal cleanup/refactor lifecycle:
 

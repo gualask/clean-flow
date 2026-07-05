@@ -12,7 +12,7 @@ This skill works with these Cflow artifacts:
 - `.cflow/architecture.md`: input only; route to `cf-architecture` when missing, stale, or materially incomplete.
 - `.cflow/trace.md`: owned here; create it from `assets/trace.template.md` when missing, or refresh it in place when it already exists.
 
-Before creating an owned `.cflow/*` artifact, if `.cflow/` does not exist, create it and add `.cflow/` to `.gitignore`, creating `.gitignore` if needed.
+Before creating an owned `.cflow/*` artifact, create `.cflow/` if needed and write `.cflow/.gitignore` containing a single `*` line if missing; never edit the repository `.gitignore`.
 
 ## Goal
 

@@ -13,7 +13,7 @@ This skill works with these Cflow artifacts:
 - `.cflow/architecture.md`: owned here; create it from `../cf-start/assets/architecture.template.md` when missing, or refresh it in place when stale or materially incomplete.
 - `.cflow/refactor-brief.md`: owned by `cf-start`; never create or update it here.
 
-Before creating an owned `.cflow/*` artifact, if `.cflow/` does not exist, create it and add `.cflow/` to `.gitignore`, creating `.gitignore` if needed.
+Before creating an owned `.cflow/*` artifact, create `.cflow/` if needed and write `.cflow/.gitignore` containing a single `*` line if missing; never edit the repository `.gitignore`.
 
 ## Goal
 
