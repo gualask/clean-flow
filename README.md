@@ -17,6 +17,7 @@ Use it when you want Codex to:
 - reduce local cognitive complexity in a source file
 - regroup related files into a more cohesive local feature slice
 - run a larger cleanup/refactor flow with artifact-backed resume
+- brainstorm a new feature or idea into an approved design spec (explicit invocation only)
 
 ## Why Use It
 
@@ -146,6 +147,11 @@ Use it when a workflow or feature is scattered across folders and navigation cos
 
 Generates or reviews Markdown docs, READMEs, and design notes against the code.
 Use it when docs may be stale, too verbose, duplicated, or structurally out of sync.
+
+### `cf-brainstorm`
+
+Turns a feature or product idea into an approved design spec through collaborative dialogue, one question at a time, before any implementation.
+Invoke it explicitly ("let's brainstorm ..."); it never triggers on its own, and ambiguous or worth-building questions stay with `cf-mr-wolf`.
 
 ## First Use And Resume
 
