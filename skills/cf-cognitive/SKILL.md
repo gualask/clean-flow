@@ -42,7 +42,7 @@ Refactor only when the target has clear local cognitive pressure:
 
 - functions or methods that are hard to scan, roughly more than 20-30 logical lines
 - nesting deeper than function -> block -> block
-- nested try/catch blocks that make control flow hard to follow; simplify when possible unless language or framework constraints force them
+- nested try/catch blocks that make control flow hard to follow, unless language or framework constraints force them
 - try/catch blocks or loop bodies long enough to hide their main purpose
 - framework, runtime, or infrastructure wiring blocks that mix setup/teardown with nested callbacks containing real behavior, especially event subscriptions, observers, lifecycle hooks, timers, middleware, transactions, or scheduler callbacks
 - branching that makes the main path hard to see

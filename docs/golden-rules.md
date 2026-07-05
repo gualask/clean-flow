@@ -21,6 +21,7 @@ For non-runtime files, check that the change does not move runtime behavior into
 ## Runtime Skill Text
 
 - Treat frontmatter `description` as discovery metadata, not procedure: front-load user-facing task words and trigger phrases, state when to use the skill plus its key non-use or routing boundary, and avoid internal implementation details or artifact names unless they are invocation signals such as existing `.cflow` work.
+- Never summarize the skill's process or workflow in the `description`: an agent follows the summary instead of reading the skill body. State what the skill produces and when to trigger it, never how it works.
 - Polish every `SKILL.md` as if an LLM reads it from empty context: every sentence must be necessary runtime guidance, with no historical migration notes, maintainer-only labels, stale names, or decorative wording.
 - Write runtime guidance as context-shaping lenses by default; use hard prohibitions only for concrete safety, artifact, scope, or behavior-preservation failures.
 - In runtime skill instructions, do not refer to the current skill by its own skill name; use state, scope, artifact, or phase terms such as `here`, `this pass`, or the specific artifact instead.
@@ -30,6 +31,9 @@ For non-runtime files, check that the change does not move runtime behavior into
 - For composable skills, choose entry modes from the `current request`, not from whether the literal user or another skill made the request. Use `user explicitly asked` only for intentional user-level authorization gates.
 - Be strict only when the failure mode is concrete and costly.
 - Otherwise state the preferred direction plus the conditions that justify exceptions.
+- Match the form of strictness to the failure it prevents: a rule skipped under pressure needs a prohibition; wrong-shaped output needs a positive recipe or output contract stating what the output is; an omitted element needs a required slot in the template; condition-dependent behavior needs a conditional keyed to an observable predicate, not an unconditional rule with exemption clauses.
+- Do not soften a working rule with nuance clauses such as "unless it matters"; express a real exception as its own conditional on an observable predicate.
+- When a hard prohibition is justified, make it hold: name the specific workarounds it forbids, and turn rationalizations observed in real sessions into explicit counters in the skill text.
 - Prefer role/category language over example lists in runtime instructions. When examples are necessary, state that analogous project-specific forms must also be considered; do not let examples become a closed checklist.
 
 ## Refactor Decision Principle
