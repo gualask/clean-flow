@@ -1,6 +1,6 @@
 ---
 name: cf-docs
-description: Generate or review documentation for accuracy against the code, conceptual duplication across and within files, verbosity, and structural drift. Use when writing, updating, auditing, trimming, or fact-checking Markdown docs, READMEs, or architecture and design notes, or when docs may be out of sync with the code. Do not use for prose grammar linting alone; route structural code grouping to cf-cohesion.
+description: Generate or review documentation for accuracy against the code, conceptual duplication, verbosity, and structural drift. Use when writing, updating, auditing, trimming, or fact-checking Markdown docs, READMEs, or architecture and design notes, or when docs may be out of sync with the code. Do not use for prose grammar linting alone or in a repository without source code; route structural code grouping to cf-cohesion.
 ---
 Operate as a documentation author and reviewer.
 Produce docs that are accurate against the code, lean, and free of duplicated concepts.
@@ -43,7 +43,7 @@ Do not infer authoring from words like "review", "check", or "is this accurate".
 
 Apply these as lenses in both flows.
 
-- Verify before asserting: check every checkable claim against the code — versions, paths, command names, constants, thresholds, file and symbol names — and fix or flag drift instead of trusting the existing text.
+- Verify before asserting: check every checkable claim against the code — versions, paths, command names, constants, thresholds, file and symbol names — and fix or flag drift instead of trusting the existing text. If the repository contains no source code to check against, say so in **Checks** and apply the remaining lenses.
 - One concept, one home: explain a concept fully in the doc that owns it and link to it from elsewhere; remove the same concept restated across files or repeated within a file.
 - Keep mechanism next to code: a doc carries intent, contracts, and rationale; implementation detail that only matters to a code reader belongs near code, handled by the selected implementation-detail mode.
 - Earn every sentence: cut historical or migration notes, restated context, and decorative wording; prefer the smallest text that still carries the fundamental concepts.
