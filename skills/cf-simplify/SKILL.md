@@ -112,6 +112,11 @@ Use direct, decision-oriented sections:
 - **Alternatives**: 1-3 clean options with trade-offs.
 - **Decision needed**: exactly one focused question when implementation requires a behavior, interface, or scope decision.
 
+When the simplification was applied in this pass, also return:
+
+- **Changes**: edits made.
+- **Checks**: commands run and pass/fail result, or why no check ran.
+
 If the review leads to a refactor handoff, end with the exact route:
 
 - `cf-start` for broad, ordered, resumable refactor work
