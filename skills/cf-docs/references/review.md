@@ -26,7 +26,7 @@ Reduce text to the fundamental concepts.
 
 - Cut historical and migration notes, restated context, and decorative wording.
 - Collapse multi-paragraph explanations that carry a single idea.
-- For implementation detail that only a code reader needs, follow the mode selected in the `SKILL.md` Mode Gate: in `standard` mode move it into a concise source comment; in `conservative` mode leave it in prose and report the candidate move.
+- For implementation detail that only a code reader needs, apply the selected mode: in `standard` mode move it into a concise source comment when source edits are authorized, otherwise report the candidate move; in `conservative` mode leave it in prose and report the candidate move.
 
 ## Structure Pass
 

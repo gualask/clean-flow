@@ -18,7 +18,7 @@ Build the doc from verified facts and a single clear purpose, not from assumptio
 ## Place Each Concept Once
 
 - Before adding an explanation, check whether another doc already owns that concept; if so, link to it and add only what is new here.
-- Keep implementation mechanism near code according to the mode selected in the `SKILL.md` Mode Gate; let the doc carry intent, contracts, and rationale.
+- Keep implementation mechanism near code according to the selected mode and source-edit scope; let the doc carry intent, contracts, and rationale.
 - Establish one home for shared values and link to it from every doc that needs them.
 
 ## Keep It Lean

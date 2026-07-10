@@ -188,4 +188,5 @@ For path reconstruction or workflow audit, use `cf-trace`.
 - [Split flow](./docs/split/doc-split.flow.md)
 - [Cohesion flow](./docs/cohesion/doc-cohesion.flow.md)
 - [Docs flow](./docs/docs/doc-docs.flow.md)
+- [Brainstorm flow](./docs/brainstorm/doc-brainstorm.flow.md)
 - [Maintaining this pack](./docs/maintaining-this-pack.md)

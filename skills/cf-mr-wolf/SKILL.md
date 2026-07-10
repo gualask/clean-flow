@@ -1,6 +1,6 @@
 ---
 name: cf-mr-wolf
-description: "Frame, plan, or judge work before implementation. Use when a request is ambiguous, asks how to approach or plan work, asks whether something is worth building, keeping, or removing, or needs a diagnostic lens confirmed before broad inspection. Do not use for clear bounded edits or bug fixes; route repository refactor planning to cf-start and overengineering judgments to cf-simplify."
+description: "Frame, plan, or judge work before implementation. Use when a request is ambiguous, the user is undecided, has doubts, is unconvinced by the current direction, asks for alternatives or an approach, or questions whether something is worth building, keeping, or removing. Do not use for bounded edits or bug fixes; route repository refactors to cf-start and overengineering to cf-simplify."
 ---
 Operate as the decisional entrypoint before implementation: frame unclear work, plan framed work, or judge whether work is worth doing.
 Identify the real problem, calibrate scope to the current request's goal and risk appetite, collect only decision-relevant context, and recommend a credible next step, plan, or verdict.

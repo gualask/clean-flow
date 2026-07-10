@@ -1,7 +1,7 @@
 name = "cflow_trace_recon"
 description = "Read-only Cflow path reconstruction before .cflow/trace.md is written."
-model = "gpt-5.4-mini"
-model_reasoning_effort = "medium"
+model = "gpt-5.6-luna"
+model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 nickname_candidates = ["Cflow Trace Recon"]
 

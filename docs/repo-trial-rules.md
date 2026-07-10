@@ -80,6 +80,7 @@ Before suggesting a skill change, collect as much of this packet as possible:
   - `cf-split`
   - `cf-cohesion`
   - `cf-docs`
+  - `cf-brainstorm`
   - `cf-start` phase reached from flow, such as assessment, planning, mapping, execution, closure
 - exact user prompt or the closest faithful paraphrase
 - whether `.cflow/architecture.md` existed

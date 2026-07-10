@@ -16,7 +16,7 @@ Maintainer summary for `cf-mr-wolf`. Runtime behavior belongs to `skills/cf-mr-w
 
 ## Maintainer Notes
 
-- Runtime routing and flow selection (framing, planning, evaluation) stay in `skills/cf-mr-wolf/SKILL.md`.
+- Runtime routing for ambiguity, indecision, alternatives, planning, and evaluation stays in `skills/cf-mr-wolf/SKILL.md`.
 - Framing, evidence, de-risking, outcome, planning, and evaluation rules stay in linked references.
 - Planning flow owns generic decision-complete plans only; repository-level refactor planning routes to `cf-start`, and code-structure value judgments route to `cf-simplify`.
 - `.cflow/mr-wolf-notes.md` is optional handoff memory.

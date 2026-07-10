@@ -57,6 +57,7 @@ Public skill entrypoints:
 - `cf-split`
 - `cf-cohesion`
 - `cf-docs`
+- `cf-brainstorm`
 
 `cf-start` phase references:
 
@@ -124,6 +125,7 @@ Maintainer flow mirrors:
 - `cf-split`: [split/doc-split.flow.md](./split/doc-split.flow.md)
 - `cf-cohesion`: [cohesion/doc-cohesion.flow.md](./cohesion/doc-cohesion.flow.md)
 - `cf-docs`: [docs/doc-docs.flow.md](./docs/doc-docs.flow.md)
+- `cf-brainstorm`: [brainstorm/doc-brainstorm.flow.md](./brainstorm/doc-brainstorm.flow.md)
 
 ## Runtime Reference Rules
 
@@ -216,10 +218,9 @@ Current automated coverage checks:
 - remove of Cflow-owned skill dirs, legacy support dirs, and custom agents while preserving foreign entries
 - install, update, prune, and remove behavior for Cflow-owned Codex custom agents
 - structural checks for packaged public skills
-- Codex implicit invocation policy for shipped public skills
-- presence of `cf-start` bootstrap assets and phase references
-- presence of `cf-trace` trace artifact template and read-only reconstruction agent
-- materialized shared reference and script links from consuming skills and phase references
+- materialized runtime reference, script, and asset links
+- packaged routing only to public skills that exist
+- token budget warnings for packaged runtime files
 - presence of per-public-skill flow docs
 
 ## Manual Smoke Checks

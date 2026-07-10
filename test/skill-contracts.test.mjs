@@ -8,6 +8,7 @@ import { createMaterializedSkills } from "../src/lib/materialize-skills.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SKILLS_ROOT = path.join(REPO_ROOT, "skills");
+const DOCS_ROOT = path.join(REPO_ROOT, "docs");
 const DESCRIPTION_MAX_CHARS = 1024;
 
 async function publicSkillNames(root) {
@@ -92,7 +93,7 @@ test("packaged skill descriptions satisfy discovery constraints", async () => {
   }
 });
 
-test("materialized skill files only link references and scripts that exist", async () => {
+test("materialized skill files only link runtime files that exist", async () => {
   const materialized = await createMaterializedSkills(SKILLS_ROOT);
 
   try {
@@ -103,7 +104,9 @@ test("materialized skill files only link references and scripts that exist", asy
         const text = await fs.readFile(file, "utf8");
         const label = `skills/${skillName}/${path.relative(skillDir, file)}`;
 
-        for (const match of text.matchAll(/(?<![\w/])(?:references|scripts)\/[\w./-]+\.(?:md|mjs)/g)) {
+        for (const match of text.matchAll(
+          /(?<![\w/])(?:\.\.\/[\w.-]+\/)?(?:references|scripts|assets)\/[\w./-]+\.(?:md|mjs)/g,
+        )) {
           const target = path.join(skillDir, match[0]);
 
           await assert.doesNotReject(
@@ -115,6 +118,18 @@ test("materialized skill files only link references and scripts that exist", asy
     }
   } finally {
     await materialized.cleanup();
+  }
+});
+
+test("every public skill has a maintainer flow doc", async () => {
+  for (const skillName of await publicSkillNames(SKILLS_ROOT)) {
+    const shortName = skillName.replace(/^cf-/, "");
+    const flowDoc = path.join(DOCS_ROOT, shortName, `doc-${shortName}.flow.md`);
+
+    await assert.doesNotReject(
+      fs.access(flowDoc),
+      `${skillName} is missing ${path.relative(REPO_ROOT, flowDoc)}`,
+    );
   }
 });
 

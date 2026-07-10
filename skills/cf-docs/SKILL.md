@@ -11,16 +11,12 @@ Do not use this to restructure source files or move code; route file grouping to
 
 Treat repository state as the source of truth and do not require `.cflow/` artifacts.
 
-## Mode Gate
+## Implementation Detail
 
-If the request does not already choose `standard` or `conservative`, stop and ask:
-
-Implementation-detail mode? Reply `1` or `2`.
-
-1. `standard`: move low-level docs detail into concise source comments.
-2. `conservative`: keep that detail in docs and report the suggested move.
-
-Accept either the number or the label. Include the selected mode in **Scope**.
+Use `standard` mode by default and `conservative` only when the current request selects it.
+In `standard` mode, move low-level detail into concise source comments only when the request authorizes source edits; otherwise report the candidate move.
+In `conservative` mode, keep that detail in docs and report the candidate move.
+Include the selected mode in **Scope**.
 
 ## Flow Selection
 

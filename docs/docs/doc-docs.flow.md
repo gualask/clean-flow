@@ -12,7 +12,7 @@ Document the runtime flow for `cf-docs`, the public entrypoint for generating do
 
 ## High-Level Flow
 
-1. Ask the numbered implementation-detail gate before work unless mode is explicit: `1. standard`, `2. conservative`.
+1. Use `standard` implementation-detail mode by default; use `conservative` only when requested, and never widen the authorized edit scope to move detail into source comments.
 2. Start from the docs the request targets, or the thing to be documented.
 3. Choose the review or generate flow from the current request.
 4. Ask one focused question if the target docs, flow, or outcome is ambiguous.

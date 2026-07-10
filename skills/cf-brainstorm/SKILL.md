@@ -20,15 +20,15 @@ Do not write code, scaffold projects, or start implementation until the design h
 
 ## Process
 
-Run the phases in order. Do not skip ahead to the spec while questions are open.
+Run the phases in order. Do not skip ahead while material questions are open unless the user explicitly asks to proceed.
 
 1. **Resume check**: if `.cflow/specs/draft.md` already exists, stop and ask whether to resume it or discard it and start fresh; never overwrite it silently. On resume, re-read the draft and continue from its oldest open question.
 2. **Context**: explore current project state — files, docs, recent commits — before asking anything.
 3. **Scope check**: if the idea spans multiple independent subsystems, say so immediately and help decompose it; brainstorm one sub-idea at a time, each with its own spec.
-4. **Question plan**: while context is still fresh, write into the draft the full list of questions the interrogation should cover — purpose, users, constraints, data, edge cases, failure modes, success criteria.
-5. **Clarify**: run a deep iterative interrogation from the question list, one question at a time, never batched, each question building on the previous answers. Append new questions as answers raise them, and do not move on while an open question remains; only the user saying to move on ends the phase early. Prefer 2-4 options with one recommended default when the answer space is enumerable; go open-ended when depth requires it.
-6. **Approaches**: propose 2-3 approaches with trade-offs. Lead with the recommendation and why. Apply YAGNI ruthlessly to every option.
-7. **Design**: present the design in sections scaled to their complexity, confirming each section before the next. Cover architecture, components, data flow, error handling, and testing. Prefer small units with one clear purpose and well-defined interfaces; in an existing codebase, follow current patterns and include only targeted improvements that serve the idea.
+4. **Question plan**: while context is fresh, write only the unresolved decisions needed for a credible design; do not add questions merely to cover a category.
+5. **Clarify**: ask one decision-relevant question at a time, each building on prior answers. Append new questions only when answers expose a real decision, and move on when the design is sufficiently determined or the user asks to proceed. Prefer 2-4 options with one recommended default when the answer space is enumerable; go open-ended when depth requires it.
+6. **Approaches**: lead with one recommended approach and why. Add alternatives only when the trade-off is genuinely close. Apply YAGNI ruthlessly.
+7. **Design**: present and confirm sections in proportion to their complexity; collapse sections for a small design. Cover only the architecture, components, data flow, error handling, and testing that materially shape the idea. Prefer small units with one clear purpose and well-defined interfaces; in an existing codebase, follow current patterns and include only targeted improvements that serve the idea.
 8. **Spec**: expand the draft into the full design spec, then promote it by renaming (a user-stated location overrides the default path).
 9. **Self-review**: re-read the spec once with fresh eyes and fix inline, without re-reviewing: placeholders or vague requirements, internal contradictions, scope too large for one implementation effort, requirements readable in two ways.
 10. **User review**: ask the user to review the spec file; apply requested changes and re-run the self-review. Stop only after explicit approval.
