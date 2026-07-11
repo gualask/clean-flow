@@ -14,13 +14,14 @@ Document the runtime flow for `cf-trace`, the public path reconstruction and aud
 
 ## High-Level Flow
 
-1. Start from the requested path, scenario, command, entrypoint, or workflow.
-2. Ask `Use subagents? Reply y/n.` before reconstruction; `y` means `subagent`, `n` means `local`.
+1. If the current task carries the state marker `delegated terminal evidence-only reconnaissance`, bypass the controller flow: inspect the assigned scope directly, do not activate skills or delegate, report missing context under **Unknowns**, and return one report.
+2. Start from the requested path, scenario, command, entrypoint, or workflow.
 3. Ask one focused question if the path is too ambiguous to trace.
-4. Require current architecture context before tracing; route to `cf-architecture` when it is missing or stale.
-5. In `subagent` mode, apply the shared clean-context reconnaissance protocol with `cflow_trace_recon`.
-6. While the agent runs, avoid duplicating the path scan locally.
-7. In `local` mode, reconstruct the same report shape locally and mark the trace as local-mode reconstruction.
-8. Check the returned or local reconstruction against `trace.template.md` and spot-check only unsupported, contradictory, or missing claims.
-9. Create or refresh `.cflow/trace.md` when durable trace state is needed.
-10. Audit the reconstructed path through the active lenses and return findings plus exactly one route: framing, architecture, simplify, refactor, local cleanup, direct fix, or none.
+4. Require current architecture context before tracing. When it is missing or stale, suspend the trace flow and run or await exactly one `cf-architecture` flow; never run the two controller flows or their reconnaissance agents concurrently.
+5. Resume only after rereading the current architecture artifact, then ask `Use subagents? Reply y/n.` before reconstruction; `y` means `subagent`, `n` means `local`.
+6. In `subagent` mode, apply the shared terminal clean-context reconnaissance protocol with `cflow_trace_recon`.
+7. While the agent runs, avoid duplicating the path scan locally.
+8. In `local` mode, reconstruct the same report shape locally and mark the trace as local-mode reconstruction.
+9. Check the returned or local reconstruction against `trace.template.md` and spot-check only unsupported, contradictory, or missing claims.
+10. Create or refresh `.cflow/trace.md` when durable trace state is needed.
+11. Audit the reconstructed path through the active lenses and return findings plus exactly one route: framing, architecture, simplify, refactor, local cleanup, direct fix, or none.

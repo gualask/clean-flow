@@ -44,16 +44,9 @@ Do not use this for broad refactor planning; use `cf-start` after trace findings
 
 Write `.cflow/trace.md` in the repository's dominant documentation language; if none exists, use the current conversation language.
 
-## Reconnaissance Gate
+## Delegated Reconnaissance Guard
 
-Stop before implementation scanning and ask:
-
-Use subagents? Reply `y` or `n`.
-
-- `y`: use read-only `cflow_trace_recon` for independent reconstruction.
-- `n`: reconstruct in this context and report no clean-context independence.
-
-Use `subagent` mode for `y` and `local` mode for `n`. Include the selected mode in **Trace**.
+If the current task carries the state marker `delegated terminal evidence-only reconnaissance`, do not enter this controller flow, run the Reconnaissance Gate, invoke any skill, resolve routes or prerequisites, or delegate again. Inspect the assigned repository scope directly with read-only tools, record missing prerequisites under **Unknowns**, and return one report to the controller.
 
 ## Preflight
 
@@ -62,11 +55,20 @@ Use `subagent` mode for `y` and `local` mode for `n`. Include the selected mode 
 3. Read `.cflow/trace.md` if it exists.
 4. Read `assets/trace.template.md`.
 5. Check `git status --short` for user-change awareness.
-6. Run the Reconnaissance Gate before reading implementation files or reconstructing the path.
-7. Do not reconstruct the path during preflight.
+6. If the requested path is too ambiguous to trace, ask one focused question before spawning reconnaissance.
+7. If `.cflow/architecture.md` is missing, stale, or materially incomplete, suspend this flow and route to exactly one `cf-architecture` run, or await the in-flight run already known to the current context. Do not run the mapping and trace controller flows or their reconnaissance agents concurrently. Resume only after the architecture artifact is current and has been read again.
+8. Do not reconstruct the path during preflight.
 
-If the requested path is too ambiguous to trace, ask one focused question before spawning reconnaissance.
-If `.cflow/architecture.md` is missing, stale, or materially incomplete, route to `cf-architecture` before continuing.
+## Reconnaissance Gate
+
+After Preflight has resolved the architecture prerequisite, stop before implementation scanning and ask:
+
+Use subagents? Reply `y` or `n`.
+
+- `y`: use read-only `cflow_trace_recon` for independent reconstruction.
+- `n`: reconstruct in this context and report no clean-context independence.
+
+Use `subagent` mode for `y` and `local` mode for `n`. Include the selected mode in **Trace**.
 
 ## Clean-Context Trace Reconstruction
 

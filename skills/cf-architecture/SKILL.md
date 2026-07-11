@@ -34,9 +34,21 @@ You must determine:
 
 Write `.cflow/architecture.md` in the repository's dominant documentation language; if none exists, use the current conversation language.
 
+## Delegated Reconnaissance Guard
+
+If the current task carries the state marker `delegated terminal evidence-only reconnaissance`, do not enter this controller flow, run the Reconnaissance Gate, invoke any skill, resolve routes, or delegate again. Inspect the assigned repository scope directly with read-only tools, record missing prerequisites under **Unknowns**, and return one report to the controller.
+
+## Preflight
+
+1. If the current context already has another in-flight repository-mapping run for this repository, await it and reuse its result; do not start a second controller or reconnaissance agent.
+2. Read `.cflow/architecture.md` if it exists.
+3. Read `../cf-start/assets/architecture.template.md`.
+4. Check `git status --short` for worktree-change awareness.
+5. Do not map repository architecture during preflight.
+
 ## Reconnaissance Gate
 
-Stop before source scanning and ask:
+After Preflight, stop before source scanning and ask:
 
 Use subagents? Reply `y` or `n`.
 
@@ -44,14 +56,6 @@ Use subagents? Reply `y` or `n`.
 - `n`: map in this context and report no clean-context independence.
 
 Use `subagent` mode for `y` and `local` mode for `n`. Include the selected mode in the final summary.
-
-## Preflight
-
-1. Read `.cflow/architecture.md` if it exists.
-2. Read `../cf-start/assets/architecture.template.md`.
-3. Check `git status --short` for worktree-change awareness.
-4. Run the Reconnaissance Gate before reading implementation files or mapping repository architecture.
-5. Do not map repository architecture during preflight.
 
 ## Clean-Context Reconnaissance
 

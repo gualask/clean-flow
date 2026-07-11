@@ -220,6 +220,7 @@ Current automated coverage checks:
 - structural checks for packaged public skills
 - materialized runtime reference, script, and asset links
 - packaged routing only to public skills that exist
+- terminal reconnaissance delegation and serialized architecture-prerequisite contracts
 - token budget warnings for packaged runtime files
 - presence of per-public-skill flow docs
 
