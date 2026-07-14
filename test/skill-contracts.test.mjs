@@ -89,8 +89,8 @@ test("packaged skill descriptions satisfy discovery constraints", async () => {
     );
     assert.match(
       description,
-      /\bUse\b/,
-      `${label} description must state when to use the skill ("Use when/after/as ...")`,
+      /\bUse (when|after|as|only when)\b/,
+      `${label} description must state when to use the skill ("Use when/after/as/only when ...")`,
     );
   }
 });

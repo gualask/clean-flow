@@ -1,6 +1,6 @@
 ---
 name: cf-split
-description: Evaluate or execute a behavior-preserving file-level split from one source file into nearby owned files. Use when the current request asks whether a file should be split or asks to perform a scoped extraction into files.
+description: Evaluate or execute a behavior-preserving file-level split from one source file into nearby owned files. Use when the current request asks whether a file should be split or asks to perform a scoped extraction into files. Route regrouping of multiple related files to cf-cohesion and repository-level restructuring to cf-start.
 ---
 Use this skill for local file-level split review and execution.
 

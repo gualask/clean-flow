@@ -1,6 +1,6 @@
 ---
 name: cf-scenario
-description: Frame, validate, or explain a bug, code change, architectural concern, or behavior through concrete code-grounded scenarios. Use when the user or another agent needs to understand real impact across direct and indirect flows, especially before a fix or after an implementation.
+description: Ground, validate, or explain a bug, code change, architectural concern, or behavior through concrete code-grounded scenarios. Use when the request needs real impact understood across direct and indirect flows, especially before a fix or after an implementation. Route reconstructing or auditing an execution path to cf-trace, and deciding what to do about the impact — approach, alternatives, worth — to cf-mr-wolf.
 ---
 Use this skill to make technical behavior concrete through scenarios grounded in the repository.
 Do not implement, move files, or write patches in this skill.

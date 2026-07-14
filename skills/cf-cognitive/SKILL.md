@@ -1,6 +1,6 @@
 ---
 name: cf-cognitive
-description: Find or refactor local source-file cognitive complexity hotspots while preserving behavior. Use with or without explicit file targets.
+description: Find or refactor local source-file cognitive complexity hotspots while preserving behavior. Use when a function or file is hard to read or reason about — overloaded functions, deep nesting, tangled branching, local readability pressure — with or without explicit file targets. Do not use to split a file into new files (cf-split) or for repository-wide refactors (cf-start).
 ---
 Use this skill for local file-level cognitive complexity refactors.
 

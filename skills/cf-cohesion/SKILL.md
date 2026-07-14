@@ -1,6 +1,6 @@
 ---
 name: cf-cohesion
-description: Evaluate or execute behavior-preserving local regrouping of already-related files into a cohesive feature or workflow slice. Use when the problem is navigation cost, placement, scattered files, feature-slice cohesion, or whether related files should live together.
+description: Evaluate or execute behavior-preserving local regrouping of already-related files into a cohesive feature or workflow slice. Use when the problem is navigation cost, placement, scattered files, feature-slice cohesion, or whether related files should live together. Route single-file splits to cf-split and repository-level restructuring to cf-start.
 ---
 Use this skill for local cross-file cohesion review and regrouping.
 

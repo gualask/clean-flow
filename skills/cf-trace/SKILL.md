@@ -1,6 +1,6 @@
 ---
 name: cf-trace
-description: Reconstruct and audit an execution, product, or refactor path from repository evidence. Use to identify broken sequences, missing states, unclear ownership, unsafe ordering, weak invariants, failure modes, resume gaps, or test gaps before changing code.
+description: Reconstruct and audit an execution, product, or refactor path from repository evidence. Use when the request asks to reconstruct how a flow works or to audit it for broken sequences, missing states, unclear ownership, unsafe ordering, weak invariants, failure modes, resume gaps, or test gaps before changing code. Route concrete impact analysis of a bug or change to cf-scenario.
 ---
 Use this skill to reconstruct one concrete path and audit it for orchestration flaws.
 Do not implement, move files, or write code patches in this skill.

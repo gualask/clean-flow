@@ -1,6 +1,6 @@
 ---
 name: cf-simplify
-description: Diagnose overengineering, file sprawl, duplicated or parallel near-identical flows, unnecessary lifecycle complexity, and whether an area gets substantially cleaner by simplifying behavior, interface contracts, boundaries, or architecture. Use when the request questions whether files are necessary, suspects overengineering or duplication, wants a large simplification, or asks whether to remove/replace an over-complex design instead of polishing it.
+description: Diagnose overengineering, file sprawl, duplicated or parallel near-identical flows, unnecessary lifecycle complexity, and whether an area gets substantially cleaner by simplifying behavior, interface contracts, boundaries, or architecture. Use when the request questions whether files are necessary, suspects overengineering or duplication, wants a large simplification, or asks whether to remove/replace an over-complex design instead of polishing it; route repository restructuring to cf-start.
 ---
 
 Operate as a simplification reviewer before refactor execution.
