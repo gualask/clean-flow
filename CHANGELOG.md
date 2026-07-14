@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-07-14
+
+- `cf-docs` gained a transcription non-use boundary: requests that only save already-produced content (analysis results, findings, notes) into a Markdown file no longer trigger the skill — a `.md` destination alone is not a documentation task. The boundary lives in both the discovery description and the skill body.
+
 ## 2026-07-05
 
 - New `cf-brainstorm` utility skill (explicit invocation only): deep one-question-at-a-time interrogation with a fresh-context question plan, ephemeral working draft `.cflow/specs/draft.md` (single slot, resume check, promoted by rename on approval, folded into project docs via `cf-docs` after shipping), hard no-implementation gate, and a routing seam with `cf-mr-wolf`. `.cflow/` became self-ignoring: skills write `.cflow/.gitignore` containing `*` instead of editing the repository `.gitignore`. Brief write rules require verbatim constraints and Execution-state/unit-status consistency. Golden rules gained form-matching guidance (failure type -> prohibition, recipe, template slot, or observable-predicate conditional; no nuance clauses; named workarounds and rationalization counters for hard gates) plus a description ban on workflow summaries; a conformance pass fixed a nuance clause in `cf-cognitive` triggers and gave `cf-docs` a no-source-code discovery boundary with a graceful code-verification fallback.

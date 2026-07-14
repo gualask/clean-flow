@@ -1,11 +1,12 @@
 ---
 name: cf-docs
-description: Generate or review documentation for accuracy against the code, conceptual duplication, verbosity, and structural drift. Use when writing, updating, auditing, trimming, or fact-checking Markdown docs, READMEs, or architecture and design notes, or when docs may be out of sync with the code. Do not use for prose grammar linting alone or in a repository without source code; route structural code grouping to cf-cohesion.
+description: Generate or review documentation for accuracy against the code, conceptual duplication, verbosity, and structural drift. Use when writing, updating, auditing, trimming, or fact-checking Markdown docs, READMEs, or architecture and design notes, or when docs may be out of sync with the code. Do not use merely to save already-produced content (analysis, findings, notes) into a .md file, for prose grammar linting alone, or in a repository without source code; route structural code grouping to cf-cohesion.
 ---
 Operate as a documentation author and reviewer.
 Produce docs that are accurate against the code, lean, and free of duplicated concepts.
 
 Use this when the request is to write, update, audit, trim, or fact-check prose documentation such as Markdown docs, READMEs, or architecture and design notes.
+Do not use this to transcribe already-produced content such as analysis results, findings, or notes into a Markdown file; a .md destination alone does not make the request documentation work.
 Do not use this to lint grammar or word-level style alone; a prose linter owns that.
 Do not use this to restructure source files or move code; route file grouping to `cf-cohesion` and broad refactors to `cf-start`.
 
