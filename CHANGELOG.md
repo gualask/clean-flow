@@ -2,6 +2,7 @@
 
 ## 2026-07-14
 
+- New `cf-todo` utility skill: creates and maintains a lightweight, user-owned `todo.md` with two sections (next steps with observable done criteria, open questions with impact/direction/what-is-needed-to-decide). Completion checks the item; checked items are removed only during a user-requested commit, the file is deleted when it empties, and git is the only history. Never touches `.cflow/*` (refactor progress stays with `cf-start`, drafts with `cf-brainstorm`); durable decision rationale routes to ADRs or owning docs via `cf-docs`, which now routes tracking files to `cf-todo`.
 - `cf-docs` gained a transcription non-use boundary: requests that only save already-produced content (analysis results, findings, notes) into a Markdown file no longer trigger the skill — a `.md` destination alone is not a documentation task. The boundary lives in both the discovery description and the skill body.
 
 ## 2026-07-05

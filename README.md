@@ -148,6 +148,11 @@ Use it when a workflow or feature is scattered across folders and navigation cos
 Generates or reviews Markdown docs, READMEs, and design notes against the code.
 Use it when docs may be stale, too verbose, duplicated, or structurally out of sync.
 
+### `cf-todo`
+
+Creates and maintains a lightweight `todo.md` tracking next steps and open questions produced by an analysis or working session.
+Completed items are checked, then removed only when you ask to commit; git is the only history, so the file holds live work only.
+
 ### `cf-brainstorm`
 
 Turns a feature or product idea into an approved design spec through collaborative dialogue, one question at a time, before any implementation.
