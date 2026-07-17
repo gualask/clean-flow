@@ -20,6 +20,12 @@ import * as tiktoken from "tiktoken";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SKILLS_ROOT = path.join(REPO_ROOT, "skills");
+const SKILL_CONTEXT_MAP_PATH = path.join(
+  REPO_ROOT,
+  "src",
+  "commands",
+  "skill-token-report.context.json",
+);
 
 const require = createRequire(import.meta.url);
 const modelToEncoding = require("tiktoken/model_to_encoding.json");
@@ -64,6 +70,54 @@ test("packaged skill frontmatter quotes YAML-sensitive scalar values", async () 
   }
 });
 
+test("skill context map covers declared public skill flows", async () => {
+  const contextMap = JSON.parse(await fs.readFile(SKILL_CONTEXT_MAP_PATH, "utf8"));
+
+  for (const skillFile of await skillFiles(SKILLS_ROOT)) {
+    const skillName = path.basename(path.dirname(skillFile));
+    const skillConfig = contextMap.skills[skillName];
+    const lines = (await fs.readFile(skillFile, "utf8")).split("\n");
+    let activeFlow = null;
+
+    assert.ok(skillConfig, `context map is missing ${skillName}`);
+
+    for (const line of lines) {
+      const flowHeading = /^### (.+) Flow$/.exec(line);
+      if (flowHeading) {
+        activeFlow = flowHeading[1]
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "");
+        assert.ok(
+          skillConfig.flows[activeFlow],
+          `context map is missing ${skillName}:${activeFlow}`,
+        );
+        continue;
+      }
+
+      if (/^#{1,3} /.test(line)) {
+        activeFlow = null;
+        continue;
+      }
+
+      if (activeFlow === null) {
+        continue;
+      }
+
+      for (const match of line.matchAll(/references\/[A-Za-z0-9._/-]+\.md/g)) {
+        const configuredFiles = [
+          ...(skillConfig.flows[activeFlow].required ?? []),
+          ...(skillConfig.flows[activeFlow].conditional ?? []),
+        ];
+        assert.ok(
+          configuredFiles.includes(match[0]),
+          `context map ${skillName}:${activeFlow} is missing ${match[0]}`,
+        );
+      }
+    }
+  }
+});
+
 test("packaged skill runtime files stay within token budget warnings", async () => {
   const resolved = resolveTokenEncoding({
     tiktoken,
@@ -74,6 +128,7 @@ test("packaged skill runtime files stay within token budget warnings", async () 
 
   try {
     const materialized = await createMaterializedSkills(SKILLS_ROOT);
+    const contextMap = JSON.parse(await fs.readFile(SKILL_CONTEXT_MAP_PATH, "utf8"));
 
     try {
       const report = await buildSkillTokenReport({
@@ -81,9 +136,25 @@ test("packaged skill runtime files stay within token budget warnings", async () 
         rootForLabels: materialized.skillsRoot,
         encoder: resolved.encoder,
         budgets: skillTokenBudgetsFromEnv(),
+        contextMap,
       });
 
       assert.ok(report.skills.length > 0, "expected at least one packaged skill");
+      assert.equal(report.context.discoveryTokens, report.totals.metadataTokens);
+      assert.deepEqual(
+        [...new Set(report.context.flows.map((flow) => flow.skillName))].sort(),
+        report.skills.map((skill) => skill.name).sort(),
+      );
+
+      const cognitiveExecution = report.context.flows.find(
+        (flow) => flow.id === "cf-cognitive:execution",
+      );
+      assert.ok(cognitiveExecution, "expected a configured cf-cognitive execution flow");
+      assert.equal(
+        cognitiveExecution.handoffs.find((handoff) => handoff.to === "cf-split:evaluation")
+          ?.kind,
+        "conditional",
+      );
 
       for (const warning of collectSkillTokenBudgetWarnings(report)) {
         process.emitWarning(warning.message, { code: warning.code });

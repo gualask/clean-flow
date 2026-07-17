@@ -2,6 +2,7 @@ import path from "node:path";
 import { readFile, readdir } from "node:fs/promises";
 
 import { listSkillDirectories } from "./fs.mjs";
+import { buildSkillContextReport } from "./skill-context-report.mjs";
 import { tokenCountRow } from "./token-count.mjs";
 
 // Budget references:
@@ -54,20 +55,22 @@ export async function buildSkillTokenReport({
   encoder,
   budgets = DEFAULT_SKILL_TOKEN_BUDGETS,
   skillName = null,
+  contextMap = null,
 }) {
   const allSkills = await listSkillDirectories(skillsRoot);
-  const skills =
+  const selectedSkills =
     skillName === null ? allSkills : allSkills.filter((skill) => skill.name === skillName);
 
-  if (skillName !== null && skills.length === 0) {
+  if (skillName !== null && selectedSkills.length === 0) {
     const available = allSkills.map((skill) => skill.name).join(", ");
     throw new Error(`Unknown skill ${JSON.stringify(skillName)}. Available skills: ${available}`);
   }
 
-  const skillReports = [];
+  const reportSkills = contextMap === null ? selectedSkills : allSkills;
+  const allSkillReports = [];
 
-  for (const skill of skills) {
-    skillReports.push(
+  for (const skill of reportSkills) {
+    allSkillReports.push(
       await buildSingleSkillReport({
         skill,
         rootForLabels,
@@ -76,6 +79,9 @@ export async function buildSkillTokenReport({
       }),
     );
   }
+
+  const selectedNames = new Set(selectedSkills.map((skill) => skill.name));
+  const skillReports = allSkillReports.filter((skill) => selectedNames.has(skill.name));
 
   const totals = skillReports.reduce(
     (current, skill) => ({
@@ -96,6 +102,11 @@ export async function buildSkillTokenReport({
     budgets,
     skills: skillReports,
     totals,
+    context: buildSkillContextReport({
+      contextMap,
+      skillReports: allSkillReports,
+      skillName,
+    }),
   };
 }
 
@@ -140,6 +151,12 @@ export function formatSkillTokenReport(report, { model, encodingName, source } =
     `Budgets: SKILL.md instructions warn ${report.budgets.skillMdWarningTokens} tokens, hard warn ${report.budgets.skillMdHardWarningTokens} tokens; references/assets warn ${report.budgets.resourceWarningTokens} tokens`,
   );
 
+  if (report.context !== null) {
+    lines.push(
+      `Flow estimates: Cflow contract tokens only; pack discovery baseline ${report.context.discoveryTokens} tokens`,
+    );
+  }
+
   for (const skill of report.skills) {
     lines.push("");
     lines.push(skill.name);
@@ -176,7 +193,29 @@ export function formatSkillTokenReport(report, { model, encodingName, source } =
       );
     }
 
-    lines.push(`  skill total: ${skill.totalTokens} tokens`);
+    lines.push(`  skill inventory total: ${skill.totalTokens} tokens`);
+
+    const flows = report.context?.flows.filter((flow) => flow.skillName === skill.name) ?? [];
+    if (flows.length > 0) {
+      lines.push("  flow stacks");
+      lines.push(formatFlowRow("flow", "required", "reachable", "max + discovery"));
+      lines.push(formatFlowRow("-".repeat(28), "-".repeat(8), "-".repeat(9), "-".repeat(15)));
+
+      for (const flow of flows) {
+        lines.push(
+          formatFlowRow(
+            flow.flowName,
+            flow.requiredTokens,
+            flow.reachableTokens,
+            flow.reachableWithDiscoveryTokens,
+          ),
+        );
+
+        for (const handoff of flow.handoffs) {
+          lines.push(formatHandoffRow(flow.flowName, handoff));
+        }
+      }
+    }
   }
 
   lines.push("");
@@ -184,7 +223,14 @@ export function formatSkillTokenReport(report, { model, encodingName, source } =
   lines.push(`  metadata: ${report.totals.metadataTokens} tokens`);
   lines.push(`  SKILL.md instructions: ${report.totals.skillInstructionTokens} tokens`);
   lines.push(`  references/assets: ${report.totals.resourceTokens} tokens`);
-  lines.push(`  all reported tokens: ${report.totals.totalTokens} tokens`);
+  lines.push(`  all inventory tokens: ${report.totals.totalTokens} tokens`);
+
+  const maximumStack = findMaximumContextStack(report.context?.flows ?? []);
+  if (maximumStack !== null) {
+    lines.push(
+      `  maximum reachable flow stack: ${maximumStack.tokens} tokens (${maximumStack.label})`,
+    );
+  }
 
   return `${lines.join("\n")}\n`;
 }
@@ -380,6 +426,39 @@ function statusForBudget(actual, { warning, hardWarning }) {
 
 function formatRuntimeRow(item, tokens, budget, status) {
   return `    ${String(item).padEnd(44)} ${String(tokens).padStart(6)}  ${String(budget).padEnd(23)} ${status}`;
+}
+
+function formatFlowRow(flow, required, reachable, withDiscovery) {
+  return `    ${String(flow).padEnd(28)} ${String(required).padStart(8)}  ${String(reachable).padStart(9)}  ${String(withDiscovery).padStart(15)}`;
+}
+
+function formatHandoffRow(flowName, handoff) {
+  const label = `${flowName} -> ${handoff.to} [${handoff.kind}, ${handoff.context}]`;
+
+  if (handoff.context === "fresh-context") {
+    return `    ${label}: target max + discovery ${handoff.targetReachableWithDiscoveryTokens}`;
+  }
+
+  return `    ${label}: adds up to ${handoff.addedReachableTokens}, cumulative max + discovery ${handoff.cumulativeReachableWithDiscoveryTokens}`;
+}
+
+function findMaximumContextStack(flows) {
+  const candidates = flows.flatMap((flow) => [
+    { label: flow.id, tokens: flow.reachableWithDiscoveryTokens },
+    ...flow.handoffs.map((handoff) => ({
+      label: `${flow.id} -> ${handoff.to}`,
+      tokens:
+        handoff.context === "fresh-context"
+          ? handoff.targetReachableWithDiscoveryTokens
+          : handoff.cumulativeReachableWithDiscoveryTokens,
+    })),
+  ]);
+
+  return candidates.reduce(
+    (maximum, candidate) =>
+      maximum === null || candidate.tokens > maximum.tokens ? candidate : maximum,
+    null,
+  );
 }
 
 function numberFromEnv(value, fallback) {

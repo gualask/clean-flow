@@ -18,7 +18,7 @@ Execute local cognitive cleanup only for explicit target files or a confirmed di
 - Prefer named local handlers or a shallow subscription helper when that makes setup, teardown, and effect order easier to scan.
 - Do not evaluate placement or execute extraction in this skill.
 
-- After editing a target file, route to `cf-split` evaluation for that same file before advancing to another target file or suggesting another cognitive candidate.
+- After editing a target file, route to `cf-split` evaluation before advancing only when remaining file-level pressure is demonstrated by a canonical file-length trigger without a recognized exemption or a stable named owner or boundary that still raises navigation cost. Otherwise finish the target and continue within the explicit target set.
 - After editing a target file, if the remaining readability cost is caused by related files scattered across folders, route to `cf-cohesion` targeted evaluation for that local workflow before advancing to another target file or suggesting another cognitive candidate.
 
 ## Verification

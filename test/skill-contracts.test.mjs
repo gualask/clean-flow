@@ -170,6 +170,42 @@ test("navigation-cost is the single source of hard-trigger threshold values", as
   }
 });
 
+test("cognitive execution routes to split only for remaining file-level pressure", async () => {
+  const executionContract = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-cognitive", "references", "execution.md"),
+    "utf8",
+  );
+  const flowDoc = await fs.readFile(
+    path.join(DOCS_ROOT, "cognitive", "doc-cognitive.flow.md"),
+    "utf8",
+  );
+
+  assert.match(
+    executionContract,
+    /route to `cf-split` evaluation before advancing only when remaining file-level pressure is demonstrated/,
+  );
+  assert.match(
+    executionContract,
+    /canonical file-length trigger without a recognized exemption/,
+  );
+  assert.match(
+    executionContract,
+    /stable named owner or boundary that still raises navigation cost/,
+  );
+  assert.match(
+    executionContract,
+    /otherwise finish the target and continue within the explicit target set/i,
+  );
+  assert.doesNotMatch(
+    executionContract,
+    /route to `cf-split` evaluation for that same file before advancing to another target file/,
+  );
+  assert.match(
+    flowDoc,
+    /route through `cf-split` evaluation only when remaining file-level pressure is demonstrated/,
+  );
+});
+
 test("delegated reconnaissance is terminal in every runtime enforcement layer", async () => {
   const sharedContract = await fs.readFile(
     path.join(SHARED_REFERENCES_ROOT, "clean-context-recon.md"),

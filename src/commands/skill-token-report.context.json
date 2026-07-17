@@ -1,0 +1,279 @@
+{
+  "version": 1,
+  "skills": {
+    "cf-architecture": {
+      "flows": {
+        "default": {
+          "required": ["../cf-start/assets/architecture.template.md"],
+          "conditional": ["references/clean-context-recon.md"]
+        }
+      }
+    },
+    "cf-brainstorm": {
+      "flows": {
+        "default": {
+          "required": [],
+          "conditional": ["assets/draft.template.md"]
+        }
+      }
+    },
+    "cf-cognitive": {
+      "flows": {
+        "discovery": {
+          "required": [
+            "references/navigation-cost.md",
+            "references/discovery.md"
+          ],
+          "conditional": []
+        },
+        "targeted-evaluation": {
+          "required": [
+            "references/navigation-cost.md",
+            "references/targeted-evaluation.md"
+          ],
+          "conditional": []
+        },
+        "execution": {
+          "required": [
+            "references/navigation-cost.md",
+            "references/execution.md",
+            "references/local-refactor-rules.md"
+          ],
+          "conditional": [],
+          "handoffs": [
+            {
+              "to": "cf-split:evaluation",
+              "kind": "conditional",
+              "context": "same-thread"
+            },
+            {
+              "to": "cf-cohesion:targeted-evaluation",
+              "kind": "conditional",
+              "context": "same-thread"
+            }
+          ]
+        }
+      }
+    },
+    "cf-cohesion": {
+      "flows": {
+        "discovery": {
+          "required": ["references/discovery.md"],
+          "conditional": []
+        },
+        "targeted-evaluation": {
+          "required": [
+            "references/targeted-evaluation.md",
+            "references/navigation-cost.md"
+          ],
+          "conditional": []
+        },
+        "execution": {
+          "required": [
+            "references/execution.md",
+            "references/reference-audit.md"
+          ],
+          "conditional": [
+            "references/targeted-evaluation.md",
+            "references/navigation-cost.md"
+          ]
+        }
+      }
+    },
+    "cf-docs": {
+      "flows": {
+        "review": {
+          "required": ["references/review.md"],
+          "conditional": []
+        },
+        "generate": {
+          "required": ["references/generate.md"],
+          "conditional": []
+        }
+      }
+    },
+    "cf-mr-wolf": {
+      "flows": {
+        "evaluation": {
+          "required": ["references/evaluation.md"],
+          "conditional": []
+        },
+        "planning": {
+          "required": [
+            "references/planning.md",
+            "references/evidence.md"
+          ],
+          "conditional": []
+        },
+        "framing": {
+          "required": [
+            "references/framing.md",
+            "references/evidence.md",
+            "references/outcomes.md"
+          ],
+          "conditional": [
+            "references/decomposition.md",
+            "references/dynamic-agents.md",
+            "references/derisk.md"
+          ],
+          "handoffs": [
+            {
+              "to": "cf-mr-wolf:evaluation",
+              "kind": "conditional",
+              "context": "same-thread"
+            },
+            {
+              "to": "cf-mr-wolf:planning",
+              "kind": "conditional",
+              "context": "same-thread"
+            }
+          ]
+        }
+      }
+    },
+    "cf-scenario": {
+      "flows": {
+        "default": {
+          "required": [],
+          "conditional": []
+        }
+      }
+    },
+    "cf-simplify": {
+      "flows": {
+        "default": {
+          "required": ["references/navigation-cost.md"],
+          "conditional": [
+            "references/parallel-flows.md",
+            "references/local-refactor-rules.md",
+            "references/reference-audit.md"
+          ]
+        }
+      }
+    },
+    "cf-split": {
+      "flows": {
+        "evaluation": {
+          "required": [
+            "references/evaluation.md",
+            "references/file-split-rules.md",
+            "references/navigation-cost.md"
+          ],
+          "conditional": []
+        },
+        "execution": {
+          "required": [
+            "references/execution.md",
+            "references/file-split-rules.md",
+            "references/navigation-cost.md",
+            "references/reference-audit.md"
+          ],
+          "conditional": ["references/regression-handling.md"]
+        }
+      }
+    },
+    "cf-start": {
+      "flows": {
+        "handoff": {
+          "required": [],
+          "conditional": []
+        },
+        "assessment": {
+          "required": ["references/assessment.md"],
+          "conditional": []
+        },
+        "target-shape": {
+          "required": ["references/target-shape.md"],
+          "conditional": []
+        },
+        "work-unit-planning": {
+          "required": ["references/work-unit-planning.md"],
+          "conditional": [
+            "references/artifacts.md",
+            "assets/refactor-brief.template.md"
+          ]
+        },
+        "migration-unit-planning": {
+          "required": ["references/migration-unit-planning.md"],
+          "conditional": [
+            "references/artifacts.md",
+            "assets/refactor-brief.template.md"
+          ]
+        },
+        "structural-split": {
+          "required": [
+            "references/concentration-map.md",
+            "references/safety-net.md",
+            "references/split-execution.md",
+            "references/file-split-rules.md",
+            "references/navigation-cost.md",
+            "references/structural-closure.md",
+            "references/reference-audit.md"
+          ],
+          "conditional": [
+            "references/regression-handling.md",
+            "references/local-simplify.md",
+            "references/local-readability-review.md",
+            "references/local-refactor-rules.md",
+            "references/artifacts.md",
+            "assets/refactor-brief.template.md"
+          ]
+        },
+        "structural-consolidate": {
+          "required": [
+            "references/fragmentation-map.md",
+            "references/navigation-cost.md",
+            "references/safety-net.md",
+            "references/consolidation-execution.md",
+            "references/structural-closure.md",
+            "references/reference-audit.md"
+          ],
+          "conditional": [
+            "references/regression-handling.md",
+            "references/local-simplify.md",
+            "references/local-readability-review.md",
+            "references/local-refactor-rules.md",
+            "references/artifacts.md",
+            "assets/refactor-brief.template.md"
+          ]
+        },
+        "review": {
+          "required": [
+            "references/review.md",
+            "references/local-readability-review.md"
+          ],
+          "conditional": [
+            "references/file-split-rules.md",
+            "references/navigation-cost.md",
+            "references/artifacts.md",
+            "assets/refactor-brief.template.md"
+          ]
+        },
+        "verify": {
+          "required": ["references/verify.md"],
+          "conditional": [
+            "references/reference-audit.md",
+            "references/artifacts.md",
+            "assets/refactor-brief.template.md"
+          ]
+        }
+      }
+    },
+    "cf-todo": {
+      "flows": {
+        "default": {
+          "required": [],
+          "conditional": []
+        }
+      }
+    },
+    "cf-trace": {
+      "flows": {
+        "default": {
+          "required": ["assets/trace.template.md"],
+          "conditional": ["references/clean-context-recon.md"]
+        }
+      }
+    }
+  }
+}

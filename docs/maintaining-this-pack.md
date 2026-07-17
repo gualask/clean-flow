@@ -178,6 +178,7 @@ Checklist:
 - `Runtime boundary`: does every runtime rule live in a skill or linked reference, not only in docs?
 - `Output contract`: does the output still give the next phase enough state?
 - `Flow doc sync`: does the affected `docs/<public-skill>/doc-*.flow.md` reflect the public flow?
+- `Context map`: does `src/commands/skill-token-report.context.json` still match required and conditional runtime files and same-thread handoffs?
 
 Token budget report:
 
@@ -186,8 +187,9 @@ pnpm report
 pnpm report -- cf-start
 ```
 
-The report shows discovery metadata, `SKILL.md` instruction tokens, each runtime reference or asset, per-skill totals, and the pack total.
-Budget warnings are emitted by `pnpm test`; the report is for maintainer review before trimming or moving detail into references.
+The report separates runtime-file inventory from configured flow stacks. `src/commands/skill-token-report.context.json` is local maintainer input: each flow lists required files, conditional files, and handoffs that can add another skill in the same thread. The estimate counts the pack discovery metadata once, adds each activated `SKILL.md`, and reports both required and maximum reachable contract tokens. It excludes system and developer instructions, tools, conversation history, project files, and dynamic command output.
+
+The packaged skills root uses that context map automatically. A custom `--skills-root` keeps the inventory-only report unless `--context-map <path>` is also passed. Budget warnings remain per runtime file and are emitted by `pnpm test`; flow totals are diagnostic estimates for maintainer review, not hard limits.
 
 ## Maintainer Workflow
 

@@ -4,6 +4,8 @@
 
 - GPT-5.6 tooling refresh: the finding de-risk agent now pins `gpt-5.6-sol` at medium reasoning, token reporting defaults to Sol and recognizes the GPT-5.6 family via `o200k_base`, and contract tests lock the intended Sol/Luna agent roles plus model-name boundaries.
 - Navigation-cost hard-trigger thresholds now have a single canonical home: `cf-cognitive`, `cf-split`, and their shared consumer references retain only flow-specific consequences, while a contract test prevents the threshold values from drifting back into duplicated prompt instructions.
+- `cf-cognitive` now routes an edited file to `cf-split` only when canonical file-level pressure remains, instead of forcing a second workflow after every completed cleanup.
+- Token reporting now uses an adjacent maintainer context map to estimate required and maximum reachable contract stacks per flow, compose same-thread handoffs, and surface the pack's maximum reachable flow alongside the existing inventory totals; contract tests keep the map aligned with public skill flows and runtime files.
 
 ## 2026-07-14
 

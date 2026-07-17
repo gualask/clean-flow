@@ -3,6 +3,7 @@
 import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { readFile } from "node:fs/promises";
 import process from "node:process";
 
 import {
@@ -30,16 +31,20 @@ try {
 
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 const DEFAULT_SKILLS_ROOT = path.join(PACKAGE_ROOT, "skills");
+const DEFAULT_CONTEXT_MAP = fileURLToPath(
+  new URL("./skill-token-report.context.json", import.meta.url),
+);
 
 const require = createRequire(import.meta.url);
 const modelToEncoding = require("tiktoken/model_to_encoding.json");
 
 const HELP_TEXT = `Usage:
-  node src/commands/skill-token-report.mjs [skill-name] [--skills-root <path>] [--model <model>] [--encoding <encoding>] [--show-encoding]
+  node src/commands/skill-token-report.mjs [skill-name] [--skills-root <path>] [--context-map <path>] [--model <model>] [--encoding <encoding>] [--show-encoding]
   node src/commands/skill-token-report.mjs --help
 
 Defaults:
   --skills-root ${path.relative(process.cwd(), DEFAULT_SKILLS_ROOT) || "."}
+  --context-map ${path.relative(process.cwd(), DEFAULT_CONTEXT_MAP) || "."} for the packaged skills root
   --model ${DEFAULT_TOKEN_MODEL}
 
 Environment budgets:
@@ -56,6 +61,7 @@ function parseArgs(argv) {
     skillsRoot: DEFAULT_SKILLS_ROOT,
     model: DEFAULT_TOKEN_MODEL,
     encoding: null,
+    contextMap: null,
     showEncoding: false,
     skillName: null,
   };
@@ -76,7 +82,12 @@ function parseArgs(argv) {
       continue;
     }
 
-    if (arg === "--skills-root" || arg === "--model" || arg === "--encoding") {
+    if (
+      arg === "--skills-root" ||
+      arg === "--context-map" ||
+      arg === "--model" ||
+      arg === "--encoding"
+    ) {
       const value = argv[index + 1];
       if (!value || value.startsWith("--")) {
         throw new Error(`${arg} requires a value`);
@@ -129,6 +140,13 @@ async function main() {
 
   try {
     const skillsRoot = path.resolve(options.skillsRoot);
+    const contextMapPath =
+      options.contextMap !== null
+        ? path.resolve(options.contextMap)
+        : skillsRoot === DEFAULT_SKILLS_ROOT
+          ? DEFAULT_CONTEXT_MAP
+          : null;
+    const contextMap = await readContextMap(contextMapPath);
     const materialized = await createMaterializedSkills(skillsRoot);
 
     try {
@@ -138,6 +156,7 @@ async function main() {
         encoder: resolved.encoder,
         budgets: skillTokenBudgetsFromEnv(),
         skillName: options.skillName,
+        contextMap,
       });
 
       process.stdout.write(
@@ -158,6 +177,18 @@ async function main() {
     return 0;
   } finally {
     resolved.encoder.free();
+  }
+}
+
+async function readContextMap(filePath) {
+  if (filePath === null) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(await readFile(filePath, "utf8"));
+  } catch (error) {
+    throw new Error(`Cannot load skill context map ${filePath}: ${error.message}`);
   }
 }
 
