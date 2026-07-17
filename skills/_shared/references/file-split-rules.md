@@ -4,7 +4,7 @@ Scope: behavior-preserving file-level extraction evaluation or execution.
 
 ## Candidate Review
 
-Judge every candidate with `references/navigation-cost.md`; that test decides split value, ahead of churn, file count, or flat-placement defaults.
+Before reviewing candidates, read `references/navigation-cost.md`; it owns the hard-trigger values and exemptions, and its test decides split value ahead of churn, file count, or flat-placement defaults.
 A file-level split candidate is a natural owner that can be named without describing implementation steps.
 
 Good candidates include:
@@ -16,8 +16,8 @@ Good candidates include:
 - substantial self-contained subcomponents
 - focused policy or domain logic with a stable name
 
-File length alone does not pick what to extract, but past the roughly-300-LOC bell in `references/navigation-cost.md` the default verdict is that a boundary exists: conclude `none` or `keep local` for such a file only by naming one of its recognized exemptions.
-The 300-LOC bell is not a minimum split threshold: below it, recommend extraction when a stable named owner, subcomponent, policy, or workflow would materially lower navigation cost; do not extract code just because a helper exists or a small component could technically live elsewhere.
+File length alone does not pick what to extract, but past the canonical file-length trigger the default verdict is that a boundary exists: conclude `none` or `keep local` only by naming a recognized exemption.
+The canonical file-length trigger is not a minimum split threshold: below it, recommend extraction when a stable named owner, subcomponent, policy, or workflow would materially lower navigation cost; do not extract code just because a helper exists or a small component could technically live elsewhere.
 
 Classify each visible boundary:
 

@@ -11,6 +11,7 @@ For cross-file cohesion, placement, navigation cost, or related files that may n
 For repository structure, module boundaries, ownership moves, or broad multi-file refactors, route to `cf-start` instead.
 
 Reduce real cognitive complexity in each target file while preserving behavior.
+Before applying any flow, read references/navigation-cost.md; it owns the hard-trigger values, exemptions, and remedy rules.
 Use numeric thresholds only when native tooling can measure them; otherwise report qualitatively.
 
 ## Flow Selection
@@ -40,7 +41,7 @@ Do not infer execution from words like "review", "check", "is this complex", or 
 
 Refactor only when the target has clear local cognitive pressure:
 
-- functions or methods that are hard to scan, roughly more than 20-30 logical lines
+- functions or methods that are hard to scan even when no canonical hard trigger fires
 - nesting deeper than function -> block -> block
 - nested try/catch blocks that make control flow hard to follow, unless language or framework constraints force them
 - try/catch blocks or loop bodies long enough to hide their main purpose
@@ -49,11 +50,11 @@ Refactor only when the target has clear local cognitive pressure:
 - complex boolean expressions, regex construction, parsing, or small algorithms that are hard to read inline
 - repeated non-trivial local logic
 
-Nesting deeper than function -> block -> block and functions past the 20-30 logical-line bell are hard triggers as defined in references/navigation-cost.md: default to cleanup, and keep code as-is only by naming one of its recognized exemptions.
+Apply the canonical hard triggers before these soft signals; a triggered target can stay as-is only under a recognized exemption.
 For function-level pressure, prefer remedies in this order: guard clauses or early returns to flatten the path first, then extraction into named same-file helpers when flattening is not enough.
-When a target file is past roughly 300 LOC, also state an explicit file-size verdict: `route` to `cf-split`, or name the exemption that justifies its current size.
+When the canonical file-length trigger fires, state an explicit file-size verdict: `route` to `cf-split`, or name the exemption that justifies its current size.
 
-Before classifying nested code as `optional` or `keep as-is`, trace the deepest main-path stack. A small method is still a cleanup candidate when the reader must pass through guard/branch, runner or callback, try/catch, and result branching before seeing the intent. Do not downrank this only because behavior is correct, the code is local, or no file split is needed. Do not downrank verbally either: report a finding past a hard trigger as a real hotspot, never as "light", "minor", or "not yet serious".
+Before classifying nested code as `optional` or `keep as-is`, trace the deepest main-path stack. A small method is still a cleanup candidate when the reader must pass through guard/branch, runner or callback, try/catch, and result branching before seeing the intent. Do not clear this finding only because behavior is correct, the code is local, or no file split is needed.
 
 ## Output Format
 

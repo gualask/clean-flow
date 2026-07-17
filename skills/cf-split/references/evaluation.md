@@ -17,7 +17,7 @@ Evaluate only. Do not edit files.
 - Classify each visible boundary as `recommended`, `optional`, or `keep local`.
 - When recommending extraction, name the exact new file set and what stays grouped inside each file.
 - Name what should stay in the source file.
-- Recommend `none` only when no natural file-level boundary is visible; when the file is past the roughly-300-LOC bell, `none` also requires naming a recognized exemption from `references/navigation-cost.md`.
+- Recommend `none` only when no natural file-level boundary is visible; when the canonical file-length trigger fires, `none` also requires naming a recognized exemption from `references/navigation-cost.md`.
 - Prefer no split only when `references/navigation-cost.md` shows the candidate would not improve source readability or maintenance navigation.
 - When the dominant cost is cross-file placement or repository structure rather than boundaries inside this file, say so and name `cf-cohesion` or `cf-start` as the next action in **Result**.
 

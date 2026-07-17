@@ -3,6 +3,7 @@
 ## 2026-07-17
 
 - GPT-5.6 tooling refresh: the finding de-risk agent now pins `gpt-5.6-sol` at medium reasoning, token reporting defaults to Sol and recognizes the GPT-5.6 family via `o200k_base`, and contract tests lock the intended Sol/Luna agent roles plus model-name boundaries.
+- Navigation-cost hard-trigger thresholds now have a single canonical home: `cf-cognitive`, `cf-split`, and their shared consumer references retain only flow-specific consequences, while a contract test prevents the threshold values from drifting back into duplicated prompt instructions.
 
 ## 2026-07-14
 

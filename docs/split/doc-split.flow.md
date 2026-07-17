@@ -16,8 +16,9 @@ Document the runtime flow for `cf-split`, the public local entrypoint for evalua
 1. Start from one explicit or inferable target source file.
 2. Ask one focused question if the target, seam, or placement is ambiguous.
 3. Choose evaluation or execution from the current request.
-4. Read the target file, relevant imports and exports, call sites, tests, and local folder conventions.
-5. In evaluation, identify real extraction seams and stop unless execution is requested.
-6. In execution, perform one scoped behavior-preserving split and place extracted ownership according to local conventions.
-7. Update affected imports, exports, call sites, tests, and paths.
-8. Run the smallest relevant check and report scope, files touched, seam rationale, final placement, and remaining risk.
+4. Read the shared navigation-cost and file-split references; navigation cost owns hard-trigger values and exemptions.
+5. Read the target file, relevant imports and exports, call sites, tests, and local folder conventions.
+6. In evaluation, identify real extraction seams and stop unless execution is requested.
+7. In execution, perform one scoped behavior-preserving split and place extracted ownership according to local conventions.
+8. Update affected imports, exports, call sites, tests, and paths.
+9. Run the smallest relevant check and report scope, files touched, seam rationale, final placement, and remaining risk.

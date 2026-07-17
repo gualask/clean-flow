@@ -135,6 +135,41 @@ test("every public skill has a maintainer flow doc", async () => {
   }
 });
 
+test("navigation-cost is the single source of hard-trigger threshold values", async () => {
+  const canonicalContract = await fs.readFile(
+    path.join(SHARED_REFERENCES_ROOT, "navigation-cost.md"),
+    "utf8",
+  );
+
+  assert.match(canonicalContract, /past roughly 20-30 logical lines/);
+  assert.match(canonicalContract, /past roughly 300 LOC/);
+
+  const consumers = [
+    path.join(SHARED_REFERENCES_ROOT, "local-refactor-rules.md"),
+    path.join(SHARED_REFERENCES_ROOT, "file-split-rules.md"),
+    path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
+    path.join(SKILLS_ROOT, "cf-cognitive", "references", "discovery.md"),
+    path.join(SKILLS_ROOT, "cf-cognitive", "references", "targeted-evaluation.md"),
+    path.join(SKILLS_ROOT, "cf-split", "references", "evaluation.md"),
+  ];
+
+  for (const file of consumers) {
+    const contract = await fs.readFile(file, "utf8");
+    const label = path.relative(REPO_ROOT, file);
+
+    assert.match(
+      contract,
+      /references\/navigation-cost\.md/,
+      `${label} must use the canonical contract`,
+    );
+    assert.doesNotMatch(
+      contract,
+      /20-30|20–30|300(?:-LOC| LOC)/,
+      `${label} must not duplicate canonical threshold values`,
+    );
+  }
+});
+
 test("delegated reconnaissance is terminal in every runtime enforcement layer", async () => {
   const sharedContract = await fs.readFile(
     path.join(SHARED_REFERENCES_ROOT, "clean-context-recon.md"),

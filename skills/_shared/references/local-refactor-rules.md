@@ -1,7 +1,7 @@
 # Local Refactor Rules
 
 Scope: local code edits for readability, cognitive load, or post-structural cleanup.
-Judge every edit with `references/navigation-cost.md`; its hard triggers (nesting depth, function length, file LOC) decide on their own that work is needed, while the remaining triggers below are smells that prompt that test.
+Before applying these rules, read `references/navigation-cost.md`; it owns the hard-trigger values, exemptions, and remedy rules. The remaining triggers below are soft signals that prompt its test.
 For function-level pressure, prefer remedies in this order: guard clauses or early returns first, then named same-file helpers when flattening is not enough.
 
 ## Behavior
@@ -15,7 +15,7 @@ For function-level pressure, prefer remedies in this order: guard clauses or ear
 
 Prefer simplification when the touched code has real local pressure:
 
-- functions that are hard to scan, roughly more than 20-30 logical lines
+- functions that are hard to scan even when no canonical hard trigger fires
 - nesting deeper than function -> block -> block
 - nested try/catch blocks, unless language or framework constraints force them
 - try/catch blocks or loop bodies long enough to hide their main purpose
