@@ -66,7 +66,7 @@ If both containment and structural cleanup are plausible, show both paths and as
 ## Artifact behavior
 
 Do not write `.cflow/architecture.md` or `.cflow/refactor-brief.md`.
-Do not add work units.
+Do not create, rewrite, or reprioritize work units.
 
 ## Output format
 
@@ -74,8 +74,6 @@ Return sections: **Critical complexity**, **Premise check**, **Domain**, **Targe
 
 ## Anti-goals
 
-- Do not implement.
 - Do not run tests, lint, typecheck, format checks, build commands, or `git diff --check`; passing checks are not architecture assessment evidence unless a concrete verification risk was part of the confirmed frame.
 - Do not dive into work-unit splitting yet.
-- Do not create, rewrite, or reprioritize work units.
 - Do not rewrite the architecture map from this phase.
