@@ -34,15 +34,15 @@ function makeEncoder(name) {
   };
 }
 
-test("token model defaults to GPT-5.5", () => {
-  assert.equal(DEFAULT_TOKEN_MODEL, "gpt-5.5");
+test("token model defaults to GPT-5.6 Sol", () => {
+  assert.equal(DEFAULT_TOKEN_MODEL, "gpt-5.6-sol");
 });
 
 test("token encoding resolves known models through tiktoken first", () => {
   const resolved = resolveTokenEncoding({
-    tiktoken: makeTiktokenStub({ knownModels: { "gpt-5": "o200k_base" } }),
-    modelToEncoding: { "gpt-5": "o200k_base" },
-    model: "gpt-5",
+    tiktoken: makeTiktokenStub({ knownModels: { "gpt-5.6-sol": "o200k_base" } }),
+    modelToEncoding: { "gpt-5.6-sol": "o200k_base" },
+    model: "gpt-5.6-sol",
     encoding: null,
   });
 
@@ -63,8 +63,12 @@ test("token encoding uses explicit encoding before model resolution", () => {
   assert.equal(resolved.source, "explicit");
 });
 
-test("token encoding locally maps GPT-5.5 and GPT-5.4 family variants", () => {
+test("token encoding locally maps GPT-5.6, GPT-5.5, and GPT-5.4 family variants", () => {
   for (const model of [
+    "gpt-5.6",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
     "gpt-5.5",
     "gpt-5.5-mini",
     "gpt-5.5-nano",
@@ -82,7 +86,7 @@ test("token encoding locally maps GPT-5.5 and GPT-5.4 family variants", () => {
 
     assert.equal(resolved.encodingName, "o200k_base", model);
     assert.equal(resolved.source, "local-override", model);
-    assert.match(resolved.note, /temporary GPT-5\.[45] family override/, model);
+    assert.match(resolved.note, /temporary GPT-5\.[456] family override/, model);
   }
 });
 
@@ -98,10 +102,13 @@ test("token encoding rejects unknown models without an override", () => {
   );
 });
 
-test("local model override only matches GPT-5.5 and GPT-5.4 model families", () => {
+test("local model override only matches supported GPT-5.x model families", () => {
+  assert.equal(findLocalModelEncodingOverride("gpt-5.6-luna")?.encodingName, "o200k_base");
   assert.equal(findLocalModelEncodingOverride("gpt-5.5-mini")?.encodingName, "o200k_base");
   assert.equal(findLocalModelEncodingOverride("gpt-5.4-mini")?.encodingName, "o200k_base");
+  assert.equal(findLocalModelEncodingOverride("not-gpt-5.6"), null);
   assert.equal(findLocalModelEncodingOverride("not-gpt-5.5"), null);
+  assert.equal(findLocalModelEncodingOverride("gpt-5.60"), null);
   assert.equal(findLocalModelEncodingOverride("gpt-5.50"), null);
 });
 

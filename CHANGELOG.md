@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-07-17
+
+- GPT-5.6 tooling refresh: the finding de-risk agent now pins `gpt-5.6-sol` at medium reasoning, token reporting defaults to Sol and recognizes the GPT-5.6 family via `o200k_base`, and contract tests lock the intended Sol/Luna agent roles plus model-name boundaries.
+
 ## 2026-07-14
 
 - Description conformance pass against the golden rules: `cf-scenario` drops its actor-based gate ("the user or another agent") for a current-request gate, `cf-cognitive` gains real trigger phrases (hard to read, deep nesting, tangled branching) plus routing to `cf-split`/`cf-start`, `cf-trace` and `cf-scenario` now declare their mutual boundary (path reconstruction vs concrete impact), `cf-scenario` also opens with "Ground" instead of colliding with `cf-mr-wolf` on "Frame" and routes decision-shaped requests (approach, alternatives, worth) back to `cf-mr-wolf`, closing the one-way seam, `cf-cohesion`/`cf-split`/`cf-simplify`/`cf-architecture` gain their missing routing boundaries, and the description contract test regex is tightened from `\bUse\b` to `Use when/after/as/only when`.

@@ -1,6 +1,6 @@
 name = "cflow_finding_derisk_recon"
 description = "Read-only Cflow finding de-risk verification before a fix or handoff is recommended."
-model = "gpt-5.5"
+model = "gpt-5.6-sol"
 model_reasoning_effort = "medium"
 sandbox_mode = "read-only"
 nickname_candidates = ["Jules"]

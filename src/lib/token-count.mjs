@@ -1,6 +1,11 @@
-export const DEFAULT_TOKEN_MODEL = "gpt-5.5";
+export const DEFAULT_TOKEN_MODEL = "gpt-5.6-sol";
 
 export const LOCAL_MODEL_ENCODING_OVERRIDES = [
+  {
+    pattern: /^gpt-5\.6(?:$|-)/,
+    encodingName: "o200k_base",
+    reason: "temporary GPT-5.6 family override until tiktoken maps these models",
+  },
   {
     pattern: /^gpt-5\.5(?:$|-)/,
     encodingName: "o200k_base",

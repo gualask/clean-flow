@@ -9,7 +9,7 @@ Maintainer summary for `cf-mr-wolf`. Runtime behavior belongs to `skills/cf-mr-w
 - Public skill: `skills/cf-mr-wolf/SKILL.md`
 - Runtime references: `skills/cf-mr-wolf/references/framing.md`, `decomposition.md`, `evidence.md`, `dynamic-agents.md`, `derisk.md`, `outcomes.md`, `planning.md`, `evaluation.md`
 - Shared source vendored into runtime paths: `skills/_shared/scripts/repo-tree.mjs`
-- Custom agent source: `skills/_codex_agents/cflow_finding_derisk_recon.toml`
+- Custom agent source: `skills/_codex_agents/cflow_finding_derisk_recon.toml` (`gpt-5.6-sol`, medium reasoning)
 - Current conversation and request
 - Focused repository context selected from the clarified request and bounded perimeter
 - Optional notes artifact: `.cflow/mr-wolf-notes.md`, created from `skills/cf-mr-wolf/assets/mr-wolf-notes.template.md` when evidence or decisions need durable handoff context

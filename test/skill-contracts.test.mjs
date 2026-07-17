@@ -172,6 +172,25 @@ test("delegated reconnaissance is terminal in every runtime enforcement layer", 
   }
 });
 
+test("packaged Codex agents pin the intended GPT-5.6 family roles", async () => {
+  const expectedAgents = [
+    ["cflow_architecture_recon.toml", "gpt-5.6-luna", "high"],
+    ["cflow_trace_recon.toml", "gpt-5.6-luna", "high"],
+    ["cflow_finding_derisk_recon.toml", "gpt-5.6-sol", "medium"],
+  ];
+
+  for (const [agentName, model, reasoningEffort] of expectedAgents) {
+    const agentContract = await fs.readFile(path.join(CODEX_AGENTS_ROOT, agentName), "utf8");
+
+    assert.ok(agentContract.includes(`model = "${model}"`), `${agentName} must use ${model}`);
+    assert.ok(
+      agentContract.includes(`model_reasoning_effort = "${reasoningEffort}"`),
+      `${agentName} must use ${reasoningEffort} reasoning`,
+    );
+    assert.doesNotMatch(agentContract, /model = "gpt-5\.5(?:"|-)/);
+  }
+});
+
 test("trace serializes architecture mapping and architecture reuses in-flight work", async () => {
   const architectureContract = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-architecture", "SKILL.md"),

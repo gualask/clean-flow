@@ -34,7 +34,7 @@ Defaults:
 
 Notes:
   - Uses the tiktoken package.
-  - gpt-5.5* and gpt-5.4* use a local o200k_base override until tiktoken maps them.
+  - gpt-5.6*, gpt-5.5*, and gpt-5.4* use a local o200k_base override until tiktoken maps them.
   - If tiktoken and the local overrides do not know a model, pass --encoding explicitly.
   - Use "-" or omit files to read stdin.
 `;
