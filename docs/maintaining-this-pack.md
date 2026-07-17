@@ -57,6 +57,7 @@ Public skill entrypoints:
 - `cf-split`
 - `cf-cohesion`
 - `cf-docs`
+- `cf-todo`
 - `cf-brainstorm`
 
 `cf-start` phase references:
@@ -84,6 +85,7 @@ Shared authoring references vendored into consuming skills:
 - `skills/_shared/references/file-split-rules.md`
 - `skills/_shared/references/reference-audit.md`
 - `skills/_shared/references/clean-context-recon.md`
+- `skills/_shared/references/regression-handling.md`
 
 Shared authoring scripts vendored into consuming skills:
 
@@ -106,7 +108,7 @@ Pack-wide golden rules live in [golden-rules.md](./golden-rules.md).
 - Shared authoring rules live in `skills/_shared/references/`; installed runtime copies live under the consuming skill's `references/` directory.
 - Shared deterministic helpers live in `skills/_shared/scripts/`; installed runtime copies live under the consuming skill's `scripts/` directory.
 - Shared vendoring configuration lives in `skills/_shared/vendor.json`.
-- Bootstrap and artifact templates live in the owning public skill's `assets/` directory.
+- Artifact ownership is declared by the public runtime contract; templates live in public skill `assets/` directories, and any cross-skill use must be an explicit runtime path.
 - Codex custom agent sources live in `skills/_codex_agents/`.
 - Codex install prompts live in `install/codex/`.
 - Pack-wide maintainer rules live in [golden-rules.md](./golden-rules.md).
@@ -125,6 +127,7 @@ Maintainer flow mirrors:
 - `cf-split`: [split/doc-split.flow.md](./split/doc-split.flow.md)
 - `cf-cohesion`: [cohesion/doc-cohesion.flow.md](./cohesion/doc-cohesion.flow.md)
 - `cf-docs`: [docs/doc-docs.flow.md](./docs/doc-docs.flow.md)
+- `cf-todo`: [todo/doc-todo.flow.md](./todo/doc-todo.flow.md)
 - `cf-brainstorm`: [brainstorm/doc-brainstorm.flow.md](./brainstorm/doc-brainstorm.flow.md)
 
 ## Runtime Reference Rules
@@ -178,7 +181,7 @@ Checklist:
 - `Runtime boundary`: does every runtime rule live in a skill or linked reference, not only in docs?
 - `Output contract`: does the output still give the next phase enough state?
 - `Flow doc sync`: does the affected `docs/<public-skill>/doc-*.flow.md` reflect the public flow?
-- `Context map`: does `src/commands/skill-token-report.context.json` still match required and conditional runtime files and same-thread handoffs?
+- `Context map`: does the union of required and conditional files in `src/commands/skill-token-report.context.json` still exactly match reachable runtime Markdown, with same-thread handoffs still accurate?
 
 Token budget report:
 
@@ -187,7 +190,9 @@ pnpm report
 pnpm report -- cf-start
 ```
 
-The report separates runtime-file inventory from configured flow stacks. `src/commands/skill-token-report.context.json` is local maintainer input: each flow lists required files, conditional files, and handoffs that can add another skill in the same thread. The estimate counts the pack discovery metadata once, adds each activated `SKILL.md`, and reports both required and maximum reachable contract tokens. It excludes system and developer instructions, tools, conversation history, project files, and dynamic command output.
+The report recursively inventories Markdown under each materialized skill's `references/` and `assets/`, then separates that inventory from configured flow stacks. `src/commands/skill-token-report.context.json` is local maintainer input: each flow lists required files, conditional files, and handoffs that can add another skill in the same thread. The estimate counts the pack discovery metadata once, adds each activated `SKILL.md`, and reports both required and maximum reachable contract tokens. It excludes system and developer instructions, tools, conversation history, project files, and dynamic command output.
+
+With a context map enabled, the report follows Markdown citations transitively from every public `SKILL.md` after shared files are materialized. The union of configured required and conditional files must exactly match that reachable set, explicit `### ... Flow` headings must match configured flow names, and direct citations inside those sections must belong to the same flow. Adding or removing a public skill is also an exact-coverage error until the JSON is updated. The validator cannot infer whether a reachable file is required or conditional, so that classification and handoff semantics remain a maintainer decision.
 
 The packaged skills root uses that context map automatically. A custom `--skills-root` keeps the inventory-only report unless `--context-map <path>` is also passed. Budget warnings remain per runtime file and are emitted by `pnpm test`; flow totals are diagnostic estimates for maintainer review, not hard limits.
 
@@ -221,6 +226,7 @@ Current automated coverage checks:
 - install, update, prune, and remove behavior for Cflow-owned Codex custom agents
 - structural checks for packaged public skills
 - materialized runtime reference, script, and asset links
+- exact context-map coverage of public skills, declared flows, and transitively reachable runtime Markdown
 - packaged routing only to public skills that exist
 - terminal reconnaissance delegation and serialized architecture-prerequisite contracts
 - token budget warnings for packaged runtime files

@@ -10,10 +10,7 @@ import {
   buildSkillTokenReport,
   formatSkillTokenReport,
 } from "../src/lib/skill-token-report.mjs";
-import {
-  makeTempWorkspace,
-  writeSkill,
-} from "./support/helpers.mjs";
+import { makeTempWorkspace, writeSkill } from "./support/helpers.mjs";
 
 const execFileAsync = promisify(execFile);
 const REPORT_COMMAND = fileURLToPath(
@@ -25,8 +22,8 @@ test("skill token report separates metadata, instructions, resources, and totals
   const skillsRoot = path.join(workspace, "skills");
 
   await writeSkill(skillsRoot, "demo-skill", {
-    "SKILL.md": `---\nname: demo-skill\ndescription: Summarize demo inputs.\n---\n\n# Demo\n\nRun the demo workflow.\n`,
-    "references/reference.md": "# Reference\n\nExtra workflow detail.\n",
+    "SKILL.md": `---\nname: demo-skill\ndescription: Summarize demo inputs.\n---\n\n# Demo\n\nRead references/nested/reference.md. Optionally use assets/template.md.\n`,
+    "references/nested/reference.md": "# Reference\n\nExtra workflow detail.\n",
   });
   await mkdir(path.join(skillsRoot, "demo-skill", "assets"), { recursive: true });
   await writeFile(
@@ -45,7 +42,7 @@ test("skill token report separates metadata, instructions, resources, and totals
         "demo-skill": {
           flows: {
             default: {
-              required: ["references/reference.md"],
+              required: ["references/nested/reference.md"],
               conditional: ["assets/template.md"],
             },
           },
@@ -74,7 +71,7 @@ test("skill token report separates metadata, instructions, resources, and totals
   assert.match(output, /demo-skill/);
   assert.match(output, /metadata/);
   assert.match(output, /SKILL\.md instructions/);
-  assert.match(output, /references\/reference\.md/);
+  assert.match(output, /references\/nested\/reference\.md/);
   assert.match(output, /assets\/template\.md/);
   assert.match(output, /skill inventory total:/);
   assert.match(output, /flow stacks/);
@@ -121,9 +118,11 @@ test("skill token report composes same-thread handoff context", async () => {
   const skillsRoot = path.join(workspace, "skills");
 
   await writeSkill(skillsRoot, "alpha-skill", {
+    "SKILL.md": `---\nname: "alpha-skill"\ndescription: "Test skill alpha-skill"\n---\n\n# alpha-skill\n\nRead references/alpha.md.\n`,
     "references/alpha.md": "# Alpha\n\nAlpha flow detail.\n",
   });
   await writeSkill(skillsRoot, "beta-skill", {
+    "SKILL.md": `---\nname: "beta-skill"\ndescription: "Test skill beta-skill"\n---\n\n# beta-skill\n\nRead references/beta.md.\n`,
     "references/beta.md": "# Beta\n\nBeta flow detail.\n",
   });
 
@@ -251,6 +250,7 @@ test("custom skills roots use flow estimates only with an explicit context map",
   const contextMapPath = path.join(workspace, "context.json");
 
   await writeSkill(skillsRoot, "demo-skill", {
+    "SKILL.md": `---\nname: "demo-skill"\ndescription: "Test skill demo-skill"\n---\n\n# demo-skill\n\nRead references/reference.md.\n`,
     "references/reference.md": "# Reference\n\nFlow detail.\n",
   });
   await writeFile(

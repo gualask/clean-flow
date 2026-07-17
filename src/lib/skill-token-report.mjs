@@ -3,6 +3,7 @@ import { readFile, readdir } from "node:fs/promises";
 
 import { listSkillDirectories } from "./fs.mjs";
 import { buildSkillContextReport } from "./skill-context-report.mjs";
+import { validateSkillContextMapRuntimeCoverage } from "./skill-context-map-validation.mjs";
 import { tokenCountRow } from "./token-count.mjs";
 
 // Budget references:
@@ -98,15 +99,19 @@ export async function buildSkillTokenReport({
     },
   );
 
+  const context = buildSkillContextReport({
+    contextMap,
+    skillReports: allSkillReports,
+    skillName,
+  });
+
+  await validateSkillContextMapRuntimeCoverage({ skillsRoot, contextMap });
+
   return {
     budgets,
     skills: skillReports,
     totals,
-    context: buildSkillContextReport({
-      contextMap,
-      skillReports: allSkillReports,
-      skillName,
-    }),
+    context,
   };
 }
 
@@ -318,26 +323,31 @@ async function listSkillResourceMarkdownFiles(skillPath) {
   const files = [];
 
   for (const relativePath of ["references", "assets"]) {
-    const absolutePath = path.join(skillPath, relativePath);
-    const entries = await readdir(absolutePath, { withFileTypes: true }).catch((error) => {
-      if (error?.code === "ENOENT" || error?.code === "ENOTDIR") {
-        return null;
-      }
-      throw error;
-    });
-
-    if (entries === null) {
-      continue;
-    }
-
-    for (const entry of entries) {
-      if (entry.isFile() && entry.name.endsWith(".md")) {
-        files.push(path.join(absolutePath, entry.name));
-      }
-    }
+    files.push(...(await listMarkdownFiles(path.join(skillPath, relativePath))));
   }
 
   return files.sort();
+}
+
+async function listMarkdownFiles(directoryPath) {
+  const entries = await readdir(directoryPath, { withFileTypes: true }).catch((error) => {
+    if (error?.code === "ENOENT" || error?.code === "ENOTDIR") {
+      return [];
+    }
+    throw error;
+  });
+  const files = [];
+
+  for (const entry of entries) {
+    const entryPath = path.join(directoryPath, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await listMarkdownFiles(entryPath)));
+    } else if (entry.isFile() && entry.name.endsWith(".md")) {
+      files.push(entryPath);
+    }
+  }
+
+  return files;
 }
 
 function parseSkillMarkdown(text) {

@@ -12,6 +12,7 @@ Use it when you want Codex to:
 - trace a workflow or command path and find sequence, ownership, or failure-mode issues
 - explain the real impact of a bug, behavior, or change through concrete code-grounded scenarios
 - generate or review docs against the code
+- track decided next steps and open questions in a lightweight todo file
 - review an area for overengineering, duplicated parallel flows, or complexity that no longer earns its place
 - split an overloaded file into nearby owned files
 - reduce local cognitive complexity in a source file
@@ -59,10 +60,16 @@ The installer materializes packaged skills, vendors shared authoring files into 
 Global install writes to `$CODEX_HOME/skills` and `$CODEX_HOME/agents`, or falls back to `~/.codex/skills` and `~/.codex/agents`.
 
 After installation, ask Codex to use one of the public entrypoints below.
-For most cleanup or refactor work, start with:
+When the cleanup or refactor concern is already clear and confirmed, start with:
 
 ```text
 Use cf-start to assess this cleanup/refactor and recommend the next step.
+```
+
+When the concern, lens, or desired outcome is still unclear, frame it first:
+
+```text
+Use cf-mr-wolf to frame this cleanup/refactor before assessment.
 ```
 
 <details>
@@ -92,12 +99,9 @@ Fetch and follow instructions from https://raw.githubusercontent.com/gualask/cle
 ### `cf-start`
 
 The main workflow controller for cleanup and refactor work, including hard-restructure planning and behavior-preserving migration units.
-Use it for fresh assessment, planning, bounded execution, review, verification, and resume.
+Use it after the diagnostic frame is confirmed, for fresh assessment, planning, bounded execution, review, verification, and resume.
 
-It can create and maintain:
-
-- `.cflow/architecture.md`
-- `.cflow/refactor-brief.md`
+It consumes `.cflow/architecture.md`, which is owned by `cf-architecture`, and creates or maintains the accepted plan and resume state in `.cflow/refactor-brief.md`.
 
 ### `cf-mr-wolf`
 
@@ -166,7 +170,7 @@ It does not create `.cflow/` immediately.
 Skills that own durable artifacts create `.cflow/` only when they need it.
 When `.cflow/` is created for the first time, Clean Flow writes a `.cflow/.gitignore` containing `*`, so the directory ignores itself and the repository `.gitignore` is never touched.
 
-Use `cf-start` when you want the normal cleanup/refactor lifecycle:
+Once the diagnostic frame is confirmed, use `cf-start` when you want the normal cleanup/refactor lifecycle:
 
 1. assess the repository pressure
 2. choose a safe path
@@ -180,6 +184,7 @@ For direct local work, use `cf-cognitive`, `cf-split`, or `cf-cohesion` instead.
 For overengineering or "are these files necessary?" reviews, use `cf-simplify`.
 For standalone repository mapping, use `cf-architecture`.
 For path reconstruction or workflow audit, use `cf-trace`.
+For lightweight follow-up tracking from an analysis or working session, use `cf-todo`.
 
 ## Documentation
 
@@ -193,5 +198,6 @@ For path reconstruction or workflow audit, use `cf-trace`.
 - [Split flow](./docs/split/doc-split.flow.md)
 - [Cohesion flow](./docs/cohesion/doc-cohesion.flow.md)
 - [Docs flow](./docs/docs/doc-docs.flow.md)
+- [Todo flow](./docs/todo/doc-todo.flow.md)
 - [Brainstorm flow](./docs/brainstorm/doc-brainstorm.flow.md)
 - [Maintaining this pack](./docs/maintaining-this-pack.md)

@@ -6,6 +6,7 @@
 - Navigation-cost hard-trigger thresholds now have a single canonical home: `cf-cognitive`, `cf-split`, and their shared consumer references retain only flow-specific consequences, while a contract test prevents the threshold values from drifting back into duplicated prompt instructions.
 - `cf-cognitive` now routes an edited file to `cf-split` only when canonical file-level pressure remains, instead of forcing a second workflow after every completed cleanup.
 - Token reporting now uses an adjacent maintainer context map to estimate required and maximum reachable contract stacks per flow, compose same-thread handoffs, and surface the pack's maximum reachable flow alongside the existing inventory totals; contract tests keep the map aligned with public skill flows and runtime files.
+- Token reporting now validates the context map against transitively reachable runtime Markdown, recursively inventories nested references/assets, and fails on missing or extra files; maintainer and user docs now explain the commands and consistently list all public flows, including `cf-todo`.
 
 ## 2026-07-14
 

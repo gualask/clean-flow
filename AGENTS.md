@@ -5,7 +5,8 @@ Clean Flow (Cflow): source pack of Codex skills for cleanup/refactor flows. This
 ## Commands
 
 - Test: `pnpm test` (Node built-in test runner, `test/*.test.mjs`)
-- Token report: `pnpm report` · Count tokens: `pnpm count-tokens`
+- Flow token report: `pnpm report` for the full pack; `pnpm report -- cf-start` to focus output on one skill. The packaged report uses `src/commands/skill-token-report.context.json` and fails when its runtime Markdown coverage drifts from the materialized skill contracts.
+- Raw token count: `pnpm count-tokens -- <file...>` for selected files; without file arguments it reads stdin.
 - CLI: `node ./bin/cflow-skills.mjs install <repo>|--global [--dry-run]`
 
 ## Layout

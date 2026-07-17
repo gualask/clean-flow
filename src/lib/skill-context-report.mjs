@@ -186,7 +186,7 @@ function resolveResourceList({ id, skillName, field, values, resourcesById }) {
   return resolved;
 }
 
-function resolveResourceId(skillName, relativePath) {
+export function resolveResourceId(skillName, relativePath) {
   if (path.posix.isAbsolute(relativePath) || relativePath.includes("\\")) {
     throw new Error(`Unsafe skill context resource path: ${relativePath}`);
   }

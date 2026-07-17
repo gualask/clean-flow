@@ -70,54 +70,6 @@ test("packaged skill frontmatter quotes YAML-sensitive scalar values", async () 
   }
 });
 
-test("skill context map covers declared public skill flows", async () => {
-  const contextMap = JSON.parse(await fs.readFile(SKILL_CONTEXT_MAP_PATH, "utf8"));
-
-  for (const skillFile of await skillFiles(SKILLS_ROOT)) {
-    const skillName = path.basename(path.dirname(skillFile));
-    const skillConfig = contextMap.skills[skillName];
-    const lines = (await fs.readFile(skillFile, "utf8")).split("\n");
-    let activeFlow = null;
-
-    assert.ok(skillConfig, `context map is missing ${skillName}`);
-
-    for (const line of lines) {
-      const flowHeading = /^### (.+) Flow$/.exec(line);
-      if (flowHeading) {
-        activeFlow = flowHeading[1]
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-|-$/g, "");
-        assert.ok(
-          skillConfig.flows[activeFlow],
-          `context map is missing ${skillName}:${activeFlow}`,
-        );
-        continue;
-      }
-
-      if (/^#{1,3} /.test(line)) {
-        activeFlow = null;
-        continue;
-      }
-
-      if (activeFlow === null) {
-        continue;
-      }
-
-      for (const match of line.matchAll(/references\/[A-Za-z0-9._/-]+\.md/g)) {
-        const configuredFiles = [
-          ...(skillConfig.flows[activeFlow].required ?? []),
-          ...(skillConfig.flows[activeFlow].conditional ?? []),
-        ];
-        assert.ok(
-          configuredFiles.includes(match[0]),
-          `context map ${skillName}:${activeFlow} is missing ${match[0]}`,
-        );
-      }
-    }
-  }
-});
-
 test("packaged skill runtime files stay within token budget warnings", async () => {
   const resolved = resolveTokenEncoding({
     tiktoken,
