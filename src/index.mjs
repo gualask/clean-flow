@@ -1,8 +1,10 @@
+import { readFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { installCodexAgents } from "./commands/install-agents.mjs";
+import { installFriction, removeFriction } from "./commands/install-friction.mjs";
 import { installSkills } from "./commands/install.mjs";
 import { removeCodexAgents } from "./commands/remove-agents.mjs";
 import { removeSkills } from "./commands/remove.mjs";
@@ -11,10 +13,11 @@ import { createMaterializedSkills } from "./lib/materialize-skills.mjs";
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SKILLS_SOURCE_ROOT = path.join(PACKAGE_ROOT, "skills");
 const CODEX_AGENTS_SOURCE_ROOT = path.join(PACKAGE_ROOT, "skills", "_codex_agents");
+const FRICTION_SOURCE_ROOT = path.join(PACKAGE_ROOT, "install", "friction");
 
 const HELP_TEXT = `Usage:
   cflow-skills install <repo-path> [--dry-run]
-  cflow-skills install --global [--dry-run]
+  cflow-skills install --global [--friction] [--dry-run]
   cflow-skills remove <repo-path> [--dry-run]
   cflow-skills remove --global [--dry-run]
 
@@ -22,7 +25,11 @@ Notes:
   - install syncs packaged, materialized skills into <repo>/.codex/skills
   - install syncs packaged Codex custom agents into <repo>/.codex/agents
   - --global targets $CODEX_HOME/skills and $CODEX_HOME/agents, or ~/.codex/*
-  - remove deletes only Cflow-owned skill directories and Codex custom agents
+  - --friction also installs the always-on friction log: the logger script
+    and law under ~/.cflow (or $CFLOW_HOME), plus a marked import block in
+    the global AGENTS.md (created minimal when absent)
+  - remove deletes only Cflow-owned skill directories and Codex custom agents;
+    global remove also removes the friction pieces and their AGENTS.md block
 `;
 
 export async function main(argv, io = { stdout: process.stdout, stderr: process.stderr }) {
@@ -56,6 +63,26 @@ export async function main(argv, io = { stdout: process.stdout, stderr: process.
             dryRun: options.dryRun,
           });
 
+    if (options.command === "install" && options.friction) {
+      const frictionTargets = resolveFrictionTargets();
+      result.friction = await installFriction({
+        sourceRoot: FRICTION_SOURCE_ROOT,
+        cflowHome: frictionTargets.cflowHome,
+        agentsFile: frictionTargets.agentsFile,
+        version: await readPackageVersion(),
+        dryRun: options.dryRun || result.conflicts.length > 0,
+      });
+    }
+
+    if (options.command === "remove" && options.global) {
+      const frictionTargets = resolveFrictionTargets();
+      result.friction = await removeFriction({
+        cflowHome: frictionTargets.cflowHome,
+        agentsFile: frictionTargets.agentsFile,
+        dryRun: options.dryRun,
+      });
+    }
+
     writeSummary(io.stdout, result);
     return result.command === "install" && result.conflicts.length > 0 ? 1 : 0;
   } catch (error) {
@@ -82,6 +109,7 @@ function parseArgs(argv) {
 
   let dryRun = false;
   let global = false;
+  let friction = false;
   const positionals = [];
 
   while (args.length > 0) {
@@ -101,6 +129,11 @@ function parseArgs(argv) {
       continue;
     }
 
+    if (arg === "--friction") {
+      friction = true;
+      continue;
+    }
+
     if (arg.startsWith("-")) {
       throw new Error(`Unknown option: ${arg}`);
     }
@@ -116,11 +149,20 @@ function parseArgs(argv) {
     throw new Error("Pass exactly one repository path, or use --global");
   }
 
+  if (friction && !global) {
+    throw new Error("--friction requires --global");
+  }
+
+  if (friction && command !== "install") {
+    throw new Error("--friction applies to install only");
+  }
+
   return {
     help: false,
     command,
     dryRun,
     global,
+    friction,
     targetPath: global ? null : positionals[0],
   };
 }
@@ -236,6 +278,19 @@ function resolveDestinations(options) {
   };
 }
 
+function resolveFrictionTargets() {
+  const codexHome = process.env.CODEX_HOME || path.join(os.homedir(), ".codex");
+  return {
+    cflowHome: path.resolve(process.env.CFLOW_HOME || path.join(os.homedir(), ".cflow")),
+    agentsFile: path.resolve(codexHome, "AGENTS.md"),
+  };
+}
+
+async function readPackageVersion() {
+  const raw = await readFile(path.join(PACKAGE_ROOT, "package.json"), "utf8");
+  return JSON.parse(raw).version;
+}
+
 function writeSummary(stream, result) {
   if (result.command === "install") {
     stream.write(`Command: install\n`);
@@ -254,6 +309,7 @@ function writeSummary(stream, result) {
     writeEntries(stream, "Updated entries", result.updated);
     writeEntries(stream, "Pruned entries", result.pruned);
     writeConflicts(stream, result.conflicts);
+    writeFrictionSummary(stream, result.friction);
     return;
   }
 
@@ -264,6 +320,23 @@ function writeSummary(stream, result) {
   stream.write(`Removed: ${result.removed.length}\n`);
   stream.write(`Kept: ${result.kept.length}\n`);
   writeEntries(stream, "Removed entries", result.removed);
+  writeFrictionSummary(stream, result.friction);
+}
+
+function writeFrictionSummary(stream, friction) {
+  if (!friction) {
+    return;
+  }
+
+  stream.write(`Friction home: ${friction.cflowHome}\n`);
+  for (const file of friction.files) {
+    stream.write(`Friction ${file.name}: ${file.action}\n`);
+  }
+  if (friction.command === "remove-friction" && friction.files.length === 0) {
+    stream.write(`Friction files: none found\n`);
+  }
+  stream.write(`Friction AGENTS.md: ${friction.agentsFile} (${friction.agents.action})\n`);
+  stream.write(`Friction applied: ${friction.applied ? "yes" : "no"}\n`);
 }
 
 function writeEntries(stream, label, entries) {
