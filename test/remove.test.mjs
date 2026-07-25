@@ -55,10 +55,10 @@ test("remove deletes only Cflow-owned Codex custom agents", async () => {
 
   await mkdir(destinationRoot, { recursive: true });
 
-  await writeCodexAgent(destinationRoot, "cflow_architecture_recon.toml");
+  await writeCodexAgent(destinationRoot, "cflow_sample_recon.toml");
   await writeCodexAgent(destinationRoot, "foreign_agent.toml");
-  await writeFileMarker(destinationRoot, "cflow_architecture_recon.toml", {
-    sourceSkill: "cflow_architecture_recon.toml",
+  await writeFileMarker(destinationRoot, "cflow_sample_recon.toml", {
+    sourceSkill: "cflow_sample_recon.toml",
     fingerprint: "sha256:owned",
   });
 

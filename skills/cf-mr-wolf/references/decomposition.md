@@ -24,13 +24,13 @@ For each slice, record only what helps choose or run the next evidence pass:
 - evidence question
 - evidence class: `behavioral`, `static-signal`, `detector`, `process`, or `mixed`
 - scope reason and explicit exclusions
-- best next lens: local evidence, `cf-scenario`, `cf-architecture`, or another specialist skill
+- best next lens: local evidence, `cf-scenario`, or another specialist skill
 
 Keep behavioral slices separate from detector/static/process slices unless the slice intentionally checks whether the signal has real behavioral impact.
 
 ## Routing During Decomposition
 
-- Use `cf-architecture` when entrypoints, ownership, or boundaries are too unclear to slice credibly.
+- When entrypoints, ownership, or boundaries are too unclear to slice credibly, orient locally: run `scripts/repo-tree.mjs` for a gitignore-aware tree with approximate LOC, then read the few files it points to. No skill owns repository mapping.
 - Use `cf-scenario` when a concrete example would clarify impact before deeper evidence.
 - When a slice depends on ordered workflow behavior, state, failure, resume, external effects, or ownership, gather that evidence locally: no skill owns path reconstruction.
 

@@ -9,14 +9,14 @@ Maintainer summary for `cf-start`. Runtime behavior belongs to `skills/cf-start/
 - Public skill: `skills/cf-start/SKILL.md`
 - Phase references: `skills/cf-start/references/*.md`
 - Shared sources vendored into runtime paths: configured `skills/_shared/references/*.md` and `skills/_shared/scripts/repo-tree.mjs` when linked by an active phase
-- Artifact templates: `skills/cf-start/assets/architecture.template.md`, `skills/cf-start/assets/refactor-brief.template.md`
-- Target artifacts: `.cflow/architecture.md`, `.cflow/refactor-brief.md`
+- Artifact templates: `skills/cf-start/assets/refactor-brief.template.md`
+- Target artifact: `.cflow/refactor-brief.md`
 
 ## Maintainer Notes
 
 - Controller runtime stays in `skills/cf-start/SKILL.md`.
 - Phase rules stay in `skills/cf-start/references/*.md`.
-- `.cflow/architecture.md` is map input from `cf-architecture`.
+- Repository structure comes from `scripts/repo-tree.mjs` at assessment time; no stored map is consumed.
 - `.cflow/refactor-brief.md` is accepted plan/resume state, not assessment notes.
 - Keep assessment, target shape, unit planning, and execution as separate gates.
 - Target-shape and migration-unit planning must surface the plan's most fragile assumption before approval.

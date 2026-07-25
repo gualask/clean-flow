@@ -1,6 +1,6 @@
 ---
 name: cf-start
-description: "Assess and plan repository-level refactors: architecture, structure, ownership, dependency direction, target shape, migration order, execution, review, verification, and `.cflow` resume. Use after the diagnostic frame is confirmed; use `cf-mr-wolf` first when framing is unclear or unconfirmed, and `cf-architecture` when architecture context is missing or stale."
+description: "Assess and plan repository-level refactors: architecture, structure, ownership, dependency direction, target shape, migration order, execution, review, verification, and `.cflow` resume. Use after the diagnostic frame is confirmed; use `cf-mr-wolf` first when framing is unclear or unconfirmed."
 ---
 
 Operate as the workflow controller. Pick one phase, run its reference, then stop at its gate.
@@ -9,8 +9,7 @@ For repository-level structure decisions, route through assessment or target-sha
 
 ## Artifacts
 
-- `.cflow/architecture.md`: input only; owned by `cf-architecture`.
-- `.cflow/refactor-brief.md`: accepted plan/resume state only. Use references/artifacts.md. Never use it as assessment notes.
+- Owns `.cflow/refactor-brief.md`: accepted plan/resume state only. Use references/artifacts.md. Never use it as assessment notes.
 
 Before creating `.cflow/*`, create `.cflow/` if needed and write `.cflow/.gitignore` containing a single `*` line if missing; never edit the repository `.gitignore`.
 
@@ -27,7 +26,7 @@ Run tests, lint, typecheck, format checks, build commands, or `git diff --check`
 
 Before running any phase reference, unless the reference says otherwise:
 
-1. Require current `.cflow/architecture.md` for workflow phases; route to `cf-architecture` when it is missing, stale, or materially incomplete.
+1. Establish current repository structure from the repository itself before workflow phases: run `scripts/repo-tree.mjs` and read the areas it surfaces. Never rely on a stored map.
 2. Ignore `.cflow/refactor-brief.md` in fresh assessment or fresh target-shape work unless the user asks to resume.
 3. Read `.cflow/refactor-brief.md` only for live resume, execution, review/verify, or accepted artifact-backed planning.
 4. Trust repository state over artifacts.
@@ -55,7 +54,6 @@ Use before Cflow workflow work. Do not touch `.cflow/refactor-brief.md`.
 
 - `cf-simplify`: overengineering or simplification review comes first.
 - `cf-cognitive`, `cf-split`, `cf-cohesion`: the request is local and bounded to that lens.
-- `cf-architecture`: `.cflow/architecture.md` is missing, stale, or materially incomplete.
 
 ### Target Shape
 

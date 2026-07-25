@@ -33,6 +33,6 @@ Useful first context slices:
 
 - docs change: docs, README, install guides, docs tests, references
 - public API change: exported types, entrypoints, tests, caller examples
-- architecture or refactor request: target area, requested decision, constraints, risk appetite, and whether `cf-architecture`, `cf-start`, or `cf-simplify` owns the next lens
+- architecture or refactor request: target area, requested decision, constraints, risk appetite, and whether `cf-start` or `cf-simplify` owns the next lens
 - local refactor request: target subsystem, call sites, tests, architecture artifacts if relevant
 - bug with clear area: failing path, relevant tests, logs, local implementation

@@ -41,6 +41,19 @@ async function skillTextFiles(skillDir) {
   return files;
 }
 
+async function skillAssetFiles(skillDir) {
+  const assetsDir = path.join(skillDir, "assets");
+
+  try {
+    return (await fs.readdir(assetsDir, { withFileTypes: true }))
+      .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
+      .map((entry) => path.join(assetsDir, entry.name));
+  } catch (error) {
+    if (error?.code !== "ENOENT") throw error;
+    return [];
+  }
+}
+
 function parseFrontmatter(text, label) {
   const frontmatter = /^---\n([\s\S]*?)\n---\n?/.exec(text);
   assert.ok(frontmatter, `${label} is missing frontmatter`);
@@ -206,48 +219,8 @@ test("cognitive execution routes to split only for remaining file-level pressure
   );
 });
 
-test("delegated reconnaissance is terminal in every runtime enforcement layer", async () => {
-  const sharedContract = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "clean-context-recon.md"),
-    "utf8",
-  );
-
-  assert.match(sharedContract, /delegated terminal evidence-only reconnaissance/);
-  assert.match(sharedContract, /reconnaissance kind and expected report section names/);
-  assert.match(sharedContract, /must not invoke or load any skill/);
-  assert.match(sharedContract, /spawn, delegate to, or coordinate another agent/);
-  assert.match(
-    sharedContract,
-    /Report missing prerequisites or unavailable context under \*\*Unknowns\*\*/,
-  );
-  assert.doesNotMatch(sharedContract, /Use subagents\? Reply/);
-
-  for (const skillName of ["cf-architecture"]) {
-    const skillContract = await fs.readFile(
-      path.join(SKILLS_ROOT, skillName, "SKILL.md"),
-      "utf8",
-    );
-
-    assert.match(skillContract, /state marker `delegated terminal evidence-only reconnaissance`/);
-    assert.match(skillContract, /do not enter this controller flow/);
-    assert.match(skillContract, /delegate again/);
-  }
-
-  for (const agentName of ["cflow_architecture_recon.toml"]) {
-    const agentContract = await fs.readFile(path.join(CODEX_AGENTS_ROOT, agentName), "utf8");
-
-    assert.match(agentContract, /state marker `delegated terminal evidence-only reconnaissance`/);
-    assert.match(agentContract, /Do not invoke or load any skill/);
-    assert.match(agentContract, /Do not spawn, delegate to, or coordinate other agents/);
-    assert.match(agentContract, /record it under Unknowns and return to the controller/);
-  }
-});
-
 test("packaged Codex agents pin the intended GPT-5.6 family roles", async () => {
-  const expectedAgents = [
-    ["cflow_architecture_recon.toml", "gpt-5.6-luna", "high"],
-    ["cflow_finding_derisk_recon.toml", "gpt-5.6-sol", "medium"],
-  ];
+  const expectedAgents = [["cflow_finding_derisk_recon.toml", "gpt-5.6-sol", "medium"]];
 
   for (const [agentName, model, reasoningEffort] of expectedAgents) {
     const agentContract = await fs.readFile(path.join(CODEX_AGENTS_ROOT, agentName), "utf8");
@@ -261,28 +234,17 @@ test("packaged Codex agents pin the intended GPT-5.6 family roles", async () => 
   }
 });
 
-test("architecture reuses in-flight mapping work instead of starting a second run", async () => {
-  const architectureContract = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-architecture", "SKILL.md"),
+test("repository orientation goes through the bundled tree script, not a stored map", async () => {
+  const startContract = await fs.readFile(path.join(SKILLS_ROOT, "cf-start", "SKILL.md"), "utf8");
+  const assessment = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "assessment.md"),
     "utf8",
   );
 
-  assert.match(architectureContract, /in-flight repository-mapping run/);
-  assert.match(architectureContract, /do not start a second controller or reconnaissance agent/);
-});
-
-test("maintainer flow docs mirror terminal delegation and serialized prerequisites", async () => {
-  const architectureFlow = await fs.readFile(
-    path.join(DOCS_ROOT, "architecture", "doc-architecture.flow.md"),
-    "utf8",
-  );
-
-  for (const flow of [architectureFlow]) {
-    assert.match(flow, /delegated terminal evidence-only reconnaissance/);
-    assert.match(flow, /do not activate skills or delegate/);
-  }
-
-  assert.match(architectureFlow, /in-flight repository-mapping run/);
+  assert.match(startContract, /run `scripts\/repo-tree\.mjs`/);
+  assert.match(startContract, /Never rely on a stored map/);
+  assert.match(assessment, /`scripts\/repo-tree\.mjs` is the default first pass/);
+  assert.doesNotMatch(startContract, /architecture\.md/);
 });
 
 test("packaged skill routing only names skills that exist in the pack", async () => {
@@ -300,6 +262,41 @@ test("packaged skill routing only names skills that exist in the pack", async ()
         assert.ok(
           known.has(match[0]),
           `${label} routes to ${match[0]}, which is not a skill in this pack`,
+        );
+      }
+    }
+  }
+});
+
+test("every `.cflow` artifact a skill references is owned by a skill in the pack", async () => {
+  const skillNames = await publicSkillNames(SKILLS_ROOT);
+
+  // Ownership is declared once per artifact, as `- Owns \`.cflow/<path>\``.
+  const owned = new Set();
+  for (const skillName of skillNames) {
+    const contract = await fs.readFile(path.join(SKILLS_ROOT, skillName, "SKILL.md"), "utf8");
+    for (const match of contract.matchAll(/^- Owns `(\.cflow\/[^`]+)`/gm)) {
+      owned.add(match[1]);
+    }
+  }
+
+  assert.ok(owned.size > 0, "no skill declares ownership of a `.cflow` artifact");
+
+  for (const skillName of skillNames) {
+    const skillDir = path.join(SKILLS_ROOT, skillName);
+    const files = [...(await skillTextFiles(skillDir)), ...(await skillAssetFiles(skillDir))];
+
+    for (const file of files) {
+      const text = await fs.readFile(file, "utf8");
+      const label = `skills/${skillName}/${path.relative(skillDir, file)}`;
+
+      for (const match of text.matchAll(/`(\.cflow\/[A-Za-z0-9._/-]+)`/g)) {
+        const artifact = match[1];
+        // `.gitignore` is bootstrap, not an owned artifact; skills also refer to the directory itself.
+        if (artifact === ".cflow/.gitignore" || artifact.endsWith("/")) continue;
+        assert.ok(
+          owned.has(artifact),
+          `${label} references ${artifact}, which no skill in this pack owns`,
         );
       }
     }

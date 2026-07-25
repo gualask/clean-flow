@@ -1,14 +1,6 @@
 {
   "version": 1,
   "skills": {
-    "cf-architecture": {
-      "flows": {
-        "default": {
-          "required": ["../cf-start/assets/architecture.template.md"],
-          "conditional": ["references/clean-context-recon.md"]
-        }
-      }
-    },
     "cf-brainstorm": {
       "flows": {
         "default": {

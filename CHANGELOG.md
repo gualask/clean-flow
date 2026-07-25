@@ -2,8 +2,9 @@
 
 ## 2026-07-25
 
-- Removed `cf-trace` and its `cflow_trace_recon` agent: modern models reconstruct and audit a workflow path unaided, so the skill added cost without changing the outcome.
-- No skill inherits path reconstruction: `cf-scenario` drops the trace clause from its description and now declares only its `cf-architecture` and `cf-mr-wolf` boundaries, `cf-mr-wolf` loses the trace lens from decomposition routing and collects that evidence locally, and `cf-start` drops it from handoff.
+- Removed `cf-architecture` and its `cflow_architecture_recon` agent: `scripts/repo-tree.mjs` orients more cheaply and cannot go stale, and the architectural rules worth protecting are already enforced by the repositories' own lint rules and tests. `cf-start` no longer requires `.cflow/architecture.md`; `cf-mr-wolf` orients locally. The orphaned `architecture.template.md` and shared `clean-context-recon.md` are gone too.
+- Removed `cf-trace` and its `cflow_trace_recon` agent: modern models reconstruct and audit a workflow path unaided, so the skill added cost without changing the outcome. No skill inherits path reconstruction; `cf-scenario`, `cf-mr-wolf`, and `cf-start` drop the route.
+- Artifact ownership is now declared with an `Owns` bullet and enforced: a contract test rejects any `.cflow` artifact a skill references without an owner, which is what the two removals left dangling in five places.
 
 ## 2026-07-17
 

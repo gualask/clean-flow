@@ -73,7 +73,6 @@ Before suggesting a skill change, collect as much of this packet as possible:
   - `cf-start`
   - `cf-mr-wolf`
   - `cf-simplify`
-  - `cf-architecture`
   - `cf-scenario`
   - `cf-cognitive`
   - `cf-split`
@@ -83,7 +82,6 @@ Before suggesting a skill change, collect as much of this packet as possible:
   - `cf-brainstorm`
   - `cf-start` phase reached from flow, such as assessment, target shape, planning, execution, review, or verification
 - exact user prompt or the closest faithful paraphrase
-- whether `.cflow/architecture.md` existed
 - whether `.cflow/refactor-brief.md` existed
 - relevant `Work units`, `Execution state`, or `Target direction` if a brief existed
 - Codex UI trace when available, for example `Explored -> Read SKILL.md (...)`

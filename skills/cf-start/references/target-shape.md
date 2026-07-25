@@ -9,7 +9,7 @@ Select the reference architecture and define target ownership, boundaries, and p
 
 ## Required Inputs
 
-- current architecture map
+- current repository structure, established in this session
 - assessment result or current request that justifies target-shape planning
 - enough scope, constraints, and risk appetite to propose one standard reference target or identify the custom-deviation decision that blocks it
 

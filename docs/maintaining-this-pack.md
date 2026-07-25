@@ -10,7 +10,7 @@ At runtime:
 - skills are installed into `.codex/skills` in the target repository, or into `$CODEX_HOME/skills` / `~/.codex/skills` for global install
 - Codex custom agents are installed into `.codex/agents` in the target repository, or into `$CODEX_HOME/agents` / `~/.codex/agents` for global install
 - Cflow artifacts live in the target repository under `.cflow/`
-- this source repository does not need `.cflow/architecture.md` or `.cflow/refactor-brief.md`
+- this source repository does not need `.cflow/refactor-brief.md`
 
 ## Runtime Model
 
@@ -50,7 +50,6 @@ Public skill entrypoints:
 - `cf-start`
 - `cf-mr-wolf`
 - `cf-simplify`
-- `cf-architecture`
 - `cf-scenario`
 - `cf-cognitive`
 - `cf-split`
@@ -83,7 +82,6 @@ Shared authoring references vendored into consuming skills:
 - `skills/_shared/references/local-readability-review.md`
 - `skills/_shared/references/file-split-rules.md`
 - `skills/_shared/references/reference-audit.md`
-- `skills/_shared/references/clean-context-recon.md`
 - `skills/_shared/references/regression-handling.md`
 
 Shared authoring scripts vendored into consuming skills:
@@ -92,7 +90,6 @@ Shared authoring scripts vendored into consuming skills:
 
 Codex custom agents:
 
-- `skills/_codex_agents/cflow_architecture_recon.toml`
 - `skills/_codex_agents/cflow_finding_derisk_recon.toml`
 
 ## Golden Rules
@@ -106,7 +103,7 @@ Pack-wide golden rules live in [golden-rules.md](./golden-rules.md).
 - Shared authoring rules live in `skills/_shared/references/`; installed runtime copies live under the consuming skill's `references/` directory.
 - Shared deterministic helpers live in `skills/_shared/scripts/`; installed runtime copies live under the consuming skill's `scripts/` directory.
 - Shared vendoring configuration lives in `skills/_shared/vendor.json`.
-- Artifact ownership is declared by the public runtime contract; templates live in public skill `assets/` directories, and any cross-skill use must be an explicit runtime path.
+- Artifact ownership is declared in the owning skill's `SKILL.md` with an `Owns` bullet naming the `.cflow` path; a contract test rejects any `.cflow` artifact a skill references without an owner. Templates live in public skill `assets/` directories, and any cross-skill use must be an explicit runtime path.
 - Codex custom agent sources live in `skills/_codex_agents/`.
 - Codex install prompts live in `install/codex/`.
 - Pack-wide maintainer rules live in [golden-rules.md](./golden-rules.md).
@@ -118,7 +115,6 @@ Maintainer flow mirrors:
 - `cf-start`: [start/doc-start.flow.md](./start/doc-start.flow.md)
 - `cf-mr-wolf`: [mr-wolf/doc-mr-wolf.flow.md](./mr-wolf/doc-mr-wolf.flow.md)
 - `cf-simplify`: [simplify/doc-simplify.flow.md](./simplify/doc-simplify.flow.md)
-- `cf-architecture`: [architecture/doc-architecture.flow.md](./architecture/doc-architecture.flow.md)
 - `cf-scenario`: [scenario/doc-scenario.flow.md](./scenario/doc-scenario.flow.md)
 - `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
 - `cf-split`: [split/doc-split.flow.md](./split/doc-split.flow.md)
@@ -225,7 +221,8 @@ Current automated coverage checks:
 - materialized runtime reference, script, and asset links
 - exact context-map coverage of public skills, declared flows, and transitively reachable runtime Markdown
 - packaged routing only to public skills that exist
-- terminal reconnaissance delegation and serialized architecture-prerequisite contracts
+- every referenced `.cflow` artifact is owned by a skill in the pack
+- repository orientation goes through the bundled tree script instead of a stored map
 - token budget warnings for packaged runtime files
 - presence of per-public-skill flow docs
 

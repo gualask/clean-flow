@@ -8,8 +8,7 @@ It helps an agent understand the repository, choose the right refactor path, kee
 Use it when you want Codex to:
 
 - clarify an unclear cleanup or refactor goal before touching code
-- map the current repository shape before planning changes
-- trace a workflow or command path and find sequence, ownership, or failure-mode issues
+- judge whether the current structure is right, and plan a repository-level refactor when it is not
 - explain the real impact of a bug, behavior, or change through concrete code-grounded scenarios
 - generate or review docs against the code
 - track decided next steps and open questions in a lightweight todo file
@@ -26,7 +25,7 @@ Refactors often fail because the agent starts moving code before it understands 
 Clean Flow gives Codex a practical operating system for that work:
 
 - **Problem first**: unclear requests are framed before implementation.
-- **Repository aware**: architecture and path evidence are captured from the actual codebase.
+- **Repository aware**: structure and evidence are read from the codebase when the work happens, never from a stored map that can drift.
 - **Domain-led**: architecture reviews start from product workflows, ownership, and external boundaries before current folders.
 - **Clean target first**: recommendations optimize for the cleanest evidence-backed structure, not the easiest low-impact workaround.
 - **Low ceremony**: boundaries, abstractions, and layers are justified by real ownership, integration, or risk.
@@ -101,7 +100,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/gualask/cle
 The main workflow controller for cleanup and refactor work, including hard-restructure planning and behavior-preserving migration units.
 Use it after the diagnostic frame is confirmed, for fresh assessment, planning, bounded execution, review, verification, and resume.
 
-It consumes `.cflow/architecture.md`, which is owned by `cf-architecture`, and creates or maintains the accepted plan and resume state in `.cflow/refactor-brief.md`.
+It reads current repository structure at assessment time through the bundled gitignore-aware tree helper rather than a stored map, and creates or maintains the accepted plan and resume state in `.cflow/refactor-brief.md`.
 
 ### `cf-mr-wolf`
 
@@ -116,11 +115,6 @@ Invoke it explicitly when the problem is hard, ambiguous, or needs careful reaso
 
 Reviews an area for overengineering, file sprawl, duplicated or parallel near-identical flows, and accidental complexity.
 Use it when you are unsure whether the current behavior, interface contracts, boundaries, or abstractions are worth their code cost, or whether similar flows should be consolidated behind one abstraction.
-
-### `cf-architecture`
-
-Builds or refreshes `.cflow/architecture.md` from repository evidence.
-Use it when Codex needs a current map of the codebase before making planning decisions.
 
 ### `cf-scenario`
 
@@ -177,14 +171,12 @@ Once the diagnostic frame is confirmed, use `cf-start` when you want the normal 
 
 For direct local work, use `cf-cognitive`, `cf-split`, or `cf-cohesion` instead.
 For overengineering or "are these files necessary?" reviews, use `cf-simplify`.
-For standalone repository mapping, use `cf-architecture`.
 For lightweight follow-up tracking from an analysis or working session, use `cf-todo`.
 
 ## Documentation
 
 - [Start flow](./docs/start/doc-start.flow.md)
 - [Mr Wolf flow](./docs/mr-wolf/doc-mr-wolf.flow.md)
-- [Architecture flow](./docs/architecture/doc-architecture.flow.md)
 - [Simplify flow](./docs/simplify/doc-simplify.flow.md)
 - [Scenario flow](./docs/scenario/doc-scenario.flow.md)
 - [Cognitive flow](./docs/cognitive/doc-cognitive.flow.md)

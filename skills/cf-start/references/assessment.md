@@ -5,7 +5,7 @@ First bias to defeat: do not protect existing code from change. Integrating arou
 
 ## Goal
 
-Decide the right **repository-level intervention frame** using the current architecture map.
+Decide the right **repository-level intervention frame** from current repository structure.
 
 Determine:
 
@@ -17,13 +17,13 @@ Determine:
 
 ## Required Inputs
 
-- current architecture map
+- current repository structure, established in this session (see Source Orientation)
 - clear repository or subsystem assessment scope
 - concrete problem, evaluation lens, or framed decision to assess
 
 ## Source Orientation
 
-For broad structure assessment, use `scripts/repo-tree.mjs` when available before ad hoc inventory. Verify conclusions from source.
+For broad structure assessment, `scripts/repo-tree.mjs` is the default first pass: resolve it from the active skill root, run `--help` first, and use its gitignore-aware tree with approximate LOC to locate the areas carrying the most weight. Fall back to ad hoc inventory only when the script cannot run. Verify conclusions from source.
 
 ## Premise check
 
@@ -65,7 +65,7 @@ If both containment and structural cleanup are plausible, show both paths and as
 
 ## Artifact behavior
 
-Do not write `.cflow/architecture.md` or `.cflow/refactor-brief.md`.
+Do not write `.cflow/refactor-brief.md`.
 Do not create, rewrite, or reprioritize work units.
 
 ## Output format
@@ -76,4 +76,3 @@ Return sections: **Critical complexity**, **Premise check**, **Domain**, **Targe
 
 - Do not run tests, lint, typecheck, format checks, build commands, or `git diff --check`; passing checks are not architecture assessment evidence unless a concrete verification risk was part of the confirmed frame.
 - Do not dive into work-unit splitting yet.
-- Do not rewrite the architecture map from this phase.

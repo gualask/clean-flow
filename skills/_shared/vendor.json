@@ -1,10 +1,6 @@
 {
   "version": 1,
   "skills": {
-    "cf-architecture": {
-      "references": ["clean-context-recon.md"],
-      "scripts": ["repo-tree.mjs"]
-    },
     "cf-cognitive": {
       "references": ["local-refactor-rules.md", "navigation-cost.md"],
       "scripts": ["repo-tree.mjs"]
