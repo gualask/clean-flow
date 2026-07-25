@@ -8,11 +8,11 @@ If agent use requires explicit authorization, ask first or keep the pass local a
 
 - Give the agent the active problem frame, bounded context, explicit exclusions, notes path or compact notes summary, and exact evidence question.
 - Require a read-only report with source-level evidence, unknowns, and candidate findings.
-- Do not let dynamic agents edit files, update `.cflow` artifacts, choose the final route, or expand the scope.
+- Do not let dynamic agents edit files, update `.cflow` artifacts, confirm a candidate finding, choose the final route, or expand the scope.
 - The controller owns note updates, final judgment, routing, and user-facing output.
 
 ## Model Guidance
 
 - Use a smaller model for mechanical inventory, file classification, or repetitive checks with clear criteria.
-- Use a stronger model for architecture, product, interface, ambiguous diagnosis, or false-positive evaluation.
+- Use a stronger model for architecture, product, interface, ambiguous diagnosis, or counter-evidence hunting.
 - When the result can change routing or risk, prefer the stronger model.
