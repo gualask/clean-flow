@@ -25,3 +25,4 @@ Document the runtime flow for `cf-simplify`, the public simplification review en
 10. Recommend the simplification lever with the best cleanup return, separating clean target shape from safe migration route and behavior-preserving cleanup from behavior-changing simplification.
 11. Stop at one decision question when implementation depends on a product, interface, behavior, or scope choice.
 12. Apply the chosen simplification only when the current request makes it explicit, under the Applying The Simplification guardrails: scope locked to the chosen lever, shared local refactor rules, reference audit after moves, and a smallest relevant check.
+13. Report a hard trigger that survives on a touched file, and whose remedy falls outside the lever, as a deferred finding at full severity with its owning route, instead of widening the pass or softening the finding.

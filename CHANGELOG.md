@@ -2,6 +2,7 @@
 
 ## 2026-07-25
 
+- `cf-simplify` can now report a hard trigger that survives on a touched file as a deferred finding at full severity, instead of choosing between widening an authorized cleanup and dropping the finding.
 - Removed `cf-architecture` and its `cflow_architecture_recon` agent: `scripts/repo-tree.mjs` orients more cheaply and cannot go stale, and the architectural rules worth protecting are already enforced by the repositories' own lint rules and tests. `cf-start` no longer requires `.cflow/architecture.md`; `cf-mr-wolf` orients locally. The orphaned `architecture.template.md` and shared `clean-context-recon.md` are gone too.
 - Removed `cf-trace` and its `cflow_trace_recon` agent: modern models reconstruct and audit a workflow path unaided, so the skill added cost without changing the outcome. No skill inherits path reconstruction; `cf-scenario`, `cf-mr-wolf`, and `cf-start` drop the route.
 - Artifact ownership is now declared with an `Owns` bullet and enforced: a contract test rejects any `.cflow` artifact a skill references without an owner, which is what the two removals left dangling in five places.
