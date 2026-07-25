@@ -24,7 +24,7 @@ For each slice, record only what helps choose or run the next evidence pass:
 - evidence question
 - evidence class: `behavioral`, `static-signal`, `detector`, `process`, or `mixed`
 - scope reason and explicit exclusions
-- best next lens: local evidence, `cf-scenario`, `cf-trace`, `cf-architecture`, or another specialist skill
+- best next lens: local evidence, `cf-scenario`, `cf-architecture`, or another specialist skill
 
 Keep behavioral slices separate from detector/static/process slices unless the slice intentionally checks whether the signal has real behavioral impact.
 
@@ -32,7 +32,7 @@ Keep behavioral slices separate from detector/static/process slices unless the s
 
 - Use `cf-architecture` when entrypoints, ownership, or boundaries are too unclear to slice credibly.
 - Use `cf-scenario` when a concrete example would clarify impact before deeper evidence.
-- Use `cf-trace` when a slice depends on ordered workflow behavior, state, failure, resume, external effects, or ownership.
+- When a slice depends on ordered workflow behavior, state, failure, resume, external effects, or ownership, gather that evidence locally: no skill owns path reconstruction.
 
 Analyze slices sequentially unless the user explicitly authorized broader agent use and the runtime supports it.
 Do not present a completed broad handoff while in-scope slices are still `pending` or `in-progress`.

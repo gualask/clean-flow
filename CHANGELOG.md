@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-07-25
+
+- Removed `cf-trace` and its `cflow_trace_recon` agent: modern models reconstruct and audit a workflow path unaided, so the skill added cost without changing the outcome.
+- No skill inherits path reconstruction: `cf-scenario` drops the trace clause from its description and now declares only its `cf-architecture` and `cf-mr-wolf` boundaries, `cf-mr-wolf` loses the trace lens from decomposition routing and collects that evidence locally, and `cf-start` drops it from handoff.
+
 ## 2026-07-17
 
 - GPT-5.6 tooling refresh: the finding de-risk agent now pins `gpt-5.6-sol` at medium reasoning, token reporting defaults to Sol and recognizes the GPT-5.6 family via `o200k_base`, and contract tests lock the intended Sol/Luna agent roles plus model-name boundaries.

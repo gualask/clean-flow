@@ -122,11 +122,6 @@ Use it when you are unsure whether the current behavior, interface contracts, bo
 Builds or refreshes `.cflow/architecture.md` from repository evidence.
 Use it when Codex needs a current map of the codebase before making planning decisions.
 
-### `cf-trace`
-
-Reconstructs and audits one concrete workflow, command path, install path, or refactor path.
-Use it to find ordering problems, missing states, unclear ownership, weak failure handling, resume gaps, or test gaps.
-
 ### `cf-scenario`
 
 Explains what really happens in a concrete scenario, grounded in the code.
@@ -183,7 +178,6 @@ Once the diagnostic frame is confirmed, use `cf-start` when you want the normal 
 For direct local work, use `cf-cognitive`, `cf-split`, or `cf-cohesion` instead.
 For overengineering or "are these files necessary?" reviews, use `cf-simplify`.
 For standalone repository mapping, use `cf-architecture`.
-For path reconstruction or workflow audit, use `cf-trace`.
 For lightweight follow-up tracking from an analysis or working session, use `cf-todo`.
 
 ## Documentation
@@ -192,7 +186,6 @@ For lightweight follow-up tracking from an analysis or working session, use `cf-
 - [Mr Wolf flow](./docs/mr-wolf/doc-mr-wolf.flow.md)
 - [Architecture flow](./docs/architecture/doc-architecture.flow.md)
 - [Simplify flow](./docs/simplify/doc-simplify.flow.md)
-- [Trace flow](./docs/trace/doc-trace.flow.md)
 - [Scenario flow](./docs/scenario/doc-scenario.flow.md)
 - [Cognitive flow](./docs/cognitive/doc-cognitive.flow.md)
 - [Split flow](./docs/split/doc-split.flow.md)

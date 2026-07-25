@@ -51,7 +51,6 @@ Public skill entrypoints:
 - `cf-mr-wolf`
 - `cf-simplify`
 - `cf-architecture`
-- `cf-trace`
 - `cf-scenario`
 - `cf-cognitive`
 - `cf-split`
@@ -94,7 +93,6 @@ Shared authoring scripts vendored into consuming skills:
 Codex custom agents:
 
 - `skills/_codex_agents/cflow_architecture_recon.toml`
-- `skills/_codex_agents/cflow_trace_recon.toml`
 - `skills/_codex_agents/cflow_finding_derisk_recon.toml`
 
 ## Golden Rules
@@ -121,7 +119,6 @@ Maintainer flow mirrors:
 - `cf-mr-wolf`: [mr-wolf/doc-mr-wolf.flow.md](./mr-wolf/doc-mr-wolf.flow.md)
 - `cf-simplify`: [simplify/doc-simplify.flow.md](./simplify/doc-simplify.flow.md)
 - `cf-architecture`: [architecture/doc-architecture.flow.md](./architecture/doc-architecture.flow.md)
-- `cf-trace`: [trace/doc-trace.flow.md](./trace/doc-trace.flow.md)
 - `cf-scenario`: [scenario/doc-scenario.flow.md](./scenario/doc-scenario.flow.md)
 - `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
 - `cf-split`: [split/doc-split.flow.md](./split/doc-split.flow.md)

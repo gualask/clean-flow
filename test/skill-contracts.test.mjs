@@ -222,7 +222,7 @@ test("delegated reconnaissance is terminal in every runtime enforcement layer", 
   );
   assert.doesNotMatch(sharedContract, /Use subagents\? Reply/);
 
-  for (const skillName of ["cf-architecture", "cf-trace"]) {
+  for (const skillName of ["cf-architecture"]) {
     const skillContract = await fs.readFile(
       path.join(SKILLS_ROOT, skillName, "SKILL.md"),
       "utf8",
@@ -233,7 +233,7 @@ test("delegated reconnaissance is terminal in every runtime enforcement layer", 
     assert.match(skillContract, /delegate again/);
   }
 
-  for (const agentName of ["cflow_architecture_recon.toml", "cflow_trace_recon.toml"]) {
+  for (const agentName of ["cflow_architecture_recon.toml"]) {
     const agentContract = await fs.readFile(path.join(CODEX_AGENTS_ROOT, agentName), "utf8");
 
     assert.match(agentContract, /state marker `delegated terminal evidence-only reconnaissance`/);
@@ -246,7 +246,6 @@ test("delegated reconnaissance is terminal in every runtime enforcement layer", 
 test("packaged Codex agents pin the intended GPT-5.6 family roles", async () => {
   const expectedAgents = [
     ["cflow_architecture_recon.toml", "gpt-5.6-luna", "high"],
-    ["cflow_trace_recon.toml", "gpt-5.6-luna", "high"],
     ["cflow_finding_derisk_recon.toml", "gpt-5.6-sol", "medium"],
   ];
 
@@ -262,28 +261,14 @@ test("packaged Codex agents pin the intended GPT-5.6 family roles", async () => 
   }
 });
 
-test("trace serializes architecture mapping and architecture reuses in-flight work", async () => {
+test("architecture reuses in-flight mapping work instead of starting a second run", async () => {
   const architectureContract = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-architecture", "SKILL.md"),
-    "utf8",
-  );
-  const traceContract = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-trace", "SKILL.md"),
     "utf8",
   );
 
   assert.match(architectureContract, /in-flight repository-mapping run/);
   assert.match(architectureContract, /do not start a second controller or reconnaissance agent/);
-  assert.match(traceContract, /suspend this flow and route to exactly one `cf-architecture` run/);
-  assert.match(
-    traceContract,
-    /Do not run the mapping and trace controller flows or their reconnaissance agents concurrently/,
-  );
-  assert.ok(
-    traceContract.indexOf("route to exactly one `cf-architecture` run") <
-      traceContract.indexOf("## Reconnaissance Gate"),
-    "cf-trace must resolve architecture before opening its reconnaissance gate",
-  );
 });
 
 test("maintainer flow docs mirror terminal delegation and serialized prerequisites", async () => {
@@ -291,22 +276,13 @@ test("maintainer flow docs mirror terminal delegation and serialized prerequisit
     path.join(DOCS_ROOT, "architecture", "doc-architecture.flow.md"),
     "utf8",
   );
-  const traceFlow = await fs.readFile(
-    path.join(DOCS_ROOT, "trace", "doc-trace.flow.md"),
-    "utf8",
-  );
 
-  for (const flow of [architectureFlow, traceFlow]) {
+  for (const flow of [architectureFlow]) {
     assert.match(flow, /delegated terminal evidence-only reconnaissance/);
     assert.match(flow, /do not activate skills or delegate/);
   }
 
   assert.match(architectureFlow, /in-flight repository-mapping run/);
-  assert.match(traceFlow, /run or await exactly one `cf-architecture` flow/);
-  assert.match(
-    traceFlow,
-    /never run the two controller flows or their reconnaissance agents concurrently/,
-  );
 });
 
 test("packaged skill routing only names skills that exist in the pack", async () => {

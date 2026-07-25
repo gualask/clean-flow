@@ -74,7 +74,6 @@ Before suggesting a skill change, collect as much of this packet as possible:
   - `cf-mr-wolf`
   - `cf-simplify`
   - `cf-architecture`
-  - `cf-trace`
   - `cf-scenario`
   - `cf-cognitive`
   - `cf-split`

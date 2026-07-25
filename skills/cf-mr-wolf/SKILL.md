@@ -73,9 +73,8 @@ Choose the first route that fits current evidence and uncertainty:
 3. `cf-simplify`: the current request asks whether an area has too many files, unnecessary complexity, overengineering, duplicated or parallel near-identical flows, or whether changing behavior or interface contracts could enable a cleaner simplification.
 4. `cf-start`: the current request asks for cleanup/refactor architecture, structure, target direction, ownership, dependency direction, migration order, repository-level assessment, multi-step refactor work, risky or ordered work, or resumable work.
 5. `cf-scenario`: one or two concrete code-grounded scenarios would clarify real impact or compare similar flows.
-6. `cf-trace`: one concrete workflow/path needs ordered reconstruction for state, failure, resume, or ownership.
-7. `cf-split`, `cf-cognitive`, or `cf-cohesion`: one bounded local cleanup action clearly belongs to that skill.
-8. Direct bounded handoff or options: the problem is clear enough and no specialized route owns the decision lens.
+6. `cf-split`, `cf-cognitive`, or `cf-cohesion`: one bounded local cleanup action clearly belongs to that skill.
+7. Direct bounded handoff or options: the problem is clear enough and no specialized route owns the decision lens.
 
 ## Output
 

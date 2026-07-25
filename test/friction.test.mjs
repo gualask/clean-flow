@@ -41,7 +41,7 @@ test("logger appends to the repo root log from a subdirectory", async () => {
   await mkdir(nested, { recursive: true });
 
   const { stdout } = await runLogger({
-    args: ["three retries on build", "expected one pass", "--category", "repeated-attempts", "--skill", "cf-trace"],
+    args: ["three retries on build", "expected one pass", "--category", "repeated-attempts", "--skill", "cf-scenario"],
     cwd: nested,
     home,
   });
@@ -51,7 +51,7 @@ test("logger appends to the repo root log from a subdirectory", async () => {
   assert.equal(entry.observed, "three retries on build");
   assert.equal(entry.expected, "expected one pass");
   assert.equal(entry.category, "repeated-attempts");
-  assert.equal(entry.skill, "cf-trace");
+  assert.equal(entry.skill, "cf-scenario");
   assert.match(entry.ts, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/);
   assert.equal(entry.pack_version, undefined);
 });

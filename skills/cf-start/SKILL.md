@@ -54,7 +54,6 @@ Approval is phase-scoped.
 Use before Cflow workflow work. Do not touch `.cflow/refactor-brief.md`.
 
 - `cf-simplify`: overengineering or simplification review comes first.
-- `cf-trace`: the user asks only to reconstruct or audit a path.
 - `cf-cognitive`, `cf-split`, `cf-cohesion`: the request is local and bounded to that lens.
 - `cf-architecture`: `.cflow/architecture.md` is missing, stale, or materially incomplete.
 

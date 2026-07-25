@@ -266,14 +266,6 @@
           "conditional": []
         }
       }
-    },
-    "cf-trace": {
-      "flows": {
-        "default": {
-          "required": ["assets/trace.template.md"],
-          "conditional": ["references/clean-context-recon.md"]
-        }
-      }
     }
   }
 }

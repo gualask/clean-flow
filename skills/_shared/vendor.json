@@ -34,10 +34,6 @@
         "regression-handling.md"
       ],
       "scripts": ["repo-tree.mjs"]
-    },
-    "cf-trace": {
-      "references": ["clean-context-recon.md"],
-      "scripts": ["repo-tree.mjs"]
     }
   }
 }
