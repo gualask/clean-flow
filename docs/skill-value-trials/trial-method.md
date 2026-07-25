@@ -1,176 +1,211 @@
 # Skill Value Trial — Repeatable Method
 
-Purpose: measure whether a Cflow skill produces value a current model does not produce unaided.
-Audience: an LLM agent running the trial autonomously, with shell access.
+Purpose: measure whether a Cflow skill produces material value that the same model and tool
+environment do not produce without it.
 
-This answers one question only: **does skill X change the outcome?** It does not measure whether X
-is invoked at the right times — that is a separate trigger trial (see "Related trials" below), and
-conflating the two produces conclusions neither design supports.
+Audience: an LLM agent running a controlled trial with shell access.
+
+This method answers one question only: **does the skill improve the tested outcome enough to justify
+its cost?** Invocation precision belongs to a separate trigger trial; coordination, durable state,
+and multi-session value need a design that can observe those properties.
+
+## Trial contract
+
+Write the trial contract before running either arm:
+
+- **Value claim**: the capability or constraint the skill is expected to improve.
+- **Population**: the task class to which the verdict may generalize.
+- **Tasks**: representative prompts and inputs sampled from that population.
+- **Controlled inputs**: model, host, tools, repository or other source material, starting state,
+  limits, and user-provided context.
+- **Oracle**: the expected facts, properties, changes, or decisions established independently.
+- **Metrics**: observable scoring rules tied to the value claim.
+- **Replication**: run count and execution order.
+- **Stopping rule**: the evidence needed for supported, unsupported, or indeterminate verdicts.
+
+Do not choose metrics, exclusions, or stopping conditions after reading an arm's output.
 
 ## When this method applies
 
-Use it when a skill's justification is *capability* ("the model would not do this well alone").
-Model improvements erode capability-scaffolding faster than any other skill value, so re-run the
-trial after major model changes rather than trusting an earlier verdict.
+Use an A/B value trial when the skill claims to improve a result within one observable run. Re-run
+after material model, host, tool, or skill changes.
 
-Do not use it for skills whose value is coordination, durable state across sessions, or user-facing
-ceremony — a single-session A/B cannot observe those. State that limit instead of testing around it.
+Do not force a single-run A/B onto value that exists across sessions, coordinates several actors,
+persists accepted state, or provides user-facing ceremony. Build a trial that observes the claimed
+property, or mark the claim untested.
 
 ## Prerequisites
 
-- `opencode` CLI (`opencode run` is the non-interactive entrypoint), with a configured provider.
-  Check available models with `opencode models`.
-- Target repositories that already use Cflow, at a clean worktree.
-- This pack, to materialize skills: `node ./bin/cflow-skills.mjs install <dir>` writes
-  `<dir>/.codex/skills`.
+- A fixed model and host with a repeatable way to run the same task.
+- A clean, pinnable copy of every repository or input corpus used by the task.
+- An isolated scratch root outside the source repository.
+- This pack, when materializing the skill under test:
+  `node ./bin/cflow-skills.mjs install <skill-host>`.
+- A recorded inventory of host-provided skills, tools, and instructions visible to both arms.
 
-## The one rule that decides validity
+## Step 1 — Define the value claim and task population
 
-**Establish ground truth before reading any arm's output.** Answer the trial task yourself, from
-the code, and write the answer down first. Once you have read a model's narrative you cannot judge
-it — you will score plausibility instead of correctness. If you skip this step the trial is worth
-nothing, however clean the rest of the harness is.
+State what the skill should change and why that difference matters. A skill justified by accuracy,
+coverage, safer edits, decision quality, lower variance, or lower cost needs different evidence for
+each claim.
 
-## Step 1 — Pick the target and the task
+Choose tasks squarely inside the declared domain. Use more than one task whenever the verdict is
+meant to generalize across materially different repository shapes, inputs, or request forms. A
+single task supports a verdict about that task class only.
 
-Requirements for the repository: clean `git status`, small enough for fast runs (~100–400 source
-files), and a real product flow crossing at least three ownership boundaries.
+Write each shared task prompt once and reuse it verbatim in both arms. Do not mention the skill in
+the shared prompt.
 
-Requirements for the task: phrased as a user-reported symptom, not as an instruction to use a skill;
-answerable from the code; with a verifiable failure point. Write it once to a file and reuse it
-verbatim in both arms — any wording difference invalidates the comparison.
+## Step 2 — Establish the oracle before any run
 
-Give the skill its best shot. Choose a task squarely inside the skill's declared domain; a
-straw-man task proves nothing about a skill you are considering removing.
+Determine the expected outcome independently, then save it where trial outputs cannot overwrite it.
+Choose the verification surface that fits the task:
 
-## Step 2 — Establish and record ground truth
+- factual answer: required facts and acceptable evidence
+- code or document change: expected behavior, allowed scope, invariants, and relevant checks
+- review or diagnosis: known issues, non-issues, reachability, and severity boundaries
+- plan or decision: required constraints, rejected directions, and observable decision criteria
+- generated artifact: required fields, semantic properties, and invalid states
 
-Read the code and record: the true file set involved, the exact break point with `file:line`, and
-any secondary findings. Note also which claims are **not** repo-verifiable (external API semantics,
-runtime behavior) — models err there most, and neither arm's discipline catches it.
+Separate mechanically verifiable claims from external or judgment-dependent claims. Define how the
+latter will be evaluated before seeing the outputs. If no credible oracle exists, the trial can
+measure cost or consistency but not correctness.
 
-## Step 3 — Build the harness
+## Step 3 — Prepare equivalent starting state
 
-```bash
-SC=<scratch>/trial            # scratch dir, outside the target repo
-SRC=/path/to/target-repo
-PIN=$(cd $SRC && git rev-parse HEAD)
-
-# Materialize skills, then keep only the skill under test
-node ./bin/cflow-skills.mjs install $SC/skillhost
-mkdir -p $SC/skills-A && cp -R $SC/skillhost/.codex/skills/<skill> $SC/skills-A/
-
-# One pinned clone per run, per arm (n>=3 each)
-for arm in A B; do for i in 1 2 3; do
-  D=$SC/repo-$arm$i
-  git clone --quiet --local $SRC $D && (cd $D && git checkout --quiet $PIN)
-  rm -f $D/.cflow/<artifact-owned-by-skill>.md     # see pitfall 3
-  mkdir -p $D/.cflow && cp $SRC/.cflow/architecture.md $D/.cflow/ && printf '*\n' > $D/.cflow/.gitignore
-done; done
-```
-
-Per-arm config. Arm A sees only the skill under test; arm B sees none:
+Pin every controlled input. Use one fresh run directory per arm and replication.
 
 ```bash
-# $SC/repo-A*/opencode.json
-{ "$schema": "https://opencode.ai/config.json", "skills": { "paths": ["<abs>/skills-A"] } }
-# $SC/repo-B*/opencode.json
-{ "$schema": "https://opencode.ai/config.json" }
+TRIAL_ROOT=<scratch>/skill-value-trial
+SOURCE_REPO=/path/to/target-repo
+PIN=<tested-commit>
+SKILL=<skill-name>
+REPLICATIONS="1 2 3"
+
+node ./bin/cflow-skills.mjs install "$TRIAL_ROOT/skill-host"
+mkdir -p "$TRIAL_ROOT/skills-a"
+cp -R "$TRIAL_ROOT/skill-host/.codex/skills/$SKILL" "$TRIAL_ROOT/skills-a/"
+
+for arm in A B; do
+  for i in $REPLICATIONS; do
+    RUN_DIR="$TRIAL_ROOT/run-$arm$i"
+    git clone --quiet --local "$SOURCE_REPO" "$RUN_DIR"
+    git -C "$RUN_DIR" checkout --quiet "$PIN"
+  done
+done
 ```
 
-Export `OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=1` for **both** arms so unrelated host skills cannot
-contaminate either side. Verify isolation before spending runs:
+Before running, classify every file or state item not carried by that clone:
 
-```bash
-cd $SC/repo-A1 && opencode run "List only the names of your available skills. No tools." -m <model>
-cd $SC/repo-B1 && opencode run "..." -m <model> | grep -c "<skill>"   # expect 0
+- **Task input**: copy it identically into both arms.
+- **Prior output of the skill or task**: remove it from both arms unless resuming it is the tested
+  scenario.
+- **Skill prerequisite**: decide whether it is part of the skill's cost or a task input; document
+  the choice and keep the comparison fair.
+- **Irrelevant host or repository state**: exclude it from both arms.
+
+Never seed an artifact merely because one tested skill happens to mention it. Any asymmetry in
+starting state must be part of the declared intervention, not an accidental convenience.
+
+## Step 4 — Isolate the intervention
+
+Arm A sees the skill under test. Arm B does not. Keep every other skill, instruction, tool, model
+setting, permission, and task input identical.
+
+Verify the effective capability inventory in both arms before spending trial runs. A host-provided
+skill or global instruction that replaces the tested behavior changes what "without the skill"
+means and must be recorded.
+
+Append only the activation instruction to Arm A:
+
+```text
+<shared task prompt>
+
+Use the <skill-name> skill for this work.
 ```
 
-## Step 4 — Run
+Do not embed answers to one skill's gates in the universal harness. If a skill requires interaction,
+either run the interaction normally or define a deterministic response policy in the trial contract.
+Record every extra turn and every injected response as part of the intervention cost. If the runner
+cannot complete the interaction, count that as an observed limitation rather than silently bypassing
+it.
 
-```bash
-cd $SC/repo-B$i && /usr/bin/time -p opencode run "$(cat $SC/task.txt)" \
-  -m <model> --auto > $SC/out-B$i.txt 2> $SC/time-B$i.txt
-```
+## Step 5 — Execute reproducibly
 
-Arm A appends the invocation instruction and pre-answers any gate the skill raises:
+Run at least three replications per arm for each task unless the contract justifies another count.
+Execute one run at a time; interleave or randomize arm order to reduce temporal bias without creating
+provider contention.
 
-```
-<task>
+For every run:
 
-Use the <skill> skill for this work. If the skill asks whether to use subagents,
-treat the answer as 'n' and proceed in local mode.
-```
+- use the same shared task text, limits, permissions, and starting state
+- capture the full output, tool log, elapsed time, exit status, and model/host identifiers
+- confirm liveness and completion with the runner's own process or completion signal
+- keep incomplete, timed-out, refused, or crashed runs in the result set
+- record provider or tool failures that make timing or outcome comparison invalid
 
-Run at least three per arm. Report every run individually; a mean over two runs hides the variance
-that decides whether a difference is real.
+Do not retry only the arm that failed. Apply any declared retry policy symmetrically.
 
-## Step 5 — Score
+## Step 6 — Score against predeclared metrics
 
-Verify mechanically, never by impression:
+Score each run individually. Use only dimensions that the value claim needs, but always include
+correctness, harmful error, reliability, and cost when they are observable.
 
-| Metric | How |
+| Dimension | Observable rule |
 | --- | --- |
-| Hallucinated paths | extract every cited path; `[ -f "$f" ]` each one |
-| Wrong line references | `sed -n '<n>p'` each cited line; check it holds the named symbol |
-| Ground-truth coverage | per recorded element: found / partial / missed |
-| False positives | each finding checked against code; mark unverifiable-by-repo separately |
-| Route stability (skill arms) | compare the recommended route across identical runs |
-| Cost | wall time and tool-call count (`grep -cE '→ .*(Read\|Grep\|Glob\|Bash)'` on the log) |
+| Correctness | Compare required facts, properties, changes, or decisions with the oracle. |
+| Completeness | Mark each predeclared required element as found, partial, or missed. |
+| Harmful error | Verify false claims, unsafe edits, scope violations, invented evidence, or broken invariants. |
+| Claim-specific value | Measure the exact property named in the value claim with its predeclared check. |
+| Reliability | Record variance, incomplete runs, refusals, crashes, and unstable routes or outputs. |
+| Cost | Record elapsed time, turns, tool calls, and context or token cost when available. |
 
-## Step 6 — Verdict
+Prefer executable checks, source verification, schema validation, or blinded rubric scoring over
+impression. Keep unverifiable claims separate from errors.
 
-The skill adds value only if it wins on a dimension that matters, reproducibly across runs, at a
-cost you accept. Equal accuracy plus higher cost is a negative result — say so plainly.
+## Step 7 — Decide the verdict
 
-Record, in the trial file: the model and host, n, the task, the ground truth, the per-run table, the
-verdict, and the limits. A trial without its limits stated will be over-read later.
+The value claim is supported only when Arm A produces a material, reproducible improvement on the
+claimed dimension at an acceptable cost without creating a worse failure elsewhere.
 
-## Pitfalls that have already cost time
+- **Supported**: the improvement meets the stopping rule.
+- **Unsupported**: results are equal, worse, or too costly for the claimed value.
+- **Indeterminate**: the oracle, sample, reliability, or controls cannot support a conclusion.
 
-1. **`.cflow/` is untracked and self-ignoring**, so `git clone` does not carry it. Skills whose
-   preflight requires `.cflow/architecture.md` will suspend and route away instead of running.
-   Seed the artifact identically in both arms and say you did.
-2. **Interactive gates stall non-interactive runs.** Pre-answer them in the prompt and record it as
-   a deliberate deviation — it disables whatever the gate protects (e.g. clean-context independence).
-3. **A pre-existing owned artifact biases the skill arm**, which will "refresh in place" and inherit
-   earlier work. Delete it from every clone.
-4. **The host may ship its own built-in skills.** Present in both arms they are a controlled
-   constant, which is acceptable — but record whether the bare arm reaches for an alternative
-   scaffold, since that changes what "unaided" means.
-5. **Seeding a Cflow artifact into arm B is a confound favouring it.** Check whether the bare arm
-   actually read it (`grep -c architecture.md` on the log). Runs that never opened it are the
-   strongest evidence in the trial.
-6. **macOS has no `timeout`**; use `/usr/bin/time -p`. Runs take minutes — start them in the
-   background and wait with an `until` loop on the completion marker rather than polling.
-7. **`git clone --local` omits untracked and ignored files.** Any finding of the form "this path
-   does not exist" may be an artifact of the clone rather than a fact about the repository. Before
-   scoring such a finding, diff the clone against the source (`[ -e $CLONE/$f ]` vs
-   `[ -e $SRC/$f ]`). A run that reports what it could actually see is correct even when the claim
-   is false of the real repository — score the harness, not the model.
-8. **Run sequentially — one run at a time.** Concurrent runs contend for provider throughput. A
-   six-way parallel batch produced 11 `stream error` events with exponential backoff (up to 33s)
-   inside a single trial window, while a batch of at most four produced none. Backoff lands
-   unevenly, so it destroys wall-time comparability and can starve a run into delivering nothing —
-   a failure that then looks like a property of the arm. Sequential execution costs wall-clock time
-   and buys the only cost metric the trial has. Check the provider log afterwards
-   (`~/.local/share/opencode/log/opencode.log`, grep `stream error`) and discard timing data if any
-   appear.
-9. **A run can end without producing its deliverable.** Record incomplete runs as incomplete rather
-   than dropping them — the failure rate is part of the result.
-10. **Cross-host validity.** Cflow skills are authored for Codex. A trial in another host tells you
-    about that host's model; it is indicative, never dispositive.
-11. **A launched run can die at once, silently.** `opencode run` buffers its output when redirected,
-    so an empty output file proves nothing by itself — but an empty file *plus* no matching process
-    means the run never started. Confirm liveness within a minute of launching: `pgrep -f "opencode
-    run"` and the output file's size. Then poll at most every two minutes, and never report a run as
-    in progress without having just checked. This trial lost twenty minutes waiting on a background
-    script that died at launch, while its status was reported as running.
+Limit the verdict to the declared population. A result on one task, host, model, or repository does
+not establish universal skill value.
+
+Record:
+
+- value claim and population
+- model, host, tools, skill revision, tasks, and pinned inputs
+- starting-state and capability inventories
+- oracle and metrics
+- every run's score and cost
+- failures, exclusions, and validity threats
+- verdict, limits, and next replication needed
+
+## Validity threats
+
+Check these before accepting the verdict:
+
+1. **Oracle contamination**: ground truth was written after an output was read.
+2. **Prompt drift**: the shared task or limits differed across arms.
+3. **Capability leakage**: Arm B could still access the tested skill or an equivalent scaffold.
+4. **Starting-state asymmetry**: ignored, untracked, generated, cached, or external inputs differed.
+5. **Prior-output bias**: an arm inherited an artifact or answer from earlier work.
+6. **Prerequisite confound**: a skill-specific prerequisite was added to both arms without proving
+   it was a task input, or only to one arm without counting it as intervention cost.
+7. **Interaction bias**: gates or questions were bypassed, pre-answered, or answered inconsistently.
+8. **Provider contention**: concurrent runs distorted latency, reliability, or completion.
+9. **Selective reruns**: failed or weak results were retried asymmetrically or omitted.
+10. **Unverifiable scoring**: plausibility was scored as correctness.
+11. **Cross-host overreach**: a host-specific result was generalized to another host.
+12. **Single-case overreach**: one task or repository was generalized beyond its declared population.
 
 ## Related trials
 
-A **trigger trial** answers the other half: a labelled battery of prompts, half deserving the skill
-and half not, run with the skill available, measuring invocation precision and recall. It needs no
-ground truth beyond the labels, and it is the only cheap way to validate a description rewrite
-before the friction log accumulates evidence. See `docs/friction-rules-trial.md` for the
-friction-log baseline that motivates such work.
+A **trigger trial** measures invocation precision and recall with a labelled prompt battery. It does
+not need an outcome oracle, and it must not be used as evidence that the skill improves task quality.
+See `docs/friction-rules-trial.md` for the friction-log baseline that motivates trigger work in this
+pack.

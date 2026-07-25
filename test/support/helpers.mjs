@@ -37,6 +37,36 @@ export async function writeSupportDirectory(root, name = "_shared", files = {}) 
   return supportDir;
 }
 
+export async function writeLegacyCodexAgentFixture(
+  root,
+  name = "cflow_finding_derisk_recon.toml",
+  {
+    marker = {
+      owner: "clean-flow",
+      pack: "cflow",
+      sourceSkill: name,
+      sourceKind: "codex-agent",
+      fingerprint: "sha256:legacy",
+    },
+    writeAgent = true,
+  } = {},
+) {
+  const agentFile = path.join(root, name);
+  const markerFile = path.join(root, ".cflow-sync", `${name}.json`);
+
+  if (writeAgent) {
+    await mkdir(root, { recursive: true });
+    await writeFile(agentFile, `name = "${path.basename(name, ".toml")}"\n`, "utf8");
+  }
+
+  if (marker) {
+    await mkdir(path.dirname(markerFile), { recursive: true });
+    await writeFile(markerFile, `${JSON.stringify(marker, null, 2)}\n`, "utf8");
+  }
+
+  return { agentFile, markerFile };
+}
+
 export async function listDirectoryNames(root) {
   try {
     const entries = await readdir(root, { withFileTypes: true });

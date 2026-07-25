@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 
 import { installFriction, removeFriction } from "./commands/install-friction.mjs";
 import { installSkills } from "./commands/install.mjs";
+import { pruneLegacyCodexAgents } from "./commands/prune-legacy-agents.mjs";
 import { removeSkills } from "./commands/remove.mjs";
 import { createMaterializedSkills } from "./lib/materialize-skills.mjs";
 
@@ -21,6 +22,7 @@ const HELP_TEXT = `Usage:
 Notes:
   - install syncs packaged, materialized skills into <repo>/.codex/skills
   - --global targets $CODEX_HOME/skills, or ~/.codex/skills
+  - install and remove prune legacy static agents marked as Cflow-owned
   - --friction also installs the always-on friction log: the logger script
     and law under ~/.cflow (or $CFLOW_HOME), plus a marked import block in
     the global AGENTS.md (created minimal when absent)
@@ -50,10 +52,12 @@ export async function main(argv, io = { stdout: process.stdout, stderr: process.
       options.command === "install"
         ? await installAll({
             skillsDestinationRoot: destinations.skillsRoot,
+            legacyCodexAgentsDestinationRoot: destinations.legacyCodexAgentsRoot,
             dryRun: options.dryRun,
           })
         : await removeAll({
             skillsDestinationRoot: destinations.skillsRoot,
+            legacyCodexAgentsDestinationRoot: destinations.legacyCodexAgentsRoot,
             dryRun: options.dryRun,
           });
 
@@ -161,7 +165,11 @@ function parseArgs(argv) {
   };
 }
 
-async function installAll({ skillsDestinationRoot, dryRun }) {
+async function installAll({
+  skillsDestinationRoot,
+  legacyCodexAgentsDestinationRoot,
+  dryRun,
+}) {
   const materialized = await createMaterializedSkills(SKILLS_SOURCE_ROOT);
 
   try {
@@ -170,24 +178,49 @@ async function installAll({ skillsDestinationRoot, dryRun }) {
       destinationRoot: skillsDestinationRoot,
       dryRun: true,
     });
+    const legacyAgentsPlan = await pruneLegacyCodexAgents({
+      destinationRoot: legacyCodexAgentsDestinationRoot,
+      dryRun: true,
+    });
 
     if (dryRun || skillsPlan.conflicts.length > 0) {
-      return withPackagedSkillsSource(toInstallResult(skillsPlan, dryRun, false));
+      return withPackagedSkillsSource(
+        toInstallResult(skillsPlan, legacyAgentsPlan, dryRun, false),
+      );
     }
 
+    const legacyAgentsResult = await pruneLegacyCodexAgents({
+      destinationRoot: legacyCodexAgentsDestinationRoot,
+      dryRun: false,
+    });
     const skillsResult = await installSkills({
       sourceRoot: materialized.skillsRoot,
       destinationRoot: skillsDestinationRoot,
       dryRun: false,
     });
 
-    return withPackagedSkillsSource(toInstallResult(skillsResult, dryRun, skillsResult.applied));
+    return withPackagedSkillsSource(
+      toInstallResult(
+        skillsResult,
+        legacyAgentsResult,
+        dryRun,
+        skillsResult.applied && legacyAgentsResult.applied,
+      ),
+    );
   } finally {
     await materialized.cleanup();
   }
 }
 
-async function removeAll({ skillsDestinationRoot, dryRun }) {
+async function removeAll({
+  skillsDestinationRoot,
+  legacyCodexAgentsDestinationRoot,
+  dryRun,
+}) {
+  const legacyAgentsResult = await pruneLegacyCodexAgents({
+    destinationRoot: legacyCodexAgentsDestinationRoot,
+    dryRun,
+  });
   const skillsResult = await removeSkills({
     destinationRoot: skillsDestinationRoot,
     dryRun,
@@ -198,14 +231,14 @@ async function removeAll({ skillsDestinationRoot, dryRun }) {
     destinationRoot: skillsDestinationRoot,
     skillsDestinationRoot,
     dryRun,
-    removed: [...skillsResult.removed],
+    removed: [...skillsResult.removed, ...legacyAgentsResult.removed],
     kept: [...skillsResult.kept],
     conflicts: [],
-    applied: skillsResult.applied,
+    applied: skillsResult.applied && legacyAgentsResult.applied,
   };
 }
 
-function toInstallResult(skillsResult, dryRun, applied) {
+function toInstallResult(skillsResult, legacyAgentsResult, dryRun, applied) {
   return {
     command: "install",
     sourceRoot: skillsResult.sourceRoot,
@@ -216,7 +249,7 @@ function toInstallResult(skillsResult, dryRun, applied) {
     added: [...skillsResult.added],
     updated: [...skillsResult.updated],
     unchanged: [...skillsResult.unchanged],
-    pruned: [...skillsResult.pruned],
+    pruned: [...skillsResult.pruned, ...legacyAgentsResult.removed],
     conflicts: [...skillsResult.conflicts],
     applied,
   };
@@ -233,11 +266,17 @@ function withPackagedSkillsSource(result) {
 function resolveDestinations(options) {
   if (options.global) {
     const codexHome = process.env.CODEX_HOME || path.join(os.homedir(), ".codex");
-    return { skillsRoot: path.resolve(codexHome, "skills") };
+    return {
+      skillsRoot: path.resolve(codexHome, "skills"),
+      legacyCodexAgentsRoot: path.resolve(codexHome, "agents"),
+    };
   }
 
   const targetRoot = path.resolve(options.targetPath);
-  return { skillsRoot: path.resolve(targetRoot, ".codex", "skills") };
+  return {
+    skillsRoot: path.resolve(targetRoot, ".codex", "skills"),
+    legacyCodexAgentsRoot: path.resolve(targetRoot, ".codex", "agents"),
+  };
 }
 
 function resolveFrictionTargets() {

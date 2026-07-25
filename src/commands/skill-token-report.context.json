@@ -172,12 +172,15 @@
           "conditional": []
         },
         "assessment": {
-          "required": ["references/assessment.md"],
+          "required": [
+            "references/assessment.md",
+            "references/source-orientation.md"
+          ],
           "conditional": []
         },
         "target-shape": {
           "required": ["references/target-shape.md"],
-          "conditional": []
+          "conditional": ["references/source-orientation.md"]
         },
         "work-unit-planning": {
           "required": ["references/work-unit-planning.md"],

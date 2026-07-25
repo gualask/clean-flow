@@ -110,8 +110,8 @@ Consequences for this trial:
 - **The findings-coverage comparison survives**, because it depends on output content rather than on
   timing or completion, and five of six runs delivered.
 
-The verdict below rests on coverage only. Trials from this point on run sequentially
-(`trial-method.md`, pitfall 8).
+The verdict below rests on coverage only. Trials from this point on run sequentially, following the
+provider-contention validity rule in `trial-method.md`.
 
 ## Harness artifact, disclosed
 
@@ -120,7 +120,8 @@ Five of six runs reported that `.vscodeignore` excludes non-existent paths (`kni
 `package.json` with no separate file. `.mcp.json` and `.impeccable/` exist in the real repository
 but are untracked, so `git clone --local` did not carry them and the runs could not see them. Every
 run reported what its environment actually contained; this is scored as a harness defect, not a
-model error, and is now pitfall 7 in `trial-method.md`. B2 was nonetheless the most precise arm,
+model error, and is covered by the starting-state asymmetry rule in `trial-method.md`. B2 was
+nonetheless the most precise arm,
 narrowing the phantom set to two entries and classifying `.mcp.json` as a real local artifact.
 
 ## Verdict

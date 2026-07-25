@@ -19,6 +19,7 @@ Cflow has two maintainer concerns:
    - `cflow-skills install` is an idempotent sync for both first install and later updates
    - it materializes public skill directories before syncing them
    - it vendors configured `_shared` files into the consuming skill's `references/` and `scripts/` paths
+   - install and remove prune legacy static agents only when old file markers identify them as Cflow-owned
    - it does not install `_shared` as a runtime skill directory
    - it does not bootstrap `.cflow/`
 2. public runtime flows
@@ -210,6 +211,7 @@ Current automated coverage checks:
 - update + prune + preserve foreign skills
 - conflict detection on foreign same-name skills
 - remove of Cflow-owned skill dirs and legacy support dirs while preserving foreign entries
+- install/remove cleanup of marked legacy Cflow agents while preserving unmarked and foreign agents
 - structural checks for packaged public skills
 - materialized runtime reference, script, and asset links
 - exact context-map coverage of public skills, declared flows, and transitively reachable runtime Markdown

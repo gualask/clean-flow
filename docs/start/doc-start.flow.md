@@ -16,7 +16,7 @@ Maintainer summary for `cf-start`. Runtime behavior belongs to `skills/cf-start/
 
 - Controller runtime stays in `skills/cf-start/SKILL.md`.
 - Phase rules stay in `skills/cf-start/references/*.md`.
-- Repository structure comes from `scripts/repo-tree.mjs` at assessment time; no stored map is consumed.
+- `scripts/repo-tree.mjs` orients fresh assessment and direct target-shape work when current structure is not already established; planning, resume, execution, review, and verify inspect only their accepted or touched scope. No stored map is consumed.
 - `.cflow/refactor-brief.md` is accepted plan/resume state, not assessment notes.
 - Keep assessment, target shape, unit planning, and execution as separate gates.
 - Target-shape and migration-unit planning must surface the plan's most fragile assumption before approval.

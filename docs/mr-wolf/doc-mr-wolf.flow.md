@@ -19,7 +19,8 @@ Maintainer summary for `cf-mr-wolf`. Runtime behavior belongs to `skills/cf-mr-w
 - Runtime routing for ambiguity, indecision, alternatives, planning, and evaluation stays in `skills/cf-mr-wolf/SKILL.md`.
 - Framing, evidence, de-risking, outcome, planning, and evaluation rules stay in linked references.
 - Planning flow owns generic decision-complete plans only; repository-level refactor planning routes to `cf-start`, and code-structure value judgments route to `cf-simplify`.
-- The de-risk agent gathers counter-evidence and never confirms a candidate; classification stays with the controller, which holds the full problem frame. A pass where the agent returns nothing leaves its candidates unconfirmed.
+- Dynamic delegation receives the active frame, bounded context, exclusions, and an evidence question or candidate findings. Retained notes are included only when they exist and matter to the pass.
+- The de-risk agent is terminal: it does not activate skills, route prerequisites, or delegate again. It gathers counter-evidence and never confirms a candidate; classification stays with the controller, which holds the full problem frame. A pass where the agent returns nothing leaves its candidates unconfirmed.
 - `.cflow/mr-wolf-notes.md` is optional handoff memory.
 - `.cflow/refactor-brief.md` remains owned by `cf-start`.
 - Keep this doc aligned with runtime files, but do not rely on it at runtime.

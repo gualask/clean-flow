@@ -237,16 +237,102 @@ test("todo rolls completed tasks over only when adding new work", async () => {
   }
 });
 
-test("repository orientation goes through the bundled tree script, not a stored map", async () => {
+test("dynamic de-risk agents are terminal in selection and prompt contracts", async () => {
+  const derisk = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "derisk.md"),
+    "utf8",
+  );
+  const dynamicAgents = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "dynamic-agents.md"),
+    "utf8",
+  );
+  const brief = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "derisk-agent-brief.md"),
+    "utf8",
+  );
+
+  assert.match(derisk, /terminal read-only agent/);
+  for (const contract of [dynamicAgents, brief]) {
+    assert.match(contract, /activate skills/);
+    assert.match(contract, /route prerequisites/);
+    assert.match(contract, /delegate (?:again|to another agent)/);
+  }
+});
+
+test("dynamic agent inputs require retained notes only when relevant", async () => {
+  const dynamicAgents = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-mr-wolf", "references", "dynamic-agents.md"),
+    "utf8",
+  );
+
+  assert.match(dynamicAgents, /exact evidence question or candidate findings/);
+  assert.match(dynamicAgents, /When retained notes exist and matter to the pass/);
+  assert.doesNotMatch(
+    dynamicAgents,
+    /notes path or compact notes summary, and exact evidence question/,
+  );
+});
+
+test("skill value trials declare their intervention instead of inheriting one case", async () => {
+  const method = await fs.readFile(
+    path.join(DOCS_ROOT, "skill-value-trials", "trial-method.md"),
+    "utf8",
+  );
+
+  for (const field of [
+    "Value claim",
+    "Population",
+    "Controlled inputs",
+    "Oracle",
+    "Metrics",
+    "Stopping rule",
+  ]) {
+    assert.match(method, new RegExp(`\\*\\*${field}\\*\\*`));
+  }
+
+  assert.doesNotMatch(
+    method,
+    /cf-trace|\.cflow\/architecture\.md|artifact-owned-by-skill|proceed in local mode|100.?400 source files/,
+  );
+});
+
+test("repository orientation is phase-scoped instead of global preflight", async () => {
   const startContract = await fs.readFile(path.join(SKILLS_ROOT, "cf-start", "SKILL.md"), "utf8");
   const assessment = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-start", "references", "assessment.md"),
     "utf8",
   );
+  const targetShape = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "target-shape.md"),
+    "utf8",
+  );
+  const sourceOrientation = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-start", "references", "source-orientation.md"),
+    "utf8",
+  );
+  const startFlow = await fs.readFile(
+    path.join(DOCS_ROOT, "start", "doc-start.flow.md"),
+    "utf8",
+  );
+  const preflight = /## Preflight\n([\s\S]*?)\n## Flow Selection/.exec(startContract);
 
-  assert.match(startContract, /run `scripts\/repo-tree\.mjs`/);
-  assert.match(startContract, /Never rely on a stored map/);
-  assert.match(assessment, /`scripts\/repo-tree\.mjs` is the default first pass/);
+  assert.ok(preflight, "cf-start must keep an explicit Preflight section");
+  assert.doesNotMatch(preflight[1], /repo-tree\.mjs/);
+  assert.match(
+    preflight[1],
+    /Do not run repository-wide orientation unless the fresh-assessment or target-shape reference requires it/,
+  );
+  assert.match(startContract, /never rely on a stored map/i);
+  assert.match(assessment, /controller's Source Orientation rules/);
+  assert.match(targetShape, /controller's Source Orientation rules/);
+  assert.match(assessment, /Read `references\/source-orientation\.md`/);
+  assert.match(targetShape, /When target-shape is entered directly or the scope materially changed/);
+  assert.match(targetShape, /read `references\/source-orientation\.md`/);
+  assert.doesNotMatch(assessment, /repo-tree\.mjs/);
+  assert.doesNotMatch(targetShape, /repo-tree\.mjs/);
+  assert.match(sourceOrientation, /Resolve `scripts\/repo-tree\.mjs`/);
+  assert.match(sourceOrientation, /Do not persist the tree as a Cflow artifact/);
+  assert.match(startFlow, /orients fresh assessment and direct target-shape work/);
   assert.doesNotMatch(startContract, /architecture\.md/);
 });
 

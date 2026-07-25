@@ -16,7 +16,7 @@ For non-runtime files, check that the change does not move runtime behavior into
 - A reference may own local subpath selection after it is active, including agent paths bound to that reference.
 - Do not repeat phase-entry gates inside local subpath or agent selection; if the whole reference should not run yet, the gate belongs in the consuming `SKILL.md`.
 - Bind every agent contract to the smallest active reference that owns its phase or task; keep shared agent rules separate from phase-specific prompt, input, and output contracts.
-- Make terminal agent roles explicit in both the agent-bound prompt contract and the installed custom-agent instructions; a terminal agent must not activate skills, route prerequisites, or delegate again.
+- Make terminal agent roles explicit in both agent selection and the agent-bound prompt contract; a terminal agent must not activate skills, route prerequisites, or delegate again.
 - In agent-bound references, prefer `Selection`, `Required Inputs`, `Valid Inputs`, `Assumptions`, `Prompt Contract`, and `Expected Output` sections over generic `Preconditions` headings.
 
 ## Runtime Skill Text

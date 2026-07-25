@@ -26,10 +26,10 @@ Run tests, lint, typecheck, format checks, build commands, or `git diff --check`
 
 Before running any phase reference, unless the reference says otherwise:
 
-1. Establish current repository structure from the repository itself before workflow phases: run `scripts/repo-tree.mjs` and read the areas it surfaces. Never rely on a stored map.
+1. Establish the selected phase and its scope from the current request and live brief. Do not run repository-wide orientation unless the fresh-assessment or target-shape reference requires it; otherwise inspect only the accepted or touched scope.
 2. Ignore `.cflow/refactor-brief.md` in fresh assessment or fresh target-shape work unless the user asks to resume.
 3. Read `.cflow/refactor-brief.md` only for live resume, execution, review/verify, or accepted artifact-backed planning.
-4. Trust repository state over artifacts.
+4. Trust repository state over artifacts; never rely on a stored map.
 5. If required state or scope is missing, route back to the right planning phase.
 6. Treat recorded completion as a claim to verify, not a conclusion.
 
@@ -74,6 +74,8 @@ Run references/assessment.md. Stop with one checkpoint question.
 Use only when the user asks to resume, continue, proceed with, or inspect existing Cflow work.
 
 A brief is live only when the user references it, the last accepted checkpoint used it, or the user asks to resume. File existence alone is not resume.
+
+Validate only the paths, owners, and touched scope named by the brief or current request; do not inventory the whole repository just to resume.
 
 - stale or unreliable brief: reassess
 - unresolved hard target: target-shape

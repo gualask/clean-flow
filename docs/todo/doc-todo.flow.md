@@ -16,8 +16,8 @@ The skill triggers only on requests that change the file. Reading it, reporting 
 
 1. Locate the target todo file; extend an existing one instead of creating a second tracking file for the same work.
 2. Record only what the conversation or analysis produced: decided actions as checkboxes with an observable done criterion, undecided items as open questions with impact, hypothesized direction, and what is needed to decide.
-3. On task completion, check the item; a checked item stays where it is until the user removes it.
-4. Remove checked items only while preparing a user-requested commit, offering their text for the commit message; never run commit or push autonomously.
-5. When nothing open is left, whether this pass completed the last item or found the file already complete, report what the checked set covers and ask whether to empty the file of items and start fresh; never empty or prune it on your own initiative.
-6. When an open question is decided, remove it, promote resulting actions to next steps, and route durable rationale to an ADR or owning doc via `cf-docs`.
-7. Report scope, changes, remaining open items, and next action.
+3. On task completion, check the item and keep it in place.
+4. When adding new tasks while at least one existing task is unchecked, preserve every existing task, including checked tasks.
+5. When adding new tasks and every existing task is checked, remove those completed tasks as part of the same update; never remove them when no new task is being added.
+6. When an open question is decided, remove it, treat its resulting actions as new tasks for the cleanup rule, preserve other open questions, and route durable rationale to an ADR or owning doc via `cf-docs`.
+7. Report scope, changes, remaining open items, and next action; when every task is complete and no new task was added, report that the completed tasks were retained.

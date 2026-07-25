@@ -55,8 +55,8 @@ node ./bin/cflow-skills.mjs install --global
 node ./bin/cflow-skills.mjs install /path/to/repo --dry-run
 ```
 
-The installer materializes packaged skills and vendors shared authoring files into the consuming skill directories.
-Global install writes to `$CODEX_HOME/skills` and `$CODEX_HOME/agents`, or falls back to `~/.codex/skills` and `~/.codex/agents`.
+The installer materializes packaged skills and vendors shared authoring files into the consuming skill directories. Install and remove also prune legacy static agents identified by Cflow's old ownership markers; unmarked agents are never touched.
+Global install writes to `$CODEX_HOME/skills`, or falls back to `~/.codex/skills`.
 
 After installation, ask Codex to use one of the public entrypoints below.
 When the cleanup or refactor concern is already clear and confirmed, start with:
@@ -74,7 +74,7 @@ Use cf-mr-wolf to frame this cleanup/refactor before assessment.
 <details>
 <summary>Uninstall</summary>
 
-Remove only Clean Flow-owned skill directories:
+Remove only Clean Flow-owned skill directories and legacy marked static agents:
 
 ```bash
 node ./bin/cflow-skills.mjs remove /path/to/repo
@@ -100,7 +100,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/gualask/cle
 The main workflow controller for cleanup and refactor work, including hard-restructure planning and behavior-preserving migration units.
 Use it after the diagnostic frame is confirmed, for fresh assessment, planning, bounded execution, review, verification, and resume.
 
-It reads current repository structure at assessment time through the bundled gitignore-aware tree helper rather than a stored map, and creates or maintains the accepted plan and resume state in `.cflow/refactor-brief.md`.
+It uses the bundled gitignore-aware tree helper for fresh assessment and direct target-shape work when current structure is not already established. Later phases inspect only their accepted or touched scope, while `.cflow/refactor-brief.md` carries accepted plan and resume state.
 
 ### `cf-mr-wolf`
 

@@ -9,9 +9,13 @@ Select the reference architecture and define target ownership, boundaries, and p
 
 ## Required Inputs
 
-- current repository structure, established in this session
+- current repository structure, established under the controller's Source Orientation rules
 - assessment result or current request that justifies target-shape planning
 - enough scope, constraints, and risk appetite to propose one standard reference target or identify the custom-deviation decision that blocks it
+
+## Source Orientation
+
+Reuse current structure when it was established in this conversation and the scope still matches. When target-shape is entered directly or the scope materially changed, read `references/source-orientation.md` and establish current structure first.
 
 ## Rules
 

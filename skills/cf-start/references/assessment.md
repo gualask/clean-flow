@@ -17,13 +17,13 @@ Determine:
 
 ## Required Inputs
 
-- current repository structure, established in this session (see Source Orientation)
+- current repository structure, established under the controller's Source Orientation rules
 - clear repository or subsystem assessment scope
 - concrete problem, evaluation lens, or framed decision to assess
 
 ## Source Orientation
 
-For broad structure assessment, `scripts/repo-tree.mjs` is the default first pass: resolve it from the active skill root, run `--help` first, and use its gitignore-aware tree with approximate LOC to locate the areas carrying the most weight. Fall back to ad hoc inventory only when the script cannot run. Verify conclusions from source.
+Read `references/source-orientation.md` and establish current structure before assessment.
 
 ## Premise check
 
