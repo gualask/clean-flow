@@ -10,7 +10,7 @@ Use it when you want Codex to:
 - clarify an unclear cleanup or refactor goal before touching code
 - judge whether the current structure is right, and plan a repository-level refactor when it is not
 - explain the real impact of a bug, behavior, or change through concrete code-grounded scenarios
-- generate or review docs against the code
+- write, update, or trim docs so they stay accurate against the code
 - track decided next steps and open questions in a lightweight todo file
 - review an area for overengineering, duplicated parallel flows, or complexity that no longer earns its place
 - split an overloaded file into nearby owned files
@@ -138,12 +138,13 @@ Use it when a workflow or feature is scattered across folders and navigation cos
 
 ### `cf-docs`
 
-Generates or reviews Markdown docs, READMEs, and design notes against the code.
-Use it when docs may be stale, too verbose, duplicated, or structurally out of sync.
+Writes, updates, trims, and restructures Markdown docs, READMEs, and design notes against the code.
+It enters only when the request changes documentation; reading a doc to answer something else never triggers it, and a read-only audit needs you to ask for the skill by name.
 
 ### `cf-todo`
 
 Creates and maintains a lightweight `todo.md` tracking next steps and open questions produced by an analysis or working session.
+It enters only when the request changes the file; reading it or reporting what is left does not.
 Completed items are checked, then removed only when you ask to commit; git is the only history, so the file holds live work only.
 
 ### `cf-brainstorm`

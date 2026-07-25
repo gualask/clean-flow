@@ -2,7 +2,9 @@
 
 ## Purpose
 
-Document the runtime flow for `cf-docs`, the public entrypoint for generating documentation or reviewing existing docs for accuracy against the code, conceptual duplication, verbosity, and structural drift.
+Document the runtime flow for `cf-docs`, the public entrypoint for changing documentation — writing, updating, trimming, or restructuring it — so it stays accurate against the code, lean, and free of conceptual duplication.
+
+The skill triggers only on requests that change docs. Reading a doc as a source of information for another answer never enters here, and a read-only review or audit enters only when the request names this skill.
 
 ## Runtime Inputs
 

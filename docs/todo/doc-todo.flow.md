@@ -10,6 +10,8 @@ Document the runtime flow for `cf-todo`, the public entrypoint for creating and 
 - Runtime references: none
 - Target artifacts: the todo file (`todo.md` at the repository root by default; request or existing tracking file overrides)
 
+The skill triggers only on requests that change the file. Reading it, reporting what it still contains, or answering a question from it stays outside the pack.
+
 ## High-Level Flow
 
 1. Locate the target todo file; extend an existing one instead of creating a second tracking file for the same work.
