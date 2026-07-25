@@ -145,7 +145,7 @@ It enters only when the request changes documentation; reading a doc to answer s
 
 Creates and maintains a lightweight `todo.md` tracking next steps and open questions produced by an analysis or working session.
 It enters only when the request changes the file; reading it or reporting what is left does not.
-Completed items are checked, then removed only when you ask to commit; git is the only history, so the file holds live work only.
+Completed items stay checked in place; when nothing is left open, it reports what was completed and asks before emptying the file.
 
 ### `cf-brainstorm`
 

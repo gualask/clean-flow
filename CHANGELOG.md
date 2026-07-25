@@ -2,6 +2,7 @@
 
 ## 2026-07-25
 
+- `cf-todo` keeps completed items until you clear them, and offers the choice when the list runs out: it reports what the checked set covers and asks whether to empty the file. Two rules went the other way — the automatic pruning of checked items, which destroyed the base for that report, and deleting the file when it empties, which is what left dangling links behind in stable documents.
 - `cf-docs` and `cf-todo` now trigger only on requests that change a doc or the todo file. `cf-docs` loses `when docs may be stale`, a predicate over repository state that matched every assessment-shaped question; a read-only doc audit now needs the skill by name. A trigger trial over a labelled prompt battery measured the old clause firing 3/3 and the new description 0/3, with write triggers intact.
 - `cf-simplify` can now report a hard trigger that survives on a touched file as a deferred finding at full severity, instead of choosing between widening an authorized cleanup and dropping the finding.
 - Removed `cf-architecture` and its `cflow_architecture_recon` agent: `scripts/repo-tree.mjs` orients more cheaply and cannot go stale, and the architectural rules worth protecting are already enforced by the repositories' own lint rules and tests. `cf-start` no longer requires `.cflow/architecture.md`; `cf-mr-wolf` orients locally. The orphaned `architecture.template.md` and shared `clean-context-recon.md` are gone too.
