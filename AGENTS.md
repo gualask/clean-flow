@@ -11,7 +11,7 @@ Clean Flow (Cflow): source pack of Codex skills for cleanup/refactor flows. This
 
 ## Layout
 
-- `skills/` — authoring source for public skills (`cf-*`), `_shared/` (vendored references/scripts, `vendor.json`), `_codex_agents/` (custom agents)
+- `skills/` — authoring source for public skills (`cf-*`) and `_shared/` (vendored references/scripts, `vendor.json`)
 - `src/` — install/materialize/sync logic (`commands/`, `lib/`)
 - `docs/` — maintainer mirrors of the runtime flows; `docs/maintaining-this-pack.md` is the guide
 - `test/` — Node test suites

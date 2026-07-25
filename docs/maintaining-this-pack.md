@@ -8,7 +8,6 @@ It is not a target repository that uses Cflow at runtime.
 At runtime:
 
 - skills are installed into `.codex/skills` in the target repository, or into `$CODEX_HOME/skills` / `~/.codex/skills` for global install
-- Codex custom agents are installed into `.codex/agents` in the target repository, or into `$CODEX_HOME/agents` / `~/.codex/agents` for global install
 - Cflow artifacts live in the target repository under `.cflow/`
 - this source repository does not need `.cflow/refactor-brief.md`
 
@@ -20,7 +19,6 @@ Cflow has two maintainer concerns:
    - `cflow-skills install` is an idempotent sync for both first install and later updates
    - it materializes public skill directories before syncing them
    - it vendors configured `_shared` files into the consuming skill's `references/` and `scripts/` paths
-   - it copies Cflow-owned Codex custom agents from `skills/_codex_agents`
    - it does not install `_shared` as a runtime skill directory
    - it does not bootstrap `.cflow/`
 2. public runtime flows
@@ -33,9 +31,7 @@ They are not packaged as separate skill entrypoints.
 ## Repository Layout
 
 ```text
-skills/          authoring source for public skill dirs, shared sources, and custom agents
-skills/_codex_agents/
-                 canonical Codex custom agent source
+skills/          authoring source for public skill dirs and shared sources
 skills/_shared/  shared authoring references, scripts, and vendoring config
 src/             materialization, sync, and fingerprint logic
 bin/             CLI entrypoint
@@ -88,9 +84,9 @@ Shared authoring scripts vendored into consuming skills:
 
 - `skills/_shared/scripts/repo-tree.mjs`
 
-Codex custom agents:
+Delegated agents are dispatched from prompt templates that live beside the reference that uses them, so any host with subagents can run them:
 
-- `skills/_codex_agents/cflow_finding_derisk_recon.toml`
+- `skills/cf-mr-wolf/references/derisk-agent-brief.md`
 
 ## Golden Rules
 
@@ -104,7 +100,6 @@ Pack-wide golden rules live in [golden-rules.md](./golden-rules.md).
 - Shared deterministic helpers live in `skills/_shared/scripts/`; installed runtime copies live under the consuming skill's `scripts/` directory.
 - Shared vendoring configuration lives in `skills/_shared/vendor.json`.
 - Artifact ownership is declared in the owning skill's `SKILL.md` with an `Owns` bullet naming the `.cflow` path; a contract test rejects any `.cflow` artifact a skill references without an owner. Templates live in public skill `assets/` directories, and any cross-skill use must be an explicit runtime path.
-- Codex custom agent sources live in `skills/_codex_agents/`.
 - Codex install prompts live in `install/codex/`.
 - Pack-wide maintainer rules live in [golden-rules.md](./golden-rules.md).
 
@@ -156,7 +151,6 @@ Do not duplicate the same rule in both `SKILL.md` and a reference unless `SKILL.
 - Public skill flow rules live in `docs/<public-skill>/doc-*.flow.md`; do not keep duplicate flow copies in maintainer overview docs.
 - The former internal workflow skills remain `cf-start` phase references, not separately packaged entrypoints.
 - `_shared` is authoring source for references and scripts vendored into multiple runtime skill directories.
-- `skills/_codex_agents` is for real Codex custom agents that should be installed, not notes or examples.
 
 ## Skill Change Validation
 
@@ -199,7 +193,7 @@ When changing the pack:
 - update this document when maintainer rules change
 - if artifact structure changes, update the owning skill's `assets/*.template.md`
 - if install/remove behavior changes, update `src/` and filesystem tests
-- if Codex custom agent behavior changes, update `skills/_codex_agents/*.toml`, the consuming `SKILL.md`, the affected flow doc, and tests together
+- if delegated-agent behavior changes, update the agent brief reference, the consuming `SKILL.md`, the affected flow doc, and tests together
 - keep `README.md` focused on user-facing install and usage
 
 ## Testing
@@ -215,8 +209,7 @@ Current automated coverage checks:
 - install on empty target
 - update + prune + preserve foreign skills
 - conflict detection on foreign same-name skills
-- remove of Cflow-owned skill dirs, legacy support dirs, and custom agents while preserving foreign entries
-- install, update, prune, and remove behavior for Cflow-owned Codex custom agents
+- remove of Cflow-owned skill dirs and legacy support dirs while preserving foreign entries
 - structural checks for packaged public skills
 - materialized runtime reference, script, and asset links
 - exact context-map coverage of public skills, declared flows, and transitively reachable runtime Markdown
@@ -235,5 +228,4 @@ The most important manual validation is a real target-repo run:
 3. confirm the target repo gets `.codex/skills/...`
 4. confirm no `.codex/skills/_shared` directory is installed
 5. confirm vendored shared files exist inside the consuming skill directories
-6. confirm the target repo gets Cflow-owned custom agents under `.codex/agents/`
 7. confirm runtime artifacts match the owning public flow docs

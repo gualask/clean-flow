@@ -9,7 +9,6 @@ import { createMaterializedSkills } from "../src/lib/materialize-skills.mjs";
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SKILLS_ROOT = path.join(REPO_ROOT, "skills");
 const DOCS_ROOT = path.join(REPO_ROOT, "docs");
-const CODEX_AGENTS_ROOT = path.join(SKILLS_ROOT, "_codex_agents");
 const SHARED_REFERENCES_ROOT = path.join(SKILLS_ROOT, "_shared", "references");
 const DESCRIPTION_MAX_CHARS = 1024;
 
@@ -219,18 +218,22 @@ test("cognitive execution routes to split only for remaining file-level pressure
   );
 });
 
-test("packaged Codex agents pin the intended GPT-5.6 family roles", async () => {
-  const expectedAgents = [["cflow_finding_derisk_recon.toml", "gpt-5.6-sol", "medium"]];
+test("todo rolls completed tasks over only when adding new work", async () => {
+  const todoContract = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-todo", "SKILL.md"),
+    "utf8",
+  );
+  const todoFlow = await fs.readFile(
+    path.join(DOCS_ROOT, "todo", "doc-todo.flow.md"),
+    "utf8",
+  );
 
-  for (const [agentName, model, reasoningEffort] of expectedAgents) {
-    const agentContract = await fs.readFile(path.join(CODEX_AGENTS_ROOT, agentName), "utf8");
-
-    assert.ok(agentContract.includes(`model = "${model}"`), `${agentName} must use ${model}`);
-    assert.ok(
-      agentContract.includes(`model_reasoning_effort = "${reasoningEffort}"`),
-      `${agentName} must use ${reasoningEffort} reasoning`,
-    );
-    assert.doesNotMatch(agentContract, /model = "gpt-5\.5(?:"|-)/);
+  for (const text of [todoContract, todoFlow]) {
+    assert.match(text, /at least one existing task is unchecked/);
+    assert.match(text, /every existing task is checked/);
+    assert.match(text, /add(?:s|ing)? new tasks?/);
+    assert.match(text, /no new task/);
+    assert.doesNotMatch(text, /preparing a .*commit|ask whether to empty|commit cleanup|reset/);
   }
 });
 

@@ -6,7 +6,7 @@ Use these rules when changing Cflow runtime skills, references, templates, docs,
 
 Before changing any Cflow pack file, identify which rules apply by file type, runtime role, and public or installable surface; evaluate the full change against all of them and do not stop at the first matching issue.
 For runtime guidance, review each changed sentence for empty-context clarity, state-based or current-request gates, progressive disclosure, proportionality, and current-skill self-reference.
-For non-runtime files, check that the change does not move runtime behavior into maintainer-only docs, duplicate guidance that belongs in a linked reference, or create installable/public surfaces that the rules reserve for skills, `_shared` authoring sources, or `_codex_agents`.
+For non-runtime files, check that the change does not move runtime behavior into maintainer-only docs, duplicate guidance that belongs in a linked reference, or create installable/public surfaces that the rules reserve for skills or `_shared` authoring sources.
 
 ## Runtime Placement
 
@@ -53,7 +53,6 @@ For non-runtime files, check that the change does not move runtime behavior into
 - Keep `cf-start/SKILL.md` as the controller: identity, hard gates, flow selection slices, phase reference links, and output contracts.
 - Put phase-specific operational detail in `cf-start/references/*.md`.
 - Keep `_shared` only for shared authoring references, scripts, and vendoring config consumed by multiple public skills or phase references.
-- Keep `skills/_codex_agents` only for real Codex custom agents that should be installed, not for notes or examples.
 - Do not create separate internal skills unless a phase needs independent triggering as a real user-facing entrypoint.
 
 ## File-Type Checklist
@@ -65,5 +64,4 @@ Use this checklist additively: when a changed file has multiple roles, apply eve
 - `docs/*.md`: maintainer-only explanation; no runtime dependency.
 - `templates` and `assets`: artifact shape, examples, or review rubrics only.
 - `_shared`: shared authoring references, scripts, helpers, and vendoring config consumed by multiple public skills or phase references.
-- `_codex_agents`: real installable custom agent definitions only.
 - tests: guard contracts and package behavior; never act as an alternate source of runtime behavior.

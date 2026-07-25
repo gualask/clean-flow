@@ -55,7 +55,7 @@ node ./bin/cflow-skills.mjs install --global
 node ./bin/cflow-skills.mjs install /path/to/repo --dry-run
 ```
 
-The installer materializes packaged skills, vendors shared authoring files into the consuming skill directories, and syncs packaged Codex custom agents.
+The installer materializes packaged skills and vendors shared authoring files into the consuming skill directories.
 Global install writes to `$CODEX_HOME/skills` and `$CODEX_HOME/agents`, or falls back to `~/.codex/skills` and `~/.codex/agents`.
 
 After installation, ask Codex to use one of the public entrypoints below.
@@ -74,7 +74,7 @@ Use cf-mr-wolf to frame this cleanup/refactor before assessment.
 <details>
 <summary>Uninstall</summary>
 
-Remove only Clean Flow-owned skill directories and Codex custom agents:
+Remove only Clean Flow-owned skill directories:
 
 ```bash
 node ./bin/cflow-skills.mjs remove /path/to/repo
@@ -145,7 +145,7 @@ It enters only when the request changes documentation; reading a doc to answer s
 
 Creates and maintains a lightweight `todo.md` tracking next steps and open questions produced by an analysis or working session.
 It enters only when the request changes the file; reading it or reporting what is left does not.
-Completed items stay checked in place; when nothing is left open, it reports what was completed and asks before emptying the file.
+Completed tasks stay checked in place while work remains and after the list becomes fully complete. They are removed only when a later update adds new tasks to that fully completed list.
 
 ### `cf-brainstorm`
 
@@ -154,7 +154,7 @@ Invoke it explicitly ("let's brainstorm ..."); it never triggers on its own, and
 
 ## First Use And Resume
 
-Installing the pack only syncs materialized skills and Codex custom agents.
+Installing the pack only syncs materialized skills.
 It does not create `.cflow/` immediately.
 
 Skills that own durable artifacts create `.cflow/` only when they need it.

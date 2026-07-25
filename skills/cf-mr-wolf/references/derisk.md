@@ -3,8 +3,8 @@
 De-risk only candidate findings that affect the final answer or next route.
 The goal is to avoid promoting suspicious patterns into confirmed problems too early.
 
-Prefer the packaged `cflow_finding_derisk_recon` agent when it is available and allowed; it hunts counter-evidence and reports `refuted`, `narrowed`, or `no counter-evidence found`, never a confirmation.
-Use a local bounded pass when the agent is unavailable or the current request asks to keep the pass local.
+Prefer a read-only agent when subagents are available and allowed: dispatch one by filling the template in references/derisk-agent-brief.md, which hunts counter-evidence and reports `refuted`, `narrowed`, or `no counter-evidence found`, never a confirmation.
+Use a local bounded pass when subagents are unavailable or the current request asks to keep the pass local.
 When the agent returns nothing within the wait the current request allows, treat every candidate it was given as unchecked: no counter-evidence was gathered, so no candidate becomes `confirmed` on that pass.
 
 ## Gate

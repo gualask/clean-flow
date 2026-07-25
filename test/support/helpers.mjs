@@ -37,20 +37,6 @@ export async function writeSupportDirectory(root, name = "_shared", files = {}) 
   return supportDir;
 }
 
-export async function writeCodexAgent(root, name = "cflow_sample_recon.toml", content) {
-  const agentPath = path.join(root, name);
-
-  await mkdir(path.dirname(agentPath), { recursive: true });
-  await writeFile(
-    agentPath,
-    content ??
-      `name = "cflow_sample_recon"\ndescription = "Test Codex agent."\ndeveloper_instructions = "Stay read-only."\n`,
-    "utf8",
-  );
-
-  return agentPath;
-}
-
 export async function listDirectoryNames(root) {
   try {
     const entries = await readdir(root, { withFileTypes: true });

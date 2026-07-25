@@ -106,7 +106,8 @@
           "conditional": [
             "references/decomposition.md",
             "references/dynamic-agents.md",
-            "references/derisk.md"
+            "references/derisk.md",
+            "references/derisk-agent-brief.md"
           ],
           "handoffs": [
             {

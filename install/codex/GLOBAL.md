@@ -9,7 +9,7 @@ Support these actions:
 - sync globally, for both first install and later updates
 - uninstall globally
 
-Global sync installs or updates Cflow skills into `$CODEX_HOME/skills` or `~/.codex/skills`, and Cflow Codex custom agents into `$CODEX_HOME/agents` or `~/.codex/agents`.
+Global sync installs or updates Cflow skills into `$CODEX_HOME/skills` or `~/.codex/skills`.
 
 ## Prerequisites
 
