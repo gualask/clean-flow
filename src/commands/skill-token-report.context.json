@@ -129,18 +129,9 @@
         "default": {
           "required": [
             "references/sweep.md",
-            "references/navigation-cost.md",
-            "references/local-refactor-rules.md",
-            "references/reference-audit.md"
+            "references/navigation-cost.md"
           ],
-          "conditional": ["references/handoff.md"],
-          "handoffs": [
-            {
-              "to": "cf-todo:default",
-              "kind": "conditional",
-              "context": "same-thread"
-            }
-          ]
+          "conditional": ["references/reference-audit.md", "references/handoff.md"]
         }
       }
     },

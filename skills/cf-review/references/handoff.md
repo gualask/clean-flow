@@ -8,7 +8,7 @@ Every finding carries this information. The shape is free; the content is not. A
 
 - **claim**: what is wrong, in one sentence, as a fact about the code.
 - **evidence**: a path with a line or range, or a command and the output it produced. No locatable evidence, no finding.
-- **severity**: what the violation costs a maintainer. Take it from the rule that fired, not from how easy the fix looks.
+- **severity**: the level assigned to the rule that fired by the mapping below.
 - **impact**: who or what else is affected, when that is not obvious from the claim.
 - **confidence**: high, medium, or low, followed by what it rests on — what was read, what was inferred, what was not checked.
 - **introduced**: whether the change set created this or found it already there.
@@ -20,9 +20,20 @@ Every finding carries this information. The shape is free; the content is not. A
 
 `status` never advances here. Confirming a candidate, ruling it out, or fixing it belongs to the receiving skill.
 
+## Severity
+
+Severity belongs to the rule that fired. Do not adjust it for age, confidence, change size, or ease of repair:
+
+- Lens 1: the declared level, or `medium` when none is stated.
+- Lenses 2, 4, 8, and 11: `high`.
+- Lenses 3, 9, and 10: `medium`.
+- Lens 5: `low`.
+- Lens 6: `high` for code, configuration, manifests, scripts, tests, or templates; `medium` for documentation and examples.
+- Lens 7: `high` when old and new reachable flows coexist or the change made runtime code unreachable; `medium` for a callerless compatibility shim or non-runtime leftover.
+
 ## Grouping
 
-Group findings by file, files ordered by how many findings they carry. Report every finding: the sweep produces one line of claim per violation, not an analysis, so the full set stays readable.
+Group findings by affected primary file or audit surface, ordered by how many findings each carries. Report every finding: the sweep produces one line of claim per violation, not an analysis, so the full set stays readable.
 
 If one file carries so many findings that its list buries the rest, say that in **Result** and name it as the first thing to open. Do not drop findings to shorten the output.
 
@@ -41,14 +52,17 @@ Recommend; do not invoke. The user decides what runs next.
 - what was not checked, so the frame's edges are visible
 - that the finding is a candidate needing a decision, not a framed problem needing a plan
 
-Hand one finding at a time. Several unrouted findings stay in the persisted list and are opened one after another.
+Hand one finding at a time. Other findings stay in the reported list and are opened one after another.
 
-## Persistence
+### Handing Business Alignment To `cf-scenario`
 
-Close the pass by handing the finding set to `cf-todo`, which owns the repository todo file.
+Carry the quoted authoritative rule and its source, the changed behavior that appears to contradict it, the affected caller or user-visible boundary, and what was not checked. `cf-scenario` confirms or rejects the candidate by comparing expected and actual behavior through the relevant direct and nearby flows.
 
-- A finding whose fix is decided becomes a next step, with a done criterion that is observable in the code: the trigger cleared, the reference gone, the old path removed.
-- A finding whose fix is a real decision becomes an open question. Anything routed to `cf-mr-wolf` is an open question by construction, because what to do about it has not been decided.
-- Do not invent a done criterion to force a finding into next steps. A candidate with no observable close condition is an open question.
+## Shipping Recommendation
 
-Pass the findings as they were recorded; `cf-todo` writes the file and owns its shape.
+Use exactly one result for a non-empty finding set:
+
+- **hold for confirmation**: at least one introduced `high` candidate exists, or a declared invariant explicitly makes the violation blocking.
+- **proceed with follow-up**: findings exist, but none meets the hold rule.
+
+A hold is provisional because findings remain candidates. State what must be confirmed; never present a candidate as a confirmed shipping failure.

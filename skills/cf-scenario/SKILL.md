@@ -23,6 +23,7 @@ Keep it lightweight. The goal is not a formal use-case document; the goal is to 
 - When validating a suspected bug or fix, identify the nearest relevant boundary to check: similar flow, shared component, caller, protocol/contract, persisted state, event, or user-visible behavior.
 - Do not stop at the impacted path; explain what specific nearby flow or boundary should stay unchanged, is not impacted, or remains uncertain.
 - When the boundary depends on an external protocol, standard, API contract, or documented behavior, verify the relevant primary source before treating the scenario as confirmed.
+- When `cf-review` routes a business-alignment candidate, verify the quoted authoritative source, then compare its expected behavior with the changed path's actual behavior. Do not replace the source with product intuition or treat implementation code as the intended rule.
 - Say what the user, caller, UI, CLI, database, event bus, job, or external system observes.
 - Keep the answer focused on the scenario the user asked about.
 - Distinguish verified behavior from inference when the code does not fully prove the conclusion.
@@ -40,6 +41,7 @@ Default shape:
 
 - State what you checked and why, especially when comparing similar paths.
 - Walk through each relevant path in plain language.
+- For a business-alignment candidate, state the sourced expected behavior and the verified actual behavior before concluding whether they conflict.
 - Call out paths that are not impacted because they use a different mechanism.
 - End with the practical conclusion.
 

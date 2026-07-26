@@ -2,66 +2,59 @@
 
 ## 2026-07-26
 
-- New `cf-review` skill: a detector over a bounded change set — uncommitted work by default, or a history range the request names, such as the last few commits or a branch against its base. One selector, then an identical pass: the change set exists to be a reference point, not to describe when the review runs. A request that names no range with nothing pending ends the pass, and a range reaching most of the repository is sent back to be narrowed, because a change set covering everything has stopped bounding anything. Every other skill needs a target before it can look — `cf-cognitive` wants the files, `cf-simplify` wants the area, `cf-start` has the frame gate — so a violation lands in a commit whenever nobody thinks to look there. The pending change set supplies that target for free, and unlike a repository-wide audit its scope is small enough to verify, which is the failure the `cf-audit` draft could not price.
-- The change set selects files, not lines: a violation that predates the change is a finding at full severity, because clean new code inside a rule-breaking file does not clear that file. `introduced: yes/no` records urgency, never severity.
-- Three gates define it. It reports candidates and never confirms them, so a file past a file-level trigger is one finding and its internal inventory stays with the receiving skill. It routes only after the last of its ten lenses has run, which is what stops a review from becoming the refactor of whatever it found first. And it reports a violation only when the remedy is confined to a unit the finding can name. Lenses cover declared repository conventions, structural pressure, placement, dependency direction, local anti-patterns, stale references, incomplete changes, behavior drift, responsibility and ownership, and doc drift; findings persist through `cf-todo` and anything unrouted goes to `cf-mr-wolf` with its confirmed lens attached.
-- The declared-invariant lens keeps only rules that prose states and nothing verifies. A rule the repository already enforces through a linter, formatter, type checker, or test is better run than read, and hand-deriving it produces a slower answer with a worse error rate — the same reasoning that retired `cf-architecture`. The exclusion holds only when the tool that owns the rule can be named: configuration nobody wired up enforces nothing and stays in scope.
-- The output accounts for every lens, marking each reporting, silent, or not applicable. Without that slot the skill's central claim was unfalsifiable: a pass that ran four lenses and a pass that ran all ten emit the same findings list, so nobody — the user or the skill — can tell a rubric from a spot check. Only the two conditional lenses can be marked not applicable, and only by naming the condition that was absent, which is what stops the mark from becoming the escape hatch for a lens nobody wanted to run.
-- That third gate excludes data clumps, primitive obsession, feature envy, temporal coupling, and leaky abstractions by name. Not because the detections are wrong — because they do not converge. A repeated shape is repeated by definition, so no single commit clears it and the same findings return on every later pass until the output is noise a reader skips; the fix propagates to every call site meanwhile, which is the runaway refactor loop these passes are supposed to prevent. A hard trigger is the opposite on both counts: one owner, and silence once it is fixed. The new responsibility lens is admitted under exactly that test — one nameable owner per finding, quiet once fixed — and closes false ownership, accidental boundaries, and catch-all buckets, three structures the golden rules call out and no lens was checking.
-- `cf-mr-wolf` can now reach `cf-review`, which needed two edits rather than one: a routing entry, and a carve-out in the unconfirmed-lens hard stop. That gate blocks routing to a specialist until the user names a lens, so the routing entry alone would have been dead on arrival for exactly the vague requests it exists to catch — "have a look at whether what I did is alright" would still have been answered with a question. A rubric-driven skill answers "which lens" with "all of them", so the question has no content. The carve-out is keyed to a named change set, never to a request that merely sounds like a review.
-- Golden rules now require every finding-recording surface to carry claim, evidence, severity, impact, confidence with basis, route, and status — as content, not as serialization. The handoff-format trials had already rejected a shared format (single-writer artifacts, model readers) while isolating this checklist; `cf-review` is its first consumer.
-- Report and action are now separate in the canonical navigation-cost contract: an editing pass records a complete deferred finding when a hard-trigger remedy falls outside its authorized scope instead of widening or softening the pass. `cf-cohesion` now audits candidate consumers across repository-controlled code, configuration, and documentation during targeted evaluation, admits only `recommended` or `optional` regrouping into execution, and audits references made stale after the move. `cf-split` now loads its shared contracts at flow entry, audits external consumers before choosing a seam or placement, and repeats the audit after moving code; both split and cognitive execution expose the same complete deferred-finding contract. Vendored file-split and local-refactor rules now assume navigation cost is already active instead of selecting another first-level reference; each consuming skill or active phase reference owns that loading decision.
+- Added `cf-review` for uncommitted work or a named history range. It runs eleven lenses across structure, conventions, behavior, documentation, and authoritative business requirements.
+- Reviews select whole files, report evidenced candidates, separate severity from when a violation was introduced, and exclude findings whose remedy cannot converge on a nameable unit.
+- Review output accounts for every lens, stays read-only, and routes findings only after collection. Reference audit and handoff contracts load only when their conditions apply.
+- `cf-mr-wolf` can route a bounded change-set review directly to `cf-review`; business-alignment candidates route to `cf-scenario`.
+- Finding contracts now consistently require claim, evidence, severity, impact, confidence, route, and status.
+- Navigation-cost, cohesion, split, and cognitive flows now preserve complete deferred findings and audit affected consumers without widening the authorized change.
 
 ## 2026-07-25
 
-- The de-risk agent is now a prompt template, `cf-mr-wolf/references/derisk-agent-brief.md`, dispatched to whatever read-only subagent the host provides. The packaged `cflow_finding_derisk_recon.toml` and the whole Codex-agent install path go with it: two sync commands, the file-marker branch that existed only for them, five tests, and their doc entries — a few hundred lines of machinery to ship one file, on a pack whose only remaining host-specific asset was that file. Install and remove no longer sync static agents; they only prune leftovers identified by Cflow's legacy ownership markers.
-- The same agent stops issuing verdicts: it reports `refuted`, `narrowed`, or `no counter-evidence found`, and `cf-mr-wolf` assigns the class from the full problem frame the agent does not hold. A verdict from a context slice was final where evidence would have invited the controller to finish the check, and `dynamic-agents.md` already reserved final judgment for the controller while its model guidance pointed the other way. An agent that returns nothing now leaves its candidates unconfirmed instead of leaving the pass undefined.
-- `cf-start` now scopes repository-wide orientation to fresh assessment and direct or materially re-scoped target-shape work. Planning, resume, execution, review, and verify inspect their accepted or touched scope instead of rerunning `repo-tree.mjs`; stale targeted evidence routes back to assessment or target-shape.
-- The skill-value trial method now starts from a predeclared value claim, task population, oracle, metrics, controls, and stopping rule. Repository shape, artifacts, gates, runner behavior, and scoring are parameters of the tested claim rather than assumptions inherited from the retired `cf-trace` trial.
-- `cf-todo` keeps completed tasks while any task remains open and after a list becomes fully complete. It removes that completed task set only when a later update adds new tasks; adding to a still-open list or completing work without adding a new batch never prunes it, and unresolved open questions are preserved.
-- `cf-docs` and `cf-todo` now trigger only on requests that change a doc or the todo file. `cf-docs` loses `when docs may be stale`, a predicate over repository state that matched every assessment-shaped question; a read-only doc audit now needs the skill by name. A trigger trial over a labelled prompt battery measured the old clause firing 3/3 and the new description 0/3, with write triggers intact.
-- `cf-simplify` can now report a hard trigger that survives on a touched file as a deferred finding at full severity, instead of choosing between widening an authorized cleanup and dropping the finding.
-- Removed `cf-architecture` and its `cflow_architecture_recon` agent: `scripts/repo-tree.mjs` orients more cheaply and cannot go stale, and the architectural rules worth protecting are already enforced by the repositories' own lint rules and tests. `cf-start` no longer requires `.cflow/architecture.md`; `cf-mr-wolf` orients locally. The orphaned `architecture.template.md` and shared `clean-context-recon.md` are gone too.
-- Removed `cf-trace` and its `cflow_trace_recon` agent: modern models reconstruct and audit a workflow path unaided, so the skill added cost without changing the outcome. No skill inherits path reconstruction; `cf-scenario`, `cf-mr-wolf`, and `cf-start` drop the route.
-- Artifact ownership is now declared with an `Owns` bullet and enforced: a contract test rejects any `.cflow` artifact a skill references without an owner, which is what the two removals left dangling in five places.
+- Replaced the packaged de-risk agent with a host-provided read-only agent prompt; install and remove now only prune legacy marked agents.
+- De-risk agents return evidence states while `cf-mr-wolf` retains final classification.
+- Scoped repository-wide orientation in `cf-start` to fresh or materially re-scoped work.
+- Clarified `cf-todo` rollover behavior and limited `cf-docs`/`cf-todo` triggering to requests that change their owned files.
+- Added deferred hard-trigger findings to `cf-simplify` and enforced `.cflow` artifact ownership.
+- Removed `cf-architecture` and `cf-trace`; existing entrypoints now orient and reconstruct relevant paths directly.
 
 ## 2026-07-17
 
-- GPT-5.6 tooling refresh: the finding de-risk agent now pins `gpt-5.6-sol` at medium reasoning, token reporting defaults to Sol and recognizes the GPT-5.6 family via `o200k_base`, and contract tests lock the intended Sol/Luna agent roles plus model-name boundaries.
-- Navigation-cost hard-trigger thresholds now have a single canonical home: `cf-cognitive`, `cf-split`, and their shared consumer references retain only flow-specific consequences, while a contract test prevents the threshold values from drifting back into duplicated prompt instructions.
-- `cf-cognitive` now routes an edited file to `cf-split` only when canonical file-level pressure remains, instead of forcing a second workflow after every completed cleanup.
-- Token reporting now uses an adjacent maintainer context map to estimate required and maximum reachable contract stacks per flow, compose same-thread handoffs, and surface the pack's maximum reachable flow alongside the existing inventory totals; contract tests keep the map aligned with public skill flows and runtime files.
-- Token reporting now validates the context map against transitively reachable runtime Markdown, recursively inventories nested references/assets, and fails on missing or extra files; maintainer and user docs now explain the commands and consistently list all public flows, including `cf-todo`.
+- Updated tooling and token reporting for the GPT-5.6 model family.
+- Centralized navigation-cost hard-trigger thresholds and limited `cf-cognitive` → `cf-split` routing to remaining file-level pressure.
+- Added validated per-flow context stacks, transitive runtime inventories, and same-thread handoff estimates to token reporting.
 
 ## 2026-07-14
 
-- Description conformance pass against the golden rules: `cf-scenario` drops its actor-based gate ("the user or another agent") for a current-request gate, `cf-cognitive` gains real trigger phrases (hard to read, deep nesting, tangled branching) plus routing to `cf-split`/`cf-start`, `cf-trace` and `cf-scenario` now declare their mutual boundary (path reconstruction vs concrete impact), `cf-scenario` also opens with "Ground" instead of colliding with `cf-mr-wolf` on "Frame" and routes decision-shaped requests (approach, alternatives, worth) back to `cf-mr-wolf`, closing the one-way seam, `cf-cohesion`/`cf-split`/`cf-simplify`/`cf-architecture` gain their missing routing boundaries, and the description contract test regex is tightened from `\bUse\b` to `Use when/after/as/only when`.
-- New `cf-todo` utility skill: creates and maintains a lightweight, user-owned `todo.md` with two sections (next steps with observable done criteria, open questions with impact/direction/what-is-needed-to-decide). Completion checks the item; checked items are removed only during a user-requested commit, the file is deleted when it empties, and git is the only history. Never touches `.cflow/*` (refactor progress stays with `cf-start`, drafts with `cf-brainstorm`); durable decision rationale routes to ADRs or owning docs via `cf-docs`, which now routes tracking files to `cf-todo`.
-- `cf-docs` gained a transcription non-use boundary: requests that only save already-produced content (analysis results, findings, notes) into a Markdown file no longer trigger the skill — a `.md` destination alone is not a documentation task. The boundary lives in both the discovery description and the skill body.
+- Aligned skill discovery descriptions and routing boundaries with the golden rules.
+- Added `cf-todo` for lightweight next steps and open questions outside `.cflow`.
+- Prevented `cf-docs` from triggering on simple transcription into Markdown.
 
 ## 2026-07-05
 
-- New `cf-brainstorm` utility skill (explicit invocation only): deep one-question-at-a-time interrogation with a fresh-context question plan, ephemeral working draft `.cflow/specs/draft.md` (single slot, resume check, promoted by rename on approval, folded into project docs via `cf-docs` after shipping), hard no-implementation gate, and a routing seam with `cf-mr-wolf`. `.cflow/` became self-ignoring: skills write `.cflow/.gitignore` containing `*` instead of editing the repository `.gitignore`. Brief write rules require verbatim constraints and Execution-state/unit-status consistency. Golden rules gained form-matching guidance (failure type -> prohibition, recipe, template slot, or observable-predicate conditional; no nuance clauses; named workarounds and rationalization counters for hard gates) plus a description ban on workflow summaries; a conformance pass fixed a nuance clause in `cf-cognitive` triggers and gave `cf-docs` a no-source-code discovery boundary with a graceful code-verification fallback.
+- Added explicit-only `cf-brainstorm` with resumable draft specs and a no-implementation gate.
+- Made `.cflow` self-ignoring and tightened runtime guidance and discovery-description rules.
 
 ## 2026-07-04
 
-- `cf-mr-wolf` evolved into the decisional entrypoint with flow selection (framing, planning, evaluation) and new `planning.md`/`evaluation.md` references; shared `regression-handling.md` gates further edits when a safety lock breaks in `cf-start`/`cf-split` execution; target-shape and migration planning must surface the plan's fragile assumption; new skill-contract tests (reference links, description constraints, routing targets) which also caught and fixed `cf-simplify` missing its vendored `repo-tree.mjs`; `AGENTS.md` added and `cf-mr-wolf` description tightened to budget.
+- Expanded `cf-mr-wolf` into framing, planning, and evaluation flows.
+- Added shared regression handling, fragile-assumption checks, and broader skill-contract validation.
 
 ## 2026-06-28
 
-- Clarified split/cohesion guidance: the 300-LOC file-size bell is not a minimum split threshold, `cf-cognitive` must route smaller stable owners to `cf-split`, and private child files of an owner must be grouped into an owner directory when unrelated sibling owners share the parent.
+- Clarified split/cohesion routing, file-size guidance, and owner-directory grouping.
 
 ## 2026-06-26
 
-- Materialized skill install: `_shared/vendor.json` vendors shared references/scripts into consuming skills, no `_shared` runtime directory is installed, install/remove/token-report/tests/docs were aligned, `cf-docs` was added, and subagent/doc gates plus split/navigation-cost guidance were tightened.
+- Added materialized skill installation with vendored shared resources and introduced `cf-docs`.
 
 ## 2026-06-12
 
-- Hard triggers in navigation-cost (nesting, function length, ~300-LOC file bell) with inverted burden of proof, closed exemption list, and ban on minimizing language; guard-clause-first remedy order; repo-tree.mjs references now resolve from the reference file's directory instead of the project working directory.
+- Added canonical navigation-cost hard triggers, exemptions, and guard-clause-first remedies.
 
 ## 2026-06-11
 
-- Navigation-cost spine as the canonical objective across skills; logic fixes (cf-simplify apply guardrails, consolidation criteria, cf-split route outcome); parallel-flows consolidation lens and scope budget in cf-simplify; repo-tree made the discovery default; removed cf-clarify.
+- Established navigation cost as the shared cleanup objective, added parallel-flow simplification guidance, and removed `cf-clarify`.
 
 ## 2026-05-05
 

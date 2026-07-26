@@ -417,6 +417,132 @@ test("cognitive owns first-level reference loading in its skill contract", async
   assert.doesNotMatch(localRefactorRules, /read `references\/navigation-cost\.md`/i);
 });
 
+test("review owns reference loading and remains read-only", async () => {
+  const reviewContract = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-review", "SKILL.md"),
+    "utf8",
+  );
+  const reviewMetadata = parseFrontmatter(
+    reviewContract,
+    "skills/cf-review/SKILL.md",
+  );
+  const sweep = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-review", "references", "sweep.md"),
+    "utf8",
+  );
+  const handoff = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-review", "references", "handoff.md"),
+    "utf8",
+  );
+  const referenceAudit = await fs.readFile(
+    path.join(SHARED_REFERENCES_ROOT, "reference-audit.md"),
+    "utf8",
+  );
+  const contextMap = JSON.parse(
+    await fs.readFile(
+      path.join(REPO_ROOT, "src", "commands", "skill-token-report.context.json"),
+      "utf8",
+    ),
+  );
+  const reviewFlow = contextMap.skills["cf-review"].flows.default;
+
+  assert.match(
+    reviewMetadata.description,
+    /^Report structural, convention, and authoritative requirement findings for a set of code changes\./,
+  );
+  assert.match(
+    reviewMetadata.description,
+    /Use when the current request asks to review\b/,
+  );
+  assert.match(reviewMetadata.description, /Do not use to fix findings\b/);
+  assert.doesNotMatch(
+    reviewMetadata.description,
+    /\b(?:evidence|candidate|owning routes|sweep|lens|reference|handoff|audit surface|primary file)\b/i,
+  );
+  assert.match(
+    reviewContract,
+    /Read `references\/sweep\.md` and `references\/navigation-cost\.md`/,
+  );
+  assert.match(
+    reviewContract,
+    /When the change is move-shaped, also read `references\/reference-audit\.md`/,
+  );
+  assert.match(
+    reviewContract,
+    /When the sweep produced at least one finding, read `references\/handoff\.md`/,
+  );
+  assert.match(
+    reviewContract,
+    /With no findings, do not read it: report `Findings: none`, `Handoff: none`, and `Result: clear`/,
+  );
+  assert.match(
+    reviewContract,
+    /Do not edit repository files or invoke another skill that edits them/,
+  );
+  assert.match(reviewContract, /Primary files/);
+  assert.match(reviewContract, /Deleted entries/);
+  assert.match(reviewContract, /Audit surfaces/);
+  assert.match(reviewContract, /Authoritative intent sources/);
+
+  for (const contract of [sweep, handoff]) {
+    assert.doesNotMatch(contract, /cf-todo/);
+    assert.doesNotMatch(contract, /local-refactor-rules\.md/);
+  }
+  assert.match(reviewContract, /name `cf-todo` as the separate next action/);
+  assert.doesNotMatch(reviewContract, /hands work to directly|persist the findings/);
+  assert.doesNotMatch(reviewContract, /local-refactor-rules\.md/);
+  assert.doesNotMatch(sweep, /\bRead `?references\//);
+  assert.doesNotMatch(sweep, /references\/reference-audit\.md/);
+  assert.match(handoff, /Severity belongs to the rule that fired/);
+  assert.match(handoff, /hold for confirmation/);
+  assert.match(handoff, /proceed with follow-up/);
+  assert.match(handoff, /Use exactly one result for a non-empty finding set/);
+  assert.doesNotMatch(handoff, /- \*\*clear\*\*/);
+  assert.match(
+    sweep,
+    /## Lens 11 — Business Requirement Alignment[\s\S]*Route: `cf-scenario`/,
+  );
+  assert.match(
+    sweep,
+    /Conflicting, ambiguous, or absent sources produce no finding/,
+  );
+  assert.match(
+    sweep,
+    /Do not derive intent from implementation/,
+  );
+  assert.match(
+    sweep,
+    /Resolve sources from requirements in the current request or commit messages/,
+  );
+  assert.match(
+    sweep,
+    /List checked sources in \*\*Scope\*\*/,
+  );
+  assert.doesNotMatch(sweep, /## (?:Contents|What Counts As A Finding|Bounded Remedies)/);
+  assert.match(
+    sweep,
+    /Exclude data clumps, primitive obsession, feature envy, temporal coupling, leaky abstractions/,
+  );
+  assert.match(
+    reviewContract,
+    /business correctness not assessed: no authoritative requirement source identified/,
+  );
+  assert.doesNotMatch(handoff, /business correctness not assessed/);
+  assert.match(
+    referenceAudit,
+    /When the active pass is read-only, report each surviving stale reference and do not modify it/,
+  );
+  assert.deepEqual(reviewFlow.required, [
+    "references/sweep.md",
+    "references/navigation-cost.md",
+  ]);
+  assert.deepEqual(reviewFlow.conditional, [
+    "references/reference-audit.md",
+    "references/handoff.md",
+  ]);
+  assert.equal(reviewFlow.handoffs, undefined);
+});
+
 test("cohesion execution composes evaluation as a gated non-terminal preflight", async () => {
   const cohesionContract = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-cohesion", "SKILL.md"),

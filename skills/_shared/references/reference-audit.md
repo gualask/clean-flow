@@ -15,6 +15,6 @@ Run separate repository-wide searches for the categories that apply instead of r
 - documentation and examples that name changed paths, symbols, commands, or behavior
 
 Use repository-native search tools and respect generated, vendored, dependency, build-output, and ignored directories.
-Before editing, treat consumers outside the candidate unit as compatibility evidence.
-After editing, fix every repository-controlled reference made stale by the change.
-If a stale reference is intentionally left alone, report why in the final output.
+Treat consumers outside the candidate unit as compatibility evidence.
+When the active pass is read-only, report each surviving stale reference and do not modify it.
+When the current request authorizes edits, fix every repository-controlled reference made stale by the change; if one is intentionally left alone, report why in the final output.

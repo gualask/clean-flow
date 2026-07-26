@@ -16,7 +16,7 @@ Use it when you want Codex to:
 - split an overloaded file into nearby owned files
 - reduce local cognitive complexity in a source file
 - regroup related files into a more cohesive local feature slice
-- check uncommitted work, or the last few commits, against the pack's structure rules
+- check uncommitted work, or the last few commits, against structure rules and authoritative requirements
 - run a larger cleanup/refactor flow with artifact-backed resume
 - brainstorm a new feature or idea into an approved design spec (explicit invocation only)
 
@@ -139,13 +139,11 @@ Use it when a workflow or feature is scattered across folders and navigation cos
 
 ### `cf-review`
 
-Checks a bounded set of changes against the pack's structure rules: declared repository conventions, file and function pressure, misplaced responsibility, placement, dependency direction, local anti-patterns, stale references, leftover parallel flows, behavior drift, and drifted docs.
+Checks a bounded change set against structural rules, repository conventions, behavior-preservation claims, documentation, and authoritative requirements.
 
-The change set is uncommitted work by default, or a history range you name — the last few commits, a range, a branch against its base. Everything after that selection is the same either way.
+The change set is uncommitted work by default, or a named history range such as recent commits or a branch against its base. Selected files are reviewed as whole units. Findings remain evidenced candidates, are limited to remedies a nameable unit can clear, and are routed without being confirmed, fixed, or persisted.
 
-The change set selects files, not lines, so a violation that was already in a touched file is still reported — clean new code does not clear the file it lands in. Every result is a candidate with evidence, routed to the skill that owns it and persisted through `cf-todo`; nothing is confirmed or fixed here.
-
-It reports only violations whose remedy is confined to a unit the finding can name. Repeated-shape smells such as data clumps or feature envy are excluded on purpose: their fix propagates to every call site, and no single commit can clear them, so reporting one means reporting it forever.
+Business alignment uses explicit requirements, repository-controlled product or domain documentation and acceptance criteria, or linked primary external contracts. Without one, the result says that business correctness was not assessed.
 
 ### `cf-docs`
 
