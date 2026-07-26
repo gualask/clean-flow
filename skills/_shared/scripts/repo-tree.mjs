@@ -3,6 +3,7 @@
 import { spawnSync } from "node:child_process";
 import { closeSync, openSync, readSync, readdirSync } from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 const DEFAULT_MAX_NODES = 3000;
 const DEFAULT_DEPTH = Number.POSITIVE_INFINITY;
@@ -180,13 +181,16 @@ function gitLsFiles(root) {
     },
   );
 
-  if (result.error) {
-    return { ok: false, reason: result.error.message };
-  }
+  return parseGitLsFilesResult(result);
+}
 
+export function parseGitLsFilesResult(result) {
   if (result.status !== 0) {
     const stderr = result.stderr?.toString("utf8").trim();
-    return { ok: false, reason: stderr || `git exited with status ${result.status}` };
+    return {
+      ok: false,
+      reason: result.error?.message || stderr || `git exited with status ${result.status}`,
+    };
   }
 
   const files = result.stdout
@@ -520,9 +524,11 @@ That includes tracked files and untracked non-ignored files, while excluding fil
 `);
 }
 
-try {
-  main();
-} catch (error) {
-  process.stderr.write(`${error.message}\n`);
-  process.exitCode = 1;
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  try {
+    main();
+  } catch (error) {
+    process.stderr.write(`${error.message}\n`);
+    process.exitCode = 1;
+  }
 }

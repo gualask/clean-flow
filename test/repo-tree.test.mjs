@@ -6,11 +6,40 @@ import test from "node:test";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 
+import { parseGitLsFilesResult } from "../skills/_shared/scripts/repo-tree.mjs";
 import { makeTempWorkspace } from "./support/helpers.mjs";
 
 const execFileAsync = promisify(execFile);
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SCRIPT_PATH = path.join(REPO_ROOT, "skills", "_shared", "scripts", "repo-tree.mjs");
+
+test("repo-tree accepts successful Git output when spawnSync also reports an error", () => {
+  const result = parseGitLsFilesResult({
+    error: Object.assign(new Error("spawnSync git EPERM"), { code: "EPERM" }),
+    status: 0,
+    stdout: Buffer.from("src/index.mjs\0README.md\0"),
+    stderr: Buffer.alloc(0),
+  });
+
+  assert.deepEqual(result, {
+    ok: true,
+    files: ["README.md", "src/index.mjs"],
+  });
+});
+
+test("repo-tree rejects Git results without a successful exit status", () => {
+  const result = parseGitLsFilesResult({
+    error: Object.assign(new Error("spawnSync git EPERM"), { code: "EPERM" }),
+    status: null,
+    stdout: Buffer.from("src/index.mjs\0"),
+    stderr: Buffer.alloc(0),
+  });
+
+  assert.deepEqual(result, {
+    ok: false,
+    reason: "spawnSync git EPERM",
+  });
+});
 
 test("repo-tree renders gitignore-aware names and folders views", async () => {
   const workspace = await makeTempWorkspace("repo-tree-");
