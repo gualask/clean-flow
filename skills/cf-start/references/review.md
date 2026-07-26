@@ -17,7 +17,7 @@ Judge whether the refactor improved structure proportionately.
 ## Review lens
 
 Read references/local-readability-review.md before judging readability.
-If files moved, split, grouped, or renamed, read references/file-split-rules.md before judging placement.
+If files moved, split, grouped, or renamed, read references/file-split-rules.md and references/navigation-cost.md before judging placement.
 
 Judge the result on four questions:
 

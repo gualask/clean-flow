@@ -24,12 +24,15 @@ Read references/discovery.md.
 ### Targeted Evaluation Flow
 
 Use when an explicit feature, workflow, file cluster, or local area was provided, but the current request does not explicitly ask to move files.
-Read references/targeted-evaluation.md.
+Read references/targeted-evaluation.md, references/reference-audit.md, and references/navigation-cost.md.
 
 ### Execution Flow
 
 Use when the current request explicitly asks to regroup, move, reorganize, or apply the cohesion fix for a bounded target.
-Read references/execution.md.
+Read references/targeted-evaluation.md, references/execution.md, references/reference-audit.md, and references/navigation-cost.md.
+Complete or refresh the targeted evaluation before editing.
+Continue only when its decision is `recommended` or `optional`; the request that selected this flow authorizes an optional regrouping.
+For `keep as-is` or `route`, stop without editing and use the targeted-evaluation output.
 
 If the target, flow, or requested outcome is ambiguous, ask one focused question.
 Do not infer execution from words like "review", "check", "is this right", or "should these live together".
@@ -80,4 +83,5 @@ Return only:
 - **Cohesion map**: files considered, owner cluster, outliers, and nearby precedent; or discovery shortlist.
 - **Decision**: keep as-is, optional regrouping, recommended regrouping, discovery candidates, or regrouping performed.
 - **Checks**: commands run and pass/fail result, or why no check ran.
+- **Deferred**: only after execution edits; findings required by the report/action rule in references/navigation-cost.md. Omit this section when no regrouping ran and in discovery or targeted evaluation.
 - **Result**: behavior preservation, final placement decision, remaining risk, and next action.

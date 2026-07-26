@@ -6,7 +6,6 @@ Execute local cognitive cleanup only for explicit target files or a confirmed di
 
 - Use up to three target files per session, processed one file at a time.
 - Read each whole target file, relevant tests or call sites, and local helper/error/async/performance conventions before editing.
-- Before editing any target file, ensure you have read references/local-refactor-rules.md in this invocation.
 
 ## Execution Rules
 
@@ -20,6 +19,7 @@ Execute local cognitive cleanup only for explicit target files or a confirmed di
 
 - After editing a target file, route to `cf-split` evaluation before advancing only when remaining file-level pressure is demonstrated by a canonical file-length trigger without a recognized exemption or a stable named owner or boundary that still raises navigation cost. Otherwise finish the target and continue within the explicit target set.
 - After editing a target file, if the remaining readability cost is caused by related files scattered across folders, route to `cf-cohesion` targeted evaluation for that local workflow before advancing to another target file or suggesting another cognitive candidate.
+- Apply the report/action separation in references/navigation-cost.md to every qualifying hard trigger.
 
 ## Verification
 
@@ -32,4 +32,5 @@ If no relevant check can be run, say that explicitly.
 
 Use the standard output format.
 For **Changes**, summarize hotspots addressed and refactors applied.
+For **Deferred**, after edits use the finding content required by references/navigation-cost.md.
 For **Result**, include behavior preservation, remaining risk, and `cf-split` or `cf-cohesion` next step when relevant.

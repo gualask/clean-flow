@@ -35,6 +35,7 @@ Flows may chain within one invocation: when framing concludes and the current re
 Before any tool call, file read, repository inspection, or specialist skill read, check whether the request is broad diagnostic work whose evaluation lens has not been confirmed in this conversation.
 If so, the entire response must be only one question asking which concern or lens should drive the check, plus 2-4 options with one recommended default.
 Do not announce an inspection plan, infer the frame from repository state, or continue after the question.
+A request that names a change set to review — pending work, recent commits, or a branch — is outside this gate: its lens is a full rubric, so asking which one to apply has no answer. Route it. This carve-out needs the named change set; wanting a review is not enough.
 
 ## Artifacts
 
@@ -71,8 +72,9 @@ Choose the first route that fits current evidence and uncertainty:
 2. `cf-simplify`: the current request asks whether an area has too many files, unnecessary complexity, overengineering, duplicated or parallel near-identical flows, or whether changing behavior or interface contracts could enable a cleaner simplification.
 3. `cf-start`: the current request asks for cleanup/refactor architecture, structure, target direction, ownership, dependency direction, migration order, repository-level assessment, multi-step refactor work, risky or ordered work, or resumable work.
 4. `cf-scenario`: one or two concrete code-grounded scenarios would clarify real impact or compare similar flows.
-5. `cf-split`, `cf-cognitive`, or `cf-cohesion`: one bounded local cleanup action clearly belongs to that skill.
-6. Direct bounded handoff or options: the problem is clear enough and no specialized route owns the decision lens.
+5. `cf-review`: the current request points at a change set — pending work or a named history range — and asks what is wrong with it instead of naming a target to fix.
+6. `cf-split`, `cf-cognitive`, or `cf-cohesion`: one bounded local cleanup action clearly belongs to that skill.
+7. Direct bounded handoff or options: the problem is clear enough and no specialized route owns the decision lens.
 
 ## Output
 

@@ -12,6 +12,10 @@
     "cf-mr-wolf": {
       "scripts": ["repo-tree.mjs"]
     },
+    "cf-review": {
+      "references": ["local-refactor-rules.md", "navigation-cost.md", "reference-audit.md"],
+      "scripts": ["repo-tree.mjs"]
+    },
     "cf-simplify": {
       "references": ["local-refactor-rules.md", "navigation-cost.md", "reference-audit.md"],
       "scripts": ["repo-tree.mjs"]

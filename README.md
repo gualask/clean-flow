@@ -16,6 +16,7 @@ Use it when you want Codex to:
 - split an overloaded file into nearby owned files
 - reduce local cognitive complexity in a source file
 - regroup related files into a more cohesive local feature slice
+- check uncommitted work, or the last few commits, against the pack's structure rules
 - run a larger cleanup/refactor flow with artifact-backed resume
 - brainstorm a new feature or idea into an approved design spec (explicit invocation only)
 
@@ -136,6 +137,16 @@ Use it when a file has grown past its natural responsibilities.
 Evaluates or performs local regrouping of already-related files.
 Use it when a workflow or feature is scattered across folders and navigation cost is the problem.
 
+### `cf-review`
+
+Checks a bounded set of changes against the pack's structure rules: declared repository conventions, file and function pressure, misplaced responsibility, placement, dependency direction, local anti-patterns, stale references, leftover parallel flows, behavior drift, and drifted docs.
+
+The change set is uncommitted work by default, or a history range you name — the last few commits, a range, a branch against its base. Everything after that selection is the same either way.
+
+The change set selects files, not lines, so a violation that was already in a touched file is still reported — clean new code does not clear the file it lands in. Every result is a candidate with evidence, routed to the skill that owns it and persisted through `cf-todo`; nothing is confirmed or fixed here.
+
+It reports only violations whose remedy is confined to a unit the finding can name. Repeated-shape smells such as data clumps or feature envy are excluded on purpose: their fix propagates to every call site, and no single commit can clear them, so reporting one means reporting it forever.
+
 ### `cf-docs`
 
 Writes, updates, trims, and restructures Markdown docs, READMEs, and design notes against the code.
@@ -172,6 +183,7 @@ Once the diagnostic frame is confirmed, use `cf-start` when you want the normal 
 
 For direct local work, use `cf-cognitive`, `cf-split`, or `cf-cohesion` instead.
 For overengineering or "are these files necessary?" reviews, use `cf-simplify`.
+To review what a set of changes exposes and route it, use `cf-review`: pending work before you commit, or a history range after the fact.
 For lightweight follow-up tracking from an analysis or working session, use `cf-todo`.
 
 ## Documentation
@@ -183,6 +195,7 @@ For lightweight follow-up tracking from an analysis or working session, use `cf-
 - [Cognitive flow](./docs/cognitive/doc-cognitive.flow.md)
 - [Split flow](./docs/split/doc-split.flow.md)
 - [Cohesion flow](./docs/cohesion/doc-cohesion.flow.md)
+- [Review flow](./docs/review/doc-review.flow.md)
 - [Docs flow](./docs/docs/doc-docs.flow.md)
 - [Todo flow](./docs/todo/doc-todo.flow.md)
 - [Brainstorm flow](./docs/brainstorm/doc-brainstorm.flow.md)

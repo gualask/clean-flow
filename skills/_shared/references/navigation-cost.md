@@ -55,6 +55,12 @@ Past a hard trigger, `keep as-is` or "no finding" is allowed only by explicitly 
 No named exemption, no absolution. The test below still decides the remedy: guard clauses or same-file helpers for function-level pressure; file-level split is the default remedy for file-length pressure.
 Report any finding past a hard trigger as a real hotspot. Do not minimize it with words like "minor", "light", "not yet serious", or "someday"; severity hedging is a form of downranking and is treated as a violation of this rule.
 
+## Report And Action Are Separate
+
+During an editing pass, a hard trigger that still fires on a file modified by the pass or explicitly selected as a cleanup target remains a finding even when its remedy is outside the authorized scope.
+Finish the authorized change and record the exact unit, claim, evidence, trigger-defined severity, impact when not obvious, confidence with its basis, owning route, and status `Deferred`.
+Widening the pass solely to remedy it, or dropping or softening the finding, are both violations.
+
 ## Soft Signals Are Not the Verdict
 
 Treat hop count, scattered files, and other distance or count signals, except the file-length hard trigger above, as smells that prompt the test, never as the decision.

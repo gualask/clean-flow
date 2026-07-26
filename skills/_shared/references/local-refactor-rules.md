@@ -1,7 +1,7 @@
 # Local Refactor Rules
 
 Scope: local code edits for readability, cognitive load, or post-structural cleanup.
-Before applying these rules, read `references/navigation-cost.md`; it owns the hard-trigger values, exemptions, and remedy rules. The remaining triggers below are soft signals that prompt its test.
+The hard-trigger values, exemptions, and remedy rules come from `references/navigation-cost.md`; apply that contract before the soft signals below.
 For function-level pressure, prefer remedies in this order: guard clauses or early returns first, then named same-file helpers when flattening is not enough.
 
 ## Behavior

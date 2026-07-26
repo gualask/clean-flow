@@ -32,7 +32,7 @@ Do not split just because a file is large. If the new boundary would be generic,
 
 ## Placement criteria
 
-Before creating or moving files, read references/file-split-rules.md. If placement is unclear, ask one focused question.
+Before creating or moving files, read references/file-split-rules.md and references/navigation-cost.md. If placement is unclear, ask one focused question.
 
 ## Execution rules
 

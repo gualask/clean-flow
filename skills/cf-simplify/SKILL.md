@@ -95,7 +95,7 @@ Prefer one clear recommendation over a menu of equal choices, in this order:
 Only when applying the chosen simplification is explicit in the current request:
 
 - Stay within the chosen lever; if the work widens beyond it, stop and return to recommendation.
-- When a hard trigger from references/navigation-cost.md still fires on a file this pass touched and its remedy falls outside the chosen lever, finish the lever and record that finding as deferred, at full severity, naming the route that owns the remedy. Widening the pass to remedy it and dropping or softening it are both violations.
+- Apply the report/action separation from references/navigation-cost.md when a hard trigger's remedy falls outside the chosen lever.
 - Before editing code, ensure you have read references/local-refactor-rules.md in this invocation.
 - After moving, renaming, or deleting files or symbols, read references/reference-audit.md, then audit the touched names and paths.
 - Run the smallest relevant check: targeted tests, typecheck or compile, lint, or a narrow smoke check; if none can run, say that explicitly.
@@ -117,7 +117,7 @@ When the simplification was applied in this pass, also return:
 
 - **Changes**: edits made.
 - **Checks**: commands run and pass/fail result, or why no check ran.
-- **Deferred**: only when a hard trigger fired on a touched file and its remedy fell outside the lever — the finding at full severity plus its owning route.
+- **Deferred**: only when the canonical report/action rule applies; use the finding content required by references/navigation-cost.md.
 
 If the review leads to a refactor handoff, end with the exact route:
 

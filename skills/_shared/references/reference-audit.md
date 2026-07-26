@@ -1,8 +1,8 @@
 # Reference Audit
 
-Scope: moved, renamed, split, merged, removed, or re-exported files or symbols.
+Scope: files or symbols considered for or affected by a move, rename, split, merge, removal, or re-export.
 
-Run separate searches for the categories that apply instead of relying on one broad search:
+Run separate repository-wide searches for the categories that apply instead of relying on one broad search or limiting the audit to a source directory:
 
 - direct calls and type references
 - old file paths
@@ -11,7 +11,10 @@ Run separate searches for the categories that apply instead of relying on one br
 - dynamic imports and `require()` paths
 - re-exports and barrel files
 - tests, fixtures, mocks, and helpers
+- configuration, manifests, scripts, and templates
+- documentation and examples that name changed paths, symbols, commands, or behavior
 
-Use repository-native search tools and respect generated, vendored, or ignored directories.
-Fix stale references in the touched scope.
+Use repository-native search tools and respect generated, vendored, dependency, build-output, and ignored directories.
+Before editing, treat consumers outside the candidate unit as compatibility evidence.
+After editing, fix every repository-controlled reference made stale by the change.
 If a stale reference is intentionally left alone, report why in the final output.

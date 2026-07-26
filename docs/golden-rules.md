@@ -37,6 +37,15 @@ For non-runtime files, check that the change does not move runtime behavior into
 - When a hard prohibition is justified, make it hold: name the specific workarounds it forbids, and turn rationalizations observed in real sessions into explicit counters in the skill text.
 - Prefer role/category language over example lists in runtime instructions. When examples are necessary, state that analogous project-specific forms must also be considered; do not let examples become a closed checklist.
 
+## Finding Content
+
+- When a skill, reference, or template records findings for later work, require every finding to carry claim, evidence, severity, impact, confidence with its basis, route, and status. Require the content; do not impose a serialization. Skills are single-writer by design, and a model reads several shapes at the same cost as one, so a shared format buys nothing while a shared checklist prevents real content gaps.
+- State impact only when it is not already obvious from the claim; state every other element explicitly, including when it does not apply.
+- Keep severity a property of the rule that fired, never of how recent, small, or easy to fix the finding looks. Age and effort belong in separate fields.
+- Apply the checklist to a template when that template is already being changed; do not open templates only to conform them.
+- Let a detecting skill report a violation only when the remedy is confined to a unit the finding can name. A smell whose fix propagates to every site sharing a shape does not converge: no single pass clears it, so it returns on every later pass until the output becomes noise a reader skips, while the propagating fix is itself the runaway-refactor failure these passes exist to prevent. Judge a candidate lens on that test, not on how objective its trigger looks.
+- When a detecting skill excludes a category on those grounds, name the excluded families and the rationalization in its runtime text. A category left unmentioned gets re-added by the next author who finds it useful.
+
 ## Refactor Decision Principle
 
 - Cflow's mission is obsessive pursuit of the cleanest practical structure: maximum domain and ownership clarity, minimum justified ceremony, and no boilerplate that does not pay for a real boundary or risk.

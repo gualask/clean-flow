@@ -16,8 +16,12 @@ Document the runtime flow for `cf-cohesion`, the public local entrypoint for eva
 1. Start from the requested feature, workflow, file cluster, or discovery area.
 2. Choose discovery, targeted evaluation, or execution from the current request.
 3. In discovery, return at most three candidate clusters and do not edit.
-4. In targeted evaluation, build the cohesion map and do not edit unless a move is explicitly requested.
+4. In targeted evaluation, load the targeted-evaluation, reference-audit, and navigation-cost references; audit candidate consumers across repository-controlled code, configuration, and documentation before building the cohesion map. Do not edit.
 5. Ask one focused question if target, mode, or requested outcome is ambiguous.
-6. In execution, move exactly one clear local cluster and keep broadly shared files outside the slice.
-7. Update affected imports, exports, call sites, tests, and local paths; audit moved names and paths.
-8. Run the smallest relevant check and report placement decision, behavior preservation, and any broader route needed.
+6. In execution, load those references plus execution and complete or refresh the targeted evaluation without emitting intermediate output.
+7. Continue only for `recommended` or `optional`; for `keep as-is` or `route`, stop without editing and return the evaluation output.
+8. Use external consumers to keep files with broader ownership outside the selected cluster.
+9. Move exactly one clear local cluster and keep files with broader reuse or ownership outside the slice.
+10. Update affected references and repeat the shared audit for moved names and paths.
+11. Keep the regrouping bounded when a hard trigger's remedy belongs to another flow, but report the complete deferred finding required by the canonical navigation-cost contract.
+12. Run the smallest relevant check and report placement decision, behavior preservation, and any broader route needed.

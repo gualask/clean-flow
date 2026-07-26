@@ -4,8 +4,7 @@ Execute exactly one behavior-preserving local regrouping.
 
 ## Preflight
 
-- If no targeted evaluation was done in this invocation, perform the targeted evaluation steps first.
-- Continue only when the owner cluster, outliers, shared files, and destination are clear.
+- Continue from a targeted-evaluation decision admitted by the execution gate, with a confirmed owner cluster, outlier set, shared-file set, and destination.
 - If placement is unclear, ask one focused question before editing.
 
 ## Execution Rules
@@ -19,7 +18,8 @@ Execute exactly one behavior-preserving local regrouping.
 - Keep broadly reused files outside the local slice.
 - Move tests only when repository convention supports colocated tests and the tests belong exclusively to the moved behavior.
 - Do not refactor file internals except import/export/path cleanup required by the move.
-- After moving code, ensure you have read references/reference-audit.md in this invocation, then audit moved names and paths.
+- After moving code, repeat the reference audit for moved names and paths.
+- Apply the report/action separation in references/navigation-cost.md to every qualifying hard trigger.
 
 ## Verification
 
@@ -31,5 +31,7 @@ If no relevant check can be run, say that explicitly.
 ## Output
 
 Use the standard output format.
-For **Decision**, report `regrouping performed`.
+For **Decision**, report `regrouping performed` only after files moved.
+If the evaluation gate stopped the flow before edits, use the targeted-evaluation output instead of this output.
+For **Deferred**, after edits use the finding content required by references/navigation-cost.md.
 For **Result**, include behavior preservation, final placement, remaining risk, and next action.

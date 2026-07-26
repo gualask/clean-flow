@@ -1,6 +1,6 @@
 # cf-cohesion Targeted Evaluation
 
-Evaluate only. Do not edit files.
+Evaluate without editing; this reference never edits files.
 
 ## Goal
 
@@ -8,9 +8,10 @@ Decide whether already-related files should stay where they are or live together
 
 ## Preflight
 
-- Ensure you have read references/navigation-cost.md in this invocation; it owns the test that decides regrouping value.
 - Read the local directory tree around the target.
 - Read candidate files, imports/exports, call sites, tests, and nearby grouping conventions.
+- Run the reference audit for each candidate before finalizing the cohesion map.
+- Treat consumers outside the proposed cluster as ownership evidence: classify a file as shared or an outlier when its reuse or responsibility is broader than the proposed owner.
 - Identify the current owner area and any sibling feature folders that set precedent.
 
 ## Cohesion Map
@@ -51,8 +52,10 @@ Before naming destination folders, state the smallest local convention that woul
 - Use `route` when the move crosses repository boundaries, changes module ownership, or needs ordered planning through `cf-start`.
 - If placement is plausible but not clear, ask one focused question instead of inventing a folder.
 
-## Output
+## Exit
 
-Use the standard output format.
+When targeted evaluation is the selected flow, use the standard output format.
 For **Checks**, say `not run; evaluation only` unless a read-only diagnostic command was useful enough to report.
 For **Result**, name the exact regrouping candidate only when it is `recommended` or `optional`.
+
+When loaded as execution preflight, emit no intermediate output; pass the cohesion map and decision to the execution gate in SKILL.md.

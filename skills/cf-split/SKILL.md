@@ -25,12 +25,13 @@ Evaluation flow does not edit repository files.
 ### Evaluation Flow
 
 Use when the current request asks whether a split is worthwhile.
-Read references/evaluation.md.
+Read references/evaluation.md, references/file-split-rules.md, and references/navigation-cost.md.
 
 ### Execution Flow
 
 Use when the current request explicitly asks to perform the split.
-Read references/execution.md.
+Read references/execution.md, references/file-split-rules.md, references/navigation-cost.md, and references/reference-audit.md.
+If a verification check fails, read references/regression-handling.md.
 
 Do not infer execution from words like "review", "check", "is this worth splitting", or "should this be extracted".
 
@@ -41,4 +42,5 @@ Return only:
 - **Scope**: target file and selected flow.
 - **Decision**: candidates and recommendation, or split performed.
 - **Checks**: commands run and pass/fail result, or why no check ran.
+- **Deferred**: only after execution edits; findings required by the report/action rule in references/navigation-cost.md. Omit this section when no split ran and in evaluation.
 - **Result**: behavior preservation, final placement decision, remaining risk, and next action.

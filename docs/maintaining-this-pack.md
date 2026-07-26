@@ -51,6 +51,7 @@ Public skill entrypoints:
 - `cf-cognitive`
 - `cf-split`
 - `cf-cohesion`
+- `cf-review`
 - `cf-docs`
 - `cf-todo`
 - `cf-brainstorm`
@@ -115,6 +116,7 @@ Maintainer flow mirrors:
 - `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
 - `cf-split`: [split/doc-split.flow.md](./split/doc-split.flow.md)
 - `cf-cohesion`: [cohesion/doc-cohesion.flow.md](./cohesion/doc-cohesion.flow.md)
+- `cf-review`: [review/doc-review.flow.md](./review/doc-review.flow.md)
 - `cf-docs`: [docs/doc-docs.flow.md](./docs/doc-docs.flow.md)
 - `cf-todo`: [todo/doc-todo.flow.md](./todo/doc-todo.flow.md)
 - `cf-brainstorm`: [brainstorm/doc-brainstorm.flow.md](./brainstorm/doc-brainstorm.flow.md)

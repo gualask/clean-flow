@@ -32,7 +32,7 @@ Read references/targeted-evaluation.md.
 ### Execution Flow
 
 Use when the current request explicitly asks to refactor, reduce, clean up, fix cognitive complexity, or proceed on explicit target files or a confirmed discovery candidate.
-Read references/execution.md.
+Read references/execution.md and references/local-refactor-rules.md.
 
 If the target, flow, or requested outcome is ambiguous, ask one focused question.
 Do not infer execution from words like "review", "check", "is this complex", or "should we clean this up".
@@ -64,4 +64,5 @@ Return only:
 - **Assessment**: candidates, target decision, or hotspots addressed.
 - **Changes**: edits made, or `none` for discovery/evaluation.
 - **Checks**: commands run and pass/fail result, or why no check ran.
+- **Deferred**: only after execution edits; findings required by the report/action rule in references/navigation-cost.md. Omit this section when no cleanup ran and in discovery or targeted evaluation.
 - **Result**: behavior preservation, remaining risk, and `cf-split` or `cf-cohesion` next step when relevant.

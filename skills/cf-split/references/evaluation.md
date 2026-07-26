@@ -9,7 +9,6 @@ Evaluate only. Do not edit files.
 - If the target is an area rather than one file, run bundled `scripts/repo-tree.mjs` (resolve it from the active skill root, never from the project working directory; run `--help` first) and use its gitignore-aware file-name tree to choose the target file before reading implementation.
 - Read the whole target file, nearby imports/exports, call sites, tests, and local naming or folder conventions.
 - Treat repository state as the source of truth.
-- Before evaluating candidates, ensure you have read references/file-split-rules.md in this invocation.
 
 ## Evaluation Rules
 

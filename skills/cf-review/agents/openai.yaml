@@ -1,0 +1,6 @@
+interface:
+  display_name: "Cflow:review"
+  short_description: "Check pending changes against the pack's structure rules"
+  default_prompt: "Use $cf-review to check the uncommitted changes before I commit them."
+policy:
+  allow_implicit_invocation: true

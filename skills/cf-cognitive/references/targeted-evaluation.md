@@ -8,7 +8,6 @@ Decide whether the explicit target files have real local cognitive pressure wort
 
 ## Preflight
 
-- Ensure you have read references/navigation-cost.md in this invocation; it owns the test that decides whether cleanup is worth it.
 - Use explicit file targets only, up to three per session.
 - Read each whole target file, relevant tests or call sites, and local helper/error/async/performance conventions.
 - Process target files sequentially.

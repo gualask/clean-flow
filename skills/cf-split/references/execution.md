@@ -9,7 +9,7 @@ Execute exactly one cohesive behavior-preserving file-level split.
 - If the target is an area rather than one file, run bundled `scripts/repo-tree.mjs` (resolve it from the active skill root, never from the project working directory; run `--help` first) and use its gitignore-aware file-name tree to choose the target file before reading implementation.
 - Read the whole target file, nearby imports/exports, call sites, tests, and local naming or folder conventions.
 - Treat repository state as the source of truth.
-- Before choosing placement, ensure you have read references/file-split-rules.md in this invocation.
+- Complete the reference audit for the candidate unit before choosing the seam or placement; treat consumers outside the unit as compatibility evidence.
 
 ## Execution Rules
 
@@ -18,17 +18,19 @@ Execute exactly one cohesive behavior-preserving file-level split.
 - Keep the source file as the readable entry point for the local workflow.
 - Follow shared grouping and placement rules before creating files, and choose placement for the resulting local cluster rather than only for the new file.
 - Do not promote code to shared, global hooks, common, or utils locations unless the shared grouping rules justify it.
-- After moving code, ensure you have read references/reference-audit.md in this invocation, then audit moved names and paths.
+- After moving code, repeat the reference audit for moved names and paths.
+- Apply the report/action separation in references/navigation-cost.md to every qualifying hard trigger.
 
 ## Verification
 
 Run the smallest relevant check: targeted tests, typecheck or compile, lint, or a narrow smoke check.
 Use native success criteria; do not require `failed=0` unless that is how the runner reports results.
-If a relevant check fails, apply references/regression-handling.md: state the root cause before editing again, fix split-caused failures, and re-run the check.
+If a relevant check fails, apply the regression-handling contract loaded for the failed check.
 If no relevant check can be run, say that explicitly.
 
 ## Output
 
 Use the standard output format.
 For **Decision**, report the split performed.
+For **Deferred**, after edits use the finding content required by references/navigation-cost.md.
 For **Result**, include behavior preservation, final placement decision, remaining risk, and next action.

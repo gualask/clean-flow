@@ -56,6 +56,7 @@
         "targeted-evaluation": {
           "required": [
             "references/targeted-evaluation.md",
+            "references/reference-audit.md",
             "references/navigation-cost.md"
           ],
           "conditional": []
@@ -63,12 +64,11 @@
         "execution": {
           "required": [
             "references/execution.md",
-            "references/reference-audit.md"
+            "references/reference-audit.md",
+            "references/navigation-cost.md",
+            "references/targeted-evaluation.md"
           ],
-          "conditional": [
-            "references/targeted-evaluation.md",
-            "references/navigation-cost.md"
-          ]
+          "conditional": []
         }
       }
     },
@@ -117,6 +117,26 @@
             },
             {
               "to": "cf-mr-wolf:planning",
+              "kind": "conditional",
+              "context": "same-thread"
+            }
+          ]
+        }
+      }
+    },
+    "cf-review": {
+      "flows": {
+        "default": {
+          "required": [
+            "references/sweep.md",
+            "references/navigation-cost.md",
+            "references/local-refactor-rules.md",
+            "references/reference-audit.md"
+          ],
+          "conditional": ["references/handoff.md"],
+          "handoffs": [
+            {
+              "to": "cf-todo:default",
               "kind": "conditional",
               "context": "same-thread"
             }

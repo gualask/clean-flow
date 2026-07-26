@@ -4,7 +4,7 @@ Scope: behavior-preserving file-level extraction evaluation or execution.
 
 ## Candidate Review
 
-Before reviewing candidates, read `references/navigation-cost.md`; it owns the hard-trigger values and exemptions, and its test decides split value ahead of churn, file count, or flat-placement defaults.
+The hard-trigger values and exemptions come from `references/navigation-cost.md`; apply its test ahead of churn, file count, or flat-placement defaults.
 A file-level split candidate is a natural owner that can be named without describing implementation steps.
 
 Good candidates include:
