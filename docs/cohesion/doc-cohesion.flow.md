@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Document the runtime flow for `cf-cohesion`, the public local entrypoint for evaluating or regrouping already-related files into a clearer feature or workflow slice.
+Document the runtime flow for `cf-cohesion`, the public local entrypoint for evaluating or regrouping already-related files into a clearer feature or workflow slice. Non-code content stays outside this flow.
 
 ## Runtime Inputs
 

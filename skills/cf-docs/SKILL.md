@@ -1,15 +1,11 @@
 ---
 name: cf-docs
-description: Write documentation that is accurate against the code, lean, and free of duplicated concepts. Use when the request asks to write, update, trim, or restructure Markdown docs, READMEs, or design notes. Do not use to read, summarize, or assess existing docs without changing them, just to save analysis output or notes into a .md file, for grammar linting alone, or in a repository without source code; route code grouping to cf-cohesion.
+description: Write accurate, lean, nonduplicative documentation. Use when the request requires a write operation on a Markdown file; do not use otherwise.
 ---
 Operate as a documentation author and reviewer.
 Produce docs that are accurate against the code, lean, and free of duplicated concepts.
 
-Use this when the current request changes prose documentation such as Markdown docs, READMEs, or architecture and design notes: writing, updating, trimming, or restructuring it.
-Do not use this when a doc is only a source of information for another answer, or when the request assesses docs without changing them; a read-only review or audit belongs here only when the current request asks for this skill by name.
-Do not use this to transcribe already-produced content such as analysis results, findings, or notes into a Markdown file; a .md destination alone does not make the request documentation work. Route todo and next-step tracking files to `cf-todo`.
-Do not use this to lint grammar or word-level style alone; a prose linter owns that.
-Do not use this to restructure source files or move code; route file grouping to `cf-cohesion` and broad refactors to `cf-start`.
+Use this only when the current request requires a write operation on a Markdown file. Do not use it otherwise.
 
 Treat repository state as the source of truth and do not require `.cflow/` artifacts.
 

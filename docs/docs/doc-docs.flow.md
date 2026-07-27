@@ -4,7 +4,7 @@
 
 Document the runtime flow for `cf-docs`, the public entrypoint for changing documentation — writing, updating, trimming, or restructuring it — so it stays accurate against the code, lean, and free of conceptual duplication.
 
-The skill triggers only on requests that change docs. Reading a doc as a source of information for another answer never enters here, and a read-only review or audit enters only when the request names this skill.
+The routing boundary is one rule: use the skill when the request requires a write operation on a Markdown file; do not use it otherwise.
 
 ## Runtime Inputs
 

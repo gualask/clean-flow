@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Document the runtime flow for `cf-simplify`, the public simplification review entrypoint for deciding whether complexity is necessary, accidental, or removable by changing behavior, interface contracts, boundaries, or architecture.
+Document the runtime flow for `cf-simplify`, the public entrypoint for deciding whether software implementation complexity is necessary, accidental, or removable by changing behavior, interface contracts, boundaries, or architecture. Non-code content and local readability cleanup stay outside this flow.
 
 ## Runtime Inputs
 

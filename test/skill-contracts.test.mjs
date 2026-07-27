@@ -107,6 +107,47 @@ test("packaged skill descriptions satisfy discovery constraints", async () => {
   }
 });
 
+test("cf-docs routes only by Markdown write intent", async () => {
+  const skillFile = path.join(SKILLS_ROOT, "cf-docs", "SKILL.md");
+  const skill = await fs.readFile(skillFile, "utf8");
+  const description = parseFrontmatter(skill, "skills/cf-docs/SKILL.md").description;
+  const flow = await fs.readFile(
+    path.join(DOCS_ROOT, "docs", "doc-docs.flow.md"),
+    "utf8",
+  );
+
+  for (const contract of [description, skill, flow]) {
+    assert.match(contract, /write operation on a Markdown file/);
+    assert.match(contract, /do not use (?:it )?otherwise/i);
+  }
+});
+
+test("cf-simplify discovery stays within software implementation", async () => {
+  const skillFile = path.join(SKILLS_ROOT, "cf-simplify", "SKILL.md");
+  const skill = await fs.readFile(skillFile, "utf8");
+  const description = parseFrontmatter(
+    skill,
+    "skills/cf-simplify/SKILL.md",
+  ).description;
+
+  assert.match(description, /overengineering in software implementation/);
+  assert.match(description, /implementation structure or behavior/);
+  assert.match(description, /Do not use for non-code content/);
+  assert.match(description, /local code readability work to cf-cognitive/);
+  assert.doesNotMatch(description, /questions whether files are necessary/);
+});
+
+test("cf-cohesion discovery excludes non-code content", async () => {
+  const skillFile = path.join(SKILLS_ROOT, "cf-cohesion", "SKILL.md");
+  const skill = await fs.readFile(skillFile, "utf8");
+  const description = parseFrontmatter(
+    skill,
+    "skills/cf-cohesion/SKILL.md",
+  ).description;
+
+  assert.match(description, /Do not use for non-code content/);
+});
+
 test("materialized skill files only link runtime files that exist", async () => {
   const materialized = await createMaterializedSkills(SKILLS_ROOT);
 

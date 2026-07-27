@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-07-27
+
+- Fixed skill discovery boundaries: `cf-docs` now triggers for every Markdown write, `cf-simplify` stays within software implementation, and `cf-cohesion` excludes non-code content.
+
 ## 2026-07-26
 
 - Added `cf-review` for uncommitted work or a named history range. It runs eleven lenses across structure, conventions, behavior, documentation, and authoritative business requirements.
