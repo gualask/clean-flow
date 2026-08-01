@@ -29,6 +29,65 @@ test("short top-level help exits successfully", async () => {
   assert.equal(io.stderr.output, "");
 });
 
+test("install delegates an exact tag while preserving install options", async () => {
+  const io = makeIo();
+  let delegated;
+
+  const exitCode = await main(
+    ["install", "--global", "--friction", "--dry-run", "--tag", "0.0.1"],
+    io,
+    {
+      installFromTag: async (request) => {
+        delegated = request;
+        return 7;
+      },
+    },
+  );
+
+  assert.equal(exitCode, 7);
+  assert.equal(delegated.tag, "0.0.1");
+  assert.deepEqual(delegated.installArgs, [
+    "install",
+    "--global",
+    "--friction",
+    "--dry-run",
+  ]);
+  assert.equal(delegated.io, io);
+});
+
+test("install accepts an inline tag for a repository target", async () => {
+  const io = makeIo();
+  let delegated;
+
+  const exitCode = await main(
+    ["install", "/tmp/example", "--tag=0.0.1"],
+    io,
+    {
+      installFromTag: async (request) => {
+        delegated = request;
+        return 0;
+      },
+    },
+  );
+
+  assert.equal(exitCode, 0);
+  assert.deepEqual(delegated.installArgs, ["install", "/tmp/example"]);
+});
+
+test("tag selection rejects missing, repeated, and remove usage", async () => {
+  for (const argv of [
+    ["install", "/tmp/example", "--tag"],
+    ["install", "/tmp/example", "--tag", "0.0.1", "--tag", "0.0.2"],
+    ["remove", "/tmp/example", "--tag", "0.0.1"],
+  ]) {
+    const io = makeIo();
+    const exitCode = await main(argv, io);
+
+    assert.equal(exitCode, 1);
+    assert.match(io.stderr.output, /Error: --tag/);
+  }
+});
+
 test("install and remove prune marked legacy agents while dry-run preserves them", async () => {
   const workspace = await makeTempWorkspace();
   const targetRoot = path.join(workspace, "repo");

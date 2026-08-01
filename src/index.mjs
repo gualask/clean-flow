@@ -7,6 +7,7 @@ import { installFriction, removeFriction } from "./commands/install-friction.mjs
 import { installSkills } from "./commands/install.mjs";
 import { pruneLegacyCodexAgents } from "./commands/prune-legacy-agents.mjs";
 import { removeSkills } from "./commands/remove.mjs";
+import { installFromTag } from "./lib/install-from-tag.mjs";
 import { createMaterializedSkills } from "./lib/materialize-skills.mjs";
 
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -14,13 +15,15 @@ const SKILLS_SOURCE_ROOT = path.join(PACKAGE_ROOT, "skills");
 const FRICTION_SOURCE_ROOT = path.join(PACKAGE_ROOT, "install", "friction");
 
 const HELP_TEXT = `Usage:
-  cflow-skills install <repo-path> [--dry-run]
-  cflow-skills install --global [--friction] [--dry-run]
+  cflow-skills install <repo-path> [--tag <tag>] [--dry-run]
+  cflow-skills install --global [--tag <tag>] [--friction] [--dry-run]
   cflow-skills remove <repo-path> [--dry-run]
   cflow-skills remove --global [--dry-run]
 
 Notes:
   - install syncs packaged, materialized skills into <repo>/.codex/skills
+  - --tag installs an exact Git tag from the official Clean Flow repository
+    and can be used to upgrade or downgrade an existing installation
   - --global targets $CODEX_HOME/skills, or ~/.codex/skills
   - install and remove prune legacy static agents marked as Cflow-owned
   - --friction also installs the always-on friction log: the logger script
@@ -30,7 +33,11 @@ Notes:
     removes the friction pieces and their AGENTS.md block
 `;
 
-export async function main(argv, io = { stdout: process.stdout, stderr: process.stderr }) {
+export async function main(
+  argv,
+  io = { stdout: process.stdout, stderr: process.stderr },
+  dependencies = {},
+) {
   let options;
 
   try {
@@ -43,6 +50,19 @@ export async function main(argv, io = { stdout: process.stdout, stderr: process.
   if (options.help) {
     io.stdout.write(HELP_TEXT);
     return 0;
+  }
+
+  if (options.tag) {
+    try {
+      return await (dependencies.installFromTag ?? installFromTag)({
+        tag: options.tag,
+        installArgs: buildInstallArgs(options),
+        io,
+      });
+    } catch (error) {
+      io.stderr.write(`Error: ${error.message}\n`);
+      return 1;
+    }
   }
 
   const destinations = resolveDestinations(options);
@@ -108,6 +128,7 @@ function parseArgs(argv) {
   let dryRun = false;
   let global = false;
   let friction = false;
+  let tag = null;
   const positionals = [];
 
   while (args.length > 0) {
@@ -129,6 +150,26 @@ function parseArgs(argv) {
 
     if (arg === "--friction") {
       friction = true;
+      continue;
+    }
+
+    if (arg === "--tag" || arg.startsWith("--tag=")) {
+      if (tag !== null) {
+        throw new Error("--tag may be passed only once");
+      }
+
+      if (arg === "--tag") {
+        const value = args.shift();
+        if (!value || value.startsWith("-")) {
+          throw new Error("--tag requires a value");
+        }
+        tag = value;
+      } else {
+        tag = arg.slice("--tag=".length);
+        if (!tag) {
+          throw new Error("--tag requires a value");
+        }
+      }
       continue;
     }
 
@@ -155,14 +196,38 @@ function parseArgs(argv) {
     throw new Error("--friction applies to install only");
   }
 
+  if (tag && command !== "install") {
+    throw new Error("--tag applies to install only");
+  }
+
   return {
     help: false,
     command,
     dryRun,
     global,
     friction,
+    tag,
     targetPath: global ? null : positionals[0],
   };
+}
+
+function buildInstallArgs(options) {
+  const args = ["install"];
+
+  if (options.global) {
+    args.push("--global");
+  } else {
+    args.push(options.targetPath);
+  }
+
+  if (options.friction) {
+    args.push("--friction");
+  }
+  if (options.dryRun) {
+    args.push("--dry-run");
+  }
+
+  return args;
 }
 
 async function installAll({

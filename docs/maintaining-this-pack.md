@@ -17,6 +17,7 @@ Cflow has two maintainer concerns:
 
 1. distribution
    - `cflow-skills install` is an idempotent sync for both first install and later updates
+   - `cflow-skills install --tag <tag>` delegates to the exact tag from the official repository, allowing upgrade or downgrade without changing the caller's checkout
    - it materializes public skill directories before syncing them
    - it vendors configured `_shared` files into the consuming skill's `references/` and `scripts/` paths
    - install and remove prune legacy static agents only when old file markers identify them as Cflow-owned
@@ -214,6 +215,7 @@ Current automated coverage checks:
 - conflict detection on foreign same-name skills
 - remove of Cflow-owned skill dirs and legacy support dirs while preserving foreign entries
 - install/remove cleanup of marked legacy Cflow agents while preserving unmarked and foreign agents
+- exact-tag install delegation and temporary-checkout cleanup
 - structural checks for packaged public skills
 - materialized runtime reference, script, and asset links
 - exact context-map coverage of public skills, declared flows, and transitively reachable runtime Markdown
