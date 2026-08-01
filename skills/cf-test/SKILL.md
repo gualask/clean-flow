@@ -12,7 +12,7 @@ Resolve exactly one test scope:
 - **A named history range**: existing test files selected by the requested commits, range, or branch.
 - **Explicit tests**: the named test files or directories, whether changed or unchanged.
 
-Treat every selected test file as a **primary test** and inspect it as a whole. Treat changed production files in the same change set, production files directly imported by explicit tests, and authoritative requirement or acceptance documents named by the request or adjacent repository docs as **contract surfaces**. They provide evidence but are not themselves review targets.
+Treat every selected test file as a **primary test** and inspect it as a whole. Treat changed production files in the same change set, production files directly imported by explicit tests, and identified authoritative documents as **contract surfaces**. Requirements, product or domain documentation, and acceptance criteria are authoritative only when they name the tested behavior; path proximity alone is insufficient. Contract surfaces provide evidence but are not themselves review targets.
 
 Exclude generated, vendored, ignored, fixture-only, snapshot-output, and deleted files unless an authoritative requirement makes one directly relevant. If no primary test exists, report that and stop; never widen to the repository.
 

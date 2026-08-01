@@ -212,6 +212,8 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
   assert.match(metadata.description, /cf-scenario/);
   assert.match(testContract, /primary test/);
   assert.match(testContract, /contract surfaces/);
+  assert.match(testContract, /path proximity alone is insufficient/);
+  assert.doesNotMatch(testContract, /adjacent repository docs/);
   assert.match(testContract, /Read `references\/dynamic-agents\.md`/);
   assert.match(testContract, /Read `references\/assertion-quality\.md`/);
   assert.match(testContract, /references\/test-agent-brief\.md/);
