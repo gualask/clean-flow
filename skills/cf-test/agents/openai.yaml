@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cflow:test"
+  short_description: "Review test assertions against real invariants"
+  default_prompt: "Use $cf-test to review changed tests for missing invariants and brittle assertions."

@@ -8,8 +8,8 @@ Maintainer summary for `cf-mr-wolf`. Runtime behavior belongs to `skills/cf-mr-w
 
 - Public skill: `skills/cf-mr-wolf/SKILL.md`
 - Runtime references: `skills/cf-mr-wolf/references/framing.md`, `decomposition.md`, `evidence.md`, `dynamic-agents.md`, `derisk.md`, `derisk-agent-brief.md`, `outcomes.md`, `planning.md`, `evaluation.md`
-- Shared source vendored into runtime paths: `skills/_shared/scripts/repo-tree.mjs`
-- De-risk agent prompt template: `skills/cf-mr-wolf/references/derisk-agent-brief.md`, dispatched to any available read-only subagent
+- Shared sources vendored into runtime paths: `skills/_shared/references/dynamic-agents.md`; `skills/_shared/scripts/repo-tree.mjs`
+- De-risk agent prompt template: `skills/cf-mr-wolf/references/derisk-agent-brief.md`, dispatched only when the shared deterministic context gate selects delegation and consent or durable authorization allows it
 - Current conversation and request
 - Focused repository context selected from the clarified request and bounded perimeter
 - Optional notes artifact: `.cflow/mr-wolf-notes.md`, created from `skills/cf-mr-wolf/assets/mr-wolf-notes.template.md` when evidence or decisions need durable handoff context

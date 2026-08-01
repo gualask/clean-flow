@@ -53,6 +53,7 @@ Public skill entrypoints:
 - `cf-split`
 - `cf-cohesion`
 - `cf-review`
+- `cf-test`
 - `cf-docs`
 - `cf-todo`
 - `cf-brainstorm`
@@ -82,14 +83,18 @@ Shared authoring references vendored into consuming skills:
 - `skills/_shared/references/file-split-rules.md`
 - `skills/_shared/references/reference-audit.md`
 - `skills/_shared/references/regression-handling.md`
+- `skills/_shared/references/dynamic-agents.md`
 
 Shared authoring scripts vendored into consuming skills:
 
 - `skills/_shared/scripts/repo-tree.mjs`
 
-Delegated agents are dispatched from prompt templates that live beside the reference that uses them, so any host with subagents can run them:
+Delegated agents use the shared provider-neutral context and consent contract, then prompts that live beside the consuming reference:
 
+- `skills/_shared/references/dynamic-agents.md`
 - `skills/cf-mr-wolf/references/derisk-agent-brief.md`
+- `skills/cf-review/references/review-agent-brief.md`
+- `skills/cf-test/references/test-agent-brief.md`
 
 ## Golden Rules
 
@@ -118,6 +123,7 @@ Maintainer flow mirrors:
 - `cf-split`: [split/doc-split.flow.md](./split/doc-split.flow.md)
 - `cf-cohesion`: [cohesion/doc-cohesion.flow.md](./cohesion/doc-cohesion.flow.md)
 - `cf-review`: [review/doc-review.flow.md](./review/doc-review.flow.md)
+- `cf-test`: [test/doc-test.flow.md](./test/doc-test.flow.md)
 - `cf-docs`: [docs/doc-docs.flow.md](./docs/doc-docs.flow.md)
 - `cf-todo`: [todo/doc-todo.flow.md](./todo/doc-todo.flow.md)
 - `cf-brainstorm`: [brainstorm/doc-brainstorm.flow.md](./brainstorm/doc-brainstorm.flow.md)

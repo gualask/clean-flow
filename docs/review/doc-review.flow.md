@@ -11,25 +11,27 @@ The change set is the reference point that keeps findings verifiable, and it com
 ## Runtime Inputs
 
 - Public skill: `skills/cf-review/SKILL.md`
-- Runtime references: `skills/cf-review/references/sweep.md`, `handoff.md`
-- Shared sources vendored into runtime paths: `skills/_shared/references/navigation-cost.md`, `reference-audit.md`; `skills/_shared/scripts/repo-tree.mjs`
+- Runtime references: `skills/cf-review/references/sweep.md`, `review-agent-brief.md`, `handoff.md`
+- Shared sources vendored into runtime paths: `skills/_shared/references/dynamic-agents.md`, `navigation-cost.md`, `reference-audit.md`; `skills/_shared/scripts/repo-tree.mjs`
 - Target artifacts: none
 
 ## High-Level Flow
 
 1. Resolve one change set: pending work by default (staged, unstaged, and untracked together), or a named history range when the request asks for one. A clean tree never implies a range.
 2. Separate selected existing files, deleted entries, external reference or documentation audit surfaces, and authoritative intent sources. Read primary files from the working tree and old deletion names from the diff or range base.
-3. Load the sweep and navigation-cost contracts from the controller; load the reference-audit contract only for move-shaped changes.
-4. Run all eleven sweep lenses over their declared surfaces, collecting candidates with evidence and never routing mid-pass.
-5. Keep repeated-shape smells out through the bounded-remedy gate, and keep file triggers at one finding while unrelated lenses continue.
-6. When findings exist, load the handoff contract to assign finding content, severity, routing, and `hold` or `proceed`; the clean path does not load it.
-7. Let the controller produce `clear` for an empty finding set, account for every lens, and qualify every result with the authoritative sources checked or the explicit business-correctness coverage gap.
+3. Measure primary files and identified authoritative sources before loading them in full, then follow the shared context, consent, and delegation contract.
+4. Load the sweep and navigation-cost contracts from the controller; load the reference-audit contract only for move-shaped changes.
+5. Run all eleven sweep lenses locally or through the review agent brief. Every assignment applies all lenses; the controller takes the shared contract's completed ledger and verifies its cited evidence.
+6. Keep repeated-shape smells out through the bounded-remedy gate, and keep file triggers at one finding while unrelated lenses continue.
+7. When findings exist, load the handoff contract to assign finding content, severity, routing, and `hold` or `proceed`; the clean path does not load it.
+8. Mark `cf-test` as an eligible follow-up when primary tests exist, without invoking it, and qualify the result with the authoritative sources checked or the explicit business-correctness coverage gap.
 
 ## Boundaries
 
 - Does not edit repository files.
 - Does not invoke another skill that edits repository files; persistence is a separate user-selected action.
-- Does not confirm, de-risk, or fix a candidate.
+- Does not assess assertion quality or invoke `cf-test`; it only exposes the deterministic follow-up slot.
+- Does not confirm or fix a candidate; the controller de-risks only its cited evidence and never advances `status: candidate`.
 - Does not report a smell whose remedy no nameable unit can clear.
 - Does not own `.cflow` state; nothing here is resumable.
 - Does not run lint, formatters, type checks, or tests, or hand-check rules those tools enforce.

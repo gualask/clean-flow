@@ -17,7 +17,7 @@ Prefer simplification when the touched code has real local pressure:
 
 - functions that are hard to scan even when no canonical hard trigger fires
 - nesting deeper than function -> block -> block
-- nested try/catch blocks, unless language or framework constraints force them
+- nested try/catch blocks that make control flow hard to follow, unless language or framework constraints force them
 - try/catch blocks or loop bodies long enough to hide their main purpose
 - framework, runtime, or infrastructure wiring blocks that mix setup/teardown with nested callbacks containing real behavior, especially event subscriptions, observers, lifecycle hooks, timers, middleware, transactions, or scheduler callbacks
 - branching that hides the main path

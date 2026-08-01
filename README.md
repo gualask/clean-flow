@@ -147,6 +147,11 @@ The change set is uncommitted work by default, or a named history range such as 
 
 Business alignment uses explicit requirements, repository-controlled product or domain documentation and acceptance criteria, or linked primary external contracts. Without one, the result says that business correctness was not assessed.
 
+### `cf-test`
+
+Reviews changed or explicitly targeted tests against observable contracts and authoritative invariants.
+It reports missing invariants, invalid domain states, redundant or over-specified assertions, brittle strings, and implementation-detail coupling without editing files or running the suite.
+
 ### `cf-docs`
 
 Writes, updates, trims, and restructures Markdown docs, READMEs, and design notes against the code.
@@ -184,6 +189,7 @@ Once the diagnostic frame is confirmed, use `cf-start` when you want the normal 
 For direct local work, use `cf-cognitive`, `cf-split`, or `cf-cohesion` instead.
 For overengineering or "are these files necessary?" reviews, use `cf-simplify`.
 To review what a set of changes exposes and route it, use `cf-review`: pending work before you commit, or a history range after the fact.
+To inspect assertion quality and test-contract coverage, use `cf-test`; `cf-review` only marks that follow-up as eligible when tests are present.
 For lightweight follow-up tracking from an analysis or working session, use `cf-todo`.
 
 ## Documentation
@@ -196,6 +202,7 @@ For lightweight follow-up tracking from an analysis or working session, use `cf-
 - [Split flow](./docs/split/doc-split.flow.md)
 - [Cohesion flow](./docs/cohesion/doc-cohesion.flow.md)
 - [Review flow](./docs/review/doc-review.flow.md)
+- [Test flow](./docs/test/doc-test.flow.md)
 - [Docs flow](./docs/docs/doc-docs.flow.md)
 - [Todo flow](./docs/todo/doc-todo.flow.md)
 - [Brainstorm flow](./docs/brainstorm/doc-brainstorm.flow.md)

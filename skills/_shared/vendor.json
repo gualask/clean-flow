@@ -10,10 +10,11 @@
       "scripts": ["repo-tree.mjs"]
     },
     "cf-mr-wolf": {
+      "references": ["dynamic-agents.md"],
       "scripts": ["repo-tree.mjs"]
     },
     "cf-review": {
-      "references": ["navigation-cost.md", "reference-audit.md"],
+      "references": ["dynamic-agents.md", "navigation-cost.md", "reference-audit.md"],
       "scripts": ["repo-tree.mjs"]
     },
     "cf-simplify": {
@@ -33,6 +34,10 @@
         "reference-audit.md",
         "regression-handling.md"
       ],
+      "scripts": ["repo-tree.mjs"]
+    },
+    "cf-test": {
+      "references": ["dynamic-agents.md"],
       "scripts": ["repo-tree.mjs"]
     }
   }

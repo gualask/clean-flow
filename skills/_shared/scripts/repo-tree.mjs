@@ -1,12 +1,18 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "node:child_process";
-import { closeSync, openSync, readSync, readdirSync } from "node:fs";
+import { closeSync, openSync, readSync, readdirSync, realpathSync } from "node:fs";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const DEFAULT_MAX_NODES = 3000;
 const DEFAULT_DEPTH = Number.POSITIVE_INFINITY;
+const CONTEXT_TOKEN_BYTES = 4;
+const CONTEXT_BUDGETS = [
+  { name: "local", maxFiles: 8, maxLoc: 800, maxTokens: 8_000 },
+  { name: "subagent-1", maxFiles: 40, maxLoc: 6_000, maxTokens: 55_000 },
+  { name: "subagent-2", maxFiles: 80, maxLoc: 12_000, maxTokens: 110_000 },
+];
 const FALLBACK_IGNORED_DIRS = new Set([
   ".git",
   ".hg",
@@ -34,8 +40,15 @@ function main() {
 
   const root = path.resolve(options.root);
   const inventory = listFiles(root, options);
-  const tree = buildTree(root, inventory.files);
+  const scopedFiles = filterIncludedFiles(root, inventory.files, options.includes);
+  const tree = buildTree(root, scopedFiles);
   computeTotals(tree);
+
+  if (options.contextBudget) {
+    assertMeasurementComplete(tree);
+    printContextBudget(root, tree, inventory, options);
+    return;
+  }
 
   const lines = [];
   lines.push("repo-tree");
@@ -59,7 +72,9 @@ function main() {
 function parseArgs(args) {
   const options = {
     depth: DEFAULT_DEPTH,
+    contextBudget: false,
     help: false,
+    includes: [],
     maxNodes: DEFAULT_MAX_NODES,
     mode: "folders",
     root: ".",
@@ -76,6 +91,16 @@ function parseArgs(args) {
 
     if (arg === "--no-gitignore") {
       options.useGitignore = false;
+      continue;
+    }
+
+    if (arg === "--context-budget") {
+      options.contextBudget = true;
+      continue;
+    }
+
+    if (arg === "--include") {
+      options.includes.push(requiredValue(args, (index += 1), arg));
       continue;
     }
 
@@ -116,6 +141,44 @@ function parseArgs(args) {
   }
 
   return options;
+}
+
+function filterIncludedFiles(root, files, includes) {
+  if (includes.length === 0) {
+    return files;
+  }
+
+  const normalizedIncludes = includes.map((include) => normalizeInclude(root, include));
+  const matchedIncludes = new Set();
+  const selected = files.filter((file) => {
+    let selectedFile = false;
+    for (const include of normalizedIncludes) {
+      const matched = include === "." || file === include || file.startsWith(`${include}/`);
+      if (matched) {
+        matchedIncludes.add(include);
+        selectedFile = true;
+      }
+    }
+    return selectedFile;
+  });
+
+  const missing = normalizedIncludes.filter((include) => !matchedIncludes.has(include));
+  if (missing.length > 0) {
+    throw new Error(`--include did not match repository files: ${missing.join(", ")}`);
+  }
+
+  return selected;
+}
+
+function normalizeInclude(root, include) {
+  const absolutePath = path.resolve(root, include);
+  const relativePath = path.relative(root, absolutePath);
+
+  if (relativePath.startsWith("..") || path.isAbsolute(relativePath)) {
+    throw new Error(`--include must stay inside the repository root: ${include}`);
+  }
+
+  return normalizeRelativePath(relativePath) || ".";
 }
 
 function requiredValue(args, index, flag) {
@@ -274,8 +337,10 @@ function createDirectoryNode(name) {
     directories: new Map(),
     directFileCount: 0,
     files: [],
+    measurementFailures: [],
     name,
     totalDirectories: 0,
+    totalBytes: 0,
     totalFiles: 0,
     totalLoc: 0,
   };
@@ -283,14 +348,18 @@ function createDirectoryNode(name) {
 
 function createFileNode(root, relativePath, name) {
   const absolutePath = path.join(root, relativePath);
+  const measurement = measureFile(absolutePath);
 
   return {
-    loc: countLines(absolutePath),
+    bytes: measurement.bytes,
+    loc: measurement.loc,
+    measurementError: measurement.error,
     name,
+    relativePath,
   };
 }
 
-function countLines(absolutePath) {
+function measureFile(absolutePath) {
   const buffer = Buffer.allocUnsafe(64 * 1024);
   let file = null;
   let bytesReadTotal = 0;
@@ -314,8 +383,12 @@ function countLines(absolutePath) {
         lastByte = buffer[index];
       }
     }
-  } catch {
-    return 0;
+  } catch (error) {
+    return {
+      bytes: 0,
+      error: error instanceof Error ? error.message : String(error),
+      loc: 0,
+    };
   } finally {
     if (file !== null) {
       closeFile(file);
@@ -323,10 +396,13 @@ function countLines(absolutePath) {
   }
 
   if (bytesReadTotal === 0) {
-    return 0;
+    return { bytes: 0, loc: 0 };
   }
 
-  return lineBreaks + (lastByte === 10 ? 0 : 1);
+  return {
+    bytes: bytesReadTotal,
+    loc: lineBreaks + (lastByte === 10 ? 0 : 1),
+  };
 }
 
 function closeFile(file) {
@@ -351,15 +427,21 @@ function sortTree(node) {
 
 function computeTotals(node) {
   node.directFileCount = node.files.length;
+  node.measurementFailures = node.files
+    .filter((file) => file.measurementError)
+    .map((file) => ({ error: file.measurementError, path: file.relativePath }));
   node.totalFiles = node.files.length;
   node.totalDirectories = node.directories.size;
+  node.totalBytes = node.files.reduce((sum, file) => sum + file.bytes, 0);
   node.totalLoc = node.files.reduce((sum, file) => sum + file.loc, 0);
 
   for (const child of node.directories.values()) {
     computeTotals(child);
     node.totalFiles += child.totalFiles;
     node.totalDirectories += child.totalDirectories;
+    node.totalBytes += child.totalBytes;
     node.totalLoc += child.totalLoc;
+    node.measurementFailures.push(...child.measurementFailures);
   }
 }
 
@@ -483,6 +565,50 @@ function formatNumber(value) {
   return value.toLocaleString("en-US");
 }
 
+export function classifyContextBudget({ files, loc, estimatedTokens }) {
+  for (const budget of CONTEXT_BUDGETS) {
+    if (
+      files <= budget.maxFiles &&
+      loc <= budget.maxLoc &&
+      estimatedTokens <= budget.maxTokens
+    ) {
+      return budget.name;
+    }
+  }
+
+  return "batched";
+}
+
+function assertMeasurementComplete(tree) {
+  if (tree.measurementFailures.length === 0) {
+    return;
+  }
+
+  const failures = tree.measurementFailures
+    .map((failure) => `${failure.path} (${failure.error})`)
+    .join(", ");
+  throw new Error(`could not measure selected files: ${failures}`);
+}
+
+function printContextBudget(root, tree, inventory, options) {
+  const estimatedTokens = Math.ceil(tree.totalBytes / CONTEXT_TOKEN_BYTES);
+  const policy = classifyContextBudget({
+    files: tree.totalFiles,
+    loc: tree.totalLoc,
+    estimatedTokens,
+  });
+
+  process.stdout.write(`context-budget\n`);
+  process.stdout.write(`root: ${root}\n`);
+  process.stdout.write(`source: ${inventory.source}\n`);
+  process.stdout.write(`scope: ${options.includes.length > 0 ? `${options.includes.length} includes` : "repository"}\n`);
+  process.stdout.write(`files: ${tree.totalFiles}\n`);
+  process.stdout.write(`loc: ${tree.totalLoc}\n`);
+  process.stdout.write(`bytes: ${tree.totalBytes}\n`);
+  process.stdout.write(`estimated tokens: ${estimatedTokens} (bytes / ${CONTEXT_TOKEN_BYTES})\n`);
+  process.stdout.write(`policy: ${policy}\n`);
+}
+
 function compareNames(left, right) {
   return left.localeCompare(right, "en", {
     numeric: true,
@@ -499,6 +625,7 @@ Use LOC as a rough size signal, not a quality or complexity judgment.
 
 Usage:
   node repo-tree.mjs [root] [--mode folders|names] [--depth N|all] [--max-nodes N]
+  node repo-tree.mjs [root] --context-budget [--include PATH ...]
 
 Options:
   --root PATH       Repository root. Defaults to current directory.
@@ -507,6 +634,8 @@ Options:
   --depth N|all    Maximum tree depth. Defaults to all.
   --max-nodes N    Maximum rendered nodes. Use 0 for no limit. Defaults to ${DEFAULT_MAX_NODES}.
   --full           Alias for --max-nodes 0.
+  --include PATH   Limit inventory to an exact file or directory. Repeatable.
+  --context-budget Print only deterministic context metrics and delegation policy.
   --no-gitignore   Walk the filesystem instead of using git exclude rules.
   --help           Show this help.
 
@@ -516,6 +645,15 @@ Modes:
 
 Use a narrow --depth or --max-nodes when full output would bury the signal.
 
+Context budget policy:
+  local       <= 8 files, <= 800 LOC, and <= 8,000 estimated tokens
+  subagent-1  <= 40 files, <= 6,000 LOC, and <= 55,000 estimated tokens
+  subagent-2  <= 80 files, <= 12,000 LOC, and <= 110,000 estimated tokens
+  batched     anything larger; keep one logical scope and process file batches
+
+Estimated context tokens use bytes / ${CONTEXT_TOKEN_BYTES}. They are a provider-neutral size
+signal, not an exact tokenizer or billing count. The highest exceeded limit selects the next band.
+
 Default behavior uses:
   git ls-files -co --exclude-standard
 
@@ -524,7 +662,17 @@ That includes tracked files and untracked non-ignored files, while excluding fil
 `);
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+function isMainModule(argvPath) {
+  if (!argvPath) return false;
+
+  try {
+    return realpathSync(argvPath) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return import.meta.url === pathToFileURL(path.resolve(argvPath)).href;
+  }
+}
+
+if (isMainModule(process.argv[1])) {
   try {
     main();
   } catch (error) {

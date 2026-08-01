@@ -37,25 +37,6 @@ Read references/execution.md and references/local-refactor-rules.md.
 If the target, flow, or requested outcome is ambiguous, ask one focused question.
 Do not infer execution from words like "review", "check", "is this complex", or "should we clean this up".
 
-## Shared Triggers
-
-Refactor only when the target has clear local cognitive pressure:
-
-- functions or methods that are hard to scan even when no canonical hard trigger fires
-- nesting deeper than function -> block -> block
-- nested try/catch blocks that make control flow hard to follow, unless language or framework constraints force them
-- try/catch blocks or loop bodies long enough to hide their main purpose
-- framework, runtime, or infrastructure wiring blocks that mix setup/teardown with nested callbacks containing real behavior, especially event subscriptions, observers, lifecycle hooks, timers, middleware, transactions, or scheduler callbacks
-- branching that makes the main path hard to see
-- complex boolean expressions, regex construction, parsing, or small algorithms that are hard to read inline
-- repeated non-trivial local logic
-
-Apply the canonical hard triggers before these soft signals; a triggered target can stay as-is only under a recognized exemption.
-For function-level pressure, prefer remedies in this order: guard clauses or early returns to flatten the path first, then extraction into named same-file helpers when flattening is not enough.
-When the canonical file-length trigger fires, state an explicit file-size verdict: `route` to `cf-split`, or name the exemption that justifies its current size.
-
-Before classifying nested code as `optional` or `keep as-is`, trace the deepest main-path stack. A small method is still a cleanup candidate when the reader must pass through guard/branch, runner or callback, try/catch, and result branching before seeing the intent. Do not clear this finding only because behavior is correct, the code is local, or no file split is needed.
-
 ## Output Format
 
 Return only:

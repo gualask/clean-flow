@@ -1,6 +1,6 @@
 ---
 name: cf-review
-description: "Report structural, convention, and authoritative requirement findings for a set of code changes. Use when the current request asks to review pending or uncommitted work, commit readiness, recent commits, a commit range, or a branch. Do not use to fix findings or review an unchanged file or area; route a target without a change set to the owning diagnostic skill."
+description: "Report structural, convention, and authoritative requirement findings for a set of code changes. Use when the current request asks to review pending or uncommitted work, commit readiness, recent commits, a commit range, or a branch. Do not use to fix findings, assess test assertion quality, or review an unchanged file or area; route test quality to cf-test and a target without a change set to the owning diagnostic skill."
 ---
 Detect eligible structural and authoritative-requirement violations exposed by a bounded change set, record them with evidence, and route them to the skill that owns the next decision.
 
@@ -34,8 +34,10 @@ Then, for either one:
 ## Flow
 
 1. Resolve the change set from the current request. List primary files, deleted entries, and authoritative intent sources separately.
-2. Read `references/sweep.md` and `references/navigation-cost.md`. When the change is move-shaped, also read `references/reference-audit.md`; use its read-only audit rule and do not apply its editing rule. Run every lens against its declared surface. All lenses are mandatory; only a lens whose observable condition is absent may be not applicable.
-3. When the sweep produced at least one finding, read `references/handoff.md` and build the routing output. With no findings, do not read it: report `Findings: none`, `Handoff: none`, and `Result: clear`. Either way the output accounts for every lens.
+2. Read `references/dynamic-agents.md`. Run its installed-local context gate against every primary file and already-identified authoritative source before loading them in full. Follow its policy and consent UX exactly.
+3. Read `references/sweep.md` and `references/navigation-cost.md`. When the change is move-shaped, also read `references/reference-audit.md`; use its read-only audit rule and do not apply its editing rule. Run every lens against its declared surface. All lenses are mandatory; only a lens whose observable condition is absent may be not applicable.
+4. For `local`, run the sweep sequentially. For `subagent-1`, `subagent-2`, or `batched`, read `references/review-agent-brief.md` and fill every placeholder. Every assignment applies all lenses. The shared reference owns assignment and completion; treat its merged ledger as the completed sweep before step 5 loads `references/handoff.md`.
+5. When the sweep produced at least one finding, read `references/handoff.md` and build the routing output. With no findings, do not read it: report `Findings: none`, `Handoff: none`, and `Result: clear`. Either way the output accounts for every lens.
 
 If the current request names no range and nothing is pending, say so and stop; never widen the pass to the repository. If a named range reaches most of the repository, say so and ask for a narrower one: a change set that covers everything has stopped being a reference point, which is the only thing keeping these findings verifiable.
 
@@ -55,7 +57,9 @@ Route, do not invoke: name the destination and let the user choose what to open 
 Return only:
 
 - **Scope**: which change set was resolved and how, primary file count and list, deleted entries, audit surfaces inspected, and authoritative intent sources checked.
+- **Context budget**: measured files, LOC, estimated tokens, selected policy, consent source, and actual model or `runtime default`; use `local` when no agent ran.
 - **Lenses**: every lens by number, each marked as reporting, silent, or not applicable. A `not applicable` mark must name the condition that was absent; a mark without one is a lens that was skipped, and skipping is what this slot exists to make visible.
 - **Findings**: every candidate, grouped by file, in the shape `references/handoff.md` defines. Report all of them; do not cap, rank away, or soften a finding that fires a hard trigger.
 - **Handoff**: with findings, destination skill mapped to the findings it receives and the recommended first one to open; otherwise `none`.
+- **Test-quality follow-up**: `eligible — route cf-test` with the primary test count, or `not applicable — no primary tests`; never run `cf-test` from this pass.
 - **Result**: with findings, the shipping recommendation from `references/handoff.md`; otherwise `clear`. Always append exactly one business-alignment qualifier: `business alignment checked against <sources>`, `business correctness not assessed: no authoritative requirement source identified`, or `business correctness not assessed for <case>: authoritative sources conflict or are ambiguous`. State confirmation still needed, that no repository files were modified, and the next action.
