@@ -8,7 +8,6 @@ import {
   REPO_ROOT,
   SHARED_REFERENCES_ROOT,
   SKILLS_ROOT,
-  TERMINAL_AGENT_PROTOCOL,
   assertStableFields,
   parseFrontmatter,
 } from "./support/skill-contract-helpers.mjs";
@@ -78,7 +77,7 @@ test("review owns reference loading and remains read-only", async () => {
   );
   assert.match(
     reviewContract,
-    /With no findings, do not read it: report `Findings: none`, `Handoff: none`, and `Result: clear`/,
+    /With no findings, do not read it: report `Findings: none`, `Handoff: none`, and `Result: clear for the completed sweep`/,
   );
   assert.match(
     reviewContract,
@@ -94,7 +93,10 @@ test("review owns reference loading and remains read-only", async () => {
   assert.match(reviewAgentBrief, /Logical scope manifest: \{SCOPE_MANIFEST\}/);
   assert.match(reviewAgentBrief, /cross-batch reconciliation/);
   assert.doesNotMatch(reviewContract, /Two agents receive non-overlapping groups/);
-  assertStableFields(reviewAgentBrief, TERMINAL_AGENT_PROTOCOL, "review agent brief");
+  assert.doesNotMatch(reviewAgentBrief, /Terminal protocol \(stable contract\)/);
+  assert.match(reviewAgentBrief, /terminal read-only change-set review agent/);
+  assert.match(reviewAgentBrief, /Do not edit files, run tests, create artifacts/);
+  assert.match(reviewAgentBrief, /activate skills, route prerequisites, delegate again/);
   assertStableFields(
     reviewAgentBrief,
     [
@@ -104,6 +106,8 @@ test("review owns reference loading and remains read-only", async () => {
       "severity",
       "impact",
       "confidence_basis",
+      "route",
+      "status",
       "introduced_by_change",
       "hard_trigger_exemption",
       "false_positive_check",
@@ -111,10 +115,23 @@ test("review owns reference loading and remains read-only", async () => {
     ],
     "review agent brief",
   );
-  assert.match(reviewContract, /Test-quality follow-up/);
-  assert.match(reviewContract, /eligible — route cf-test/);
-  assert.match(reviewContract, /eligible — route cf-test` with the primary test count/);
-  assert.match(reviewContract, /not applicable — no primary tests/);
+  assert.match(reviewAgentBrief, /route `controller-owned` and status `candidate`/);
+  assert.match(reviewContract, /Test assertion quality/);
+  assert.match(reviewContract, /not assessed in this pass/);
+  assert.match(reviewContract, /same pending work or named history range/);
+  assert.match(reviewContract, /Do not classify tests, report a test count/);
+  assert.match(reviewContract, /never unqualified `clear` or `commit-ready`/);
+  assert.doesNotMatch(reviewContract, /eligible — route cf-test|primary test count|no primary tests/);
+  assert.match(
+    reviewContract,
+    /Test files selected by the change set remain \*\*Primary files\*\*/,
+  );
+  assert.match(reviewContract, /Do not classify or count them separately/);
+  assert.match(
+    reviewFlowDoc,
+    /Keeps selected test files in the structural sweep but does not assess their assertion quality/,
+  );
+  assert.match(reviewFlowDoc, /Never presents an empty structural sweep as an unqualified `clear`/);
   assert.match(reviewContract, /Primary files/);
   assert.match(reviewContract, /Deleted entries/);
   assert.match(reviewContract, /Audit surfaces/);
@@ -235,6 +252,7 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
     );
   }
   assert.match(testContract, /status `candidate`/);
+  assert.match(testContract, /confidence with its basis/);
 
   for (const lens of [
     "Missing Observable Invariant",
@@ -252,7 +270,7 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
     /No locatable source and no concrete passing regression means no finding/,
   );
   assert.match(assertionQuality, /language-agnostic/);
-  assertStableFields(agentBrief, TERMINAL_AGENT_PROTOCOL, "test agent brief");
+  assert.doesNotMatch(agentBrief, /Terminal protocol \(stable contract\)/);
   assertStableFields(
     agentBrief,
     [
@@ -264,11 +282,14 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
       "concrete_regression",
       "severity",
       "confidence_basis",
+      "route",
+      "status",
       "false_positive_check",
       "unknowns",
     ],
     "test agent brief",
   );
+  assert.match(agentBrief, /route `controller-owned` and status `candidate`/);
   assert.match(dynamicAgents, /policy.*authoritative/s);
   assert.match(dynamicAgents, /`batched`/);
   assert.match(dynamicAgents, /Batching changes source loading, never the logical scope/);

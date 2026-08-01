@@ -89,7 +89,7 @@ Shared authoring scripts vendored into consuming skills:
 
 - `skills/_shared/scripts/repo-tree.mjs`
 
-Delegated agents use the shared provider-neutral context and consent contract, then prompts that live beside the consuming reference:
+Delegated agents use the shared provider-neutral context, consent, and terminal-role contract, then explicit phase prompts that live beside the consuming reference:
 
 - `skills/_shared/references/dynamic-agents.md`
 - `skills/cf-mr-wolf/references/derisk-agent-brief.md`

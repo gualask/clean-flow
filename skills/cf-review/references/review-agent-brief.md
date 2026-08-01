@@ -12,20 +12,6 @@ Placeholders:
 - `{LENS_RULES}` — all sections copied from `references/sweep.md` and any loaded shared rule they require
 - `{EXCLUSIONS}` — generated paths and genuinely out-of-scope areas; other batches are unavailable content, not exclusions
 
-Terminal protocol (stable contract):
-
-- `filesystem_writes: forbidden`
-- `test_execution: forbidden`
-- `artifact_creation: forbidden`
-- `skill_activation: forbidden`
-- `prerequisite_routing: forbidden`
-- `further_delegation: forbidden`
-- `candidate_confirmation: forbidden`
-- `final_routing_decision: forbidden`
-- `scope_expansion: forbidden`
-- `runtime_model_selection: controller-owned`
-- `runtime_effort_selection: controller-owned`
-
 Required candidate fields (stable contract):
 
 - `lens`
@@ -34,6 +20,8 @@ Required candidate fields (stable contract):
 - `severity`
 - `impact`
 - `confidence_basis`
+- `route`
+- `status`
 - `introduced_by_change`
 - `hard_trigger_exemption`
 - `false_positive_check`
@@ -58,6 +46,7 @@ For every candidate, provide:
 - lens number, claim, and exact file/line evidence
 - severity required by the assigned rule
 - impact and confidence with basis
+- route `controller-owned` and status `candidate`
 - whether the change introduced it
 - applicable hard-trigger exemption and why it fails
 - nearest false-positive or counter-evidence check

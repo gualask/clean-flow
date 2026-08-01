@@ -42,6 +42,6 @@ Return only:
 - **Scope**: resolved scope, primary tests, contract surfaces, authoritative sources, and exclusions.
 - **Context budget**: measured files, LOC, estimated tokens, selected policy, consent source, and actual model or `runtime default`; use `local` when no agent ran.
 - **Lenses**: every lens from `references/assertion-quality.md`, marked reporting, silent, or not applicable with the absent condition.
-- **Findings**: candidates grouped by primary test, ordered by severity, with claim, evidence, invariant or contract, impact, severity, confidence, false-positive check, and status `candidate`.
+- **Findings**: candidates grouped by primary test, ordered by severity, with claim, evidence, invariant or contract, impact, severity, confidence with its basis, false-positive check, and status `candidate`.
 - **Handoff**: destination mapped to candidate ids, recommended first action, or `none`.
 - **Result**: `clear` or `candidates found`; state that confirmation is still needed, that no files were modified, and the next action.

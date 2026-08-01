@@ -39,17 +39,26 @@ When the policy selects agents, ask once before the first spawn unless the curre
 
 Accept a compact reply such as `yes`, `local`, `no agents`, or `use <model> <effort>`. Consent applies only to the current request unless the user explicitly asks to persist a preference. When agent use is already authorized, announce the same plan without blocking and dispatch it.
 
-## Model Selection
+## Delegated Terminal Agent Protocol
 
-Keep public skill contracts provider-neutral. Never hard-code a model family or provider.
+Apply this stable protocol to every delegated agent. It restricts only the delegated role; the consuming controller retains the authority allowed by its own skill contract and the current request.
 
-Routing ownership is a stable contract:
-
+- `filesystem_writes: forbidden`
+- `test_execution: forbidden`
+- `artifact_creation: forbidden`
+- `skill_activation: forbidden`
+- `prerequisite_routing: forbidden`
+- `further_delegation: forbidden`
+- `candidate_confirmation: forbidden`
+- `final_routing_decision: forbidden`
+- `scope_expansion: forbidden`
 - `runtime_model_selection: controller-owned`
 - `runtime_effort_selection: controller-owned`
 - `reusable_brief_model_values: forbidden`
 
-Apply this precedence:
+## Model Selection
+
+Keep public skill contracts provider-neutral. Never hard-code a model family or provider. Apply the protocol's model-ownership fields with this precedence:
 
 1. Use an exact model or effort explicitly requested by the user when the spawn tool advertises it.
 2. Otherwise omit model-specific overrides and inherit the host's configured subagent defaults.
@@ -61,8 +70,8 @@ Pass reasoning effort only when the runtime exposes that control. Model names an
 ## Agent Contract
 
 - Give each agent the bounded corpus, active problem frame, exact evidence question or candidate findings, consuming lens, explicit exclusions, and required output shape. When retained notes exist and matter to the pass, include their path or a compact summary.
+- Restate the terminal read-only role and its task-specific prohibitions in every agent-bound prompt; shared ownership does not replace prompt explicitness.
 - Require a read-only report with source-level evidence, unknowns, and candidate findings.
-- Do not let agents edit files, update `.cflow` artifacts, activate skills, route prerequisites, delegate again, confirm findings, choose final routing, or expand scope.
 - Keep two-agent assignments non-overlapping. A complete corpus pass splits by file; other passes may split by explicit evidence question or file slice.
 - Let the controller inspect only the cited evidence needed to de-risk reports, then own final judgment, routing, and user-facing output.
 

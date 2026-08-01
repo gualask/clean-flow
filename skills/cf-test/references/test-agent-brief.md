@@ -12,20 +12,6 @@ Placeholders:
 - `{LENS_RULES}` — all rules copied from `references/assertion-quality.md`
 - `{EXCLUSIONS}` — files and behaviors genuinely outside this pass; other batches are unavailable content, not exclusions
 
-Terminal protocol (stable contract):
-
-- `filesystem_writes: forbidden`
-- `test_execution: forbidden`
-- `artifact_creation: forbidden`
-- `skill_activation: forbidden`
-- `prerequisite_routing: forbidden`
-- `further_delegation: forbidden`
-- `candidate_confirmation: forbidden`
-- `final_routing_decision: forbidden`
-- `scope_expansion: forbidden`
-- `runtime_model_selection: controller-owned`
-- `runtime_effort_selection: controller-owned`
-
 Required candidate fields (stable contract):
 
 - `id`
@@ -36,6 +22,8 @@ Required candidate fields (stable contract):
 - `concrete_regression`
 - `severity`
 - `confidence_basis`
+- `route`
+- `status`
 - `false_positive_check`
 - `unknowns`
 
@@ -60,6 +48,7 @@ For every candidate, provide:
 - authoritative invariant or observable contract
 - concrete regression or behavior-preserving change that proves impact
 - severity and confidence with basis
+- route `controller-owned` and status `candidate`
 - nearest false-positive check and outcome
 - unknowns
 

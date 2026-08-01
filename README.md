@@ -143,7 +143,7 @@ Use it when a workflow or feature is scattered across folders and navigation cos
 
 Checks a bounded change set against structural rules, repository conventions, behavior-preservation claims, documentation, and authoritative requirements.
 
-The change set is uncommitted work by default, or a named history range such as recent commits or a branch against its base. Selected files are reviewed as whole units. Findings remain evidenced candidates, are limited to remedies a nameable unit can clear, and are routed without being confirmed, fixed, or persisted.
+The change set is uncommitted work by default, or a named history range such as recent commits or a branch against its base. Selected files, including tests, are reviewed as whole units for structural and repository-level concerns. Test assertion quality remains a separate pass. Findings remain evidenced candidates, are limited to remedies a nameable unit can clear, and are routed without being confirmed, fixed, or persisted.
 
 Business alignment uses explicit requirements, repository-controlled product or domain documentation and acceptance criteria, or linked primary external contracts. Without one, the result says that business correctness was not assessed.
 
@@ -189,7 +189,7 @@ Once the diagnostic frame is confirmed, use `cf-start` when you want the normal 
 For direct local work, use `cf-cognitive`, `cf-split`, or `cf-cohesion` instead.
 For overengineering or "are these files necessary?" reviews, use `cf-simplify`.
 To review what a set of changes exposes and route it, use `cf-review`: pending work before you commit, or a history range after the fact.
-To inspect assertion quality and test-contract coverage, use `cf-test`; `cf-review` only marks that follow-up as eligible when tests are present.
+To inspect assertion quality and test-contract coverage, run `cf-test` separately against the same pending work or named history range; `cf-review` does not classify tests or assess their assertions.
 For lightweight follow-up tracking from an analysis or working session, use `cf-todo`.
 
 ## Documentation

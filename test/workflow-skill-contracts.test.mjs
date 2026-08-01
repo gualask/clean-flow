@@ -8,6 +8,8 @@ import {
   REPO_ROOT,
   SHARED_REFERENCES_ROOT,
   SKILLS_ROOT,
+  TERMINAL_AGENT_PROTOCOL,
+  assertStableFields,
   publicSkillNames,
   skillAssetFiles,
   skillTextFiles,
@@ -120,11 +122,20 @@ test("dynamic de-risk agents are terminal in selection and prompt contracts", as
   assert.match(derisk, /terminal read-only agent/);
   assert.match(mrWolfFlow, /shared deterministic context gate selects delegation/);
   assert.doesNotMatch(mrWolfFlow, /dispatched to any available read-only subagent/);
-  for (const contract of [dynamicAgents, brief]) {
-    assert.match(contract, /activate skills/);
-    assert.match(contract, /route prerequisites/);
-    assert.match(contract, /delegate (?:again|to another agent)/);
-  }
+  assert.match(dynamicAgents, /## Delegated Terminal Agent Protocol/);
+  assert.match(dynamicAgents, /restricts only the delegated role/);
+  assertStableFields(
+    dynamicAgents,
+    [...TERMINAL_AGENT_PROTOCOL, "reusable_brief_model_values: forbidden"],
+    "shared delegated terminal agent protocol",
+  );
+  assert.doesNotMatch(brief, /Terminal protocol \(stable contract\)/);
+  assert.match(brief, /do not activate skills/);
+  assert.match(brief, /route prerequisites/);
+  assert.match(brief, /delegate to another agent/);
+  assert.match(brief, /Do not write anywhere on the filesystem, run tests/);
+  assert.match(brief, /Stay inside the assigned context slice/);
+  assert.match(derisk, /controller executes it/);
 });
 
 test("dynamic agent inputs require retained notes only when relevant", async () => {

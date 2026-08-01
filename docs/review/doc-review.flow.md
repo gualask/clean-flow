@@ -24,13 +24,14 @@ The change set is the reference point that keeps findings verifiable, and it com
 5. Run all eleven sweep lenses locally or through the review agent brief. Every assignment applies all lenses; the controller takes the shared contract's completed ledger and verifies its cited evidence.
 6. Keep repeated-shape smells out through the bounded-remedy gate, and keep file triggers at one finding while unrelated lenses continue.
 7. When findings exist, load the handoff contract to assign finding content, severity, routing, and `hold` or `proceed`; the clean path does not load it.
-8. Mark `cf-test` as an eligible follow-up when primary tests exist, without invoking it, and qualify the result with the authoritative sources checked or the explicit business-correctness coverage gap.
+8. State that test assertion quality was not assessed and recommend running `cf-test` separately against the same pending work or named history range when it adds or changes executable tests. Do not classify or count tests for this recommendation.
 
 ## Boundaries
 
 - Does not edit repository files.
 - Does not invoke another skill that edits repository files; persistence is a separate user-selected action.
-- Does not assess assertion quality or invoke `cf-test`; it only exposes the deterministic follow-up slot.
+- Keeps selected test files in the structural sweep but does not assess their assertion quality, classify or count them separately, or invoke `cf-test`.
+- Never presents an empty structural sweep as an unqualified `clear` or `commit-ready`; test assertion quality remains an explicit coverage limit.
 - Does not confirm or fix a candidate; the controller de-risks only its cited evidence and never advances `status: candidate`.
 - Does not report a smell whose remedy no nameable unit can clear.
 - Does not own `.cflow` state; nothing here is resumable.
