@@ -10,7 +10,8 @@ Support these actions:
 - sync an exact Git tag to upgrade or downgrade
 - uninstall from a specific repository
 
-Local sync installs or updates Cflow skills into `.codex/skills`.
+Local sync installs or updates Cflow skills into `.agents/skills`.
+It also removes Cflow-owned skill directories from the former `.codex/skills` destination while preserving foreign entries.
 
 ## Prerequisites
 

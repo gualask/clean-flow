@@ -15,7 +15,7 @@ import {
 
 test("remove deletes only Cflow-owned skill and legacy support directories", async () => {
   const workspace = await makeTempWorkspace();
-  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
+  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
 
   await mkdir(destinationRoot, { recursive: true });
 

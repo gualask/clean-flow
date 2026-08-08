@@ -18,7 +18,7 @@ import {
 test("install copies new skills with owned markers", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
-  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
+  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
 
   await mkdir(sourceRoot, { recursive: true });
   await writeSupportDirectory(sourceRoot);
@@ -47,7 +47,7 @@ test("install copies new skills with owned markers", async () => {
 test("install updates owned skills, prunes removed owned directories, and keeps foreign skills", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
-  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
+  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
 
   await mkdir(sourceRoot, { recursive: true });
   await mkdir(destinationRoot, { recursive: true });
@@ -104,7 +104,7 @@ test("install updates owned skills, prunes removed owned directories, and keeps 
 test("install reports conflicts and leaves foreign same-name skills untouched", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
-  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
+  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
 
   await mkdir(sourceRoot, { recursive: true });
   await mkdir(destinationRoot, { recursive: true });
@@ -125,7 +125,7 @@ test("install reports conflicts and leaves foreign same-name skills untouched", 
 test("install dry-run computes the plan without mutating the target", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
-  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
+  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
 
   await mkdir(sourceRoot, { recursive: true });
   await writeSkill(sourceRoot, "cf-start");
@@ -140,7 +140,7 @@ test("install dry-run computes the plan without mutating the target", async () =
 test("install rejects raw vendored skill sources", async () => {
   const workspace = await makeTempWorkspace();
   const sourceRoot = path.join(workspace, "source");
-  const destinationRoot = path.join(workspace, "repo", ".codex", "skills");
+  const destinationRoot = path.join(workspace, "repo", ".agents", "skills");
 
   await writeSupportDirectory(sourceRoot, "_shared", {
     "vendor.json": JSON.stringify({ version: 1, skills: {} }),

@@ -10,7 +10,8 @@ Support these actions:
 - sync an exact Git tag to upgrade or downgrade
 - uninstall globally
 
-Global sync installs or updates Cflow skills into `$CODEX_HOME/skills` or `~/.codex/skills`.
+Global sync installs or updates Cflow skills into `$HOME/.agents/skills`.
+It also removes Cflow-owned skill directories from the former `$CODEX_HOME/skills` or `~/.codex/skills` destination while preserving foreign entries.
 
 ## Prerequisites
 

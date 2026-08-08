@@ -7,7 +7,7 @@ It is not a target repository that uses Cflow at runtime.
 
 At runtime:
 
-- skills are installed into `.codex/skills` in the target repository, or into `$CODEX_HOME/skills` / `~/.codex/skills` for global install
+- skills are installed into `.agents/skills` in the target repository, or into `$HOME/.agents/skills` for global install
 - Cflow artifacts live in the target repository under `.cflow/`
 - this source repository does not need `.cflow/refactor-brief.md`
 
@@ -20,6 +20,7 @@ Cflow has two maintainer concerns:
    - `cflow-skills install --tag <tag>` delegates to the exact tag from the official repository, allowing upgrade or downgrade without changing the caller's checkout
    - it materializes public skill directories before syncing them
    - it vendors configured `_shared` files into the consuming skill's `references/` and `scripts/` paths
+   - it removes only Cflow-owned skill directories from the former `.codex/skills` destination after a conflict-free install into `.agents/skills`
    - install and remove prune legacy static agents only when old file markers identify them as Cflow-owned
    - it does not install `_shared` as a runtime skill directory
    - it does not bootstrap `.cflow/`
@@ -237,7 +238,7 @@ The most important manual validation is a real target-repo run:
 
 1. install the pack into a target repo
 2. exercise each public skill according to its `docs/<public-skill>/doc-*.flow.md` reference
-3. confirm the target repo gets `.codex/skills/...`
-4. confirm no `.codex/skills/_shared` directory is installed
+3. confirm the target repo gets `.agents/skills/...`
+4. confirm no `.agents/skills/_shared` directory is installed
 5. confirm vendored shared files exist inside the consuming skill directories
 7. confirm runtime artifacts match the owning public flow docs
