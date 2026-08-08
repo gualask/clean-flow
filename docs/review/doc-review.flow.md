@@ -21,7 +21,7 @@ The change set is the reference point that keeps findings verifiable, and it com
 2. Separate selected existing files, deleted entries, external reference or documentation audit surfaces, and authoritative intent sources. Read primary files from the working tree and old deletion names from the diff or range base.
 3. Measure primary files and identified authoritative sources before loading them in full, then follow the shared context, consent, and delegation contract.
 4. Load the sweep and navigation-cost contracts from the controller; load the reference-audit contract only for move-shaped changes.
-5. Run all eleven sweep lenses locally or through the review agent brief. Every assignment applies all lenses; the controller takes the shared contract's completed ledger and verifies its cited evidence.
+5. Run all eleven sweep lenses locally or through the review agent brief. Every assignment applies all lenses. Never interrupt a dispatched agent or replace it locally because it seems slow; only an explicit current user request authorizes interruption, and a missing report leaves the sweep incomplete. The controller takes the shared contract's completed ledger and verifies its cited evidence.
 6. Keep repeated-shape smells out through the bounded-remedy gate, and keep file triggers at one finding while unrelated lenses continue.
 7. When findings exist, load the handoff contract to assign finding content, severity, routing, and `hold` or `proceed`; the clean path does not load it.
 8. State that test assertion quality was not assessed and recommend running `cf-test` separately against the same pending work or named history range when it adds or changes executable tests. Do not classify or count tests for this recommendation.

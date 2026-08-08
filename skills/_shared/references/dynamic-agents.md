@@ -56,6 +56,11 @@ Apply this stable protocol to every delegated agent. It restricts only the deleg
 - `runtime_effort_selection: controller-owned`
 - `reusable_brief_model_values: forbidden`
 
+## Completion
+
+- Wait for every dispatched agent to finish. Never interrupt it or redo its assignment locally because it seems slow; only an explicit request from the user in the current conversation authorizes interruption.
+- A missing report leaves the delegated pass incomplete; do not report a clear or completed result.
+
 ## Model Selection
 
 Keep public skill contracts provider-neutral. Never hard-code a model family or provider. Apply the protocol's model-ownership fields with this precedence:

@@ -139,6 +139,33 @@ test("every public skill has a maintainer flow doc", async () => {
   }
 });
 
+test("delegated agents cannot be interrupted for perceived slowness", async () => {
+  const contract = await fs.readFile(
+    path.join(SHARED_REFERENCES_ROOT, "dynamic-agents.md"),
+    "utf8",
+  );
+
+  assert.match(contract, /Wait for every dispatched agent to finish/i);
+  assert.match(contract, /Never interrupt.*because it seems slow/is);
+  assert.match(contract, /only an explicit request from the user.*interrupt/is);
+  assert.match(contract, /redo its assignment locally/i);
+  assert.match(contract, /missing report.*incomplete/is);
+
+  for (const [skill, flow] of [
+    ["cf-review", path.join(DOCS_ROOT, "review", "doc-review.flow.md")],
+    ["cf-test", path.join(DOCS_ROOT, "test", "doc-test.flow.md")],
+  ]) {
+    const mirror = await fs.readFile(flow, "utf8");
+    assert.match(mirror, /Never interrupt a dispatched agent/i, `${skill} mirror`);
+    assert.match(
+      mirror,
+      /Only an explicit current user request authorizes interruption/i,
+      `${skill} mirror`,
+    );
+    assert.match(mirror, /missing report leaves .* incomplete/i, `${skill} mirror`);
+  }
+});
+
 test("navigation-cost is the single source of hard-trigger threshold values", async () => {
   const canonicalContract = await fs.readFile(
     path.join(SHARED_REFERENCES_ROOT, "navigation-cost.md"),
