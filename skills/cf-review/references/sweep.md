@@ -62,6 +62,8 @@ Route: `cf-mr-wolf`
 
 Apply the naming test in `references/navigation-cost.md` to touched functions, files, or directories. Report one finding per nameable owner that holds unrelated responsibilities; do not propose redistribution.
 
+Report a derived value that a consumer stores, declares, or maintains instead of obtaining it from the owner of the information that determines it. That owner must derive the value and remain its single source of truth; consumers must not redefine it or require coordinated updates.
+
 Lens 3 owns location. Prefer its placement finding unless the unit would retain the wrong responsibilities after any move.
 
 ## Lens 10 — Documentation Drift
