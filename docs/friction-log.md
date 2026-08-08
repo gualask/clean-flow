@@ -44,9 +44,11 @@ Opt-in, global install only:
 This writes `~/.cflow/bin/friction.mjs` (pack version stamped) and adds a marked block to `$CODEX_HOME/AGENTS.md` containing the full law text (source: `install/friction/friction-law.md`) — created minimal when absent; existing user content is never rewritten, and the block is idempotent across reinstalls.
 `$CFLOW_HOME` overrides `~/.cflow`.
 
+The flag is the desired state for every global sync: `install --global --friction` enables or updates the integration, while `install --global` without the flag removes a previous integration. Dry runs and skill conflicts report the planned friction change without applying it. Repository-scoped installs do not change the global friction state.
+
 The law is inlined rather than referenced with an `@file` import because hosts are not guaranteed to expand imports: a Codex CLI that leaves the import line unexpanded gives the model only a file path, and a law read lazily on request never fires at the moment of friction, which is the entire point of the law.
 
-`remove --global` removes the script and the AGENTS.md block (plus the legacy `~/.cflow/friction-law.md` from import-based installs); accumulated logs under `~/.cflow/friction/` are user data and stay.
+Both a global install without `--friction` and `remove --global` remove the script and the AGENTS.md block (plus the legacy `~/.cflow/friction-law.md` from import-based installs); accumulated logs under `~/.cflow/friction/` are user data and stay.
 
 ## Reading The Log
 

@@ -8,6 +8,7 @@ Support these actions:
 
 - sync globally, for both first install and later updates
 - sync an exact Git tag to upgrade or downgrade
+- enable or disable the optional friction log during sync
 - uninstall globally
 
 Global sync installs or updates Cflow skills into `$HOME/.agents/skills`.
@@ -28,11 +29,13 @@ Each action below uses its own temporary shallow clone of this repository and re
 
 Use this when the user explicitly asked to install, sync, or update Cflow globally.
 If the user named an exact Git tag, assign it to `CFLOW_TAG`; otherwise leave `CFLOW_TAG` empty to install the latest checkout.
+Set `CFLOW_FRICTION=1` only when the user explicitly asked to enable or keep the friction log. Omitting `--friction` is declarative and removes a previous friction integration while preserving accumulated logs.
 
 ```bash
 TMP_ROOT="$(mktemp -d)"
 PACK_ROOT="$TMP_ROOT/clean-flow"
 CFLOW_TAG="${CFLOW_TAG:-}"
+CFLOW_FRICTION="${CFLOW_FRICTION:-}"
 
 cleanup() {
   rm -rf "$TMP_ROOT"
@@ -41,11 +44,14 @@ cleanup() {
 trap cleanup EXIT
 
 git clone --depth 1 https://github.com/gualask/clean-flow.git "$PACK_ROOT"
+INSTALL_ARGS=(install --global)
 if [ -n "$CFLOW_TAG" ]; then
-  node "$PACK_ROOT/bin/cflow-skills.mjs" install --global --tag "$CFLOW_TAG"
-else
-  node "$PACK_ROOT/bin/cflow-skills.mjs" install --global
+  INSTALL_ARGS+=(--tag "$CFLOW_TAG")
 fi
+if [ "$CFLOW_FRICTION" = "1" ]; then
+  INSTALL_ARGS+=(--friction)
+fi
+node "$PACK_ROOT/bin/cflow-skills.mjs" "${INSTALL_ARGS[@]}"
 ```
 
 ### Uninstall Globally

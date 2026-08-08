@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 
 import { installFriction, removeFriction } from "../src/commands/install-friction.mjs";
 import { main } from "../src/index.mjs";
-import { makeTempWorkspace, readText } from "./support/helpers.mjs";
+import { makeTempWorkspace, readText, writeSkill } from "./support/helpers.mjs";
 
 const execFileAsync = promisify(execFile);
 
@@ -245,6 +245,111 @@ test("removeFriction on a clean system reports nothing to do", async () => {
   assert.equal(result.agents.action, "unchanged");
 });
 
+test("global install treats --friction as the desired enabled state", async () => {
+  const fixture = await makeGlobalInstallFixture();
+  const scriptTarget = path.join(fixture.cflowHome, "bin", "friction.mjs");
+  const logFile = path.join(fixture.cflowHome, "friction", "kept.jsonl");
+  await mkdir(path.dirname(fixture.agentsFile), { recursive: true });
+  await writeFile(fixture.agentsFile, "# My rules\n\nAlways be kind.\n", "utf8");
+
+  const enableIo = makeIo();
+  const enableCode = await main(
+    ["install", "--global", "--friction"],
+    enableIo,
+    fixture.dependencies,
+  );
+
+  assert.equal(enableCode, 0);
+  assert.match(await readText(scriptTarget), /Cflow friction logger/);
+  assert.match(await readText(fixture.agentsFile), /BEGIN CFLOW FRICTION/);
+
+  await mkdir(path.dirname(logFile), { recursive: true });
+  await writeFile(logFile, '{"observed":"kept"}\n', "utf8");
+
+  const dryRunIo = makeIo();
+  const dryRunCode = await main(
+    ["install", "--global", "--dry-run"],
+    dryRunIo,
+    fixture.dependencies,
+  );
+
+  assert.equal(dryRunCode, 0);
+  assert.match(await readText(scriptTarget), /Cflow friction logger/);
+  assert.match(await readText(fixture.agentsFile), /BEGIN CFLOW FRICTION/);
+  assert.match(dryRunIo.stdout.output, /Friction friction script: removed/);
+  assert.match(dryRunIo.stdout.output, /Friction applied: no/);
+
+  const disableIo = makeIo();
+  const disableCode = await main(
+    ["install", "--global"],
+    disableIo,
+    fixture.dependencies,
+  );
+
+  assert.equal(disableCode, 0);
+  assert.equal(
+    await readFile(scriptTarget, "utf8").catch((error) => error.code),
+    "ENOENT",
+  );
+  const agents = await readText(fixture.agentsFile);
+  assert.match(agents, /Always be kind\./);
+  assert.doesNotMatch(agents, /CFLOW FRICTION/);
+  assert.equal(await readText(logFile), '{"observed":"kept"}\n');
+  assert.match(disableIo.stdout.output, /Friction friction script: removed/);
+  assert.match(disableIo.stdout.output, /Friction applied: yes/);
+});
+
+test("a global install conflict does not disable friction", async () => {
+  const fixture = await makeGlobalInstallFixture();
+  const scriptTarget = path.join(fixture.cflowHome, "bin", "friction.mjs");
+  await installFriction({
+    sourceRoot: FRICTION_SOURCE_ROOT,
+    cflowHome: fixture.cflowHome,
+    agentsFile: fixture.agentsFile,
+    version: "1.0.0",
+  });
+  await writeSkill(
+    path.join(fixture.homeDirectory, ".agents", "skills"),
+    "cf-start",
+    {
+      "SKILL.md": `---\nname: "cf-start"\ndescription: "Foreign"\n---\n\n# foreign\n`,
+    },
+  );
+
+  const io = makeIo();
+  const exitCode = await main(
+    ["install", "--global"],
+    io,
+    fixture.dependencies,
+  );
+
+  assert.equal(exitCode, 1);
+  assert.match(await readText(scriptTarget), /Cflow friction logger/);
+  assert.match(await readText(fixture.agentsFile), /BEGIN CFLOW FRICTION/);
+  assert.match(io.stdout.output, /Conflicts: 1/);
+  assert.match(io.stdout.output, /Friction applied: no/);
+});
+
+test("a repository install does not change global friction state", async () => {
+  const fixture = await makeGlobalInstallFixture();
+  const scriptTarget = path.join(fixture.cflowHome, "bin", "friction.mjs");
+  await installFriction({
+    sourceRoot: FRICTION_SOURCE_ROOT,
+    cflowHome: fixture.cflowHome,
+    agentsFile: fixture.agentsFile,
+    version: "1.0.0",
+  });
+
+  const io = makeIo();
+  const repo = await makeTempWorkspace();
+  const exitCode = await main(["install", repo], io, fixture.dependencies);
+
+  assert.equal(exitCode, 0);
+  assert.match(await readText(scriptTarget), /Cflow friction logger/);
+  assert.match(await readText(fixture.agentsFile), /BEGIN CFLOW FRICTION/);
+  assert.doesNotMatch(io.stdout.output, /Friction home:/);
+});
+
 test("--friction requires --global", async () => {
   const io = makeIo();
   const repo = await makeTempWorkspace();
@@ -263,6 +368,23 @@ test("--friction applies to install only", async () => {
   assert.equal(exitCode, 1);
   assert.match(io.stderr.output, /--friction applies to install only/);
 });
+
+async function makeGlobalInstallFixture() {
+  const root = await makeTempWorkspace();
+  const homeDirectory = path.join(root, "home");
+  const codexHome = path.join(root, "codex-home");
+  const cflowHome = path.join(root, "cflow-home");
+
+  return {
+    homeDirectory,
+    cflowHome,
+    agentsFile: path.join(codexHome, "AGENTS.md"),
+    dependencies: {
+      homeDirectory,
+      environment: { CODEX_HOME: codexHome, CFLOW_HOME: cflowHome },
+    },
+  };
+}
 
 function makeIo() {
   return {

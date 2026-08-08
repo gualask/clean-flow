@@ -28,9 +28,8 @@ Notes:
   - install and remove clean up Cflow-owned skills from the former
     .codex/skills location while preserving foreign entries
   - install and remove prune legacy static agents marked as Cflow-owned
-  - --friction also installs the always-on friction log: the logger script
-    and law under ~/.cflow (or $CFLOW_HOME), plus a marked import block in
-    the global AGENTS.md (created minimal when absent)
+  - --friction enables the always-on friction log during global install;
+    omitting it disables a previous friction installation but keeps its logs
   - remove deletes only Cflow-owned skill directories; global remove also
     removes the friction pieces and their AGENTS.md block
 `;
@@ -89,24 +88,25 @@ export async function main(
             dryRun: options.dryRun,
           });
 
-    if (options.command === "install" && options.friction) {
+    if (options.global) {
       const frictionTargets = resolveFrictionTargets(resolutionContext);
-      result.friction = await installFriction({
-        sourceRoot: FRICTION_SOURCE_ROOT,
-        cflowHome: frictionTargets.cflowHome,
-        agentsFile: frictionTargets.agentsFile,
-        version: await readPackageVersion(),
-        dryRun: options.dryRun || result.conflicts.length > 0,
-      });
-    }
+      const frictionDryRun =
+        options.dryRun || (result.conflicts?.length ?? 0) > 0;
 
-    if (options.command === "remove" && options.global) {
-      const frictionTargets = resolveFrictionTargets(resolutionContext);
-      result.friction = await removeFriction({
-        cflowHome: frictionTargets.cflowHome,
-        agentsFile: frictionTargets.agentsFile,
-        dryRun: options.dryRun,
-      });
+      result.friction =
+        options.command === "install" && options.friction
+          ? await installFriction({
+              sourceRoot: FRICTION_SOURCE_ROOT,
+              cflowHome: frictionTargets.cflowHome,
+              agentsFile: frictionTargets.agentsFile,
+              version: await readPackageVersion(),
+              dryRun: frictionDryRun,
+            })
+          : await removeFriction({
+              cflowHome: frictionTargets.cflowHome,
+              agentsFile: frictionTargets.agentsFile,
+              dryRun: frictionDryRun,
+            });
     }
 
     writeSummary(io.stdout, result);
