@@ -1,6 +1,6 @@
 interface:
   display_name: "Cflow:Mr Wolf"
-  short_description: "Clarify problems and calibrate scope for handoff"
-  default_prompt: "Use $cf-mr-wolf to clarify an ambiguous problem before implementation."
+  short_description: "Confirm what you are actually after, or step aside"
+  default_prompt: "Use $cf-mr-wolf when a symptom or doubt names no target to decide on."
 policy:
   allow_implicit_invocation: true

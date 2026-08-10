@@ -1,8 +1,10 @@
 # Shared Handoff Block — Format Trials
 
-Status: concluded (2026-07-18). Outcome: shared serialization rejected; a shared semantic checklist retained as the working direction (authoring-rules todo item still pending) — see Conclusions. Source: artifact-format session (2026-07-18), follow-up to docs/cf-audit/cf-audit-gap-analysis.md. Trials 1–3 below are kept as the record of which information the current templates capture or miss.
+Status: concluded (2026-07-18). Outcome: shared serialization rejected; a shared semantic checklist retained as the working direction (authoring-rules todo item still pending) — see Conclusions. Source: artifact-format session (2026-07-18). Trials 1–3 below are kept as the record of which information the current templates capture or miss.
 
-Method: for realistic scenarios, write the artifact excerpt the old way (current per-skill template) and the new way (candidate shared finding block), then compare field by field to detect information loss. Scenario material reuses real findings from the qaptar freeform audit examined in the gap analysis.
+Note (2026-08-07): the `mr-wolf-notes.md` template used as the "old way" in Trial 1 no longer exists — `cf-mr-wolf` was reduced to a gate and owns no artifact. Trial 1 is kept as a historical format comparison; it is not a description of a current template.
+
+Method: for realistic scenarios, write the artifact excerpt the old way (current per-skill template) and the new way (candidate shared finding block), then compare field by field to detect information loss. Scenario material reuses real findings from a freeform audit of a target repository.
 
 ## Candidate Format Under Trial (v0)
 
@@ -16,7 +18,7 @@ Method: for realistic scenarios, write the artifact excerpt the old way (current
 
 ## Trial 1 — cf-mr-wolf Overflow (Three Findings From One Framing Pass)
 
-Scenario: a framing pass on the qaptar backend surfaces three findings; the overflow protocol requires persisting all of them in `.cflow/mr-wolf-notes.md` and handing off one.
+Scenario: a framing pass on a target repository backend surfaces three findings; the overflow protocol requires persisting all of them in `.cflow/mr-wolf-notes.md` and handing off one.
 
 ### Old Way (current mr-wolf-notes template)
 
@@ -75,7 +77,7 @@ Verdict: v0 is lossy for mr-wolf. The lost fields are exactly the pack's evidenc
 Historical: `cf-trace` was retired on 2026-07-25 (`docs/skill-value-trials/`). The trial is kept
 because the format conclusions stand on their own; the template it compares against no longer exists.
 
-Scenario: a trace of the qaptar export workflow finds a resume defect.
+Scenario: a trace of a target repository export workflow finds a resume defect.
 
 ### Old Way (current trace template, "Audit findings" section)
 
@@ -141,9 +143,8 @@ The trials above evaluated writer-side information capture. A follow-up review o
 1. **Shared serialization (v0 and the two-layer v1 direction) is rejected.** The reader-side reassessment removes its benefits; its costs (template migration, a shared internal API to version, risk of eroding writer-side scaffolding such as the mr-wolf de-risk matrix) remain. Templates stay per-skill; the single-writer rule stays the invariant that keeps formats a non-problem.
 2. **What the trials actually identified is a semantic checklist**: the minimum information a finding must capture regardless of shape — claim, evidence (command or file:line), severity, impact (when not self-evident), confidence with its basis, route, status. Trial 2 showed severity and impact are consumer-relevant for any finding; trial 1 showed the de-risk record is what makes a finding resumable.
 3. **Current templates have asymmetric content gaps** against that checklist: `trace.md` captures severity/impact but no structured confidence; `mr-wolf-notes.md` captures confidence and de-risk but no severity. These are content defects independent of any format decision.
-4. **Adoption path**: record the checklist in the pack authoring rules (`docs/maintaining-this-pack.md` or `docs/golden-rules.md`), expressed as required information, not required serialization. Apply it to a template only when that template is being touched anyway; no migration pass. The first natural application is cf-audit, whose finding shape does not exist yet.
+4. **Adoption path**: record the checklist in the pack authoring rules (`docs/maintaining-this-pack.md` or `docs/golden-rules.md`), expressed as required information, not required serialization. Apply it to a template only when that template is being touched anyway; no migration pass.
 
 ## Next Trials Worth Running
 
 - A resume trial: open a fresh session with only an artifact written under the checklist (own format, complete content) and check whether de-risking and slice work can actually continue. This validates content completeness, which is the surviving concern.
-- cf-audit's invariant-compliance table: verify its rows carry the checklist information (evidence command, severity, route) in table form — part of cf-audit design, not blocked on any format work.

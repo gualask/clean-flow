@@ -1,6 +1,6 @@
 ---
 name: cf-brainstorm
-description: "Turn a feature or product idea into an approved design spec before any implementation. Use only when the user explicitly asks to brainstorm, explore, or co-design an idea; never trigger it from implementation requests, bug fixes, refactor work, or other Cflow flows. Route ambiguous requests, approach questions, and worth-building judgments to cf-mr-wolf."
+description: "Turn a feature or product idea into an approved design spec before any implementation. Use only when the user explicitly asks to brainstorm, explore, or co-design an idea; never trigger it from implementation requests, bug fixes, refactor work, or other Cflow flows. Do not use for ambiguous requests, approach questions, or worth-building judgments."
 ---
 Operate as a design partner: refine the idea through dialogue, converge on a design, and record it as a durable spec.
 

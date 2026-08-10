@@ -93,7 +93,6 @@ Shared authoring scripts vendored into consuming skills:
 Delegated agents use the shared provider-neutral context, consent, and terminal-role contract, then explicit phase prompts that live beside the consuming reference:
 
 - `skills/_shared/references/dynamic-agents.md`
-- `skills/cf-mr-wolf/references/derisk-agent-brief.md`
 - `skills/cf-review/references/review-agent-brief.md`
 - `skills/cf-test/references/test-agent-brief.md`
 

@@ -5,7 +5,9 @@
       "flows": {
         "default": {
           "required": [],
-          "conditional": ["assets/draft.template.md"]
+          "conditional": [
+            "assets/draft.template.md"
+          ]
         }
       }
     },
@@ -50,7 +52,9 @@
     "cf-cohesion": {
       "flows": {
         "discovery": {
-          "required": ["references/discovery.md"],
+          "required": [
+            "references/discovery.md"
+          ],
           "conditional": []
         },
         "targeted-evaluation": {
@@ -75,51 +79,25 @@
     "cf-docs": {
       "flows": {
         "review": {
-          "required": ["references/review.md"],
+          "required": [
+            "references/review.md"
+          ],
           "conditional": []
         },
         "generate": {
-          "required": ["references/generate.md"],
+          "required": [
+            "references/generate.md"
+          ],
           "conditional": []
         }
       }
     },
     "cf-mr-wolf": {
       "flows": {
-        "evaluation": {
-          "required": ["references/evaluation.md"],
-          "conditional": []
-        },
-        "planning": {
-          "required": [
-            "references/planning.md",
-            "references/evidence.md"
-          ],
-          "conditional": []
-        },
-        "framing": {
-          "required": [
-            "references/framing.md",
-            "references/evidence.md",
-            "references/outcomes.md"
-          ],
+        "gate": {
+          "required": [],
           "conditional": [
-            "references/decomposition.md",
-            "references/dynamic-agents.md",
-            "references/derisk.md",
-            "references/derisk-agent-brief.md"
-          ],
-          "handoffs": [
-            {
-              "to": "cf-mr-wolf:evaluation",
-              "kind": "conditional",
-              "context": "same-thread"
-            },
-            {
-              "to": "cf-mr-wolf:planning",
-              "kind": "conditional",
-              "context": "same-thread"
-            }
+            "references/pushback.md"
           ]
         }
       }
@@ -151,7 +129,9 @@
     "cf-simplify": {
       "flows": {
         "default": {
-          "required": ["references/navigation-cost.md"],
+          "required": [
+            "references/navigation-cost.md"
+          ],
           "conditional": [
             "references/parallel-flows.md",
             "references/local-refactor-rules.md",
@@ -177,7 +157,9 @@
             "references/navigation-cost.md",
             "references/reference-audit.md"
           ],
-          "conditional": ["references/regression-handling.md"]
+          "conditional": [
+            "references/regression-handling.md"
+          ]
         }
       }
     },
@@ -195,18 +177,26 @@
           "conditional": []
         },
         "target-shape": {
-          "required": ["references/target-shape.md"],
-          "conditional": ["references/source-orientation.md"]
+          "required": [
+            "references/target-shape.md"
+          ],
+          "conditional": [
+            "references/source-orientation.md"
+          ]
         },
         "work-unit-planning": {
-          "required": ["references/work-unit-planning.md"],
+          "required": [
+            "references/work-unit-planning.md"
+          ],
           "conditional": [
             "references/artifacts.md",
             "assets/refactor-brief.template.md"
           ]
         },
         "migration-unit-planning": {
-          "required": ["references/migration-unit-planning.md"],
+          "required": [
+            "references/migration-unit-planning.md"
+          ],
           "conditional": [
             "references/artifacts.md",
             "assets/refactor-brief.template.md"
@@ -262,7 +252,9 @@
           ]
         },
         "verify": {
-          "required": ["references/verify.md"],
+          "required": [
+            "references/verify.md"
+          ],
           "conditional": [
             "references/reference-audit.md",
             "references/artifacts.md",
@@ -278,7 +270,9 @@
             "references/dynamic-agents.md",
             "references/assertion-quality.md"
           ],
-          "conditional": ["references/test-agent-brief.md"]
+          "conditional": [
+            "references/test-agent-brief.md"
+          ]
         }
       }
     },

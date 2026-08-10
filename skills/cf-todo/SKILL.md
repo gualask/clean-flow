@@ -1,6 +1,6 @@
 ---
 name: cf-todo
-description: Create or update a lightweight todo file tracking next steps and open questions from an analysis or working session. Use when the request asks to write, add to, update, or check off a todo.md, or to record remaining work and open questions in a tracking file. Do not use to read an existing todo file or to answer what it contains. Do not use for Cflow refactor progress or resume state (cf-start owns them), decision framing (cf-mr-wolf), or project documentation (cf-docs).
+description: Create or update a lightweight todo file tracking next steps and open questions from an analysis or working session. Use when the request asks to write, add to, update, or check off a todo.md, or to record remaining work and open questions in a tracking file. Do not use to read an existing todo file or to answer what it contains. Do not use for Cflow refactor progress or resume state (cf-start owns them), or for project documentation (cf-docs).
 ---
 Operate as the keeper of a lightweight tracking file: capture next steps and open questions the current conversation or analysis already produced, and keep the file current.
 

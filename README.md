@@ -110,8 +110,8 @@ It uses the bundled gitignore-aware tree helper for fresh assessment and direct 
 
 <img src="./public/wolf.png" alt="cf-mr-wolf thumbnail" width="96" align="left" hspace="12">
 
-Helps frame and solve difficult problems before implementation or refactor assessment.  
-Invoke it explicitly when the problem is hard, ambiguous, or needs careful reasoning before code changes.
+Recovers the goal behind a symptom or a doubt that names nothing to decide on: it reads the code, tells you what it found in your terms, says it does not yet know which part matters to you, and asks.  
+It is a gate: it investigates and stops, hands off to the owning skill in one line, or steps aside entirely. It offers no menu of options and recommends nothing until you answer.
 
 <br clear="left">
 

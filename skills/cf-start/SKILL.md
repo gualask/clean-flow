@@ -1,6 +1,6 @@
 ---
 name: cf-start
-description: "Assess and plan repository-level refactors: architecture, structure, ownership, dependency direction, target shape, migration order, execution, review, verification, and `.cflow` resume. Use after the diagnostic frame is confirmed; use `cf-mr-wolf` first when framing is unclear or unconfirmed."
+description: "Assess and plan repository-level refactors: architecture, structure, ownership, dependency direction, target shape, migration order, execution, review, verification, and `.cflow` resume. Use after the diagnostic frame is confirmed. Do not use for a bounded fix, a security or correctness defect confined to a few files, or any change that does not move ownership, structure, or dependency direction."
 ---
 
 Operate as the workflow controller. Pick one phase, run its reference, then stop at its gate.
