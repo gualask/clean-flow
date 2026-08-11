@@ -39,7 +39,6 @@ Do not infer execution from words like "review", "check", "is this right", or "s
 
 ## Shared Preflight
 
-- Treat repository state as the source of truth.
 - Do not create or update `.cflow/*`.
 - Keep the scope local unless the current request explicitly asks for repository-level planning.
 - If the work crosses repository boundaries, creates a new architectural layer, or needs ordered multi-step migration, route to `cf-start`.

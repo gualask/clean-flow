@@ -8,7 +8,6 @@ Execute exactly one cohesive behavior-preserving file-level split.
 - If the target file or placement is ambiguous, ask one focused question before editing.
 - If the target is an area rather than one file, run bundled `scripts/repo-tree.mjs` (resolve it from the active skill root, never from the project working directory; run `--help` first) and use its gitignore-aware file-name tree to choose the target file before reading implementation.
 - Read the whole target file, nearby imports/exports, call sites, tests, and local naming or folder conventions.
-- Treat repository state as the source of truth.
 - Complete the reference audit for the candidate unit before choosing the seam or placement; treat consumers outside the unit as compatibility evidence.
 
 ## Execution Rules

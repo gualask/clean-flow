@@ -16,7 +16,7 @@ Classify each divergence before proposing consolidation:
 
 - `accidental`: born from old UI, data, or design choices; nobody rewriting this today would reintroduce it. Consolidation candidate.
 - `essential`: domain forces will keep pulling the flows apart; differences are expected to grow. Keep the flows separate.
-- `unknown`: needs one more targeted check before deciding.
+- `uncertain`: needs one more targeted check before deciding.
 
 A wrong abstraction costs more than the duplication it removes. When in doubt between `accidental` and `essential`, prefer keeping the duplication and say why.
 
@@ -24,6 +24,6 @@ A wrong abstraction costs more than the duplication it removes. When in doubt be
 
 - Name the single abstraction by its shared responsibility; per-flow remainders stay as thin named variants beside it.
 - If the unified unit needs mode flags, type switches, or per-flow branches inside its core, the divergence was essential; stop and keep the flows separate.
-- The result must still pass references/navigation-cost.md: a maintainer hunting a bug in one flow should read the shared core once and skip the other flow's variant entirely.
+- The result must still lower reading cost: a maintainer hunting a bug in one flow should read the shared core once and skip the other flow's variant entirely.
 - Keep the consolidation behavior-preserving; if a contract or visible behavior must change to unify the flows, surface that as the decision before implementation.
 - For a bounded merge, apply it under the Applying The Simplification rules; for multi-step or cross-boundary migration, route to `cf-start` with the proposed abstraction as the target direction.

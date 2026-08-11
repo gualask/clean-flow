@@ -15,7 +15,6 @@ Do not bootstrap or require `.cflow/` artifacts.
 
 - Identify one target source file or one explicitly touched local file area.
 - If the target, flow, or requested outcome is ambiguous, ask one focused question.
-- Treat repository state as the source of truth.
 
 ## Flow Selection
 
