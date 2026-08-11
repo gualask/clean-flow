@@ -409,6 +409,23 @@ that had already been reported, and each is cheap to prevent.
     are actually written in. Every wrong reading here was a **substantive** claim about which
     mechanism worked, reported before the check.
 
+32. **The pointer sentence echoed the reference's own vocabulary into the trace.** Rule 31's remedy —
+    read loading by content, not by file name — fails against the sentence form that makes references
+    load, because that form names what the file holds: *"…owns the hard triggers, the named
+    exemptions…"*. Those words then sit in every trace that read only `SKILL.md`, and counting them
+    reported a reference loaded in a pass that never opened it. It worsens as pointers improve.
+    **Rule**: count only strings present in the reference body **and** absent from the pointer
+    sentence, chosen from the file before the count and checked against that sentence explicitly.
+
+33. **The target label was read from the commit message, not the diff.** Rule 1 below was followed —
+    shipped commit found, parent pinned — and six runs were still scored against an opinion. The
+    commit was titled *"refactor align module ownership"*, so the endpoint became "dissolves the
+    catch-all directory as a category"; the commit kept all seven subdirectories and moved eight files
+    of sixty-three. Runs recommending what the author had done were failures in both arms, and the
+    control screen was misread as a baseline defect when it was baseline agreement. **Rule**: write
+    the target label from what the diff changed, quoting it in the bed file. If the label cannot be
+    stated as a property of the diff, the case is an opinion however real the commit is.
+
 ## Where the intervention can be placed
 
 Placement is part of the design, not a detail: the host decides when text reaches the model, and
@@ -424,7 +441,8 @@ Host-neutral, and every line was bought by a case that failed without it. The ha
 trial records.
 
 1. Find a shipped commit that **resolved a product decision**, and take its parent as the pin. The
-   commit is then the ground truth and nobody in the trial chose it.
+   commit is then the ground truth and nobody in the trial chose it. Write the target label from what
+   its **diff** changed, never from what the message claims (instrument error 33).
 2. Check the pre-state is **deliberate and defensible**, not an oversight. If it is simply broken,
    both arms fix it and there is nothing to recover.
 3. Write the prompt from **what the user observes only**. Naming the mechanism, the component, or the
