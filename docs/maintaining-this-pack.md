@@ -48,7 +48,6 @@ Public skill entrypoints:
 
 - `cf-start`
 - `cf-mr-wolf`
-- `cf-simplify`
 - `cf-scenario`
 - `cf-cognitive`
 - `cf-split`
@@ -117,7 +116,6 @@ Maintainer flow mirrors:
 
 - `cf-start`: [start/doc-start.flow.md](./start/doc-start.flow.md)
 - `cf-mr-wolf`: [mr-wolf/doc-mr-wolf.flow.md](./mr-wolf/doc-mr-wolf.flow.md)
-- `cf-simplify`: [simplify/doc-simplify.flow.md](./simplify/doc-simplify.flow.md)
 - `cf-scenario`: [scenario/doc-scenario.flow.md](./scenario/doc-scenario.flow.md)
 - `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
 - `cf-split`: [split/doc-split.flow.md](./split/doc-split.flow.md)

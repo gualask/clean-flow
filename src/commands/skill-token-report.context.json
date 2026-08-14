@@ -126,20 +126,6 @@
         }
       }
     },
-    "cf-simplify": {
-      "flows": {
-        "default": {
-          "required": [
-            "references/navigation-cost.md"
-          ],
-          "conditional": [
-            "references/parallel-flows.md",
-            "references/local-refactor-rules.md",
-            "references/reference-audit.md"
-          ]
-        }
-      }
-    },
     "cf-split": {
       "flows": {
         "evaluation": {

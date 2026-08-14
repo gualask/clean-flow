@@ -9,7 +9,7 @@ Do not write code, scaffold projects, or start implementation until the design h
 ## Boundaries
 
 - Explicit invocation only. If this skill was reached without the user asking to brainstorm, hand back to `cf-mr-wolf`.
-- Value judgments about existing code or features belong to `cf-mr-wolf` or `cf-simplify`; refactor planning belongs to `cf-start`.
+- Value judgments about existing code or features belong to `cf-mr-wolf`; refactor planning belongs to `cf-start`.
 
 ## Artifacts
 

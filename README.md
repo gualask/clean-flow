@@ -115,11 +115,6 @@ It is a gate: it investigates and stops, hands off to the owning skill in one li
 
 <br clear="left">
 
-### `cf-simplify`
-
-Reviews an area for overengineering, file sprawl, duplicated or parallel near-identical flows, and accidental complexity.
-Use it when you are unsure whether the current behavior, interface contracts, boundaries, or abstractions are worth their code cost, or whether similar flows should be consolidated behind one abstraction.
-
 ### `cf-scenario`
 
 Explains what really happens in a concrete scenario, grounded in the code.
@@ -188,7 +183,6 @@ Once the diagnostic frame is confirmed, use `cf-start` when you want the normal 
 7. resume from `.cflow/refactor-brief.md` when needed
 
 For direct local work, use `cf-cognitive`, `cf-split`, or `cf-cohesion` instead.
-For overengineering or "are these files necessary?" reviews, use `cf-simplify`.
 To review what a set of changes exposes and route it, use `cf-review`: pending work before you commit, or a history range after the fact.
 To inspect assertion quality and test-contract coverage, run `cf-test` separately against the same pending work or named history range; `cf-review` does not classify tests or assess their assertions.
 For lightweight follow-up tracking from an analysis or working session, use `cf-todo`.
@@ -197,7 +191,6 @@ For lightweight follow-up tracking from an analysis or working session, use `cf-
 
 - [Start flow](./docs/start/doc-start.flow.md)
 - [Mr Wolf flow](./docs/mr-wolf/doc-mr-wolf.flow.md)
-- [Simplify flow](./docs/simplify/doc-simplify.flow.md)
 - [Scenario flow](./docs/scenario/doc-scenario.flow.md)
 - [Cognitive flow](./docs/cognitive/doc-cognitive.flow.md)
 - [Split flow](./docs/split/doc-split.flow.md)

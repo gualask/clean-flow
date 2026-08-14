@@ -72,7 +72,6 @@ Before suggesting a skill change, collect as much of this packet as possible:
 - exact invocation path:
   - `cf-start`
   - `cf-mr-wolf`
-  - `cf-simplify`
   - `cf-scenario`
   - `cf-cognitive`
   - `cf-split`

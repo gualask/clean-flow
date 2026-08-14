@@ -46,7 +46,7 @@ On an applicable move-shaped change, each surviving reference to an old name or 
 
 ## Lens 7 — Incomplete Change
 
-Route: `cf-simplify`
+Route: `cf-mr-wolf`
 
 Report both sides of an incomplete transition: old and replacement paths still standing, newly parallel flows, callerless compatibility shims, or code made unreachable. Name both sides and their remaining uses.
 

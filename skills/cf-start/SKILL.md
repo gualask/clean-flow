@@ -52,7 +52,7 @@ Approval is phase-scoped.
 
 Use before Cflow workflow work. Do not touch `.cflow/refactor-brief.md`.
 
-- `cf-simplify`: overengineering or simplification review comes first.
+- `cf-mr-wolf`: whether the structure should exist at all is still open, so the shape of the change is not yet decided.
 - `cf-cognitive`, `cf-split`, `cf-cohesion`: the request is local and bounded to that lens.
 
 ### Target Shape

@@ -73,21 +73,6 @@ test("cf-docs routes only by Markdown write intent", async () => {
   }
 });
 
-test("cf-simplify discovery stays within software implementation", async () => {
-  const skillFile = path.join(SKILLS_ROOT, "cf-simplify", "SKILL.md");
-  const skill = await fs.readFile(skillFile, "utf8");
-  const description = parseFrontmatter(
-    skill,
-    "skills/cf-simplify/SKILL.md",
-  ).description;
-
-  assert.match(description, /overengineering in software implementation/);
-  assert.match(description, /implementation structure or behavior/);
-  assert.match(description, /Do not use for non-code content/);
-  assert.match(description, /local code readability work to cf-cognitive/);
-  assert.doesNotMatch(description, /questions whether files are necessary/);
-});
-
 test("cf-cohesion discovery excludes non-code content", async () => {
   const skillFile = path.join(SKILLS_ROOT, "cf-cohesion", "SKILL.md");
   const skill = await fs.readFile(skillFile, "utf8");

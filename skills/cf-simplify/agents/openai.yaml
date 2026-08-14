@@ -1,4 +1,0 @@
-interface:
-  display_name: "Cflow:simplify"
-  short_description: "Find overengineering and simplification paths"
-  default_prompt: "Use $cf-simplify to review whether this area is overengineered and recommend a cleaner simplification path."

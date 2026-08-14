@@ -13,10 +13,6 @@
       "references": ["dynamic-agents.md", "navigation-cost.md", "reference-audit.md"],
       "scripts": ["repo-tree.mjs"]
     },
-    "cf-simplify": {
-      "references": ["local-refactor-rules.md", "navigation-cost.md", "reference-audit.md"],
-      "scripts": ["repo-tree.mjs"]
-    },
     "cf-split": {
       "references": ["file-split-rules.md", "navigation-cost.md", "reference-audit.md", "regression-handling.md"],
       "scripts": ["repo-tree.mjs"]
