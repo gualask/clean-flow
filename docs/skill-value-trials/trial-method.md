@@ -27,6 +27,30 @@ would have measured nothing at more cost than one.
 Applies to every arm, every candidate rule, every endpoint change. The only thing that earns a batch
 without a probe is a comparison whose single-run outcome is already known.
 
+## GOLDEN RULE — the prompt must not contain the skill's own work
+
+**Write the task as the user would type it. If the prompt delimits the area, names the files, or
+states the suspicion, you have handed the control arm the work the skill was supposed to do, and
+every number from that bed is conditional on a frame the user may never supply.**
+
+This is not a refinement of task sampling. It silently falsifies any trial of any skill whose value
+includes deciding *where to look*, and it does so in the direction that flatters the control arm.
+
+Rules:
+
+- **Name the area by behaviour, never by file.** "Starting a recording" is a task; a list of modules
+  is an answer.
+- **Never state the suspicion, and never state the defect.** A symptom the user would really report
+  is allowed only if it does not identify the cause.
+- **Aim between two failures.** Too narrow and you have handed over the frame. Too broad and a
+  repository-level gate can fire, the treated arm correctly answers with a question instead of an
+  analysis, and the endpoint cannot be read at all. A feature-sized perimeter is the band.
+- **Record whether each arm reached the area.** With an unframed prompt, *did not find it* and
+  *never looked there* are different outcomes and only the first is about the skill. Read it from
+  the files the answer cites, and declare the field before the runs.
+- **A trial whose prompt was framed still counts** — for what it measured. It reads the skill *after*
+  its framing step has been performed by hand, and the write-up must say so.
+
 ## Trial contract
 
 Write the trial contract before running either arm:
@@ -210,6 +234,28 @@ Record:
 - every run's score and cost
 - failures, exclusions, and validity threats
 - verdict, limits, and next replication needed
+
+### Step 8 — Report it to the person, in their language
+
+The record above is written for whoever re-runs the trial. It is not a report. **The person who owns
+the decision gets a separate telling, in prose, with no codes in it.** That means: no label names, no
+lot names, no bed names, no field names, no pin paths, no tables of identifiers. Those are the
+instrument's internal vocabulary and they carry no meaning outside the harness.
+
+Say instead, in this order:
+
+1. **what was being checked**, described by what it does — "the four lines that say where the work
+   continues", not the name of the block.
+2. **how it was checked and what it cost** — how many answers, whether runs were bought, and that
+   the thresholds were written down before the numbers.
+3. **what came out**, as a sentence with the two numbers that matter in it: "of 32 answers written
+   without the skill, not one lists what it inspected; with the skill, 31 of 37 do."
+4. **what was decided as a consequence**, including *nothing was changed* when that is the answer.
+5. **where the author was wrong**, plainly, before being asked.
+
+A number is reportable when it can be said this way. If explaining a result requires the reader to
+learn a label first, the result is not yet understood well enough to act on — and a verdict nobody
+outside the harness can restate is a verdict that cannot be checked by the person paying for it.
 
 ## Validity threats
 
@@ -425,6 +471,132 @@ that had already been reported, and each is cheap to prevent.
     control screen was misread as a baseline defect when it was baseline agreement. **Rule**: write
     the target label from what the diff changed, quoting it in the bed file. If the label cannot be
     stated as a property of the diff, the case is an opinion however real the commit is.
+
+34. **The arm read the other batches.** Every batch lives beside every other under `/tmp`, and an
+    editing run hunting for a macro definition ran `rg ... /private/tmp` and pulled back logs and
+    session rollouts from nine other batches — one of them an answer about the same repository,
+    pin and area written the same morning. Isolating `HOME` (rule 23) does nothing here: the arm
+    was isolated, the directory it sits in was not. The run survived only because its reference
+    loads and its file writes both preceded the sweep, which was checked rather than assumed.
+    **Rule**: after every run, reject a trace that reached into another batch's logs, homes or
+    sessions. Prose may legitimately name another batch's *snapshot* path, since beds reuse briefs
+    written from earlier snapshots, so scope the check to logs, homes and session files or it
+    fires on half the archive. This matters most where the endpoint is "did this reference load":
+    a swept log from a batch that did load it injects the very strings being counted.
+
+35. **The intervention's arrival time was scheduled by wording, and wording does not schedule it.**
+    A design tried to make a sibling skill arrive LATE in a session by putting its work last in
+    the requested order. The sibling was read at line 31 of 11,662 — at once — because a skill is
+    activated when the prompt is READ, not when the work reaches its subject. Mentioning the
+    artifact anywhere in the request pulls the skill in immediately. A second attempt moved the
+    request to turn 2 and failed differently: the skill under test sends the model to that
+    artifact during its own pass, so the sibling still entered turn 1; and a turn-2 request that
+    is *only* about the sibling's subject is a case where the sibling's contract winning is
+    correct behaviour, not the defect under study.
+    **Rule**: when the variable is WHEN something enters a session, check that your manipulation
+    can move it before buying the batch, and declare the check as a preregistered gate. Both
+    attempts above died at one run each on exactly that gate, which is the cheap way to be wrong.
+    Where the skill under test is itself what invites the other in, the timing is not an
+    independent variable at all and the question needs a different design or no runs.
+
+36. **The endpoint read the mechanism where the ground truth was a property.** A bed was built on an
+    area whose weight is real: a command channel and a single writer thread funnel three
+    independent writers onto one file, and the code says so. The endpoint labelled the answer by
+    whether that CHANNEL survived. Both arms replaced it with a mutex around a shared writer —
+    which serialises just as completely — and both were scored as having collapsed the boundary.
+    The treatment arm had in fact preserved every property the bed asserted, refused the merge the
+    prompt asked for, and solved the half-initialised-object complaint with two explicit types
+    instead. It was labelled a failure for choosing a different mechanism.
+    **Rule**: state the ground truth as the PROPERTY that must survive, then write the endpoint on
+    that property — "does the bottom line preserve serialised writes, by any means" — never on the
+    construct that currently delivers it. If the endpoint cannot be phrased without naming a type,
+    a channel or a file, it is measuring the author's design preference.
+    Corollary, bought three times: **a doc comment is the designer's opinion written inside the
+    code.** Three beds have been built on justifications of the form "the code says this boundary
+    exists for reason R", and each time a competent reviewer found a cheaper mechanism that also
+    delivers R. A justification is a testable ground truth only when a TEST FAILS on the tempting
+    change, or when the cost of removal is observable outside the repository — a wire format, a
+    published API, a capability boundary a permission system enforces. Reading the code is not
+    enough, however carefully it is read.
+37. **A label defined by a count merged two behaviours that differ in kind.** An endpoint read how
+    many destinations an answer offered at the close, and called two-or-more a defect: the skill
+    says "the exact route", singular. Four of 37 scored two-or-more, and reading them showed three
+    were a STAGED PLAN — this piece of the work here, that piece there, in order — while one handed
+    the choice back unchosen. Only the second is the defect the endpoint was built for, so on the
+    shape that mattered n was 1, not 4. The judge had applied the definition exactly as written.
+    **Rule**: rule 13 bites hardest when the label is a quantity. "More than one" is not a
+    behaviour — it is arithmetic over behaviours, and two answers can reach the same count from
+    opposite intentions. Before banding a count, name the shapes it can contain and check they are
+    the same defect; if they are not, the field needs a second dimension declared up front, not a
+    reinterpretation afterwards.
+38. **The rubric inherited an ambiguity from the artifact and reported it as a failure.** The same
+    lot asked whether the destination an answer named was the right one of four, handing the judge
+    the four one-line glosses verbatim. Three of 24 came back wrong, all three the same pair:
+    handed to "local regrouping of already-related files" where the judge held "broad, ordered,
+    resumable refactor work" fit better. Read in full, one of the three closed with the phrase
+    "per eseguire il regrouping locale" — the losing gloss, word for word. The two glosses overlap
+    on multi-file consolidation and the brief gave no rule for scale, so the judge supplied one.
+    **Rule**: when a rubric is quoted from the artifact under test, its ambiguities become the
+    instrument's ambiguities, and a disagreement about where one category ends becomes
+    indistinguishable from a defect. Either resolve the boundary in the brief — and then you are
+    measuring against your resolution, not the artifact — or declare the overlap in advance and
+    read the disagreement as evidence about the artifact's categories rather than about the answers.
+    Do not repair the labels: the overlap is the finding.
+
+39. **The calibration answer did not have the property it was declared to have.** A two-field lot
+    anchored every label with one hand-written answer. One was declared "SPARSO + UNA": a single
+    road described in three ordered steps, which is the shape the brief explicitly warns against
+    counting as three options. It came back SENZACOSTI, and the judge was right — the answer closes
+    by asking whether the owner wants to keep the structure instead, which is a second road offered
+    seriously, and the brief's own clause says an "or leave it alone" counts as an option when
+    offered seriously. The spec was wrong, not the judge; the anchor had never been a valid instance
+    of the label.
+    **Rule**: a calibration answer is not validated by the author's intention. Read it against the
+    brief's own clauses, one clause at a time, BEFORE blinding — the same way the judge will. An
+    anchor that fails this check produces a void that looks like judge unreliability and is not.
+    Corollary, and it cost a clean reading to learn: **when a lot has more than one field, declare
+    the voiding rule PER FIELD.** "Any calibration landing wrong voids the lot" read literally
+    destroys a field whose own three anchors all held, for a failure in a field it shares nothing
+    with. Localizing the void afterwards is a refinement made after seeing numbers, and the reading
+    it rescues is one grade weaker for it.
+
+40. **A secondary field was reported as a signal while carrying no evidence line of its own.** A lot
+    asked for a label, a supporting quotation, and a second unbanded field. The brief said the
+    quotation must support THE LABEL, so every one of the 25 quotations evidenced the primary reading
+    and the secondary field rested on nothing but the judge's bare word. The author reported that
+    field — 22 of 25 — as "the sharpest defect-shaped signal of the day". Reading the answers showed
+    all 22 went in the SAME direction, the conservative one, which is not the behaviour the phrase
+    implied; the label merged "I would keep this" with "drop this requirement", so error 37 a second
+    time, made by the author who had written error 37 down that morning. It surfaced only because the
+    user asked whether the results had been read properly — the second time that question found a real
+    error in one day.
+    **Rule**: every field that will be reported needs its own evidence line, quoted from the answer.
+    A field without one may be tallied and stored, never characterised. And the archive's own "count
+    cases, not answers" applies to secondary fields too: reporting a rate from label counts, without
+    reading the positives in full, is exactly the shortcut it forbids.
+    Corollary: **when a label can be reached from opposite intentions, a direction field is not
+    optional.** Ask what the answer decided, not merely whether it decided.
+
+### Read a lot with a tool, not by hand
+
+Six of the errors above are reading errors, not design errors: a truncated reason, a hand-subtracted
+denominator, a rate quoted without the positives read, a secondary field characterised with no
+quotation behind it, a concentration check skipped, a citation never verified. They recur because
+each one is a small piece of clerical work done freshly every time, and one of the six was itself
+introduced by an audit script written in shell, which silently found nothing because zsh does not
+word-split an unquoted variable.
+
+**Write the reading down once, in a real language, and run it instead.** The reader must impose the
+order the method requires rather than leaving it to discipline: anchors checked FIRST and rates
+suppressed when one fails; every positive printed WHOLE and BEFORE any count; calibrations excluded
+from the denominator mechanically, with the denominator stated; every citation verified to exist as
+text in the answer it labels; every field with no evidence line named unquotable, meaning it may be
+tallied and never characterised; and the per-area split always printed, flagged void when the
+positives sit in one area. A reader with those properties turns six recurring mistakes into six
+things that cannot happen quietly.
+
+The one in this repository is `.local-trials/harness/read-lot.py`, and it caught a hand-count error on
+its first run.
 
 ## Where the intervention can be placed
 
