@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-15
+
+- Moved `cf-scenario` off explanation and onto deciding a named change against the scenarios it touches. Asked what happens, the bare model already named a boundary outside the reported path unprompted in every trial run, so the skill now starts where a change is on the table and its cost elsewhere is unknown.
+- Rewrote `cf-mr-wolf`'s description to match the boundary: it owns the shape of a change nobody has decided yet, and stops owning a request that names both its target and the change to make to it. "Show me what happens in this case" now belongs to no skill, deliberately.
+- Cut `cf-scenario` from 52 lines to 21. Eight of twelve guardrails and the whole output-style block were removed after they measured level with the full text on every declared field; the impact-boundary line and the behavior-pinning line were then isolated one at a time and neither separated from its absence.
+- Kept two guardrails: state what happens to rows that already exist when a change alters stored data, which is the one line measured to pay for itself, and the `cf-review` handoff contract.
+- Removed the behavior-pinning line from `cf-mr-wolf` as well, on the same measurement.
+- Added a third golden rule to the trial method: an endpoint settled by a fact in the source is read against a written criterion in the open, and only an endpoint that ranks the arms against each other is blinded.
+- Added `docs/skill-value-trials/aiming-errors.md` for the failures where the instrument was sound and the trial was pointed at the wrong question.
+- Recorded the pack-wide description budget in the authoring rules: the host's initial skills list is capped near 8,000 characters and truncates on overflow.
+
 ## 2026-08-14
 
 - Removed `cf-simplify` and its flow document. Repeated trials showed it changed how the answer was formatted without changing what the answer found, and in places it narrowed what the bare model would have done.
