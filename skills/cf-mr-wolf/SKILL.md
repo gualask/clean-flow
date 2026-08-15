@@ -1,6 +1,6 @@
 ---
 name: cf-mr-wolf
-description: "Recover the goal behind a reported symptom, or the shape of a change before any work commits to one. Use when the user reports a symptom, an experience, or a doubt without naming what in the system should change. Also use when the request asks what a change would consist of, or which approach to take, and that shape is not yet decided — even when the target is already named. Do not use when the request already names a component, flow, or contract together with the technical alternatives for it, and do not use for bounded edits, a defect whose fix is one localized edit, or code review."
+description: "Recover the goal behind a reported symptom, or the shape of a change nobody has decided yet. Use when the user reports a symptom, an experience, or a doubt without naming what should change, or asks what a change would consist of while its shape is still open — even when the target is already named. Do not use once the request names both its target and the change to make to it, even when voiced as a doubt: a named component with its technical alternatives, a proposal whose worth or impact is the question, a bounded edit, a defect whose fix is one localized edit, or code review."
 ---
 
 Everything here turns on one question: does the request name a decidable target? If it does, hand off or answer it. If it does not, investigate and stop.

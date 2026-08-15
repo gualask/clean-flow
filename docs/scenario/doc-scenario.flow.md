@@ -18,5 +18,6 @@ Document the runtime flow for `cf-scenario`, the public entrypoint for explainin
 4. When `cf-review` supplies a business-alignment candidate, verify its authoritative source and state the sourced expected behavior beside the changed path's actual behavior.
 5. Compare nearby flows when they may share implementation or prove the impact boundary.
 6. Distinguish verified behavior from inference where the code does not fully prove the conclusion.
-7. Explain what the user, caller, UI, CLI, database, job, event, or external system observes.
-8. Return a focused walkthrough and practical conclusion without implementing, moving files, or writing patches.
+7. When the change under discussion would alter stored data or its shape, state what happens to the rows that already exist.
+8. Explain what the user, caller, UI, CLI, database, job, event, or external system observes.
+9. Return a focused walkthrough and practical conclusion without implementing, moving files, or writing patches.
