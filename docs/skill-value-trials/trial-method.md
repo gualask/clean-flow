@@ -76,6 +76,32 @@ Do not force a single-run A/B onto value that exists across sessions, coordinate
 persists accepted state, or provides user-facing ceremony. Build a trial that observes the claimed
 property, or mark the claim untested.
 
+## GOLDEN RULE — criterion or comparison, decided before the instrument
+
+**Two endpoints look alike and need opposite instruments. Say which one you have, in the bed, before
+choosing how the answers will be read.**
+
+- **Criterion-referenced.** The target is a fact that exists outside the trial — the code does X, the
+  diff changed Y, the protocol says Z — written down before any run and checkable by opening the
+  source. Each arm either states it or does not, and the other arm's answers do not enter that
+  decision. **Read the answers directly against the criterion, in the open.** Blinding buys nothing
+  here: there is no relative grading for the knowledge of the arm to bend, and the criterion cannot
+  soften under an indulgent reader because it is a fact in a file. An extra LLM judge is not merely
+  unnecessary on a two-fact endpoint — it inserts a layer that can only lose information, and it
+  costs runs.
+- **Comparative.** The endpoint ranks the arms against each other — deeper, better covered, more
+  useful, more decisive. There is no external fact to check, so the reading IS the measurement.
+  Instrument error 17 applies in full: blind the answers, and have them scored by someone who did not
+  design the bed.
+
+**A criterion that cannot be checked by opening the source is a rubric wearing a fact's clothes.** If
+deciding whether an answer meets it needs an opinion about scale, completeness or quality, the
+endpoint is comparative — blind it. Errors 37, 38 and 41 are all this mistake in different disguises.
+
+What holds either way, and is not negotiable: the criterion or rubric is fixed before the runs; both
+arms pass through the same reading; every claim made about an answer carries a quotation from that
+answer; and the positives are read whole before any rate is computed.
+
 ## Prerequisites
 
 - A fixed model and host with a repeatable way to run the same task.
@@ -86,6 +112,12 @@ property, or mark the claim untested.
 - A recorded inventory of host-provided skills, tools, and instructions visible to both arms.
 
 ## Step 1 — Define the value claim and task population
+
+**Get the claim from whoever owns the skill, in one sentence, before writing any prompt: without
+this, the model does X wrong.** A skill's own file says what it covers, not what it prevents, and a
+trial can only measure the second. Reading the claim off the skill text instead is the first of five
+aiming errors in [aiming-errors.md](./aiming-errors.md) — errors where the instrument was fine and
+the trial was pointed at the wrong question. Read that file before Step 1, not after a null result.
 
 State what the skill should change and why that difference matters. A skill justified by accuracy,
 coverage, safer edits, decision quality, lower variance, or lower cost needs different evidence for
@@ -211,7 +243,9 @@ reconstructed from the run database after the fact, so process metrics never nee
 before the runs.
 
 Prefer executable checks, source verification, schema validation, or blinded rubric scoring over
-impression. Keep unverifiable claims separate from errors.
+impression — in that order, and stop at the first one the value claim can be phrased in. A criterion
+checkable in the source needs no judge above it (error 41). Keep unverifiable claims separate from
+errors.
 
 ## Step 7 — Decide the verdict
 
@@ -309,7 +343,10 @@ that had already been reported, and each is cheap to prevent.
 17. **Unblinded re-scoring by the trial author.** A dry re-score produced clean arm separation that
     did not survive blind re-scoring by an independent judge — the author's weakest run tied the
     other arm's best two.
-    **Rule**: an instrument may be calibrated unblinded; an arm comparison may not.
+    **Rule**: an instrument may be calibrated unblinded; a COMPARATIVE arm comparison may not. Scoped
+    on 2026-08-14: this error was made on a rubric endpoint, where the reading is the measurement and
+    knowing the arm bends it. It does not reach a criterion-referenced fact check — see the golden
+    rule above — and reading it as universal is what produced error 41.
 
 18. **Verify the payload was exercised.** Deleting material on the strength of a trial requires
     evidence the runs actually loaded it. Grep the traces for the reference reads before concluding
@@ -576,6 +613,21 @@ that had already been reported, and each is cheap to prevent.
     reading the positives in full, is exactly the shortcut it forbids.
     Corollary: **when a label can be reached from opposite intentions, a direction field is not
     optional.** Ask what the answer decided, not merely whether it decided.
+
+41. **A blind LLM judge was built for an endpoint that was a fact check.** A bed asked whether an
+    answer states two things a reader can settle by opening the repository: that two flows write
+    through the same function, and that only one of them moves a stored timestamp. The design still
+    reached for the full apparatus — a scoring brief, six emitted fields, calibration anchors, a
+    shuffled lot, a map kept closed — because error 17 had been read as universal. The owner stopped
+    it with one question: *we are not trying to find out which option is better without knowing; we
+    know the wanted result, we want to know whether each arm reaches it.* That is criterion-referenced
+    verification, and every layer above the criterion was cost with no measurement in it. Worse, the
+    judge was the weaker instrument: it can only report what it believes an answer claims, while the
+    operator can check the claim against the source the answer cites.
+    **Rule**: choose the instrument from the endpoint's kind, not from the archive's scars. Ask whether
+    the target is settled by a file or by a preference. If a file settles it, write the criterion in
+    the bed, read both arms against it in the open, quote the words that decide each field, and buy
+    nothing else. Keep blinding for endpoints where the reading is the measurement.
 
 ### Read a lot with a tool, not by hand
 
