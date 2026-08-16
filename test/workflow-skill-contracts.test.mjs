@@ -46,9 +46,9 @@ test("cohesion execution composes evaluation as a gated non-terminal preflight",
   assert.match(execution, /If the evaluation gate stopped the flow before edits/);
 });
 
-test("cognitive execution routes to split only for remaining file-level pressure", async () => {
-  const executionContract = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cognitive", "references", "execution.md"),
+test("cognitive routes to split and cohesion up front, not by post-edit condition", async () => {
+  const cognitiveContract = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
     "utf8",
   );
   const flowDoc = await fs.readFile(
@@ -56,30 +56,25 @@ test("cognitive execution routes to split only for remaining file-level pressure
     "utf8",
   );
 
+  // Routing is stated once, on what the request is, and named again in the
+  // result. The two post-edit conditional routes were dropped with the merge of
+  // 2026-08-16: a vague condition inside a pointer fired 4 of 9 times on
+  // identical input, and no bed ever exercised either clause.
   assert.match(
-    executionContract,
-    /route to `cf-split` evaluation before advancing only when remaining file-level pressure is demonstrated/,
-  );
-  assert.match(
-    executionContract,
-    /canonical file-length trigger without a recognized exemption/,
-  );
-  assert.match(
-    executionContract,
-    /stable named owner or boundary that still raises navigation cost/,
+    cognitiveContract,
+    /Route elsewhere instead of working here: `cf-split`.*`cf-cohesion`.*`cf-start`/s,
   );
   assert.match(
-    executionContract,
-    /otherwise finish the target and continue within the explicit target set/i,
+    cognitiveContract,
+    /`cf-split` or `cf-cohesion` next step when relevant/,
   );
-  assert.doesNotMatch(
-    executionContract,
-    /route to `cf-split` evaluation for that same file before advancing to another target file/,
-  );
-  assert.match(
-    flowDoc,
-    /route through `cf-split` evaluation only when remaining file-level pressure is demonstrated/,
-  );
+  for (const contract of [cognitiveContract, flowDoc]) {
+    assert.doesNotMatch(contract, /After editing a target file, route to/);
+    assert.doesNotMatch(
+      contract,
+      /route through `cf-split` evaluation only when remaining file-level pressure is demonstrated/,
+    );
+  }
 });
 
 test("todo rolls completed tasks over only when adding new work", async () => {

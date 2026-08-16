@@ -38,10 +38,6 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
     "utf8",
   );
-  const cognitiveExecution = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cognitive", "references", "execution.md"),
-    "utf8",
-  );
   const cognitiveFlow = await fs.readFile(
     path.join(DOCS_ROOT, "cognitive", "doc-cognitive.flow.md"),
     "utf8",
@@ -68,10 +64,16 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
     assert.match(contract, /\*\*Deferred\*\*: only after execution edits/);
     assert.match(contract, /Omit this section when no .* ran/);
   }
-  for (const execution of [cohesionExecution, splitExecution, cognitiveExecution]) {
+  for (const execution of [cohesionExecution, splitExecution]) {
     assert.match(execution, /report\/action separation in references\/navigation-cost\.md/);
     assert.match(execution, /For \*\*Deferred\*\*, after edits/);
   }
+  // cf-cognitive carries its execution flow in SKILL.md, so the same rule is
+  // asserted on the contract itself rather than on a per-flow reference file.
+  assert.match(
+    cognitiveContract,
+    /report\/action separation in references\/navigation-cost\.md/,
+  );
   for (const flow of [splitFlow, cognitiveFlow]) {
     assert.match(flow, /complete deferred finding required by the canonical navigation-cost contract/);
   }
@@ -212,30 +214,42 @@ test("cognitive owns first-level reference loading in its skill contract", async
     path.join(SHARED_REFERENCES_ROOT, "local-refactor-rules.md"),
     "utf8",
   );
-  const discovery = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cognitive", "references", "discovery.md"),
-    "utf8",
-  );
-  const targetedEvaluation = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cognitive", "references", "targeted-evaluation.md"),
-    "utf8",
-  );
-  const execution = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cognitive", "references", "execution.md"),
-    "utf8",
-  );
-
   assert.match(
     cognitiveContract,
     /Before applying any flow, read references\/navigation-cost\.md/,
   );
   assert.match(
     cognitiveContract,
-    /Read references\/execution\.md and references\/local-refactor-rules\.md/,
+    /Read references\/local-refactor-rules\.md/,
   );
-  for (const reference of [discovery, targetedEvaluation, execution]) {
-    assert.doesNotMatch(reference, /ensure you have read references\//i);
+  // The three per-flow reference files were merged into SKILL.md on 2026-08-16,
+  // so the contract itself must carry all three flows and ship no flow file.
+  for (const flow of [
+    /\*\*Discovery\*\* —/,
+    /\*\*Targeted evaluation\*\* —/,
+    /\*\*Execution\*\* —/,
+  ]) {
+    assert.match(cognitiveContract, flow);
   }
+  // The Defects slot, added 2026-08-16. It is a SLOT and not a sentence on
+  // purpose: a field that must be filled is not passed over in silence. Its first
+  // version reported 2 of 3 against a floor of 0 of 8 on a case with a planted
+  // defect and stayed quiet 3 of 3 with the defect removed, but once filled
+  // itself with a bare `none` over a live defect. The basis clause makes `none` a
+  // claim rather than a silence: 3 of 3 named the README on the clean case, and
+  // nobody wrote `none` at all on the defective one.
+  assert.match(
+    cognitiveContract,
+    /- \*\*Defects\*\*: behavior defects noticed while reading the target, with file and line\. `none` is a claim/,
+  );
+  assert.match(cognitiveContract, /name what you checked it against\./);
+  const shipped = await fs.readdir(
+    path.join(SKILLS_ROOT, "cf-cognitive", "references"),
+  );
+  assert.deepEqual(
+    shipped.filter((f) => f.endsWith(".md")).sort(),
+    ["local-refactor-rules.md", "navigation-cost.md"],
+  );
   assert.match(
     localRefactorRules,
     /hard-trigger values, exemptions, and remedy rules come from `references\/navigation-cost\.md`/,

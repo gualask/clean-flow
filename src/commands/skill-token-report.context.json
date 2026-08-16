@@ -15,22 +15,19 @@
       "flows": {
         "discovery": {
           "required": [
-            "references/navigation-cost.md",
-            "references/discovery.md"
+            "references/navigation-cost.md"
           ],
           "conditional": []
         },
         "targeted-evaluation": {
           "required": [
-            "references/navigation-cost.md",
-            "references/targeted-evaluation.md"
+            "references/navigation-cost.md"
           ],
           "conditional": []
         },
         "execution": {
           "required": [
             "references/navigation-cost.md",
-            "references/execution.md",
             "references/local-refactor-rules.md"
           ],
           "conditional": [],

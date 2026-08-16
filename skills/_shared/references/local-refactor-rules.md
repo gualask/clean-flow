@@ -4,61 +4,29 @@ Scope: local code edits for readability, cognitive load, or post-structural clea
 The hard-trigger values, exemptions, and remedy rules come from `references/navigation-cost.md`; apply that contract before the soft signals below.
 For function-level pressure, prefer remedies in this order: guard clauses or early returns first, then named same-file helpers when flattening is not enough.
 
-## Behavior
+## Scope Of The Edit
 
-- Preserve exported APIs, return values, errors, side effects, evaluation order, and async behavior unless explicitly asked to change them.
-- Prefer the most focused change that makes the main flow cleaner and clearer.
 - Keep changes local unless the active skill explicitly allows broader movement.
-- Do not fix discovered behavior bugs inside a refactor unless the current request explicitly asks; report them separately.
+- Prefer the most focused change that makes the main flow cleaner and clearer.
 
 ## When To Simplify
 
-Prefer simplification when the touched code has real local pressure:
-
 - functions that are hard to scan even when no canonical hard trigger fires
-- nesting deeper than function -> block -> block
 - nested try/catch blocks that make control flow hard to follow, unless language or framework constraints force them
 - try/catch blocks or loop bodies long enough to hide their main purpose
-- framework, runtime, or infrastructure wiring blocks that mix setup/teardown with nested callbacks containing real behavior, especially event subscriptions, observers, lifecycle hooks, timers, middleware, transactions, or scheduler callbacks
-- branching that hides the main path
-- complex boolean expressions, regex construction, parsing, or small algorithms that are hard to read inline
-- repeated non-trivial local logic
-
-Avoid edits when the code is merely imperfect but already clear, cohesive, and proportionate.
+- branching that hides the main path, or repeated non-trivial local logic
+- framework, runtime, or infrastructure wiring blocks whose callbacks carry real behavior: branching, state changes, cleanup-sensitive ordering, or multiple side effects. Prefer named local handlers when that makes setup, teardown, and effect order easier to scan, and keep ordering-sensitive side effects visible at the call site.
 
 ## Extraction
 
-- Extract validation, error creation, difficult local algorithms, parser or regex setup, domain calculations, long try/catch bodies, long loop bodies, or case-specific handling from a long branch or switch.
-- Prefer an orchestrating caller that reads as the main sequence; a jump into a helper is cheap when its name lets the reader skip it or dive deliberately.
-- Keep extracted functions file-local and near callers unless local convention says otherwise.
+- Before extracting, name the branch, loop, try/catch body, policy decision, or invariant that the extraction will make clearer.
+- A helper is justified only when its name carries useful intent that the code did not already express.
 - Extract from hot paths only when the readability gain clearly outweighs call-boundary, allocation, or extra-pass costs.
 - After editing, re-read the caller or target function first; inline or narrow helpers that do not make it clearer.
 
-## Operational Checks
-
-- Before extracting, name the branch, loop, try/catch body, policy decision, or invariant that the extraction will make clearer.
-- Prefer guard clauses, clearer names, or local reshaping before adding helpers when those make the main path clear enough.
-- A helper is justified only when its name carries useful intent that the code did not already express.
-- Keep important side effects visible at the level where ordering matters.
-- Treat anonymous callbacks passed to registration/lifecycle APIs as local cognitive load when they contain branching, state changes, cleanup-sensitive behavior, or multiple side effects.
-- Prefer named local handlers or a shallow subscription helper when that makes setup, teardown, and effect order clearer.
-- For lifecycle, registration, framework/runtime wiring, and infrastructure APIs, keep setup, teardown, cancellation, and ordering visible at the call site.
-- Extract inline callback behavior into named file-local handlers only when the name makes the local behavior clearer without hiding ordering-sensitive side effects.
-
-## Naming
-
-- Use intention-revealing names that describe the result or domain action, not every algorithm step.
-- Avoid `And` / `Or` glued names; split separate responsibilities instead.
-- Keep helper names short and domain-first when the language style allows it.
-
 ## Avoid
 
-- one-line helpers whose name merely restates the code
-- pass-through wrappers
-- generic `process`, `handle`, `helper`, `util`, or `common` names
-- todo-list names like `promoteAndFinalizeCreate` or `loadOrCleanupIfMissing`
 - single-use helpers that only unpack a regex or match result
 - single-use helpers that only loop over a range to push or add into a caller-owned collection
 - helpers that hide important side effects
-- splits that make the call flow harder to follow
 - extractions that force several layers to understand one local behavior

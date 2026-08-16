@@ -183,8 +183,6 @@ test("navigation-cost is the single source of hard-trigger threshold values", as
     path.join(SHARED_REFERENCES_ROOT, "local-refactor-rules.md"),
     path.join(SHARED_REFERENCES_ROOT, "file-split-rules.md"),
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
-    path.join(SKILLS_ROOT, "cf-cognitive", "references", "discovery.md"),
-    path.join(SKILLS_ROOT, "cf-cognitive", "references", "targeted-evaluation.md"),
     path.join(SKILLS_ROOT, "cf-review", "references", "sweep.md"),
     path.join(SKILLS_ROOT, "cf-split", "references", "evaluation.md"),
   ];
