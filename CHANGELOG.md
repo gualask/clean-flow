@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-16
+
+- Merged `cf-cognitive`'s three flow reference files into `SKILL.md`. Discovery, targeted evaluation and execution now live in its body: 49 lines in one file against 150 across four. On a writable bed the merged text wrote less than the shipped one and produced the only two runs in six that stopped and said what they would touch before editing.
+- Dropped the two post-edit conditional routes to `cf-split` and `cf-cohesion`. Routing is stated once, on what the request is, and named again in the result. The vague condition inside a pointer had been measured firing 4 of 9 times on identical input, and no trial ever exercised either clause.
+- Cut `_shared/references/local-refactor-rules.md` from 64 lines to 32, which also lightens `cf-start`. Two of its lines were convicted on a bed built for them: removing "do not fix discovered behavior bugs inside a refactor" and "preserve exported APIs, return values, errors, side effects, evaluation order" changed nothing measurable. The rest was standard refactoring knowledge, one rule stated five times, and two blocks duplicating `navigation-cost.md` — including the nesting threshold, identical character for character, in a file whose single source of truth is asserted by a test.
+- Added a `Defects` slot to `cf-cognitive`'s output. Given a refactoring request on a function carrying a real defect, the bare model corrected the behaviour in 3 of 3 trial runs while every version of the pack left it intact and said nothing about it in 8 of 8. The slot reports it instead: 2 of 3 with the first wording, 3 of 3 with the shipped one, without ever fixing it.
+- Made `none` a claim in that slot rather than a silence. The first wording once filled the field with a bare `none` over a live defect, which asserts more than saying nothing; `none` now names what the code was checked against. On a case with the defect removed the slot stayed quiet in 3 of 3 runs and named the standard every time.
+
 ## 2026-08-15
 
 - Moved `cf-scenario` off explanation and onto deciding a named change against the scenarios it touches. Asked what happens, the bare model already named a boundary outside the reported path unprompted in every trial run, so the skill now starts where a change is on the table and its cost elsewhere is unknown.
