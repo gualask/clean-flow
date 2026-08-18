@@ -7,7 +7,7 @@ Document the runtime flow for `cf-cohesion`, the public local entrypoint for eva
 ## Runtime Inputs
 
 - Public skill: `skills/cf-cohesion/SKILL.md`
-- Runtime references: `skills/cf-cohesion/references/discovery.md`, `targeted-evaluation.md`, `execution.md`
+- Runtime references: `skills/cf-cohesion/references/targeted-evaluation.md`
 - Shared sources vendored into runtime paths: `skills/_shared/references/navigation-cost.md`, `reference-audit.md`; `skills/_shared/scripts/repo-tree.mjs`
 - Target artifacts: none
 
@@ -18,7 +18,7 @@ Document the runtime flow for `cf-cohesion`, the public local entrypoint for eva
 3. In discovery, return at most three candidate clusters and do not edit.
 4. In targeted evaluation, load the targeted-evaluation, reference-audit, and navigation-cost references; audit candidate consumers across repository-controlled code, configuration, and documentation before building the cohesion map. Do not edit.
 5. Ask one focused question if target, mode, or requested outcome is ambiguous.
-6. In execution, load those references plus execution and complete or refresh the targeted evaluation without emitting intermediate output.
+6. In execution, load those same references and complete or refresh the targeted evaluation without emitting intermediate output.
 7. Continue only for `recommended` or `optional`; for `keep as-is` or `route`, stop without editing and return the evaluation output.
 8. Use external consumers to keep files with broader ownership outside the selected cluster.
 9. Move exactly one clear local cluster and keep files with broader reuse or ownership outside the slice.

@@ -18,10 +18,6 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
     path.join(SKILLS_ROOT, "cf-cohesion", "SKILL.md"),
     "utf8",
   );
-  const cohesionExecution = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cohesion", "references", "execution.md"),
-    "utf8",
-  );
   const splitContract = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-split", "SKILL.md"),
     "utf8",
@@ -64,7 +60,7 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
     assert.match(contract, /\*\*Deferred\*\*: only after execution edits/);
     assert.match(contract, /Omit this section when no .* ran/);
   }
-  for (const execution of [cohesionExecution, splitExecution]) {
+  for (const execution of [splitExecution]) {
     assert.match(execution, /report\/action separation in references\/navigation-cost\.md/);
     assert.match(execution, /For \*\*Deferred\*\*, after edits/);
   }
@@ -84,10 +80,6 @@ test("cohesion audits ownership and stale references across repository-controlle
     path.join(SHARED_REFERENCES_ROOT, "reference-audit.md"),
     "utf8",
   );
-  const cohesionExecution = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cohesion", "references", "execution.md"),
-    "utf8",
-  );
   const targetedEvaluation = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-cohesion", "references", "targeted-evaluation.md"),
     "utf8",
@@ -103,10 +95,14 @@ test("cohesion audits ownership and stale references across repository-controlle
   assert.match(referenceAudit, /consumers outside the candidate unit as compatibility evidence/);
   assert.doesNotMatch(referenceAudit, /ownership evidence/);
   assert.match(targetedEvaluation, /run the reference audit for each candidate/i);
-  assert.match(targetedEvaluation, /consumers outside the proposed cluster as ownership evidence/i);
-  assert.match(targetedEvaluation, /broader than the proposed owner/);
-  assert.match(cohesionExecution, /decision admitted by the execution gate.*confirmed owner cluster/);
-  assert.doesNotMatch(cohesionExecution, /owned symbol/);
+  // Both the ownership-evidence line and the Owner Locality section were cut on
+  // 2026-08-18. What carries this cell is the generic-folder prohibition, the
+  // line the trials named as one of the two measured payers.
+  assert.match(
+    targetedEvaluation,
+    /Do not create `common`, `shared`, `utils`, or similar generic folders/,
+  );
+  assert.doesNotMatch(targetedEvaluation, /ownership evidence/i);
   assert.match(cohesionFlow, /code, configuration, and documentation/);
   assert.doesNotMatch(cohesionFlow, /unless a move is explicitly requested/);
 });
@@ -120,24 +116,25 @@ test("cohesion owns first-level reference loading in its skill contract", async 
     path.join(SKILLS_ROOT, "cf-cohesion", "references", "targeted-evaluation.md"),
     "utf8",
   );
-  const execution = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cohesion", "references", "execution.md"),
-    "utf8",
-  );
 
   assert.match(
     cohesionContract,
-    /Read references\/targeted-evaluation\.md, references\/reference-audit\.md, and references\/navigation-cost\.md/,
+    /\[references\/targeted-evaluation\.md\]\(references\/targeted-evaluation\.md\) holds .*\. Read it in the targeted evaluation flow, and in the execution flow before any edit\./,
   );
-  assert.match(
-    cohesionContract,
-    /Read references\/targeted-evaluation\.md, references\/execution\.md, references\/reference-audit\.md, and references\/navigation-cost\.md/,
-  );
+  for (const reference of ["reference-audit", "navigation-cost"]) {
+    assert.match(
+      cohesionContract,
+      new RegExp(
+        `\\[references/${reference}\\.md\\]\\(references/${reference}\\.md\\) holds .*\\. Read it in the targeted evaluation and execution flows`,
+      ),
+    );
+  }
+  assert.match(cohesionContract, /The discovery flow reads none of them\./);
   assert.match(
     cohesionContract,
     /Complete or refresh the targeted evaluation before editing/,
   );
-  for (const reference of [targetedEvaluation, execution]) {
+  for (const reference of [targetedEvaluation]) {
     assert.doesNotMatch(reference, /Ensure you have read references\//);
   }
 });

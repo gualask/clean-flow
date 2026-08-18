@@ -24,10 +24,6 @@ test("cohesion execution composes evaluation as a gated non-terminal preflight",
     path.join(SKILLS_ROOT, "cf-cohesion", "references", "targeted-evaluation.md"),
     "utf8",
   );
-  const execution = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cohesion", "references", "execution.md"),
-    "utf8",
-  );
   const cohesionFlow = await fs.readFile(
     path.join(DOCS_ROOT, "cohesion", "doc-cohesion.flow.md"),
     "utf8",
@@ -41,9 +37,6 @@ test("cohesion execution composes evaluation as a gated non-terminal preflight",
   assert.match(targetedEvaluation, /When targeted evaluation is the selected flow/);
   assert.match(targetedEvaluation, /When loaded as execution preflight, emit no intermediate output/);
   assert.doesNotMatch(targetedEvaluation, /^Evaluate only\. Do not edit files\.$/m);
-  assert.match(execution, /decision admitted by the execution gate/);
-  assert.match(execution, /report `regrouping performed` only after files moved/);
-  assert.match(execution, /If the evaluation gate stopped the flow before edits/);
 });
 
 test("cognitive routes to split and cohesion up front, not by post-edit condition", async () => {

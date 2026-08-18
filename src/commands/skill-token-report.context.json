@@ -49,9 +49,7 @@
     "cf-cohesion": {
       "flows": {
         "discovery": {
-          "required": [
-            "references/discovery.md"
-          ],
+          "required": [],
           "conditional": []
         },
         "targeted-evaluation": {
@@ -64,10 +62,9 @@
         },
         "execution": {
           "required": [
-            "references/execution.md",
+            "references/targeted-evaluation.md",
             "references/reference-audit.md",
-            "references/navigation-cost.md",
-            "references/targeted-evaluation.md"
+            "references/navigation-cost.md"
           ],
           "conditional": []
         }
