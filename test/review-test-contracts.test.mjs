@@ -81,8 +81,10 @@ test("review owns reference loading and remains read-only", async () => {
   );
   assert.match(
     reviewContract,
-    /Do not edit repository files or invoke another skill that edits them/,
+    /Do not edit repository files other than the batched pass's recap, and do not invoke another skill that edits them/,
   );
+  assert.match(reviewContract, /Owns `\.cflow\/cf-review-recap\.md`/);
+  assert.match(reviewContract, /Create or update no other repository file/);
   assert.match(reviewContract, /references\/review-agent-brief\.md/);
   assert.match(reviewFlowDoc, /de-risks only its cited evidence and never advances `status: candidate`/);
   assert.doesNotMatch(reviewFlowDoc, /Does not confirm, de-risk, or fix a candidate/);
@@ -191,6 +193,7 @@ test("review owns reference loading and remains read-only", async () => {
     "references/navigation-cost.md",
   ]);
   assert.deepEqual(reviewFlow.conditional, [
+    "references/delegated-execution.md",
     "references/reference-audit.md",
     "references/review-agent-brief.md",
     "references/handoff.md",
@@ -216,6 +219,13 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
     path.join(SHARED_REFERENCES_ROOT, "dynamic-agents.md"),
     "utf8",
   );
+  // The split of pins/scenario44: the gate is read at step 2 of every pass, the
+  // delegated contract only when the policy is not `local`. Assertions follow
+  // the text they belong to, so the gate keeps its own coverage.
+  const delegatedExecution = await fs.readFile(
+    path.join(SHARED_REFERENCES_ROOT, "delegated-execution.md"),
+    "utf8",
+  );
   const contextMap = JSON.parse(
     await fs.readFile(
       path.join(REPO_ROOT, "src", "commands", "skill-token-report.context.json"),
@@ -238,6 +248,14 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
   assert.match(testContract, /Every assignment applies both lens groups/);
   assert.match(testContract, /shared reference owns assignment and completion/);
   assert.doesNotMatch(testContract, /complete path-only manifest|compact reports|reconcile cross-batch references/);
+  // The recap is the pass's one repository write, declared in the pack's own
+  // ownership idiom, and every other write stays banned.
+  assert.match(testContract, /Owns `\.cflow\/cf-test-recap\.md`/);
+  assert.match(testContract, /Create or update no other repository file/);
+  assert.match(
+    testContract,
+    /Do not edit repository files other than the batched pass's recap/,
+  );
   assert.match(agentBrief, /Logical scope manifest: \{SCOPE_MANIFEST\}/);
   assert.match(agentBrief, /cross-batch reconciliation/);
   assert.match(agentBrief, /Do not edit files, run tests, create artifacts/);
@@ -292,25 +310,50 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
   assert.match(agentBrief, /route `controller-owned` and status `candidate`/);
   assert.match(dynamicAgents, /policy.*authoritative/s);
   assert.match(dynamicAgents, /`batched`/);
-  assert.match(dynamicAgents, /Batching changes source loading, never the logical scope/);
-  assert.match(dynamicAgents, /controller retains only these reports in its context/);
-  assert.match(dynamicAgents, /do not create a repository or temporary artifact/);
-  assert.match(dynamicAgents, /missing report or unresolved cross-batch check cannot produce a clear result/);
-  assert.match(dynamicAgents, /Loading every batch into the same local context is not a batched fallback/);
-  assert.match(dynamicAgents, /runtime default/);
+  // The gate names no other reference: the consuming skill is the only router.
+  assert.doesNotMatch(dynamicAgents, /delegated-execution\.md/);
+  assert.doesNotMatch(dynamicAgents, /## Recap File/);
+  assert.match(delegatedExecution, /Read this when the context gate returns anything other than `local`/);
+  assert.doesNotMatch(delegatedExecution, /dynamic-agents\.md/);
+  assert.match(delegatedExecution, /Batching changes source loading, never the logical scope/);
+  assert.match(delegatedExecution, /keeps only the reports in its context/);
+  assert.match(delegatedExecution, /creates no other repository or temporary artifact/);
+  assert.match(delegatedExecution, /missing report or unresolved cross-batch check cannot produce a clear result/);
+  // The batched fallback is a recap-backed local pass, not a request to narrow
+  // the scope: scenario37-40 in the trial archive. The recap is a deliverable,
+  // owned at one flat path, shared by every skill that batches, and never
+  // overwritten without asking.
+  assert.match(
+    delegatedExecution,
+    /When agents are unavailable or declined, still make the complete pass locally/,
+  );
+  assert.match(delegatedExecution, /## Recap File/);
+  assert.match(delegatedExecution, /The consuming skill owns its own recap at the path its Artifacts contract names/);
+  // One recap per skill, at `.cflow/<skill>-recap.md`, named by each skill's own
+  // Artifacts contract: the shared text names no path, so two batching skills
+  // never collide on one file.
+  assert.doesNotMatch(delegatedExecution, /`\.cflow\/recap\.md`/);
+  assert.match(delegatedExecution, /Each batching skill has its own recap and writes no other skill's/);
+  assert.match(delegatedExecution, /Delegated agents write nothing/);
+  assert.match(delegatedExecution, /never overwrite it silently/);
+  assert.doesNotMatch(delegatedExecution, /narrower-scope fallback for/);
+  assert.match(delegatedExecution, /runtime default/);
   assertStableFields(
-    dynamicAgents,
+    delegatedExecution,
     [
       "runtime_model_selection: controller-owned",
       "runtime_effort_selection: controller-owned",
       "reusable_brief_model_values: forbidden",
     ],
-    "dynamic agent routing contract",
+    "delegated execution contract",
   );
 
   assert.deepEqual(flow.required, [
     "references/dynamic-agents.md",
     "references/assertion-quality.md",
   ]);
-  assert.deepEqual(flow.conditional, ["references/test-agent-brief.md"]);
+  assert.deepEqual(flow.conditional, [
+    "references/delegated-execution.md",
+    "references/test-agent-brief.md",
+  ]);
 });

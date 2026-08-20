@@ -125,8 +125,10 @@ test("every public skill has a maintainer flow doc", async () => {
 });
 
 test("delegated agents cannot be interrupted for perceived slowness", async () => {
+  // Completion moved to the delegated contract with the split of
+  // pins/scenario44: it is read only when the policy is not `local`.
   const contract = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "dynamic-agents.md"),
+    path.join(SHARED_REFERENCES_ROOT, "delegated-execution.md"),
     "utf8",
   );
 

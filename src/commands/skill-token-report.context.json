@@ -105,6 +105,7 @@
             "references/navigation-cost.md"
           ],
           "conditional": [
+            "references/delegated-execution.md",
             "references/reference-audit.md",
             "references/review-agent-brief.md",
             "references/handoff.md"
@@ -251,6 +252,7 @@
             "references/assertion-quality.md"
           ],
           "conditional": [
+            "references/delegated-execution.md",
             "references/test-agent-brief.md"
           ]
         }

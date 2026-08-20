@@ -2,20 +2,44 @@
   "version": 1,
   "skills": {
     "cf-cognitive": {
-      "references": ["local-refactor-rules.md", "navigation-cost.md"],
-      "scripts": ["repo-tree.mjs"]
+      "references": [
+        "local-refactor-rules.md",
+        "navigation-cost.md"
+      ],
+      "scripts": [
+        "repo-tree.mjs"
+      ]
     },
     "cf-cohesion": {
-      "references": ["navigation-cost.md", "reference-audit.md"],
-      "scripts": ["repo-tree.mjs"]
+      "references": [
+        "navigation-cost.md",
+        "reference-audit.md"
+      ],
+      "scripts": [
+        "repo-tree.mjs"
+      ]
     },
     "cf-review": {
-      "references": ["dynamic-agents.md", "navigation-cost.md", "reference-audit.md"],
-      "scripts": ["repo-tree.mjs"]
+      "references": [
+        "delegated-execution.md",
+        "dynamic-agents.md",
+        "navigation-cost.md",
+        "reference-audit.md"
+      ],
+      "scripts": [
+        "repo-tree.mjs"
+      ]
     },
     "cf-split": {
-      "references": ["file-split-rules.md", "navigation-cost.md", "reference-audit.md", "regression-handling.md"],
-      "scripts": ["repo-tree.mjs"]
+      "references": [
+        "file-split-rules.md",
+        "navigation-cost.md",
+        "reference-audit.md",
+        "regression-handling.md"
+      ],
+      "scripts": [
+        "repo-tree.mjs"
+      ]
     },
     "cf-start": {
       "references": [
@@ -26,11 +50,18 @@
         "reference-audit.md",
         "regression-handling.md"
       ],
-      "scripts": ["repo-tree.mjs"]
+      "scripts": [
+        "repo-tree.mjs"
+      ]
     },
     "cf-test": {
-      "references": ["dynamic-agents.md"],
-      "scripts": ["repo-tree.mjs"]
+      "references": [
+        "delegated-execution.md",
+        "dynamic-agents.md"
+      ],
+      "scripts": [
+        "repo-tree.mjs"
+      ]
     }
   }
 }

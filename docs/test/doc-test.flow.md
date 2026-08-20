@@ -15,7 +15,7 @@ It owns test-quality diagnosis, not test execution, production-code review, beha
 
 ## High-Level Flow
 
-1. Resolve pending tests, a named history range, or explicit test targets. Separate primary tests, contract surfaces, authoritative sources, and exclusions without loading the corpus in full. Identify authoritative documents by whether they name the tested behavior, never by path proximity alone.
+1. Resolve pending tests, the existing suite when the working tree holds no test change, a named history range, or explicit test targets. Separate primary tests, contract surfaces, authoritative sources, and exclusions without loading the corpus in full. Identify authoritative documents by whether they name the tested behavior, never by path proximity alone.
 2. Measure the selected existing-file corpus, then follow the shared context, consent, and delegation contract.
 3. Run every invariant and fragility lens locally or through the test agent brief. Every assignment applies both groups. Never interrupt a dispatched agent or replace it locally because it seems slow; only an explicit current user request authorizes interruption, and a missing report leaves the pass incomplete. The controller routes once from the shared contract's completed ledger.
 4. Require a source-backed invariant and a concrete passing regression or behavior-preserving change for every candidate. Check acceptance contracts, protocol rules, intentional seams, distinct input classes, and other nearest false positives.

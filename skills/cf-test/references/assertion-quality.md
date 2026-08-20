@@ -24,7 +24,7 @@ Keep this lens language-agnostic. TypeScript discriminated unions, schema altern
 
 ### 4. Redundant Assertion
 
-Report an assertion or duplicate case that verifies no distinct requirement, boundary, regression, or input class beyond another assertion in the same scope. Similar-looking aliases, table rows, or state transitions are not redundant when each proves a separate supported path.
+Report an assertion or duplicate case that verifies no distinct requirement, boundary, regression, or input class beyond another assertion in the same scope. A table or loop whose rows all take the same branch and assert the same thing is one case repeated: name it and say how many rows it costs. Similar-looking aliases, table rows, or state transitions are not redundant when each proves a separate supported path — a different branch, a boundary, or an input class the others do not reach.
 
 ### 5. Over-Specified Test
 
@@ -43,6 +43,8 @@ Report assertions about private wiring, collaborator identity, helper calls, int
 ## Evidence And Severity
 
 Every candidate must identify the authoritative invariant or explain which observable public contract makes an asserted detail incidental. No locatable source and no concrete passing regression means no finding.
+
+A source's silence is not evidence. Most real behavior is never written down, so a test asserting behavior the code genuinely has is not over-specified, brittle, or unsupported merely because no document restates it. `The implementation does this but no authoritative source says so` is a reason to leave the test alone, not a candidate, and routing it for confirmation spends the user's attention on a working test. Report an asserted detail as incidental only by naming the observable contract that still holds without it.
 
 - `high`: required behavior can regress while the test still passes.
 - `medium`: the test rejects a credible behavior-preserving implementation or materially obscures the contract.

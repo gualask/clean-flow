@@ -1,6 +1,6 @@
 ---
 name: cf-scenario
-description: Decide a named change against the scenarios it touches. Use when the request names both a thing and the change to make to it — remove this, merge these two, keep it as it is — and asks whether it is worth doing or what it would cost elsewhere. A doubt counts when it names both: "these two look almost identical, worth merging?", "this abstraction looks overengineered, can it go?". Do not use when nothing is named to change and the request only asks what currently happens, nor for a repository map or structural inventory.
+description: 'Decide a named change against the scenarios it touches. Use when the request names both a thing and the change to make to it — remove this, merge these two, keep it as it is — and asks whether it is worth doing or what it would cost elsewhere. A doubt counts when it names both: "these two look almost identical, worth merging?", "this abstraction looks overengineered, can it go?". Do not use when nothing is named to change and the request only asks what currently happens, nor for a repository map or structural inventory.'
 ---
 Use this skill to decide a proposed change against the scenarios it touches, grounded in the repository.
 Do not implement, move files, or write patches in this skill.

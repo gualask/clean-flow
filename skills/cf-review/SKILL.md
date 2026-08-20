@@ -4,7 +4,7 @@ description: "Report structural, convention, and authoritative requirement findi
 ---
 Detect eligible structural and authoritative-requirement violations exposed by a bounded change set, record them with evidence, and route them to the skill that owns the next decision.
 
-Do not edit repository files or invoke another skill that edits them.
+Do not edit repository files other than the batched pass's recap, and do not invoke another skill that edits them.
 
 ## Scope
 
@@ -35,7 +35,7 @@ Then, for either one:
 ## Flow
 
 1. Resolve the change set from the current request. List primary files, deleted entries, and authoritative intent sources separately.
-2. Read `references/dynamic-agents.md`. Run its installed-local context gate against every primary file and already-identified authoritative source before loading them in full. Follow its policy and consent UX exactly.
+2. Read `references/dynamic-agents.md`. Run its installed-local context gate against every primary file and already-identified authoritative source before loading them in full. Follow its policy exactly; when it is not `local`, read `references/delegated-execution.md` and follow it.
 3. Read `references/sweep.md` and `references/navigation-cost.md`. When the change is move-shaped, also read `references/reference-audit.md`; use its read-only audit rule and do not apply its editing rule. Run every lens against its declared surface. All lenses are mandatory; only a lens whose observable condition is absent may be not applicable.
 4. For `local`, run the sweep sequentially. For `subagent-1`, `subagent-2`, or `batched`, read `references/review-agent-brief.md` and fill every placeholder. Every assignment applies all lenses. The shared reference owns assignment and completion; treat its merged ledger as the completed sweep before step 5 loads `references/handoff.md`.
 5. When the sweep produced at least one finding, read `references/handoff.md` and build the routing output. With no findings, do not read it: report `Findings: none`, `Handoff: none`, and `Result: clear for the completed sweep`. Either way the output accounts for every lens.
@@ -50,7 +50,9 @@ Route, do not invoke: name the destination and let the user choose what to open 
 
 ## Artifacts
 
-- Do not create or update repository files, including todo files and `.cflow/*`.
+- Owns `.cflow/cf-review-recap.md`: the batched pass's recap, written under the Recap File contract in `references/delegated-execution.md`. It is the pass's one repository write.
+- When it already exists and the request is about it, work through it under the same contract instead of running the Flow.
+- Create or update no other repository file, including todo files and any other `.cflow/*` file.
 - If the current request also asks to persist findings, finish this read-only pass and name `cf-todo` as the separate next action.
 
 ## Output Format
@@ -63,4 +65,4 @@ Return only:
 - **Findings**: every candidate, grouped by file, in the shape `references/handoff.md` defines. Report all of them; do not cap, rank away, or soften a finding that fires a hard trigger.
 - **Handoff**: with findings, destination skill mapped to the findings it receives and the recommended first one to open; otherwise `none`.
 - **Test assertion quality**: `not assessed in this pass`; recommend running `cf-test` against the same pending work or named history range when that change set adds or changes executable tests. Do not classify tests, report a test count, or run `cf-test` from this pass.
-- **Result**: with findings, the shipping recommendation from `references/handoff.md`; otherwise `clear for the completed sweep`, never unqualified `clear` or `commit-ready`. Always append exactly one business-alignment qualifier: `business alignment checked against <sources>`, `business correctness not assessed: no authoritative requirement source identified`, or `business correctness not assessed for <case>: authoritative sources conflict or are ambiguous`. State confirmation still needed, that no repository files were modified, and the next action.
+- **Result**: with findings, the shipping recommendation from `references/handoff.md`; otherwise `clear for the completed sweep`, never unqualified `clear` or `commit-ready`. Always append exactly one business-alignment qualifier: `business alignment checked against <sources>`, `business correctness not assessed: no authoritative requirement source identified`, or `business correctness not assessed for <case>: authoritative sources conflict or are ambiguous`. State confirmation still needed, that no repository file was modified apart from the recap when the pass wrote one, and the next action.

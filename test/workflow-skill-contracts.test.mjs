@@ -90,15 +90,15 @@ test("todo rolls completed tasks over only when adding new work", async () => {
 });
 
 test("delegated terminal agents keep a stable shared protocol", async () => {
-  const dynamicAgents = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "dynamic-agents.md"),
+  const delegatedExecution = await fs.readFile(
+    path.join(SHARED_REFERENCES_ROOT, "delegated-execution.md"),
     "utf8",
   );
 
-  assert.match(dynamicAgents, /## Delegated Terminal Agent Protocol/);
-  assert.match(dynamicAgents, /restricts only the delegated role/);
+  assert.match(delegatedExecution, /## Delegated Terminal Agent Protocol/);
+  assert.match(delegatedExecution, /restricts only the delegated role/);
   assertStableFields(
-    dynamicAgents,
+    delegatedExecution,
     [...TERMINAL_AGENT_PROTOCOL, "reusable_brief_model_values: forbidden"],
     "shared delegated terminal agent protocol",
   );
@@ -152,15 +152,15 @@ test("cf-mr-wolf is a gate and carries no runtime references", async () => {
 });
 
 test("dynamic agent inputs require retained notes only when relevant", async () => {
-  const dynamicAgents = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "dynamic-agents.md"),
+  const delegatedExecution = await fs.readFile(
+    path.join(SHARED_REFERENCES_ROOT, "delegated-execution.md"),
     "utf8",
   );
 
-  assert.match(dynamicAgents, /exact evidence question or candidate findings/);
-  assert.match(dynamicAgents, /When retained notes exist and matter to the pass/);
+  assert.match(delegatedExecution, /exact evidence question or candidate findings/);
+  assert.match(delegatedExecution, /When retained notes exist and matter to the pass/);
   assert.doesNotMatch(
-    dynamicAgents,
+    delegatedExecution,
     /notes path or compact notes summary, and exact evidence question/,
   );
 });
@@ -239,7 +239,16 @@ test("packaged skill routing only names skills that exist in the pack", async ()
       const text = await fs.readFile(file, "utf8");
       const label = `skills/${skillName}/${path.relative(skillDir, file)}`;
 
+      // A path under `.cflow/` names a file, not a routing destination:
+      // `.cflow/cf-test-recap.md` is cf-test's recap, not a skill called
+      // `cf-test-recap`. Skip those spans only, so a routing typo still fails.
+      const artifactSpans = [...text.matchAll(/\.cflow\/[A-Za-z0-9._/-]+/g)].map((m) => [
+        m.index,
+        m.index + m[0].length,
+      ]);
+
       for (const match of text.matchAll(/\bcf-[a-z][a-z-]*[a-z]\b/g)) {
+        if (artifactSpans.some(([from, to]) => match.index >= from && match.index < to)) continue;
         assert.ok(
           known.has(match[0]),
           `${label} routes to ${match[0]}, which is not a skill in this pack`,
