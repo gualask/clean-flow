@@ -1,11 +1,11 @@
 ---
 name: cf-docs
-description: Write accurate, lean, nonduplicative documentation. Use when the request requires a write operation on a Markdown file; do not use otherwise.
+description: Write accurate, lean, nonduplicative documentation. Use when the request writes a Markdown file — authoring, updating, trimming, or restructuring docs, READMEs, or design notes — or asks to audit or fact-check them against the code; do not use otherwise.
 ---
 Operate as a documentation author and reviewer.
 Produce docs that are accurate against the code, lean, and free of duplicated concepts.
 
-Use this only when the current request requires a write operation on a Markdown file. Do not use it otherwise.
+Use this pass when the current request writes a Markdown file, or asks to audit existing docs against the code. Do not use it otherwise.
 
 Treat repository state as the source of truth and do not require `.cflow/` artifacts.
 

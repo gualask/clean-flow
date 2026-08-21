@@ -67,8 +67,10 @@ export async function skillAssetFiles(skillDir) {
   }
 }
 
+const FRONTMATTER = /^---\n([\s\S]*?)\n---\n?/;
+
 export function parseFrontmatter(text, label) {
-  const frontmatter = /^---\n([\s\S]*?)\n---\n?/.exec(text);
+  const frontmatter = FRONTMATTER.exec(text);
   assert.ok(frontmatter, `${label} is missing frontmatter`);
 
   const fields = {};
@@ -86,6 +88,13 @@ export function parseFrontmatter(text, label) {
   }
 
   return fields;
+}
+
+export function parseBody(text, label) {
+  const frontmatter = FRONTMATTER.exec(text);
+  assert.ok(frontmatter, `${label} is missing frontmatter`);
+
+  return text.slice(frontmatter[0].length);
 }
 
 export function assertStableFields(text, fields, label) {

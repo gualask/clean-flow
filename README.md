@@ -151,7 +151,7 @@ It reports missing invariants, invalid domain states, redundant or over-specifie
 ### `cf-docs`
 
 Writes, updates, trims, and restructures Markdown docs, READMEs, and design notes against the code.
-It enters only when the request changes documentation; reading a doc to answer something else never triggers it, and a read-only audit needs you to ask for the skill by name.
+It enters when the request writes a Markdown file or asks to audit existing docs against the code; reading a doc to answer something else never triggers it.
 
 ### `cf-todo`
 

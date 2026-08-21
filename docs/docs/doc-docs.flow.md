@@ -4,7 +4,7 @@
 
 Document the runtime flow for `cf-docs`, the public entrypoint for changing documentation — writing, updating, trimming, or restructuring it — so it stays accurate against the code, lean, and free of conceptual duplication.
 
-The routing boundary is one rule: use the skill when the request requires a write operation on a Markdown file; do not use it otherwise.
+The routing boundary is one rule: use the skill when the request writes a Markdown file, or asks to audit existing docs against the code; do not use it otherwise.
 
 ## Runtime Inputs
 

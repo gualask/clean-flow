@@ -10,6 +10,7 @@ import {
   REPO_ROOT,
   SHARED_REFERENCES_ROOT,
   SKILLS_ROOT,
+  parseBody,
   parseFrontmatter,
   publicSkillNames,
   skillTextFiles,
@@ -58,17 +59,20 @@ test("packaged skill descriptions satisfy discovery constraints", async () => {
   }
 });
 
-test("cf-docs routes only by Markdown write intent", async () => {
+test("cf-docs routes by Markdown write intent or an audit request", async () => {
   const skillFile = path.join(SKILLS_ROOT, "cf-docs", "SKILL.md");
   const skill = await fs.readFile(skillFile, "utf8");
-  const description = parseFrontmatter(skill, "skills/cf-docs/SKILL.md").description;
+  const label = "skills/cf-docs/SKILL.md";
+  const description = parseFrontmatter(skill, label).description;
+  const body = parseBody(skill, label);
   const flow = await fs.readFile(
     path.join(DOCS_ROOT, "docs", "doc-docs.flow.md"),
     "utf8",
   );
 
-  for (const contract of [description, skill, flow]) {
-    assert.match(contract, /write operation on a Markdown file/);
+  for (const contract of [description, body, flow]) {
+    assert.match(contract, /writes a Markdown file/);
+    assert.match(contract, /audit (?:or fact-check )?(?:existing )?(?:docs|them) against the code/i);
     assert.match(contract, /do not use (?:it )?otherwise/i);
   }
 });
