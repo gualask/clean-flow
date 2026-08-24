@@ -1,0 +1,6 @@
+interface:
+  display_name: "Cflow:deadcode"
+  short_description: "Report which code is dead or unreachable"
+  default_prompt: "Use $cf-deadcode to check whether any code here is unused."
+policy:
+  allow_implicit_invocation: true

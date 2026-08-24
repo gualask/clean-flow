@@ -120,6 +120,11 @@ It is a gate: it investigates and stops, hands off to the owning skill in one li
 Explains what really happens in a concrete scenario, grounded in the code.
 Use it to frame a bug, compare similar flows, or validate the practical impact of a recent implementation.
 
+### `cf-deadcode`
+
+Reports which code is unreachable when you ask whether something is unused, dead, or safe to delete.
+It closes the pass with a table pairing every name that crosses a boundary as a string — an event, a command, a message type, a job name — with the file and line on each side; an empty cell is a finding. It reports and never removes.
+
 ### `cf-cognitive`
 
 Finds or reduces local cognitive complexity in up to three source files.

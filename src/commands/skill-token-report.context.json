@@ -70,6 +70,14 @@
         }
       }
     },
+    "cf-deadcode": {
+      "flows": {
+        "default": {
+          "required": [],
+          "conditional": []
+        }
+      }
+    },
     "cf-docs": {
       "flows": {
         "review": {
