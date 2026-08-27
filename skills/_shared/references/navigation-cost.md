@@ -42,7 +42,8 @@ Three signals are alarm bells, not mere smells. Past these thresholds the defaul
 
 - nesting deeper than function -> block -> block
 - a function or method past roughly 20-30 logical lines
-- a file past roughly 300 LOC (read it from `scripts/repo-tree.mjs` output; prefer file-level split unless a strong named exemption applies)
+- a source file past roughly 300 LOC (read it from `scripts/repo-tree.mjs` output; prefer file-level split unless a strong named exemption applies).
+  This trigger fires only on implementation source; prose documentation and Markdown are never file-length candidates and are judged by their own documentation lenses.
 
 Past a hard trigger, `keep as-is` or "no finding" is allowed only by explicitly naming one of these exemptions:
 
