@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-27
+
+- Restricted the file-length hard trigger in `navigation-cost.md` to source files. A `cf-review` pass had routed a 324-line Markdown reference to `cf-split`: the trigger read "a file past roughly 300 LOC" and no exemption below it named prose, so the model had nothing to name and no way to refuse. Documentation is judged by its own documentation lenses instead. The edit is in `_shared`, so it reaches all five consumers at the next vendoring.
+- Narrowed `cf-review`'s trigger to an explicit review request and dropped `commit readiness` from its inclusions. Twenty-five real activations across August, nine of them without a review request: the description invited those, since the change set defaults to pending work and that precondition holds in every working session. Measured on a false-trigger battery built from those prompts verbatim, on `gpt-5.6-luna` at `max`: the committability question stops opening the skill, all five explicit review requests still do. 95 to 92 discovery tokens.
+- Refused the longer variants after buying them. Exclusion clauses closed one further case for 66 tokens and 250 characters and closed nothing else: this description pays per case named, roughly 25-60 characters each, and no abstract formulation closed a case on its own across seven arms and two models. Length buys the list of cases already seen, not the next one.
+
 ## 2026-08-24
 
 - Added `cf-deadcode`, eleven non-empty lines that are one output slot: a table pairing every name that crosses a boundary as a string with its consumer and producer at `file:line`, and the rule that an empty cell is a finding. No prose rules, no list of causes, no procedure. Measured on `gpt-5.6-luna` at `max`, three cells, 18 runs, zero false positives: fyler @ `cb8a7ad` (Tauri `invoke`/`emit`) and termetrix @ `3c5df46` (webview `postMessage`, discriminated union) both go 3/3 `F` bare against 3/3 `T` with the slot; linqode @ `1422228`, which has no protocol inside the repository, comes out level.
