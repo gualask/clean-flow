@@ -55,7 +55,7 @@ test("review owns reference loading and remains read-only", async () => {
   );
   assert.match(
     reviewMetadata.description,
-    /Use when the current request asks to review\b/,
+    /Use only when the current request explicitly asks for a review\b/,
   );
   assert.match(reviewMetadata.description, /Do not use to fix findings\b/);
   assert.doesNotMatch(

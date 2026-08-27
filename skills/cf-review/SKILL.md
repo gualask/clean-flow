@@ -1,6 +1,6 @@
 ---
 name: cf-review
-description: "Report structural, convention, and authoritative requirement findings for a set of code changes. Use when the current request asks to review pending or uncommitted work, commit readiness, recent commits, a commit range, or a branch. Do not use to fix findings, assess test assertion quality, or review an unchanged file or area; route test quality to cf-test and a target without a change set to the owning diagnostic skill."
+description: "Report structural, convention, and authoritative requirement findings for a set of code changes. Use only when the current request explicitly asks for a review of pending work, recent commits, a commit range, or a branch. Do not use to fix findings, assess test assertion quality, or review an unchanged file or area; route test quality to cf-test and a target without a change set to the owning diagnostic skill."
 ---
 Detect eligible structural and authoritative-requirement violations exposed by a bounded change set, record them with evidence, and route them to the skill that owns the next decision.
 
