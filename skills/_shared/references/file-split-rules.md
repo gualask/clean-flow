@@ -65,7 +65,7 @@ Do not move to `shared`, `common`, or `utils` because reuse is only theoretical.
 After every executed split, re-check the containing directory:
 
 - if the owner group now passes the bug-localization test and either the placement guardrails or a concrete exception to them, move it into one local subfolder
-- if the owner group is still not stable or the folder would add navigation cost, keep or return the files flat in the parent directory
+- if the owner group is still not stable, keep or return the files flat in the parent directory
 - if a previous split left one extracted file flat, move it only when the current split makes the full owner group pass the same owner and placement checks
 
 If more than one placement is plausible, ask one focused question before editing.

@@ -10,15 +10,19 @@ Execute exactly one cohesive behavior-preserving file-level split.
 - Read the whole target file, nearby imports/exports, call sites, tests, and local naming or folder conventions.
 - Complete the reference audit for the candidate unit before choosing the seam or placement; treat consumers outside the unit as compatibility evidence.
 
-## Execution Rules
+## Placement Check
 
-- Preserve behavior, public API, exports, side effects, evaluation order, and async behavior.
-- Move only the selected owned unit or related group.
-- Keep the source file as the readable entry point for the local workflow.
-- Follow shared grouping and placement rules before creating files, and choose placement for the resulting local cluster rather than only for the new file.
-- Do not promote code to shared, global hooks, common, or utils locations unless the shared grouping rules justify it.
-- After moving code, repeat the reference audit for moved names and paths.
-- Apply the report/action separation in references/navigation-cost.md to every qualifying hard trigger.
+After the split, re-check the containing directory once, before the closing audit and verification.
+Run bundled `scripts/repo-tree.mjs --mode names --include <containing directory>`, read the real
+source files it lists, and evaluate the resulting owner group against the shared placement
+guardrails, and settle the final placement here.
+When the owner group passes the guardrails but a folder there would change module or package
+boundaries, keep the files flat in this pass and record the owner group as a `Deferred` finding
+routed to `cf-start`.
+
+## Reference Audit
+
+Once placement is settled, repeat the reference audit for moved names and paths.
 
 ## Verification
 

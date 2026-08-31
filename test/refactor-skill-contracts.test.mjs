@@ -60,9 +60,11 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
     assert.match(contract, /\*\*Deferred\*\*: only after execution edits/);
     assert.match(contract, /Omit this section when no .* ran/);
   }
+  // The report/action rule is owned by navigation-cost.md, asserted above, and reaches a
+  // split through the mandatory Deferred slot rather than through a restated clause.
   for (const execution of [splitExecution]) {
-    assert.match(execution, /report\/action separation in references\/navigation-cost\.md/);
     assert.match(execution, /For \*\*Deferred\*\*, after edits/);
+    assert.match(execution, /required by references\/navigation-cost\.md/);
   }
   // cf-cognitive carries its execution flow in SKILL.md, so the same rule is
   // asserted on the contract itself rather than on a per-flow reference file.
@@ -198,6 +200,16 @@ test("split owns first-level reference loading and audits consumers before editi
   );
   assert.match(execution, /consumers outside the unit as compatibility evidence/);
   assert.match(execution, /repeat the reference audit for moved names and paths/);
+  // The closing audit and verification must follow the final placement, so a move ordered by
+  // the placement check cannot leave references unaudited or unverified.
+  const placementAt = execution.indexOf("## Placement Check");
+  const auditAt = execution.indexOf("## Reference Audit");
+  const verifyAt = execution.indexOf("## Verification");
+  assert.ok(placementAt > 0 && auditAt > 0 && verifyAt > 0);
+  assert.ok(
+    placementAt < auditAt && auditAt < verifyAt,
+    "placement must settle before the closing reference audit and verification",
+  );
   assert.match(splitFlow, /Before execution edits, audit repository-controlled consumers/);
   assert.match(splitFlow, /fixing stale code, configuration, and documentation references/);
 });
