@@ -13,7 +13,7 @@ Do not write code, scaffold projects, or start implementation until the design h
 
 ## Artifacts
 
-- Owns `.cflow/specs/draft.md`: the single working draft — only one brainstorm can be in progress at a time. On user approval it is promoted by renaming it to `.cflow/specs/<YYYY-MM-DD>-<topic>.md`.
+- Owns `.cflow/specs/draft.md`: the single working draft — only one brainstorm can be in progress at a time. On final spec approval it is promoted by renaming it to `.cflow/specs/<YYYY-MM-DD>-<topic>.md`.
 - Specs are ephemeral by design — a spec serves the implementation and is discarded once the implementation ships.
 - Before creating the draft, create `.cflow/` if needed and write `.cflow/.gitignore` containing a single `*` line if missing; never edit the repository `.gitignore`.
 - Do not read, create, or update other `.cflow/*` artifacts.
@@ -29,9 +29,9 @@ Run the phases in order. Do not skip ahead while material questions are open unl
 5. **Clarify**: ask one decision-relevant question at a time, each building on prior answers. Append new questions only when answers expose a real decision, and move on when the design is sufficiently determined or the user asks to proceed. Prefer 2-4 options with one recommended default when the answer space is enumerable; go open-ended when depth requires it.
 6. **Approaches**: lead with one recommended approach and why. Add alternatives only when the trade-off is genuinely close. Apply YAGNI ruthlessly.
 7. **Design**: present and confirm sections in proportion to their complexity; collapse sections for a small design. Cover only the architecture, components, data flow, error handling, and testing that materially shape the idea. Prefer small units with one clear purpose and well-defined interfaces; in an existing codebase, follow current patterns and include only targeted improvements that serve the idea.
-8. **Spec**: expand the draft into the full design spec, then promote it by renaming (a user-stated location overrides the default path).
-9. **Self-review**: re-read the spec once with fresh eyes and fix inline, without re-reviewing: placeholders or vague requirements, internal contradictions, scope too large for one implementation effort, requirements readable in two ways.
-10. **User review**: ask the user to review the spec file; apply requested changes and re-run the self-review. Stop only after explicit approval.
+8. **Spec**: expand the draft into the full design spec.
+9. **Self-review**: re-read the draft once with fresh eyes and fix inline, without re-reviewing: placeholders or vague requirements, internal contradictions, scope too large for one implementation effort, requirements readable in two ways.
+10. **User review**: ask the user to review the draft; apply requested changes and re-run the self-review. After explicit approval, promote it by renaming (a user-stated location overrides the default path), then stop.
 
 ## Working Draft
 

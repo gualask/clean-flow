@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-07
+
+- Fixed `cf-brainstorm` to keep the spec in `draft.md` through self-review and user review, then rename it only after explicit final approval. The draft no longer disappears while its review is pending or remains after promotion. One `gpt-5.6-luna` at `max` closure trial preserved the approved decisions, left one dated spec and no draft, and changed no implementation files. The fix adds no tokens and leaves the description unchanged.
+- Corrected `cf-test`'s result wording to acknowledge its batched recap instead of claiming that no files were modified.
+- Aligned the README and maintainer flow docs with the runtime contracts: `cf-scenario`'s change-decision scope, recap ownership in review and test flows, cohesion check reporting, the public skill inventory, and `cf-mr-wolf`'s `pushback` reference.
+
 ## 2026-08-31
 
 - Added a fourth hard trigger to `navigation-cost.md`, on directory population: a directory at or past roughly 10 direct real source files with no sub-grouping. It reads the directory rather than the unit being split, so it fires whether or not the current owner group passes the placement guardrails, and it admits two remedies — group one owner family into a named owner folder, or hand the directory to the route that owns that move. The threshold is the 95th percentile of ~300 source directories across three repositories and catches 4% of them; the existing guardrail permits a folder at the 75th. Counting excludes barrels, re-exports, generated files, fixtures, snapshots and tests, and the soft-signal carve-out now names both hard triggers, or the new one would have been demoted to a smell by the line below it.

@@ -24,4 +24,4 @@ Document the runtime flow for `cf-cohesion`, the public local entrypoint for eva
 9. Move exactly one clear local cluster and keep files with broader reuse or ownership outside the slice.
 10. Update affected references and repeat the shared audit for moved names and paths.
 11. Keep the regrouping bounded when a hard trigger's remedy belongs to another flow, but report the complete deferred finding required by the canonical navigation-cost contract.
-12. Run the smallest relevant check and report placement decision, behavior preservation, and any broader route needed.
+12. Report checks run and their results, or why none ran, alongside placement decision, behavior preservation, and any broader route needed.

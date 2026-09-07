@@ -117,8 +117,8 @@ It is a gate: it investigates and stops, hands off to the owning skill in one li
 
 ### `cf-scenario`
 
-Explains what really happens in a concrete scenario, grounded in the code.
-Use it to frame a bug, compare similar flows, or validate the practical impact of a recent implementation.
+Decides a proposed change against the concrete scenarios it touches, grounded in the code.
+Use it when a named change needs a worth-doing decision or impact validation, not merely to explain current behavior.
 
 ### `cf-deadcode`
 

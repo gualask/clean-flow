@@ -4,11 +4,12 @@
 
 Maintainer summary for `cf-mr-wolf`. Runtime behavior belongs to `skills/cf-mr-wolf/SKILL.md`; keep this file descriptive, not authoritative.
 
-`cf-mr-wolf` is a gate, not a pipeline. It performs one classification, then hands off, steps aside, or investigates and stops. It carries no runtime references, no workflow phases, no output contracts, and no artifact of its own.
+`cf-mr-wolf` is a gate, not a pipeline. It performs one classification, then hands off, steps aside, or investigates and stops. It carries no workflow phases, no output contracts, and no artifact of its own.
 
 ## Runtime Inputs
 
 - Public skill: `skills/cf-mr-wolf/SKILL.md`
+- Runtime reference: `skills/cf-mr-wolf/references/pushback.md`, read before answering when the user asserts a cause, offers an explanation, or asks for a specific change
 - Current conversation and request
 - Repository context, on the third branch below only
 

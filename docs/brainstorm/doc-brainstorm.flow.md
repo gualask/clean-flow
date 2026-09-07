@@ -17,5 +17,5 @@ Maintainer summary for the explicit-only design flow that turns one feature or p
 2. Inspect current project context and decompose independent ideas.
 3. Record only decision-relevant questions and answers in the draft.
 4. Recommend an approach, adding alternatives only for real trade-offs.
-5. Present a design proportionate to the idea and promote the completed draft to a spec.
-6. Self-review the spec, then stop after explicit user approval without implementing it.
+5. Present a design proportionate to the idea, complete the spec in the draft, and self-review it there.
+6. Ask the user to review the draft. After explicit approval, rename it to the approved spec and stop without implementing it.

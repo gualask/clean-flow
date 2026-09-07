@@ -47,4 +47,4 @@ Return only:
 - **Lenses**: every lens from `references/assertion-quality.md`, marked reporting, silent, or not applicable with the absent condition.
 - **Findings**: candidates grouped by the action they ask for, in the order `remove`, `rewrite`, `strengthen`, and by severity within each group. A test that does not pay for itself is the answer to a different question than a test that covers too little, and burying the first under the second answers neither. Each candidate carries claim, evidence, invariant or contract, impact, severity, confidence with its basis, false-positive check, and status `candidate`.
 - **Handoff**: destination mapped to candidate ids, recommended first action, or `none`.
-- **Result**: `clear` or `candidates found`, opening with how many cases are proposed for removal; then state that confirmation is still needed, that no files were modified, and the next action.
+- **Result**: `clear` or `candidates found`, opening with how many cases are proposed for removal; then state that confirmation is still needed, that no files were modified except the recap when written, and the next action.

@@ -12,8 +12,8 @@ The change set is the reference point that keeps findings verifiable, and it com
 
 - Public skill: `skills/cf-review/SKILL.md`
 - Runtime references: `skills/cf-review/references/sweep.md`, `review-agent-brief.md`, `handoff.md`
-- Shared sources vendored into runtime paths: `skills/_shared/references/dynamic-agents.md`, `navigation-cost.md`, `reference-audit.md`; `skills/_shared/scripts/repo-tree.mjs`
-- Target artifacts: none
+- Shared sources vendored into runtime paths: `skills/_shared/references/dynamic-agents.md`, `delegated-execution.md`, `navigation-cost.md`, `reference-audit.md`; `skills/_shared/scripts/repo-tree.mjs`
+- Owned artifact: `.cflow/cf-review-recap.md`, under the shared delegated-execution contract
 
 ## High-Level Flow
 
@@ -28,13 +28,13 @@ The change set is the reference point that keeps findings verifiable, and it com
 
 ## Boundaries
 
-- Does not edit repository files.
-- Does not invoke another skill that edits repository files; persistence is a separate user-selected action.
+- Does not edit repository files apart from its batched pass's recap.
+- Does not invoke another skill that edits repository files; persistence outside the recap is a separate user-selected action.
 - Keeps selected test files in the structural sweep but does not assess their assertion quality, classify or count them separately, or invoke `cf-test`.
 - Never presents an empty structural sweep as an unqualified `clear` or `commit-ready`; test assertion quality remains an explicit coverage limit.
 - Does not confirm or fix a candidate; the controller de-risks only its cited evidence and never advances `status: candidate`.
 - Does not report a smell whose remedy no nameable unit can clear.
-- Does not own `.cflow` state; nothing here is resumable.
+- Owns only its recap. A request about an existing recap follows the shared contract's work-through path instead of rerunning the corpus; other `.cflow` state and todo files stay outside this skill.
 - Does not run lint, formatters, type checks, or tests, or hand-check rules those tools enforce.
 - Does not claim business correctness when no authoritative requirement source was identified; lack of such a source is a coverage limitation, not a finding.
 - Does not run without a change set; no pending work and no named range ends the pass instead of widening it, and a range reaching most of the repository is sent back to be narrowed.

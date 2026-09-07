@@ -49,6 +49,7 @@ Public skill entrypoints:
 - `cf-start`
 - `cf-mr-wolf`
 - `cf-scenario`
+- `cf-deadcode`
 - `cf-cognitive`
 - `cf-split`
 - `cf-cohesion`
@@ -117,6 +118,7 @@ Maintainer flow mirrors:
 - `cf-start`: [start/doc-start.flow.md](./start/doc-start.flow.md)
 - `cf-mr-wolf`: [mr-wolf/doc-mr-wolf.flow.md](./mr-wolf/doc-mr-wolf.flow.md)
 - `cf-scenario`: [scenario/doc-scenario.flow.md](./scenario/doc-scenario.flow.md)
+- `cf-deadcode`: [deadcode/doc-deadcode.flow.md](./deadcode/doc-deadcode.flow.md)
 - `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
 - `cf-split`: [split/doc-split.flow.md](./split/doc-split.flow.md)
 - `cf-cohesion`: [cohesion/doc-cohesion.flow.md](./cohesion/doc-cohesion.flow.md)
