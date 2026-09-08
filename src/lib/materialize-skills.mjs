@@ -2,7 +2,7 @@ import os from "node:os";
 import path from "node:path";
 import { cp, mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
 
-import { listSkillDirectories, pathExists } from "./fs.mjs";
+import { cleanupDirectory, listSkillDirectories, pathExists } from "./fs.mjs";
 
 export const VENDOR_CONFIG_RELATIVE_PATH = "_shared/vendor.json";
 
@@ -27,20 +27,20 @@ const RUNTIME_SHARED_PATTERNS = [
   "_shared/scripts/",
 ];
 
-export async function createMaterializedSkills(sourceRoot) {
+export async function createMaterializedSkills(sourceRoot, { onWarning } = {}) {
   const tempRoot = await mkdtemp(path.join(os.tmpdir(), "cflow-skills-"));
   const skillsRoot = path.join(tempRoot, "skills");
 
   try {
     await materializeSkills({ sourceRoot, destinationRoot: skillsRoot });
   } catch (error) {
-    await rm(tempRoot, { recursive: true, force: true });
+    await cleanupDirectory(tempRoot, onWarning);
     throw error;
   }
 
   return {
     skillsRoot,
-    cleanup: () => rm(tempRoot, { recursive: true, force: true }),
+    cleanup: () => cleanupDirectory(tempRoot, onWarning),
   };
 }
 

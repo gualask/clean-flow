@@ -10,6 +10,7 @@ export const AGENTS_MARKER_END = "<!-- END CFLOW FRICTION -->";
 
 const MINIMAL_AGENTS_HEADER = "# Global agent instructions\n";
 const SCRIPT_VERSION_PLACEHOLDER = "__CFLOW_PACK_VERSION__";
+const SCRIPT_HOME_PLACEHOLDER = "__CFLOW_HOME__";
 const LAW_BIN_PLACEHOLDER = "{{CFLOW_BIN}}";
 
 export async function installFriction({
@@ -24,7 +25,9 @@ export async function installFriction({
   const scriptSource = await readFile(path.join(sourceRoot, "friction.mjs"), "utf8");
   const lawSource = await readFile(path.join(sourceRoot, FRICTION_LAW_FILE), "utf8");
 
-  const scriptContent = scriptSource.replaceAll(SCRIPT_VERSION_PLACEHOLDER, version);
+  const scriptContent = scriptSource
+    .replaceAll(SCRIPT_VERSION_PLACEHOLDER, version)
+    .replaceAll(JSON.stringify(SCRIPT_HOME_PLACEHOLDER), () => JSON.stringify(path.resolve(cflowHome)));
   const lawContent = lawSource.replaceAll(LAW_BIN_PLACEHOLDER, scriptTarget);
 
   const files = [await planFileWrite("friction script", scriptTarget, scriptContent)];
@@ -54,9 +57,6 @@ export async function installFriction({
     await writeFile(file.target, file.content, "utf8");
   }
 
-  // Clean up the legacy law file left by import-based installs.
-  await rm(path.join(cflowHome, FRICTION_LAW_FILE), { force: true });
-
   if (agents.action !== "unchanged") {
     await mkdir(path.dirname(agentsFile), { recursive: true });
     await writeFile(agentsFile, agents.content, "utf8");
@@ -67,20 +67,10 @@ export async function installFriction({
 }
 
 export async function removeFriction({ cflowHome, agentsFile, dryRun = false }) {
-  const scriptTarget = path.join(cflowHome, FRICTION_SCRIPT_RELATIVE_PATH);
-  const lawTarget = path.join(cflowHome, FRICTION_LAW_FILE);
-
-  const files = [];
-  for (const [name, target] of [
-    ["friction script", scriptTarget],
-    ["friction law", lawTarget],
-  ]) {
-    if (await pathExists(target)) {
-      files.push({ name, target, action: "removed" });
-    }
-  }
-
-  const agents = await planAgentsBlockRemoval(agentsFile);
+  const warnings = [];
+  const files = await planFrictionFileRemoval(cflowHome, warnings);
+  const agents = await attemptFrictionCleanup(warnings, () => planAgentsBlockRemoval(agentsFile))
+    ?? { path: agentsFile, action: "skipped", content: null };
 
   const result = {
     command: "remove-friction",
@@ -89,26 +79,57 @@ export async function removeFriction({ cflowHome, agentsFile, dryRun = false }) 
     dryRun,
     files,
     agents,
+    warnings,
     applied: false,
   };
 
-  if (dryRun) {
-    return result;
+  if (!dryRun) {
+    await applyFrictionFileRemoval(cflowHome, files, warnings);
+    if (agents.action === "updated") {
+      await attemptFrictionCleanup(warnings, async () => {
+        agents.action = "skipped";
+        await writeFile(agentsFile, agents.content, "utf8");
+        agents.action = "updated";
+      });
+    }
   }
 
+  result.applied = !dryRun && warnings.length === 0;
+  return result;
+}
+
+async function planFrictionFileRemoval(cflowHome, warnings) {
+  const target = path.join(cflowHome, FRICTION_SCRIPT_RELATIVE_PATH);
+  const exists = await attemptFrictionCleanup(warnings, () => pathExists(target));
+  return exists === false
+    ? []
+    : [{ name: "friction script", target, action: exists ? "removed" : "skipped" }];
+}
+
+async function applyFrictionFileRemoval(cflowHome, files, warnings) {
   for (const file of files) {
-    await rm(file.target, { force: true });
+    if (file.action === "skipped") {
+      continue;
+    }
+    await attemptFrictionCleanup(warnings, async () => {
+      // Report a removal only after it succeeds.
+      file.action = "skipped";
+      await rm(file.target, { force: true });
+      file.action = "removed";
+    });
   }
   // Friction logs under <cflowHome>/friction/ are user data and stay.
-  await removeIfEmpty(path.dirname(scriptTarget));
-  await removeIfEmpty(cflowHome);
+  await attemptFrictionCleanup(warnings, () => removeIfEmpty(path.join(cflowHome, "bin")));
+  await attemptFrictionCleanup(warnings, () => removeIfEmpty(cflowHome));
+}
 
-  if (agents.action !== "unchanged") {
-    await writeFile(agentsFile, agents.content, "utf8");
+// Optional cleanup must not fail the skills operation or prevent other cleanup.
+async function attemptFrictionCleanup(warnings, operation) {
+  try {
+    return await operation();
+  } catch (error) {
+    warnings.push(`Friction cleanup incomplete: ${error.message}`);
   }
-
-  result.applied = true;
-  return result;
 }
 
 function frictionBlock(lawContent) {

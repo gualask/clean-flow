@@ -3,13 +3,10 @@ import path from "node:path";
 import test from "node:test";
 
 import { main, resolveDestinations } from "../src/index.mjs";
-import { writeMarker } from "../src/lib/marker.mjs";
 import {
   listDirectoryNames,
-  listFileNames,
   makeTempWorkspace,
   readText,
-  writeLegacyCodexAgentFixture,
   writeSkill,
 } from "./support/helpers.mjs";
 
@@ -105,153 +102,62 @@ test("destination resolution follows Codex user and repository skill locations",
     ),
     {
       skillsRoot: path.join(homeDirectory, ".agents", "skills"),
-      legacySkillsRoot: path.join(codexHome, "skills"),
-      legacyCodexAgentsRoot: path.join(codexHome, "agents"),
     },
   );
 
   const repo = path.join(path.sep, "tmp", "repo");
   assert.deepEqual(resolveDestinations({ global: false, targetPath: repo }), {
     skillsRoot: path.join(repo, ".agents", "skills"),
-    legacySkillsRoot: path.join(repo, ".codex", "skills"),
-    legacyCodexAgentsRoot: path.join(repo, ".codex", "agents"),
   });
 });
 
-test("global install and remove use HOME .agents and migrate the CODEX_HOME legacy install", async () => {
-  const workspace = await makeTempWorkspace();
-  const homeDirectory = path.join(workspace, "home");
-  const codexHome = path.join(workspace, "codex-home");
-  const legacySkillsRoot = path.join(codexHome, "skills");
-  const ownedLegacySkill = await writeSkill(legacySkillsRoot, "cf-start");
-  await writeMarker(ownedLegacySkill, {
-    sourceSkill: "cf-start",
-    fingerprint: "sha256:legacy",
-  });
-  await writeSkill(legacySkillsRoot, "foreign-skill");
+test("global install and remove use HOME .agents and preserve foreign skills", async () => {
+  const homeDirectory = await makeTempWorkspace();
+  const skillsRoot = path.join(homeDirectory, ".agents", "skills");
+  const dependencies = { homeDirectory, environment: {} };
+  await writeSkill(skillsRoot, "foreign-skill");
 
   const io = makeIo();
-  const exitCode = await main(["install", "--global"], io, {
-    environment: { CODEX_HOME: codexHome },
-    homeDirectory,
-  });
-
-  assert.equal(exitCode, 0);
-  assert.ok(
-    (await listDirectoryNames(path.join(homeDirectory, ".agents", "skills"))).includes(
-      "cf-start",
-    ),
-  );
-  assert.deepEqual(await listDirectoryNames(legacySkillsRoot), ["foreign-skill"]);
-  assert.match(io.stdout.output, /legacy-skill: cf-start/);
-  assert.match(
-    io.stdout.output,
-    new RegExp(escapeRegExp(path.join(homeDirectory, ".agents", "skills"))),
-  );
-
-  const removeIo = makeIo();
-  const removeExitCode = await main(["remove", "--global"], removeIo, {
-    environment: { CODEX_HOME: codexHome },
-    homeDirectory,
-  });
-
-  assert.equal(removeExitCode, 0);
-  assert.deepEqual(
-    await listDirectoryNames(path.join(homeDirectory, ".agents", "skills")),
-    [],
-  );
-  assert.deepEqual(await listDirectoryNames(legacySkillsRoot), ["foreign-skill"]);
-});
-
-test("install and remove prune marked legacy agents while dry-run preserves them", async () => {
-  const workspace = await makeTempWorkspace();
-  const targetRoot = path.join(workspace, "repo");
-  const agentsRoot = path.join(targetRoot, ".codex", "agents");
-  const skillsRoot = path.join(targetRoot, ".agents", "skills");
-  const legacySkillsRoot = path.join(targetRoot, ".codex", "skills");
-
-  await writeLegacyCodexAgentFixture(agentsRoot);
-  const ownedLegacySkill = await writeSkill(legacySkillsRoot, "cf-start");
-  await writeMarker(ownedLegacySkill, {
-    sourceSkill: "cf-start",
-    fingerprint: "sha256:legacy",
-  });
-  await writeSkill(legacySkillsRoot, "foreign-skill");
-
-  const dryRunIo = makeIo();
-  const dryRunCode = await main(["install", targetRoot, "--dry-run"], dryRunIo);
-
-  assert.equal(dryRunCode, 0);
-  assert.deepEqual(await listDirectoryNames(skillsRoot), []);
-  assert.deepEqual(await listDirectoryNames(legacySkillsRoot), [
-    "cf-start",
-    "foreign-skill",
-  ]);
-  assert.deepEqual(await listFileNames(agentsRoot), [
-    "cflow_finding_derisk_recon.toml",
-  ]);
-  assert.match(dryRunIo.stdout.output, /legacy-skill: cf-start/);
-  assert.match(
-    dryRunIo.stdout.output,
-    /legacy-codex-agent: cflow_finding_derisk_recon\.toml/,
-  );
-
-  const installIo = makeIo();
-  const installCode = await main(["install", targetRoot], installIo);
-
-  assert.equal(installCode, 0);
+  assert.equal(await main(["install", "--global"], io, dependencies), 0);
   assert.ok((await listDirectoryNames(skillsRoot)).includes("cf-start"));
-  assert.deepEqual(await listDirectoryNames(legacySkillsRoot), ["foreign-skill"]);
-  assert.deepEqual(await listFileNames(agentsRoot), []);
-  assert.match(installIo.stdout.output, /legacy-skill: cf-start/);
-  assert.match(
-    installIo.stdout.output,
-    /legacy-codex-agent: cflow_finding_derisk_recon\.toml/,
-  );
-
-  await writeLegacyCodexAgentFixture(agentsRoot, "cflow_trace_recon.toml");
+  assert.ok(io.stdout.output.includes(`Skills destination: ${skillsRoot}`));
 
   const removeIo = makeIo();
-  const removeCode = await main(["remove", targetRoot], removeIo);
-
-  assert.equal(removeCode, 0);
-  assert.deepEqual(await listDirectoryNames(skillsRoot), []);
-  assert.deepEqual(await listDirectoryNames(legacySkillsRoot), ["foreign-skill"]);
-  assert.deepEqual(await listFileNames(agentsRoot), []);
-  assert.match(
-    removeIo.stdout.output,
-    /legacy-codex-agent: cflow_trace_recon\.toml/,
-  );
+  assert.equal(await main(["remove", "--global"], removeIo, dependencies), 0);
+  assert.deepEqual(await listDirectoryNames(skillsRoot), ["foreign-skill"]);
 });
 
-test("a conflict in .agents leaves an owned legacy install untouched", async () => {
-  const workspace = await makeTempWorkspace();
-  const targetRoot = path.join(workspace, "repo");
+test("repository install is idempotent and install/remove dry runs preserve the target", async () => {
+  const targetRoot = await makeTempWorkspace();
   const skillsRoot = path.join(targetRoot, ".agents", "skills");
-  const legacySkillsRoot = path.join(targetRoot, ".codex", "skills");
-  const foreignSkill = await writeSkill(skillsRoot, "cf-start", {
-    "SKILL.md": `---\nname: "cf-start"\ndescription: "Foreign"\n---\n\n# foreign\n`,
-  });
-  const ownedLegacySkill = await writeSkill(legacySkillsRoot, "cf-start");
-  await writeMarker(ownedLegacySkill, {
-    sourceSkill: "cf-start",
-    fingerprint: "sha256:legacy",
-  });
+  assert.equal(await main(["install", targetRoot, "--dry-run"], makeIo()), 0);
+  assert.deepEqual(await listDirectoryNames(skillsRoot), []);
 
+  assert.equal(await main(["install", targetRoot], makeIo()), 0);
+  const installed = await listDirectoryNames(skillsRoot);
+  assert.ok(installed.includes("cf-start"));
+  const repeatIo = makeIo();
+  assert.equal(await main(["install", targetRoot], repeatIo), 0);
+  assert.ok(repeatIo.stdout.output.includes(`Unchanged: ${installed.length}`));
+
+  assert.equal(await main(["remove", targetRoot, "--dry-run"], makeIo()), 0);
+  assert.deepEqual(await listDirectoryNames(skillsRoot), installed);
+  assert.equal(await main(["remove", targetRoot], makeIo()), 0);
+  assert.deepEqual(await listDirectoryNames(skillsRoot), []);
+});
+
+test("a conflict in .agents preserves foreign skills and prevents installation", async () => {
+  const targetRoot = await makeTempWorkspace();
+  const skillsRoot = path.join(targetRoot, ".agents", "skills");
+  const foreignSkill = await writeSkill(skillsRoot, "cf-start");
   const before = await readText(path.join(foreignSkill, "SKILL.md"));
   const io = makeIo();
-  const exitCode = await main(["install", targetRoot], io);
-
-  assert.equal(exitCode, 1);
+  assert.equal(await main(["install", targetRoot], io), 1);
   assert.equal(await readText(path.join(foreignSkill, "SKILL.md")), before);
-  assert.deepEqual(await listDirectoryNames(legacySkillsRoot), ["cf-start"]);
+  assert.deepEqual(await listDirectoryNames(skillsRoot), ["cf-start"]);
   assert.match(io.stdout.output, /Conflicts: 1/);
   assert.match(io.stdout.output, /Applied: no/);
 });
-
-function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
 
 function makeIo() {
   return {

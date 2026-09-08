@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-08
+
+- Moved the optional friction logger and its logs outside Git repositories to `~/.agents/cflow`; repository logs stay under `.cflow/friction`. The separate `install/friction/` assets are copied only with `--friction`, and `CFLOW_HOME` can override the default location.
+- Made auxiliary cleanup failures emit console warnings without masking the installation result. Skill sync remains strict: failures to inspect, replace, or prune installed skills and references stop installation, as do failures to remove interrupted staging inside the skills directory.
+- Removed migration and cleanup support for former `.codex/skills` installations, static Codex agents, and friction locations. Simplified skill installation to a single sync pass and preserved dry-run behavior and foreign-skill conflict checks.
+- Released patch version `0.4.4`.
+
 ## 2026-09-07
 
 - Fixed `cf-brainstorm` to keep the spec in `draft.md` through self-review and user review, then rename it only after explicit final approval. The draft no longer disappears while its review is pending or remains after promotion. One `gpt-5.6-luna` at `max` closure trial preserved the approved decisions, left one dated spec and no draft, and changed no implementation files. The fix adds no tokens and leaves the description unchanged.

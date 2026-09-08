@@ -57,9 +57,8 @@ node ./bin/cflow-skills.mjs install /path/to/repo --dry-run
 node ./bin/cflow-skills.mjs install /path/to/repo --tag 0.0.1
 ```
 
-The installer materializes packaged skills and vendors shared authoring files into the consuming skill directories. Install and remove also prune legacy static agents identified by Cflow's old ownership markers; unmarked agents are never touched.
+The installer materializes packaged skills and vendors shared authoring files into the consuming skill directories.
 Repository installs write to `.agents/skills`; global installs write to `$HOME/.agents/skills`, matching Codex skill discovery.
-Install and remove also clean up Cflow-owned skill directories from the former `.codex/skills` destination while preserving foreign entries.
 Pass `--tag <tag>` to install an exact tag from the official Clean Flow repository. This supports both upgrades and downgrades; without `--tag`, the CLI installs the skills packaged in its current checkout.
 
 After installation, ask Codex to use one of the public entrypoints below.
@@ -78,7 +77,7 @@ Use cf-mr-wolf to frame this cleanup/refactor before assessment.
 <details>
 <summary>Uninstall</summary>
 
-Remove only Clean Flow-owned skill directories and legacy marked static agents:
+Remove only Clean Flow-owned skill directories:
 
 ```bash
 node ./bin/cflow-skills.mjs remove /path/to/repo

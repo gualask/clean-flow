@@ -129,6 +129,40 @@ test("tag validation accepts release names and rejects unsafe refs", () => {
   }
 });
 
+for (const installerExitCode of [0, 7]) {
+  test(`tag checkout cleanup warns and preserves installer exit code ${installerExitCode}`, async () => {
+    const io = makeIo();
+    const exitCode = await installFromTag({
+      tag: "0.0.1",
+      installArgs: ["install", "--global"],
+      io,
+      dependencies: {
+        makeTemporaryDirectory: async () => "/tmp/cflow-tag-cleanup",
+        removeTemporaryDirectory: async () => { throw new Error("EACCES: cannot remove checkout"); },
+        nodeExecutable: "test-node",
+        runCommand: async command => command === "test-node" ? installerExitCode : 0,
+      },
+    });
+    assert.equal(exitCode, installerExitCode);
+    assert.match(io.stderr.output, /Warning: Cleanup incomplete: EACCES/);
+  });
+}
+
+test("tag checkout cleanup failure does not mask a fetch error", async () => {
+  const io = makeIo();
+  await assert.rejects(() => installFromTag({
+    tag: "0.0.1",
+    installArgs: ["install", "--global"],
+    io,
+    dependencies: {
+      makeTemporaryDirectory: async () => "/tmp/cflow-tag-cleanup",
+      removeTemporaryDirectory: async () => { throw new Error("EROFS: read-only checkout"); },
+      runCommand: async (_command, args) => args.includes("fetch") ? 128 : 0,
+    },
+  }), /Could not fetch Clean Flow tag 0\.0\.1 \(exit code 128\)/);
+  assert.match(io.stderr.output, /Warning: Cleanup incomplete: EROFS/);
+});
+
 function makeIo() {
   return {
     stdout: makeWritableBuffer(),

@@ -11,7 +11,6 @@ Support these actions:
 - uninstall from a specific repository
 
 Local sync installs or updates Cflow skills into `.agents/skills`.
-It also removes Cflow-owned skill directories from the former `.codex/skills` destination while preserving foreign entries.
 
 ## Prerequisites
 
@@ -20,7 +19,7 @@ It also removes Cflow-owned skill directories from the former `.codex/skills` de
 
 ## Step 1: Temporary Clone Model
 
-Each action below uses its own temporary shallow clone of this repository and removes it automatically at shell exit.
+Each action below uses its own temporary shallow clone of this repository and attempts to remove it at shell exit. Cleanup failures emit a warning without changing the command result.
 
 ## Step 2: Choose The Action
 
@@ -36,7 +35,7 @@ TARGET_REPO="${TARGET_REPO:-$PWD}"
 CFLOW_TAG="${CFLOW_TAG:-}"
 
 cleanup() {
-  rm -rf "$TMP_ROOT"
+  rm -rf "$TMP_ROOT" || printf 'Warning: could not clean temporary checkout: %s\n' "$TMP_ROOT" >&2
 }
 
 trap cleanup EXIT
@@ -57,7 +56,7 @@ PACK_ROOT="$TMP_ROOT/clean-flow"
 TARGET_REPO="${TARGET_REPO:-$PWD}"
 
 cleanup() {
-  rm -rf "$TMP_ROOT"
+  rm -rf "$TMP_ROOT" || printf 'Warning: could not clean temporary checkout: %s\n' "$TMP_ROOT" >&2
 }
 
 trap cleanup EXIT

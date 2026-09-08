@@ -2,6 +2,7 @@ import { spawn } from "node:child_process";
 import { mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { tryCleanup } from "./cleanup.mjs";
 
 export const CLEAN_FLOW_REPOSITORY = "https://github.com/gualask/clean-flow.git";
 
@@ -62,7 +63,10 @@ export async function installFromTag({
       io,
     );
   } finally {
-    await removeTemporaryDirectory(temporaryRoot);
+    await tryCleanup(
+      () => removeTemporaryDirectory(temporaryRoot),
+      message => io.stderr.write(`${message}\n`),
+    );
   }
 }
 

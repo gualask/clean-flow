@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { chmod, mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 import { promisify } from "node:util";
@@ -23,8 +23,7 @@ async function runLogger({ args = [], cwd, home, env = {} }) {
   });
 }
 
-async function readSingleLogEntry(root) {
-  const logDir = path.join(root, ".cflow", "friction");
+async function readSingleLogEntry(logDir) {
   const now = new Date();
   const month = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
   const raw = await readFile(path.join(logDir, `${month}.jsonl`), "utf8");
@@ -47,7 +46,7 @@ test("logger appends to the repo root log from a subdirectory", async () => {
   });
 
   assert.equal(stdout.trim(), "friction logged");
-  const entry = await readSingleLogEntry(repo);
+  const entry = await readSingleLogEntry(path.join(repo, ".cflow", "friction"));
   assert.equal(entry.observed, "three retries on build");
   assert.equal(entry.expected, "expected one pass");
   assert.equal(entry.category, "repeated-attempts");
@@ -69,11 +68,11 @@ test("logger resolves a linked worktree to the main repository log", async () =>
 
   await runLogger({ args: ["observed", "expected"], cwd: worktree, home });
 
-  const entry = await readSingleLogEntry(main);
+  const entry = await readSingleLogEntry(path.join(main, ".cflow", "friction"));
   assert.equal(entry.observed, "observed");
 });
 
-test("logger falls back to the home directory outside a git repository", async () => {
+test("logger falls back to .agents/cflow outside a git repository", async () => {
   const cwd = await makeTempWorkspace();
   const home = await makeTempWorkspace();
 
@@ -84,9 +83,10 @@ test("logger falls back to the home directory outside a git repository", async (
     env: { CODEX_SESSION_ID: "session-42" },
   });
 
-  const entry = await readSingleLogEntry(home);
+  const entry = await readSingleLogEntry(path.join(home, ".agents", "cflow", "friction"));
   assert.equal(entry.category, "workaround");
   assert.equal(entry.session, "session-42");
+  assert.equal(await stat(path.join(home, ".cflow")).catch(error => error.code), "ENOENT");
 });
 
 test("logger without arguments exits 0 and writes nothing", async () => {
@@ -102,10 +102,8 @@ test("logger without arguments exits 0 and writes nothing", async () => {
 });
 
 test("installFriction writes the script and inlines the law in a minimal AGENTS.md", async () => {
-  const cflowHome = path.join(await makeTempWorkspace(), ".cflow");
+  const cflowHome = path.join(await makeTempWorkspace(), ".agents", "cflow");
   const agentsFile = path.join(await makeTempWorkspace(), "AGENTS.md");
-  await mkdir(cflowHome, { recursive: true });
-  await writeFile(path.join(cflowHome, "friction-law.md"), "legacy law\n", "utf8");
 
   const result = await installFriction({
     sourceRoot: FRICTION_SOURCE_ROOT,
@@ -128,15 +126,10 @@ test("installFriction writes the script and inlines the law in a minimal AGENTS.
   assert.doesNotMatch(agents, /\{\{CFLOW_BIN\}\}/);
   assert.ok(agents.includes(path.join(cflowHome, "bin", "friction.mjs")));
   assert.match(agents, /<!-- END CFLOW FRICTION -->/);
-
-  assert.equal(
-    await readFile(path.join(cflowHome, "friction-law.md"), "utf8").catch((error) => error.code),
-    "ENOENT",
-  );
 });
 
-test("installed logger records the stamped pack version", async () => {
-  const cflowHome = path.join(await makeTempWorkspace(), ".cflow");
+test("installed logger uses its installation home and stamped version without environment overrides", async () => {
+  const cflowHome = path.join(await makeTempWorkspace(), 'custom "Cflow" home');
   const agentsFile = path.join(await makeTempWorkspace(), "AGENTS.md");
   const home = await makeTempWorkspace();
 
@@ -152,12 +145,25 @@ test("installed logger records the stamped pack version", async () => {
     { cwd: home, env: { PATH: process.env.PATH, HOME: home } },
   );
 
-  const entry = await readSingleLogEntry(home);
+  const entry = await readSingleLogEntry(path.join(cflowHome, "friction"));
   assert.equal(entry.pack_version, "1.2.3");
+  assert.deepEqual(await readdir(home), []);
+});
+
+test("logger honors CFLOW_HOME only outside a repository", async () => {
+  const home = await makeTempWorkspace();
+  const fallback = path.join(home, "custom-cflow");
+  const repo = await makeTempWorkspace();
+  await runLogger({ args: ["outside", "expected"], cwd: home, home, env: { CFLOW_HOME: fallback } });
+  await mkdir(path.join(repo, ".git"));
+  await runLogger({ args: ["inside", "expected"], cwd: repo, home, env: { CFLOW_HOME: fallback } });
+
+  assert.equal((await readSingleLogEntry(path.join(fallback, "friction"))).observed, "outside");
+  assert.equal((await readSingleLogEntry(path.join(repo, ".cflow", "friction"))).observed, "inside");
 });
 
 test("installFriction appends to an existing AGENTS.md and stays idempotent", async () => {
-  const cflowHome = path.join(await makeTempWorkspace(), ".cflow");
+  const cflowHome = path.join(await makeTempWorkspace(), ".agents", "cflow");
   const agentsFile = path.join(await makeTempWorkspace(), "AGENTS.md");
   await writeFile(agentsFile, "# My rules\n\nAlways be kind.\n", "utf8");
 
@@ -183,7 +189,7 @@ test("installFriction appends to an existing AGENTS.md and stays idempotent", as
 });
 
 test("installFriction dry run writes nothing", async () => {
-  const cflowHome = path.join(await makeTempWorkspace(), ".cflow");
+  const cflowHome = path.join(await makeTempWorkspace(), ".agents", "cflow");
   const agentsFile = path.join(await makeTempWorkspace(), "AGENTS.md");
 
   const result = await installFriction({
@@ -197,13 +203,13 @@ test("installFriction dry run writes nothing", async () => {
   assert.equal(result.applied, false);
   assert.equal(await readFile(agentsFile, "utf8").catch((error) => error.code), "ENOENT");
   assert.equal(
-    await readFile(path.join(cflowHome, "friction-law.md"), "utf8").catch((error) => error.code),
+    await readFile(path.join(cflowHome, "bin", "friction.mjs"), "utf8").catch((error) => error.code),
     "ENOENT",
   );
 });
 
 test("removeFriction strips the block, keeps user content and logs", async () => {
-  const cflowHome = path.join(await makeTempWorkspace(), ".cflow");
+  const cflowHome = path.join(await makeTempWorkspace(), ".agents", "cflow");
   const agentsFile = path.join(await makeTempWorkspace(), "AGENTS.md");
   await writeFile(agentsFile, "# My rules\n\nAlways be kind.\n", "utf8");
 
@@ -213,8 +219,6 @@ test("removeFriction strips the block, keeps user content and logs", async () =>
     agentsFile,
     version: "1.0.0",
   });
-  // Legacy law file from an import-based install: remove must clean it too.
-  await writeFile(path.join(cflowHome, "friction-law.md"), "old law\n", "utf8");
   const logFile = path.join(cflowHome, "friction", "2026-07.jsonl");
   await mkdir(path.dirname(logFile), { recursive: true });
   await writeFile(logFile, '{"observed":"kept"}\n', "utf8");
@@ -222,21 +226,21 @@ test("removeFriction strips the block, keeps user content and logs", async () =>
   const result = await removeFriction({ cflowHome, agentsFile });
 
   assert.equal(result.applied, true);
-  assert.equal(result.files.length, 2);
+  assert.equal(result.files.length, 1);
 
   const agents = await readText(agentsFile);
   assert.match(agents, /Always be kind\./);
   assert.doesNotMatch(agents, /CFLOW FRICTION/);
 
   assert.equal(
-    await readFile(path.join(cflowHome, "friction-law.md"), "utf8").catch((error) => error.code),
+    await readFile(path.join(cflowHome, "bin", "friction.mjs"), "utf8").catch((error) => error.code),
     "ENOENT",
   );
   assert.equal(await readText(logFile), '{"observed":"kept"}\n');
 });
 
 test("removeFriction on a clean system reports nothing to do", async () => {
-  const cflowHome = path.join(await makeTempWorkspace(), ".cflow");
+  const cflowHome = path.join(await makeTempWorkspace(), ".agents", "cflow");
   const agentsFile = path.join(await makeTempWorkspace(), "AGENTS.md");
 
   const result = await removeFriction({ cflowHome, agentsFile });
@@ -244,6 +248,57 @@ test("removeFriction on a clean system reports nothing to do", async () => {
   assert.equal(result.files.length, 0);
   assert.equal(result.agents.action, "unchanged");
 });
+
+test("a default global install copies only skills and does not create friction homes", async () => {
+  const fixture = await makeGlobalInstallFixture({ customHome: false });
+  const io = makeIo();
+  assert.equal(await main(["install", "--global"], io, fixture.dependencies), 0, io.stderr.output);
+  assert.deepEqual(await readdir(fixture.homeDirectory), [".agents"]);
+  assert.deepEqual(await readdir(path.join(fixture.homeDirectory, ".agents")), ["skills"]);
+  const installedFiles = await readdir(path.join(fixture.homeDirectory, ".agents", "skills"), { recursive: true });
+  assert.ok(installedFiles.some(file => path.basename(file) === "SKILL.md"));
+  assert.ok(installedFiles.every(file => !path.basename(file).startsWith("friction")));
+  assert.equal(await stat(fixture.agentsFile).catch(error => error.code), "ENOENT");
+});
+
+test("global friction opt-in installs under .agents and stays idempotent", async () => {
+  const fixture = await makeGlobalInstallFixture({ customHome: false });
+  const io = makeIo();
+  assert.equal(await main(["install", "--global", "--friction", "--dry-run"], io, fixture.dependencies), 0);
+  assert.equal(await stat(fixture.homeDirectory).catch(error => error.code), "ENOENT");
+  assert.equal(await stat(fixture.agentsFile).catch(error => error.code), "ENOENT");
+
+  assert.equal(await main(["install", "--global", "--friction"], io, fixture.dependencies), 0, io.stderr.output);
+  const scriptTarget = path.join(fixture.cflowHome, "bin", "friction.mjs");
+  const agents = await readText(fixture.agentsFile);
+  assert.ok(agents.includes(scriptTarget));
+  assert.deepEqual(await readdir(fixture.homeDirectory), [".agents"]);
+  await execFileAsync(process.execPath, [scriptTarget, "new log", "expected"], {
+    cwd: fixture.homeDirectory,
+    env: { PATH: process.env.PATH, HOME: fixture.homeDirectory },
+  });
+  assert.equal((await readSingleLogEntry(path.join(fixture.cflowHome, "friction"))).observed, "new log");
+
+  const reinstalledIo = makeIo();
+  assert.equal(await main(["install", "--global", "--friction"], reinstalledIo, fixture.dependencies), 0);
+  assert.equal(await readText(fixture.agentsFile), agents);
+  assert.match(reinstalledIo.stdout.output, /Friction friction script: unchanged/);
+});
+
+for (const command of ["install", "remove"]) {
+  test(`global ${command} without friction disables the integration and preserves logs`, async () => {
+    const fixture = await makeGlobalInstallFixture({ customHome: false });
+    const { cflowHome, agentsFile } = fixture;
+    await installFriction({ sourceRoot: FRICTION_SOURCE_ROOT, cflowHome, agentsFile, version: "1.0.0" });
+    await mkdir(path.join(cflowHome, "friction"));
+    await writeFile(path.join(cflowHome, "friction", "kept.jsonl"), "kept\n");
+    const io = makeIo();
+    assert.equal(await main([command, "--global"], io, fixture.dependencies), 0, io.stderr.output);
+    assert.equal(await stat(path.join(cflowHome, "bin")).catch(error => error.code), "ENOENT");
+    assert.equal(await readText(path.join(cflowHome, "friction", "kept.jsonl")), "kept\n");
+    assert.doesNotMatch(await readText(agentsFile), /BEGIN CFLOW FRICTION/);
+  });
+}
 
 test("global install treats --friction as the desired enabled state", async () => {
   const fixture = await makeGlobalInstallFixture();
@@ -330,6 +385,55 @@ test("a global install conflict does not disable friction", async () => {
   assert.match(io.stdout.output, /Friction applied: no/);
 });
 
+const permissionTestsUnavailable = process.platform === "win32" || process.getuid?.() === 0;
+
+for (const scenario of ["unreadable home", "unwritable bin", "unwritable AGENTS.md", "unremovable empty home"]) {
+  test(`global install warns and continues with friction ${scenario}`, { skip: permissionTestsUnavailable }, async () => {
+    const fixture = await makeGlobalInstallFixture();
+    const scriptTarget = path.join(fixture.cflowHome, "bin", "friction.mjs");
+    await installFriction({
+      sourceRoot: FRICTION_SOURCE_ROOT,
+      cflowHome: fixture.cflowHome,
+      agentsFile: fixture.agentsFile,
+      version: "1.0.0",
+    });
+    const [restrictedPath, mode, restoredMode] = {
+      "unreadable home": [fixture.cflowHome, 0o000, 0o700],
+      "unwritable bin": [path.dirname(scriptTarget), 0o500, 0o700],
+      "unwritable AGENTS.md": [fixture.agentsFile, 0o400, 0o600],
+      "unremovable empty home": [path.dirname(fixture.cflowHome), 0o500, 0o700],
+    }[scenario];
+    // Keep the skills destination writable when the friction home's parent is locked.
+    await mkdir(fixture.homeDirectory, { recursive: true });
+    const io = makeIo();
+    await chmod(restrictedPath, mode);
+    try {
+      const exitCode = await main(["install", "--global"], io, fixture.dependencies);
+      assert.equal(exitCode, 0, io.stderr.output);
+    } finally {
+      await chmod(restrictedPath, restoredMode);
+    }
+
+    assert.match(await readText(path.join(fixture.homeDirectory, ".agents", "skills", "cf-start", "SKILL.md")), /name: cf-start/);
+    assert.match(io.stderr.output, /Warning: Friction cleanup incomplete:.*(?:EACCES|EPERM)/);
+    assert.match(io.stdout.output, /Friction applied: no/);
+
+    const agents = await readText(fixture.agentsFile);
+    if (scenario === "unwritable AGENTS.md") {
+      assert.match(agents, /BEGIN CFLOW FRICTION/);
+      assert.match(io.stdout.output, /Friction AGENTS.md: .* \(skipped\)/);
+    } else {
+      assert.doesNotMatch(agents, /BEGIN CFLOW FRICTION/);
+    }
+    if (scenario === "unreadable home" || scenario === "unwritable bin") {
+      assert.match(await readText(scriptTarget), /Cflow friction logger/);
+      assert.match(io.stdout.output, /Friction friction script: skipped/);
+    } else {
+      assert.equal(await readFile(scriptTarget).catch(error => error.code), "ENOENT");
+    }
+  });
+}
+
 test("a repository install does not change global friction state", async () => {
   const fixture = await makeGlobalInstallFixture();
   const scriptTarget = path.join(fixture.cflowHome, "bin", "friction.mjs");
@@ -369,11 +473,11 @@ test("--friction applies to install only", async () => {
   assert.match(io.stderr.output, /--friction applies to install only/);
 });
 
-async function makeGlobalInstallFixture() {
+async function makeGlobalInstallFixture({ customHome = true } = {}) {
   const root = await makeTempWorkspace();
   const homeDirectory = path.join(root, "home");
   const codexHome = path.join(root, "codex-home");
-  const cflowHome = path.join(root, "cflow-home");
+  const cflowHome = customHome ? path.join(root, "cflow-home") : path.join(homeDirectory, ".agents", "cflow");
 
   return {
     homeDirectory,
@@ -381,7 +485,7 @@ async function makeGlobalInstallFixture() {
     agentsFile: path.join(codexHome, "AGENTS.md"),
     dependencies: {
       homeDirectory,
-      environment: { CODEX_HOME: codexHome, CFLOW_HOME: cflowHome },
+      environment: { CODEX_HOME: codexHome, ...(customHome ? { CFLOW_HOME: cflowHome } : {}) },
     },
   };
 }

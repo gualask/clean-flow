@@ -57,9 +57,6 @@ test("install updates owned skills, prunes removed owned directories, and keeps 
   });
   await writeSkill(sourceRoot, "cf-cognitive");
 
-  const ownedShared = await writeSupportDirectory(destinationRoot, "_shared", {
-    "references/example.md": "# Old shared reference\n",
-  });
   const ownedStart = await writeSkill(destinationRoot, "cf-start", {
     "SKILL.md": `---\nname: "cf-start"\ndescription: "Old"\n---\n\n# cf-start v1\n`,
   });
@@ -68,11 +65,6 @@ test("install updates owned skills, prunes removed owned directories, and keeps 
     "SKILL.md": `---\nname: "foreign-skill"\ndescription: "Foreign"\n---\n\n# foreign\n`,
   });
 
-  await writeMarker(ownedShared, {
-    sourceSkill: "_shared",
-    sourceKind: "support",
-    fingerprint: await computeSkillFingerprint(ownedShared),
-  });
   await writeMarker(ownedStart, {
     sourceSkill: "cf-start",
     fingerprint: await computeSkillFingerprint(ownedStart),
@@ -86,7 +78,7 @@ test("install updates owned skills, prunes removed owned directories, and keeps 
 
   assert.equal(result.updated.length, 1);
   assert.equal(result.added.length, 1);
-  assert.equal(result.pruned.length, 2);
+  assert.equal(result.pruned.length, 1);
   assert.equal(result.conflicts.length, 0);
   assert.deepEqual(await listDirectoryNames(destinationRoot), [
     "cf-cognitive",

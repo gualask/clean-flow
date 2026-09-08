@@ -12,13 +12,15 @@
 // Log location: the main repository's .cflow/friction/<yyyy-mm>.jsonl when
 // cwd is inside a git repository or one of its linked worktrees (a .git
 // pointer file resolves to the main checkout, so every worktree shares one
-// project log), else ~/.cflow/friction/<yyyy-mm>.jsonl.
+// project log), else <installed Cflow home>/friction/<yyyy-mm>.jsonl
+// (default: ~/.agents/cflow/friction/). CFLOW_HOME overrides the fallback.
 
 import { appendFileSync, mkdirSync, readFileSync, statSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
 const PACK_VERSION = "__CFLOW_PACK_VERSION__";
+const INSTALLED_CFLOW_HOME = "__CFLOW_HOME__";
 
 const FLAG_MAP = {
   "--category": "category",
@@ -171,9 +173,15 @@ function main(argv) {
     entry.pack_version = PACK_VERSION;
   }
 
-  const root = findRepoRoot(process.cwd()) ?? os.homedir();
+  const repoRoot = findRepoRoot(process.cwd());
+  const fallbackHome = process.env.CFLOW_HOME || (
+    INSTALLED_CFLOW_HOME.startsWith("__")
+      ? path.join(os.homedir(), ".agents", "cflow")
+      : INSTALLED_CFLOW_HOME
+  );
+  const logRoot = repoRoot ? path.join(repoRoot, ".cflow") : fallbackHome;
   const month = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
-  const logFile = path.join(root, ".cflow", "friction", `${month}.jsonl`);
+  const logFile = path.join(logRoot, "friction", `${month}.jsonl`);
 
   mkdirSync(path.dirname(logFile), { recursive: true });
   appendFileSync(logFile, `${JSON.stringify(entry)}\n`, "utf8");

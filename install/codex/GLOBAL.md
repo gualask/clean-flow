@@ -12,7 +12,6 @@ Support these actions:
 - uninstall globally
 
 Global sync installs or updates Cflow skills into `$HOME/.agents/skills`.
-It also removes Cflow-owned skill directories from the former `$CODEX_HOME/skills` or `~/.codex/skills` destination while preserving foreign entries.
 
 ## Prerequisites
 
@@ -21,7 +20,7 @@ It also removes Cflow-owned skill directories from the former `$CODEX_HOME/skill
 
 ## Step 1: Temporary Clone Model
 
-Each action below uses its own temporary shallow clone of this repository and removes it automatically at shell exit.
+Each action below uses its own temporary shallow clone of this repository and attempts to remove it at shell exit. Cleanup failures emit a warning without changing the command result.
 
 ## Step 2: Choose The Action
 
@@ -29,6 +28,7 @@ Each action below uses its own temporary shallow clone of this repository and re
 
 Use this when the user explicitly asked to install, sync, or update Cflow globally.
 If the user named an exact Git tag, assign it to `CFLOW_TAG`; otherwise leave `CFLOW_TAG` empty to install the latest checkout.
+The optional logger is installed under `$HOME/.agents/cflow` (or `$CFLOW_HOME`); see [Friction Log](../../docs/friction-log.md) for log locations.
 Set `CFLOW_FRICTION=1` only when the user explicitly asked to enable or keep the friction log. Omitting `--friction` is declarative and removes a previous friction integration while preserving accumulated logs.
 
 ```bash
@@ -38,7 +38,7 @@ CFLOW_TAG="${CFLOW_TAG:-}"
 CFLOW_FRICTION="${CFLOW_FRICTION:-}"
 
 cleanup() {
-  rm -rf "$TMP_ROOT"
+  rm -rf "$TMP_ROOT" || printf 'Warning: could not clean temporary checkout: %s\n' "$TMP_ROOT" >&2
 }
 
 trap cleanup EXIT
@@ -61,7 +61,7 @@ TMP_ROOT="$(mktemp -d)"
 PACK_ROOT="$TMP_ROOT/clean-flow"
 
 cleanup() {
-  rm -rf "$TMP_ROOT"
+  rm -rf "$TMP_ROOT" || printf 'Warning: could not clean temporary checkout: %s\n' "$TMP_ROOT" >&2
 }
 
 trap cleanup EXIT

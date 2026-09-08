@@ -19,11 +19,11 @@ Cflow has two maintainer concerns:
    - `cflow-skills install` is an idempotent sync for both first install and later updates
    - `cflow-skills install --tag <tag>` delegates to the exact tag from the official repository, allowing upgrade or downgrade without changing the caller's checkout
    - it materializes public skill directories before syncing them
+   - auxiliary cleanup warns on failure; failures to inspect, replace, or prune installed skills and references, or remove interrupted staging under the skills directory, fail the install
    - it vendors configured `_shared` files into the consuming skill's `references/` and `scripts/` paths
-   - it removes only Cflow-owned skill directories from the former `.codex/skills` destination after a conflict-free install into `.agents/skills`
-   - install and remove prune legacy static agents only when old file markers identify them as Cflow-owned
    - it does not install `_shared` as a runtime skill directory
-   - it does not bootstrap `.cflow/`
+   - it does not bootstrap repository `.cflow/` artifacts
+   - `--friction` alone opts into the separate `install/friction/` assets under `~/.agents/cflow`; see [Friction Log](./friction-log.md)
 2. public runtime flows
    - runtime contracts live in the public `SKILL.md` files, first-level linked references, and vendored shared references loaded by an active runtime reference
    - per-public-skill flow docs are maintainer mirrors used to review and validate the runtime contracts
@@ -219,8 +219,7 @@ Current automated coverage checks:
 - install on empty target
 - update + prune + preserve foreign skills
 - conflict detection on foreign same-name skills
-- remove of Cflow-owned skill dirs and legacy support dirs while preserving foreign entries
-- install/remove cleanup of marked legacy Cflow agents while preserving unmarked and foreign agents
+- remove of Cflow-owned skill dirs while preserving foreign entries
 - exact-tag install delegation and temporary-checkout cleanup
 - structural checks for packaged public skills
 - materialized runtime reference, script, and asset links

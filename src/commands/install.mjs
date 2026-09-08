@@ -9,11 +9,12 @@ import {
   removeDirectory,
   removeTempDirectories,
   replaceDirectoryFromSource,
+  TEMP_DIRECTORY_PREFIX,
 } from "../lib/fs.mjs";
 import { VENDOR_CONFIG_RELATIVE_PATH } from "../lib/materialize-skills.mjs";
 import { isOwnedMarker, readMarker, writeMarker } from "../lib/marker.mjs";
 
-export async function installSkills({ sourceRoot, destinationRoot, dryRun = false }) {
+export async function installSkills({ sourceRoot, destinationRoot, dryRun = false, onWarning }) {
   if (await pathExists(path.join(sourceRoot, VENDOR_CONFIG_RELATIVE_PATH))) {
     throw new Error(`Install source must be materialized before sync: ${sourceRoot}`);
   }
@@ -24,7 +25,8 @@ export async function installSkills({ sourceRoot, destinationRoot, dryRun = fals
     throw new Error(`No skills found in source root: ${sourceRoot}`);
   }
 
-  const targetDirectories = await listDirectories(destinationRoot);
+  const targetDirectories = (await listDirectories(destinationRoot))
+    .filter(entry => !entry.name.startsWith(TEMP_DIRECTORY_PREFIX));
   const targetByName = new Map(targetDirectories.map((entry) => [entry.name, entry.path]));
   const sourceByName = new Map(sourcePackages.map((entry) => [entry.name, entry.path]));
 
@@ -40,8 +42,6 @@ export async function installSkills({ sourceRoot, destinationRoot, dryRun = fals
     conflicts: [],
     applied: false,
   };
-
-  await removeTempDirectories(destinationRoot);
 
   for (const sourcePackage of sourcePackages) {
     const sourceFingerprint = await computeSkillFingerprint(sourcePackage.path);
@@ -91,8 +91,11 @@ export async function installSkills({ sourceRoot, destinationRoot, dryRun = fals
   }
 
   for (const targetDirectory of targetDirectories) {
+    if (sourceByName.has(targetDirectory.name)) {
+      continue;
+    }
     const marker = await readMarker(targetDirectory.path);
-    if (!isOwnedMarker(marker) || sourceByName.has(targetDirectory.name)) {
+    if (!isOwnedMarker(marker)) {
       continue;
     }
 
@@ -107,6 +110,7 @@ export async function installSkills({ sourceRoot, destinationRoot, dryRun = fals
   }
 
   await ensureDirectory(destinationRoot);
+  await removeTempDirectories(destinationRoot);
 
   for (const entry of [...result.added, ...result.updated]) {
     await replaceDirectoryFromSource(entry.sourceDir, entry.targetDir, async (stagedDir) => {
@@ -115,7 +119,7 @@ export async function installSkills({ sourceRoot, destinationRoot, dryRun = fals
         sourceKind: entry.kind,
         fingerprint: entry.fingerprint,
       });
-    });
+    }, { onWarning });
   }
 
   for (const entry of result.pruned) {

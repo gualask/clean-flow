@@ -5,7 +5,6 @@ import { fileURLToPath } from "node:url";
 
 import { installFriction, removeFriction } from "./commands/install-friction.mjs";
 import { installSkills } from "./commands/install.mjs";
-import { pruneLegacyCodexAgents } from "./commands/prune-legacy-agents.mjs";
 import { removeSkills } from "./commands/remove.mjs";
 import { installFromTag } from "./lib/install-from-tag.mjs";
 import { createMaterializedSkills } from "./lib/materialize-skills.mjs";
@@ -25,10 +24,8 @@ Notes:
   - --tag installs an exact Git tag from the official Clean Flow repository
     and can be used to upgrade or downgrade an existing installation
   - --global targets ~/.agents/skills
-  - install and remove clean up Cflow-owned skills from the former
-    .codex/skills location while preserving foreign entries
-  - install and remove prune legacy static agents marked as Cflow-owned
   - --friction enables the always-on friction log during global install;
+    its optional logger is installed into ~/.agents/cflow/bin;
     omitting it disables a previous friction installation but keeps its logs
   - remove deletes only Cflow-owned skill directories; global remove also
     removes the friction pieces and their AGENTS.md block
@@ -77,16 +74,15 @@ export async function main(
       options.command === "install"
         ? await installAll({
             skillsDestinationRoot: destinations.skillsRoot,
-            legacySkillsDestinationRoot: destinations.legacySkillsRoot,
-            legacyCodexAgentsDestinationRoot: destinations.legacyCodexAgentsRoot,
             dryRun: options.dryRun,
+            onWarning: message => io.stderr.write(`${message}\n`),
           })
-        : await removeAll({
-            skillsDestinationRoot: destinations.skillsRoot,
-            legacySkillsDestinationRoot: destinations.legacySkillsRoot,
-            legacyCodexAgentsDestinationRoot: destinations.legacyCodexAgentsRoot,
+        : await removeSkills({
+            destinationRoot: destinations.skillsRoot,
             dryRun: options.dryRun,
           });
+
+    result.skillsDestinationRoot = destinations.skillsRoot;
 
     if (options.global) {
       const frictionTargets = resolveFrictionTargets(resolutionContext);
@@ -110,6 +106,9 @@ export async function main(
     }
 
     writeSummary(io.stdout, result);
+    for (const warning of result.friction?.warnings ?? []) {
+      io.stderr.write(`Warning: ${warning}\n`);
+    }
     return result.command === "install" && result.conflicts.length > 0 ? 1 : 0;
   } catch (error) {
     io.stderr.write(`Error: ${error.message}\n`);
@@ -238,170 +237,38 @@ function buildInstallArgs(options) {
   return args;
 }
 
-async function installAll({
-  skillsDestinationRoot,
-  legacySkillsDestinationRoot,
-  legacyCodexAgentsDestinationRoot,
-  dryRun,
-}) {
-  const materialized = await createMaterializedSkills(SKILLS_SOURCE_ROOT);
-
+async function installAll({ skillsDestinationRoot, dryRun, onWarning }) {
+  const materialized = await createMaterializedSkills(SKILLS_SOURCE_ROOT, { onWarning });
   try {
-    const skillsPlan = await installSkills({
+    const result = await installSkills({
       sourceRoot: materialized.skillsRoot,
       destinationRoot: skillsDestinationRoot,
-      dryRun: true,
+      dryRun,
+      onWarning,
     });
-    const legacySkillsPlan = await removeSkills({
-      destinationRoot: legacySkillsDestinationRoot,
-      dryRun: true,
-    });
-    const legacyAgentsPlan = await pruneLegacyCodexAgents({
-      destinationRoot: legacyCodexAgentsDestinationRoot,
-      dryRun: true,
-    });
-
-    if (dryRun || skillsPlan.conflicts.length > 0) {
-      return withPackagedSkillsSource(
-        toInstallResult(
-          skillsPlan,
-          legacySkillsPlan,
-          legacyAgentsPlan,
-          dryRun,
-          false,
-        ),
-      );
-    }
-
-    const skillsResult = await installSkills({
-      sourceRoot: materialized.skillsRoot,
-      destinationRoot: skillsDestinationRoot,
-      dryRun: false,
-    });
-    const legacySkillsResult = await removeSkills({
-      destinationRoot: legacySkillsDestinationRoot,
-      dryRun: false,
-    });
-    const legacyAgentsResult = await pruneLegacyCodexAgents({
-      destinationRoot: legacyCodexAgentsDestinationRoot,
-      dryRun: false,
-    });
-
-    return withPackagedSkillsSource(
-      toInstallResult(
-        skillsResult,
-        legacySkillsResult,
-        legacyAgentsResult,
-        dryRun,
-        skillsResult.applied &&
-          legacySkillsResult.applied &&
-          legacyAgentsResult.applied,
-      ),
-    );
+    return {
+      ...result,
+      sourceRoot: SKILLS_SOURCE_ROOT,
+      skillsSourceRoot: SKILLS_SOURCE_ROOT,
+    };
   } finally {
     await materialized.cleanup();
   }
 }
 
-async function removeAll({
-  skillsDestinationRoot,
-  legacySkillsDestinationRoot,
-  legacyCodexAgentsDestinationRoot,
-  dryRun,
-}) {
-  const legacyAgentsResult = await pruneLegacyCodexAgents({
-    destinationRoot: legacyCodexAgentsDestinationRoot,
-    dryRun,
-  });
-  const skillsResult = await removeSkills({
-    destinationRoot: skillsDestinationRoot,
-    dryRun,
-  });
-  const legacySkillsResult = await removeSkills({
-    destinationRoot: legacySkillsDestinationRoot,
-    dryRun,
-  });
-
-  return {
-    command: "remove",
-    destinationRoot: skillsDestinationRoot,
-    skillsDestinationRoot,
-    dryRun,
-    removed: [
-      ...skillsResult.removed,
-      ...asLegacySkillEntries(legacySkillsResult.removed),
-      ...legacyAgentsResult.removed,
-    ],
-    kept: [
-      ...skillsResult.kept,
-      ...asLegacySkillEntries(legacySkillsResult.kept),
-    ],
-    conflicts: [],
-    applied:
-      skillsResult.applied &&
-      legacySkillsResult.applied &&
-      legacyAgentsResult.applied,
-  };
-}
-
-function toInstallResult(
-  skillsResult,
-  legacySkillsResult,
-  legacyAgentsResult,
-  dryRun,
-  applied,
-) {
-  return {
-    command: "install",
-    sourceRoot: skillsResult.sourceRoot,
-    destinationRoot: skillsResult.destinationRoot,
-    skillsSourceRoot: skillsResult.sourceRoot,
-    skillsDestinationRoot: skillsResult.destinationRoot,
-    dryRun,
-    added: [...skillsResult.added],
-    updated: [...skillsResult.updated],
-    unchanged: [...skillsResult.unchanged],
-    pruned: [
-      ...skillsResult.pruned,
-      ...asLegacySkillEntries(legacySkillsResult.removed),
-      ...legacyAgentsResult.removed,
-    ],
-    conflicts: [...skillsResult.conflicts],
-    applied,
-  };
-}
-
-function asLegacySkillEntries(entries) {
-  return entries.map((entry) => ({ ...entry, kind: "legacy-skill" }));
-}
-
-function withPackagedSkillsSource(result) {
-  return {
-    ...result,
-    sourceRoot: SKILLS_SOURCE_ROOT,
-    skillsSourceRoot: SKILLS_SOURCE_ROOT,
-  };
-}
-
 export function resolveDestinations(
   options,
-  { environment = process.env, homeDirectory = os.homedir() } = {},
+  { homeDirectory = os.homedir() } = {},
 ) {
-  const codexHome = environment.CODEX_HOME || path.join(homeDirectory, ".codex");
-
   if (options.global) {
     return {
       skillsRoot: path.resolve(homeDirectory, ".agents", "skills"),
-      legacySkillsRoot: path.resolve(codexHome, "skills"),
-      legacyCodexAgentsRoot: path.resolve(codexHome, "agents"),
     };
   }
 
   const targetRoot = path.resolve(options.targetPath);
   return {
     skillsRoot: path.resolve(targetRoot, ".agents", "skills"),
-    legacySkillsRoot: path.resolve(targetRoot, ".codex", "skills"),
-    legacyCodexAgentsRoot: path.resolve(targetRoot, ".codex", "agents"),
   };
 }
 
@@ -409,7 +276,7 @@ function resolveFrictionTargets({ environment, homeDirectory }) {
   const codexHome = environment.CODEX_HOME || path.join(homeDirectory, ".codex");
   return {
     cflowHome: path.resolve(
-      environment.CFLOW_HOME || path.join(homeDirectory, ".cflow"),
+      environment.CFLOW_HOME || path.join(homeDirectory, ".agents", "cflow"),
     ),
     agentsFile: path.resolve(codexHome, "AGENTS.md"),
   };
