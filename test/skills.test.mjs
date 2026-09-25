@@ -102,10 +102,10 @@ test("packaged skill runtime files stay within token budget warnings", async () 
         (flow) => flow.id === "cf-cognitive:execution",
       );
       assert.ok(cognitiveExecution, "expected a configured cf-cognitive execution flow");
-      assert.equal(
-        cognitiveExecution.handoffs.find((handoff) => handoff.to === "cf-split:evaluation")
-          ?.kind,
-        "conditional",
+      assert.deepEqual(
+        cognitiveExecution.handoffs,
+        [],
+        "cf-cognitive execution names a next step; it activates no skill in the same thread",
       );
 
       for (const warning of collectSkillTokenBudgetWarnings(report)) {

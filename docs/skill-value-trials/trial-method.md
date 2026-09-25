@@ -654,8 +654,8 @@ its first run.
 
 Placement is part of the design, not a detail: the host decides when text reaches the model, and
 `docs/golden-rules.md` records which channel arrives when. The consequence for a trial is the one to
-carry here — **an intervention placed in resident text is only being tested on the turn that loaded
-it.** If the behaviour under test happens in a later turn, declare where the text lives, and do not
+carry here — **an intervention placed in resident text is read on the turn that loaded it and
+afterwards survives only as earlier context.** If the behaviour under test happens in a later turn, declare where the text lives, and do not
 read a null result as a verdict on its wording.
 
 ## Designing a case whose fork survives the control arm

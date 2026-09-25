@@ -15,7 +15,7 @@ Select the reference architecture and define target ownership, boundaries, and p
 
 ## Source Orientation
 
-Reuse current structure when it was established in this conversation and the scope still matches. When target-shape is entered directly or the scope materially changed, read `references/source-orientation.md` and establish current structure first.
+Reuse current structure when it was established in this conversation and the scope still matches. When target-shape is entered directly or the scope materially changed, establish current structure with source orientation as loaded above first.
 
 ## Rules
 

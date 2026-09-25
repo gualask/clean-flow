@@ -61,13 +61,13 @@ Use when the open decision is the clean structural end state for a repository or
 
 Also use this phase when user feedback shows a previous structural recommendation may have preserved accidental structure or solved only a local symptom.
 
-Run references/target-shape.md. Stop with one checkpoint question.
+Unless current structure was already established in this conversation for the same scope, read [references/source-orientation.md](references/source-orientation.md) first. Run references/target-shape.md. Stop with one checkpoint question.
 
 ### Fresh Assessment
 
 Use when the open decision is whether repository/subsystem intervention is justified, which intervention frame fits, or whether target-shape work is needed at all.
 
-Run references/assessment.md. Stop with one checkpoint question.
+Unless current structure was already established in this conversation for the same scope, read [references/source-orientation.md](references/source-orientation.md) first. Run references/assessment.md. Stop with one checkpoint question.
 
 ### Resume
 

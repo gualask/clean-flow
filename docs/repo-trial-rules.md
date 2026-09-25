@@ -33,11 +33,7 @@ Use this protocol to answer questions like:
 - is the proposed fix a local wording improvement or a contract change?
 
 Do not use this document as the source of truth for skill contracts.
-For that, use:
-
-- the relevant per-public-skill flow doc under `docs/<public-skill>/doc-*.flow.md`
-- [maintaining-this-pack.md](./maintaining-this-pack.md)
-- the relevant `skills/*/SKILL.md`
+The contract is the relevant `skills/*/SKILL.md` and the references it loads; the flow doc under `docs/<public-skill>/doc-*.flow.md` mirrors it for review, and [maintaining-this-pack.md](./maintaining-this-pack.md) covers pack-level rules.
 
 ## Trial Model
 

@@ -217,9 +217,15 @@ test("repository orientation is phase-scoped instead of global preflight", async
   assert.match(startContract, /never rely on a stored map/i);
   assert.match(assessment, /controller's Source Orientation rules/);
   assert.match(targetShape, /controller's Source Orientation rules/);
-  assert.match(assessment, /Read `references\/source-orientation\.md`/);
+  // source-orientation is skill-owned, so SKILL.md names it once per orienting phase.
+  assert.equal(
+    startContract.match(/read \[references\/source-orientation\.md\]\(references\/source-orientation\.md\) first/g)
+      ?.length,
+    2,
+  );
   assert.match(targetShape, /When target-shape is entered directly or the scope materially changed/);
-  assert.match(targetShape, /read `references\/source-orientation\.md`/);
+  assert.doesNotMatch(assessment, /references\/source-orientation\.md/);
+  assert.doesNotMatch(targetShape, /references\/source-orientation\.md/);
   assert.doesNotMatch(assessment, /repo-tree\.mjs/);
   assert.doesNotMatch(targetShape, /repo-tree\.mjs/);
   assert.match(sourceOrientation, /Resolve `scripts\/repo-tree\.mjs`/);

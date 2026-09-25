@@ -30,19 +30,7 @@
             "references/navigation-cost.md",
             "references/local-refactor-rules.md"
           ],
-          "conditional": [],
-          "handoffs": [
-            {
-              "to": "cf-split:evaluation",
-              "kind": "conditional",
-              "context": "same-thread"
-            },
-            {
-              "to": "cf-cohesion:targeted-evaluation",
-              "kind": "conditional",
-              "context": "same-thread"
-            }
-          ]
+          "conditional": []
         }
       }
     },

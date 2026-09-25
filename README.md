@@ -143,14 +143,14 @@ Use it when a workflow or feature is scattered across folders and navigation cos
 
 Checks a bounded change set against structural rules, repository conventions, behavior-preservation claims, documentation, and authoritative requirements.
 
-The change set is uncommitted work by default, or a named history range such as recent commits or a branch against its base. Selected files, including tests, are reviewed as whole units for structural and repository-level concerns. Test assertion quality remains a separate pass. Findings remain evidenced candidates, are limited to remedies a nameable unit can clear, and are routed without being confirmed, fixed, or persisted.
+The change set is uncommitted work by default, or a named history range such as recent commits or a branch against its base. Selected files, including tests, are reviewed as whole units for structural and repository-level concerns. Test assertion quality remains a separate pass. Findings remain evidenced candidates, are limited to remedies a nameable unit can clear, and are routed without being confirmed or fixed; the only repository write is the batched pass's recap, `.cflow/cf-review-recap.md`.
 
 Business alignment uses explicit requirements, repository-controlled product or domain documentation and acceptance criteria, or linked primary external contracts. Without one, the result says that business correctness was not assessed.
 
 ### `cf-test`
 
 Reviews changed or explicitly targeted tests against observable contracts and authoritative invariants.
-It reports missing invariants, invalid domain states, redundant or over-specified assertions, brittle strings, and implementation-detail coupling without editing files or running the suite.
+It reports missing invariants, invalid domain states, redundant or over-specified assertions, brittle strings, and implementation-detail coupling without running the suite; the only repository write is the batched pass's recap, `.cflow/cf-test-recap.md`.
 
 ### `cf-docs`
 

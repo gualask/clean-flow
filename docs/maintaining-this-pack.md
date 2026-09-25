@@ -158,7 +158,7 @@ Do not duplicate the same rule in both `SKILL.md` and a reference unless `SKILL.
 ## Key Design Decisions
 
 - Cflow does not depend on `AGENTS.md` for manual start or artifact-backed resume.
-- Public skill flow rules live in `docs/<public-skill>/doc-*.flow.md`; do not keep duplicate flow copies in maintainer overview docs.
+- Each public skill's maintainer flow mirror lives in `docs/<public-skill>/doc-*.flow.md`; do not keep duplicate flow copies in maintainer overview docs. When a mirror and the runtime disagree, `SKILL.md` and its loaded references win; fix the mirror.
 - The former internal workflow skills remain `cf-start` phase references, not separately packaged entrypoints.
 - `_shared` is authoring source for references and scripts vendored into multiple runtime skill directories.
 

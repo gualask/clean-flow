@@ -23,7 +23,7 @@ Determine:
 
 ## Source Orientation
 
-Read `references/source-orientation.md` and establish current structure before assessment.
+Establish current structure with source orientation as loaded above before assessment.
 
 ## Premise check
 
