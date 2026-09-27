@@ -1,12 +1,28 @@
 {
   "version": 1,
   "skills": {
+    "cf-architecture": {
+      "flows": {
+        "default": {
+          "required": [
+            "references/architecture-principles.md"
+          ],
+          "conditional": [
+            "references/spec.md",
+            "references/design-spec-lifecycle.md"
+          ]
+        }
+      }
+    },
     "cf-brainstorm": {
       "flows": {
         "default": {
-          "required": [],
+          "required": [
+            "references/design-spec-lifecycle.md"
+          ],
           "conditional": [
-            "assets/draft.template.md"
+            "references/architecture-principles.md",
+            "references/navigation-cost.md"
           ]
         }
       }

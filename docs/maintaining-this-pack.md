@@ -46,6 +46,7 @@ docs/            maintainer documentation
 
 Public skill entrypoints:
 
+- `cf-architecture`
 - `cf-start`
 - `cf-mr-wolf`
 - `cf-scenario`
@@ -78,6 +79,8 @@ Public skill entrypoints:
 
 Shared authoring references vendored into consuming skills:
 
+- `skills/_shared/references/architecture-principles.md`
+- `skills/_shared/references/design-spec-lifecycle.md`
 - `skills/_shared/references/navigation-cost.md`
 - `skills/_shared/references/local-refactor-rules.md`
 - `skills/_shared/references/local-readability-review.md`
@@ -104,7 +107,7 @@ Pack-wide golden rules live in [golden-rules.md](./golden-rules.md).
 
 - Public skill contracts live in `skills/*/SKILL.md`.
 - `cf-start` flow selection lives in `skills/cf-start/SKILL.md`; phase contracts live in `skills/cf-start/references/*.md`.
-- Shared authoring rules live in `skills/_shared/references/`; installed runtime copies live under the consuming skill's `references/` directory.
+- Shared authoring rules live in `skills/_shared/references/`; installed runtime copies live under the consuming skill's `references/` directory. Architecture criteria (structural questions, ownership and contract rules) are shared by architecture and brainstorm. Per-flow loading conditions live in the consuming controllers. `cf-architecture` keeps its procedure in `SKILL.md` and reads the ownership and contract rules from the shared architecture principles. The draft → spec cycle (`.cflow/specs/draft.md`, resume, review, promotion) lives once in `design-spec-lifecycle.md`, shared by brainstorm and architecture; each keeps its own process and spec sections (architecture's in its private `references/spec.md`, so the analysis body stays free of spec instructions).
 - Shared deterministic helpers live in `skills/_shared/scripts/`; installed runtime copies live under the consuming skill's `scripts/` directory.
 - Shared vendoring configuration lives in `skills/_shared/vendor.json`.
 - Artifact ownership is declared in the owning skill's `SKILL.md` with an `Owns` bullet naming the `.cflow` path; a contract test rejects any `.cflow` artifact a skill references without an owner. Templates live in public skill `assets/` directories, and any cross-skill use must be an explicit runtime path.
@@ -115,6 +118,7 @@ For real target-repo validation, use [repo-trial-rules.md](./repo-trial-rules.md
 
 Maintainer flow mirrors:
 
+- `cf-architecture`: [architecture/doc-architecture.flow.md](./architecture/doc-architecture.flow.md)
 - `cf-start`: [start/doc-start.flow.md](./start/doc-start.flow.md)
 - `cf-mr-wolf`: [mr-wolf/doc-mr-wolf.flow.md](./mr-wolf/doc-mr-wolf.flow.md)
 - `cf-scenario`: [scenario/doc-scenario.flow.md](./scenario/doc-scenario.flow.md)

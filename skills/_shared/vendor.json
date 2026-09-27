@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "cf-architecture": {
+      "references": [
+        "architecture-principles.md",
+        "design-spec-lifecycle.md"
+      ]
+    },
     "cf-cognitive": {
       "references": [
         "local-refactor-rules.md",
@@ -58,6 +64,16 @@
       "references": [
         "delegated-execution.md",
         "dynamic-agents.md"
+      ],
+      "scripts": [
+        "repo-tree.mjs"
+      ]
+    },
+    "cf-brainstorm": {
+      "references": [
+        "architecture-principles.md",
+        "navigation-cost.md",
+        "design-spec-lifecycle.md"
       ],
       "scripts": [
         "repo-tree.mjs"

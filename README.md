@@ -98,6 +98,11 @@ Fetch and follow instructions from https://raw.githubusercontent.com/gualask/cle
 
 ## Public Entrypoints
 
+### `cf-architecture`
+
+Assesses and proposes the architecture of a repository or subsystem, including exploration without a known problem.
+Produces an evidence-backed recommendation for discussion; when the user takes up a structural change, it records it as an approved spec through the same draft → spec cycle as `cf-brainstorm`. It does not implement changes. Use `cf-scenario` to judge the worth or impact of a named change.
+
 ### `cf-start`
 
 The main workflow controller for cleanup and refactor work, including hard-restructure planning and behavior-preserving migration units.
