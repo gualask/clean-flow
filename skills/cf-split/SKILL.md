@@ -1,13 +1,13 @@
 ---
 name: cf-split
-description: Evaluate or execute a behavior-preserving file-level split from one source file into nearby owned files. Use when the current request asks whether a file should be split or asks to perform a scoped extraction into files. Route regrouping of multiple related files to cf-cohesion and repository-level restructuring to cf-start.
+description: Evaluate or execute a behavior-preserving file-level split from one source file into nearby owned files. Use when the current request asks whether a file should be split or asks to perform a scoped extraction into files. Route regrouping of multiple related files to cf-cohesion and repository-level restructuring to cf-architecture.
 ---
 Use this skill for local file-level split review and execution.
 
 Use this when the current request asks whether a source file should be split into files, or asks to execute a specific local file-level extraction.
 Do not use this for cognitive cleanup inside one file; use `cf-cognitive` for that.
 Do not use this for regrouping already-split related files; use `cf-cohesion` for that.
-For repository structure, module boundaries, cross-feature ownership moves, or broad multi-file refactors, route to `cf-start`.
+For repository structure, module boundaries, cross-feature ownership moves, or broad multi-file refactors, route to `cf-architecture`.
 
 Do not bootstrap or require `.cflow/` artifacts.
 

@@ -1,14 +1,12 @@
 # Work Unit Planning
 
-Do planning only. Do not implement in this phase.
-
 ## Goal
 
-Create an ordered backlog of cohesive bounded work units.
+Create an ordered backlog of cohesive bounded work units for an approved spec.
 
 ## Required Inputs
 
-- accepted direction or target shape
+- approved spec, or accepted plan whose units need reordering
 - candidate area or bounded planning scope
 - resolved ownership, boundary, and packaging decisions for the planned area
 
@@ -21,15 +19,12 @@ Create an ordered backlog of cohesive bounded work units.
 - Prefer the narrowest cohesive useful unit.
 - A unit may touch several nearby files when one structural move owns them.
 - Split units only for ordering, ownership, risk, verification, or reviewability.
-- Do not invent a repo-wide target shape in this phase.
 
 ## Selection rules
 
-- Each unit is `mode: split` or `mode: consolidate`.
+- Each unit is `mode: split`, `mode: consolidate`, or `mode: feature` (behavior the spec introduces).
 - Choose exactly one next unit and record it through `artifacts.md`.
-- Keep the chosen unit as `recommended next work unit`, not `current work unit`.
 - Name units by workflow or seam when that is more stable than a brittle file list.
-- Stop after planning. Do not map, safety-net, or execute.
 
 ## Output format
 
@@ -43,9 +38,4 @@ Phase-specific fields:
 - `Work units`
 - `Unknowns to re-check`
 
-The chosen unit becomes active only in a later execution phase.
-
-If planning clarifies the near-term path, also update:
-
-- `Assessment summary`
-- `Decision notes`
+If planning clarifies the near-term path or finds a conflict with the spec, also update `Decision notes`.

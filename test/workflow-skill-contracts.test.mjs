@@ -55,7 +55,7 @@ test("cognitive routes to split and cohesion up front, not by post-edit conditio
   // identical input, and no bed ever exercised either clause.
   assert.match(
     cognitiveContract,
-    /Route elsewhere instead of working here: `cf-split`.*`cf-cohesion`.*`cf-start`/s,
+    /Route elsewhere instead of working here: `cf-split`.*`cf-cohesion`.*`cf-architecture`/s,
   );
   assert.match(
     cognitiveContract,
@@ -188,50 +188,42 @@ test("skill value trials declare their intervention instead of inheriting one ca
   );
 });
 
-test("repository orientation is phase-scoped instead of global preflight", async () => {
-  const startContract = await fs.readFile(path.join(SKILLS_ROOT, "cf-start", "SKILL.md"), "utf8");
-  const assessment = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-start", "references", "assessment.md"),
+test("execute inspects only the spec or unit scope and hands off without a spec", async () => {
+  const executeContract = await fs.readFile(path.join(SKILLS_ROOT, "cf-execute", "SKILL.md"), "utf8");
+  const executeFlow = await fs.readFile(
+    path.join(DOCS_ROOT, "execute", "doc-execute.flow.md"),
     "utf8",
   );
-  const targetShape = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-start", "references", "target-shape.md"),
-    "utf8",
-  );
-  const sourceOrientation = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-start", "references", "source-orientation.md"),
-    "utf8",
-  );
-  const startFlow = await fs.readFile(
-    path.join(DOCS_ROOT, "start", "doc-start.flow.md"),
-    "utf8",
-  );
-  const preflight = /## Preflight\n([\s\S]*?)\n## Flow Selection/.exec(startContract);
+  const rules = /## Rules\n([\s\S]*?)\n## /.exec(executeContract);
+  const specGate = /## Spec Gate\n([\s\S]*?)\n## /.exec(executeContract);
 
-  assert.ok(preflight, "cf-start must keep an explicit Preflight section");
-  assert.doesNotMatch(preflight[1], /repo-tree\.mjs/);
-  assert.match(
-    preflight[1],
-    /Do not run repository-wide orientation unless the fresh-assessment or target-shape reference requires it/,
-  );
-  assert.match(startContract, /never rely on a stored map/i);
-  assert.match(assessment, /controller's Source Orientation rules/);
-  assert.match(targetShape, /controller's Source Orientation rules/);
-  // source-orientation is skill-owned, so SKILL.md names it once per orienting phase.
-  assert.equal(
-    startContract.match(/read \[references\/source-orientation\.md\]\(references\/source-orientation\.md\) first/g)
-      ?.length,
-    2,
-  );
-  assert.match(targetShape, /When target-shape is entered directly or the scope materially changed/);
-  assert.doesNotMatch(assessment, /references\/source-orientation\.md/);
-  assert.doesNotMatch(targetShape, /references\/source-orientation\.md/);
-  assert.doesNotMatch(assessment, /repo-tree\.mjs/);
-  assert.doesNotMatch(targetShape, /repo-tree\.mjs/);
-  assert.match(sourceOrientation, /Resolve `scripts\/repo-tree\.mjs`/);
-  assert.match(sourceOrientation, /Do not persist the tree as a Cflow artifact/);
-  assert.match(startFlow, /orients fresh assessment and direct target-shape work/);
-  assert.doesNotMatch(startContract, /architecture\.md/);
+  assert.ok(rules, "cf-execute must keep its cross-phase Rules section");
+  assert.doesNotMatch(rules[1], /repo-tree\.mjs/);
+  assert.match(rules[1], /Inspect only the spec's scope or the accepted unit's touched scope/);
+  assert.match(rules[1], /never rely on a stored map/i);
+  assert.match(rules[1], /Do not assess or redesign under this skill/);
+  assert.match(rules[1], /A `recommended next work unit` is not accepted/);
+  assert.ok(specGate, "cf-execute must keep an explicit Spec Gate section");
+  assert.match(specGate[1], /ls -a \.cflow \.cflow\/specs/);
+  assert.match(specGate[1], /`\.cflow\/specs\/draft\.md` is not approved/);
+  assert.match(specGate[1], /do not plan: hand the request to the skill that designs it/);
+  assert.match(specGate[1], /`cf-architecture`/);
+  assert.match(specGate[1], /`cf-brainstorm`/);
+  assert.doesNotMatch(executeContract, /Frame Gate|assessment\.md|target-shape\.md|source-orientation\.md/);
+  assert.match(executeFlow, /Spec Gate replaces cf-start's Frame Gate/);
+});
+
+test("brainstorm hands feature ownership to architecture through the shared lifecycle", async () => {
+  const read = (...parts) => fs.readFile(path.join(...parts), "utf8");
+  const brainstorm = await read(SKILLS_ROOT, "cf-brainstorm", "SKILL.md");
+  const architecture = await read(SKILLS_ROOT, "cf-architecture", "SKILL.md");
+  const lifecycle = await read(SHARED_REFERENCES_ROOT, "design-spec-lifecycle.md");
+
+  assert.match(brainstorm, /## Ownership Handoff\n[\s\S]*hand the draft to `cf-architecture`/);
+  assert.doesNotMatch(brainstorm, /architecture-principles\.md|navigation-cost\.md/);
+  assert.match(architecture, /## Feature Handoff\n[\s\S]*Stay in the modules the feature touches/);
+  assert.match(lifecycle, /## Handoff\n[\s\S]*handed off by: <skill>/);
+  assert.match(lifecycle, /end the turn naming the receiver for the user to invoke; do not open the receiver in the same turn/);
 });
 
 test("packaged skill routing only names skills that exist in the pack", async () => {

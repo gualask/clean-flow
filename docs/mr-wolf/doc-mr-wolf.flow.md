@@ -37,7 +37,7 @@ There is deliberately **no closing section telling the skill to stand down after
 
 - The skill carries **no routing table**. Handoff to a specialist is left to the host, which selects from the installed descriptions. Case 9 measured this directly: with and without an in-body table, all twelve runs opened exactly one specialist `SKILL.md`, and routing was correct **12 of 12 in both arms** once conditioned on the lens the user actually picked. The one apparent divergence sat in the arm that *had* the table, and it was a correct handoff to the skill matching the option that arm had offered.
 - Consequently `cf-mr-wolf` enumerates no siblings. It names the owning skill in the handoff line, but it holds no catalogue of its own. If a specialist stops being reached, fix its `description`, not this file.
-- `.cflow/refactor-brief.md` remains owned by `cf-start`. `cf-mr-wolf` owns no artifact.
+- `.cflow/execution-plan.md` is owned by `cf-execute`. `cf-mr-wolf` owns no artifact.
 - The skill has no vendored shared files and no entry in `skills/_shared/vendor.json`.
 - Keep this doc aligned with runtime files, but do not rely on it at runtime.
 

@@ -2,7 +2,7 @@
 
 ## Required Inputs
 
-- live brief or explicit local behavior-preserving scope
+- live plan or explicit local behavior-preserving scope
 - credible safety lock
 - mapped fragmentation seam and artificial boundary
 
@@ -52,5 +52,4 @@ Apply structural-closure.md.
 If the actual implementation changed understanding, also update:
 
 - `Fragmentation pressure`
-- `Target direction`
 - `Decision notes`

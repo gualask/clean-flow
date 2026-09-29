@@ -1,29 +1,24 @@
 # Migration Unit Planning
 
-Do not implement in this phase.
-
 ## Goal
 
-Translate the accepted hard target into reviewable migration units.
+Translate the approved structural spec into reviewable migration units.
 
 ## Required Inputs
 
-- approved hard target direction
-- target boundary model and packaging direction
+- approved spec with target tree, `Moves`, and migration order
 - migration constraints and behavior-preservation expectations
 
 ## Rules
 
 - If required inputs are missing, stop with `Artifact decision: not updated; migration inputs missing`.
 - No big-bang rewrite.
-- Do not downgrade, narrow, or relabel the accepted clean target to reduce churn.
+- Follow the spec's `Moves` and migration order. Record a step the code makes impossible in `Decision notes`.
 - Prefer the narrowest first unit that proves the target.
 - Keep units behavior-preserving unless requested otherwise.
 - Record what is intentionally deferred as temporary staging against the accepted target, not as a revised target.
 - State the most fragile assumption behind the unit ordering — "this plan assumes X; if X does not hold, Y" — plus the cheapest check to run before the first unit, and record it under `Unknowns to re-check`.
 - Choose exactly one first unit and record it through `artifacts.md`.
-- Keep the first unit as `recommended next work unit`, not active execution state.
-- Stop after planning. Do not map, safety-net, or execute.
 
 ## Output format
 
@@ -37,5 +32,4 @@ Phase-specific fields:
 - `Work units`
 - `Constraints`
 - `Unknowns to re-check`
-
-The first unit becomes active only in a later execution phase.
+- `Decision notes` for conflicts with the spec

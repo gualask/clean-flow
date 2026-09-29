@@ -19,7 +19,7 @@ Judge candidates with references/navigation-cost.md: jumps into skippable single
 
 ## Required Inputs
 
-- live brief or explicit local/repo-level scope
+- live plan or explicit local/repo-level scope
 - selected consolidation-oriented pressure or unit
 
 ## Analyze in this order
@@ -45,9 +45,6 @@ Phase-specific fields:
 
 - `Fragmentation pressure`
 
-If this materially changes the likely intervention mode, also update:
-
-- `Assessment summary`
-- `Target direction`
+Record a conflict with the spec in `Decision notes`.
 
 Record concrete seam questions in `Unknowns to re-check`.

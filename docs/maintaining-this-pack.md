@@ -9,7 +9,7 @@ At runtime:
 
 - skills are installed into `.agents/skills` in the target repository, or into `$HOME/.agents/skills` for global install
 - Cflow artifacts live in the target repository under `.cflow/`
-- this source repository does not need `.cflow/refactor-brief.md`
+- this source repository does not need `.cflow/` artifacts
 
 ## Runtime Model
 
@@ -28,7 +28,7 @@ Cflow has two maintainer concerns:
    - runtime contracts live in the public `SKILL.md` files, first-level linked references, and vendored shared references loaded by an active runtime reference
    - per-public-skill flow docs are maintainer mirrors used to review and validate the runtime contracts
 
-The former internal workflow skills are now `cf-start` phase references.
+The former internal workflow skills are now `cf-execute` phase references.
 They are not packaged as separate skill entrypoints.
 
 ## Repository Layout
@@ -47,7 +47,7 @@ docs/            maintainer documentation
 Public skill entrypoints:
 
 - `cf-architecture`
-- `cf-start`
+- `cf-execute`
 - `cf-mr-wolf`
 - `cf-scenario`
 - `cf-deadcode`
@@ -60,26 +60,23 @@ Public skill entrypoints:
 - `cf-todo`
 - `cf-brainstorm`
 
-`cf-start` phase references:
+`cf-execute` phase references:
 
-- `skills/cf-start/references/artifacts.md`
-- `skills/cf-start/references/assessment.md`
-- `skills/cf-start/references/concentration-map.md`
-- `skills/cf-start/references/fragmentation-map.md`
-- `skills/cf-start/references/work-unit-planning.md`
-- `skills/cf-start/references/target-shape.md`
-- `skills/cf-start/references/migration-unit-planning.md`
-- `skills/cf-start/references/safety-net.md`
-- `skills/cf-start/references/split-execution.md`
-- `skills/cf-start/references/consolidation-execution.md`
-- `skills/cf-start/references/structural-closure.md`
-- `skills/cf-start/references/local-simplify.md`
-- `skills/cf-start/references/review.md`
-- `skills/cf-start/references/verify.md`
+- `skills/cf-execute/references/artifacts.md`
+- `skills/cf-execute/references/concentration-map.md`
+- `skills/cf-execute/references/fragmentation-map.md`
+- `skills/cf-execute/references/work-unit-planning.md`
+- `skills/cf-execute/references/migration-unit-planning.md`
+- `skills/cf-execute/references/safety-net.md`
+- `skills/cf-execute/references/split-execution.md`
+- `skills/cf-execute/references/consolidation-execution.md`
+- `skills/cf-execute/references/structural-closure.md`
+- `skills/cf-execute/references/local-simplify.md`
+- `skills/cf-execute/references/review.md`
+- `skills/cf-execute/references/verify.md`
 
 Shared authoring references vendored into consuming skills:
 
-- `skills/_shared/references/architecture-principles.md`
 - `skills/_shared/references/design-spec-lifecycle.md`
 - `skills/_shared/references/navigation-cost.md`
 - `skills/_shared/references/local-refactor-rules.md`
@@ -106,8 +103,8 @@ Pack-wide golden rules live in [golden-rules.md](./golden-rules.md).
 ## Source Of Truth
 
 - Public skill contracts live in `skills/*/SKILL.md`.
-- `cf-start` flow selection lives in `skills/cf-start/SKILL.md`; phase contracts live in `skills/cf-start/references/*.md`.
-- Shared authoring rules live in `skills/_shared/references/`; installed runtime copies live under the consuming skill's `references/` directory. Architecture criteria (structural questions, ownership and contract rules) are shared by architecture and brainstorm. Per-flow loading conditions live in the consuming controllers. `cf-architecture` keeps its procedure in `SKILL.md` and reads the ownership and contract rules from the shared architecture principles. The draft → spec cycle (`.cflow/specs/draft.md`, resume, review, promotion) lives once in `design-spec-lifecycle.md`, shared by brainstorm and architecture; each keeps its own process and spec sections (architecture's in its private `references/spec.md`, so the analysis body stays free of spec instructions).
+- `cf-execute` flow selection lives in `skills/cf-execute/SKILL.md`; phase contracts live in `skills/cf-execute/references/*.md`.
+- Shared authoring rules live in `skills/_shared/references/`; installed runtime copies live under the consuming skill's `references/` directory. Architecture criteria (structural questions, ownership and contract rules) live in the `## Principles` section of `cf-architecture/SKILL.md`; no other skill reads them. Brainstorm hands ownership of what a feature adds to architecture instead (see the brainstorm flow). Review, scenario, and execute do not load them: two-arm checks found the same lens-4 finding and the same scenario verdict (2026-09-28), and the same adapter placement for a feature unit whose spec left placement open (2026-09-29), with and without them. Per-flow loading conditions live in the consuming controllers. `cf-architecture` keeps its procedure and its ownership and contract rules in `SKILL.md`. The draft → spec cycle (`.cflow/specs/draft.md`, resume, review, promotion) lives once in `design-spec-lifecycle.md`, shared by brainstorm and architecture; each keeps its own process and spec sections (architecture's in its private `references/spec.md`, so the analysis body stays free of spec instructions).
 - Shared deterministic helpers live in `skills/_shared/scripts/`; installed runtime copies live under the consuming skill's `scripts/` directory.
 - Shared vendoring configuration lives in `skills/_shared/vendor.json`.
 - Artifact ownership is declared in the owning skill's `SKILL.md` with an `Owns` bullet naming the `.cflow` path; a contract test rejects any `.cflow` artifact a skill references without an owner. Templates live in public skill `assets/` directories, and any cross-skill use must be an explicit runtime path.
@@ -119,7 +116,7 @@ For real target-repo validation, use [repo-trial-rules.md](./repo-trial-rules.md
 Maintainer flow mirrors:
 
 - `cf-architecture`: [architecture/doc-architecture.flow.md](./architecture/doc-architecture.flow.md)
-- `cf-start`: [start/doc-start.flow.md](./start/doc-start.flow.md)
+- `cf-execute`: [execute/doc-execute.flow.md](./execute/doc-execute.flow.md)
 - `cf-mr-wolf`: [mr-wolf/doc-mr-wolf.flow.md](./mr-wolf/doc-mr-wolf.flow.md)
 - `cf-scenario`: [scenario/doc-scenario.flow.md](./scenario/doc-scenario.flow.md)
 - `cf-deadcode`: [deadcode/doc-deadcode.flow.md](./deadcode/doc-deadcode.flow.md)
@@ -163,7 +160,7 @@ Do not duplicate the same rule in both `SKILL.md` and a reference unless `SKILL.
 
 - Cflow does not depend on `AGENTS.md` for manual start or artifact-backed resume.
 - Each public skill's maintainer flow mirror lives in `docs/<public-skill>/doc-*.flow.md`; do not keep duplicate flow copies in maintainer overview docs. When a mirror and the runtime disagree, `SKILL.md` and its loaded references win; fix the mirror.
-- The former internal workflow skills remain `cf-start` phase references, not separately packaged entrypoints.
+- The former internal workflow skills remain `cf-execute` phase references, not separately packaged entrypoints.
 - `_shared` is authoring source for references and scripts vendored into multiple runtime skill directories.
 
 ## Skill Change Validation
@@ -171,12 +168,12 @@ Do not duplicate the same rule in both `SKILL.md` and a reference unless `SKILL.
 When changing the pack, validate both:
 
 1. direct human invocation of each public skill
-2. `cf-start` flow selection plus phase execution through the relevant reference
+2. `cf-execute` flow selection plus phase execution through the relevant reference
 
 Checklist:
 
 - `description`: does the public skill metadata still trigger correctly?
-- `Flow links`: does `cf-start/SKILL.md` link every runtime reference inside the flow slice that first uses it?
+- `Flow links`: does each controller `SKILL.md` link every runtime reference inside the flow slice that first uses it?
 - `State gates`: are gates based on artifacts and repository state rather than actor identity?
 - `Artifact behavior`: do create, refresh, assume, or update rules match the phase?
 - `Runtime boundary`: does every runtime rule live in a skill or linked reference, not only in docs?
@@ -188,7 +185,7 @@ Token budget report:
 
 ```bash
 pnpm report
-pnpm report -- cf-start
+pnpm report -- cf-execute
 ```
 
 The report recursively inventories Markdown under each materialized skill's `references/` and `assets/`, then separates that inventory from configured flow stacks. `src/commands/skill-token-report.context.json` is local maintainer input: each flow lists required files, conditional files, and handoffs that can add another skill in the same thread. The estimate counts the pack discovery metadata once, adds each activated `SKILL.md`, and reports both required and maximum reachable contract tokens. It excludes system and developer instructions, tools, conversation history, project files, and dynamic command output.
@@ -202,7 +199,7 @@ The packaged skills root uses that context map automatically. A custom `--skills
 When changing the pack:
 
 - update the relevant public `SKILL.md`
-- update the relevant `cf-start/references/*.md` phase contract
+- update the relevant `cf-execute/references/*.md` phase contract
 - update the affected `docs/<public-skill>/doc-*.flow.md` when a public skill flow changes
 - update this document when maintainer rules change
 - if artifact structure changes, update the owning skill's `assets/*.template.md`

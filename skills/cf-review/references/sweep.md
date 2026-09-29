@@ -26,11 +26,13 @@ Route: `cf-cohesion`
 
 Report a file added, moved, or renamed outside the owner cluster implied by its role, imports, and callers; a workflow spread further across type folders or siblings; or a new file in a catch-all bucket. Apply the placement test from `references/navigation-cost.md`; similar names alone do not establish cohesion.
 
-## Lens 4 — Dependency Direction
+## Lens 4 — Dependency Direction And Owner Placement
 
-Route: `cf-start`
+Route: `cf-architecture`
 
 Report an introduced import, call, or type edge that violates declared dependency direction or binds a lower/domain unit to delivery, infrastructure, sibling-feature, or new global glue. Report the edge only; the receiving skill owns the target architecture.
+
+Report state, cache, run coordination, cancellation, or result-acceptance policy that the change adds to a module bound to one delivery environment (it imports that environment's API or sits in its adapter folder) when more than one entry point uses it. Name the state and the entry points; the receiving skill owns placement.
 
 ## Lens 5 — Local Anti-Patterns
 

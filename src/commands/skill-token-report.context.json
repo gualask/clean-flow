@@ -4,9 +4,7 @@
     "cf-architecture": {
       "flows": {
         "default": {
-          "required": [
-            "references/architecture-principles.md"
-          ],
+          "required": [],
           "conditional": [
             "references/spec.md",
             "references/design-spec-lifecycle.md"
@@ -20,10 +18,7 @@
           "required": [
             "references/design-spec-lifecycle.md"
           ],
-          "conditional": [
-            "references/architecture-principles.md",
-            "references/navigation-cost.md"
-          ]
+          "conditional": []
         }
       }
     },
@@ -156,26 +151,11 @@
         }
       }
     },
-    "cf-start": {
+    "cf-execute": {
       "flows": {
-        "handoff": {
+        "spec-gate": {
           "required": [],
           "conditional": []
-        },
-        "assessment": {
-          "required": [
-            "references/assessment.md",
-            "references/source-orientation.md"
-          ],
-          "conditional": []
-        },
-        "target-shape": {
-          "required": [
-            "references/target-shape.md"
-          ],
-          "conditional": [
-            "references/source-orientation.md"
-          ]
         },
         "work-unit-planning": {
           "required": [
@@ -183,7 +163,8 @@
           ],
           "conditional": [
             "references/artifacts.md",
-            "assets/refactor-brief.template.md"
+            "assets/execution-plan.template.md",
+            "references/navigation-cost.md"
           ]
         },
         "migration-unit-planning": {
@@ -192,7 +173,8 @@
           ],
           "conditional": [
             "references/artifacts.md",
-            "assets/refactor-brief.template.md"
+            "assets/execution-plan.template.md",
+            "references/navigation-cost.md"
           ]
         },
         "structural-split": {
@@ -211,7 +193,7 @@
             "references/local-readability-review.md",
             "references/local-refactor-rules.md",
             "references/artifacts.md",
-            "assets/refactor-brief.template.md"
+            "assets/execution-plan.template.md"
           ]
         },
         "structural-consolidate": {
@@ -229,7 +211,23 @@
             "references/local-readability-review.md",
             "references/local-refactor-rules.md",
             "references/artifacts.md",
-            "assets/refactor-brief.template.md"
+            "assets/execution-plan.template.md"
+          ]
+        },
+        "feature-unit": {
+          "required": [
+            "references/safety-net.md",
+            "references/structural-closure.md"
+          ],
+          "conditional": [
+            "references/regression-handling.md",
+            "references/local-simplify.md",
+            "references/local-readability-review.md",
+            "references/local-refactor-rules.md",
+            "references/reference-audit.md",
+            "references/artifacts.md",
+            "assets/execution-plan.template.md",
+            "references/navigation-cost.md"
           ]
         },
         "review": {
@@ -241,7 +239,7 @@
             "references/file-split-rules.md",
             "references/navigation-cost.md",
             "references/artifacts.md",
-            "assets/refactor-brief.template.md"
+            "assets/execution-plan.template.md"
           ]
         },
         "verify": {
@@ -251,7 +249,7 @@
           "conditional": [
             "references/reference-audit.md",
             "references/artifacts.md",
-            "assets/refactor-brief.template.md"
+            "assets/execution-plan.template.md"
           ]
         }
       }

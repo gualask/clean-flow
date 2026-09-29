@@ -163,11 +163,11 @@ test("split owns first-level reference loading and audits consumers before editi
     "utf8",
   );
   const startSplitExecution = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-start", "references", "split-execution.md"),
+    path.join(SKILLS_ROOT, "cf-execute", "references", "split-execution.md"),
     "utf8",
   );
   const startReview = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-start", "references", "review.md"),
+    path.join(SKILLS_ROOT, "cf-execute", "references", "review.md"),
     "utf8",
   );
 

@@ -1,6 +1,6 @@
 ---
 name: cf-cognitive
-description: Find or refactor local source-file cognitive complexity hotspots while preserving behavior. Use when a function or file is hard to read or reason about — overloaded functions, deep nesting, tangled branching, local readability pressure — with or without explicit file targets. Do not use to split a file into new files (cf-split) or for repository-wide refactors (cf-start).
+description: Find or refactor local source-file cognitive complexity hotspots while preserving behavior. Use when a function or file is hard to read or reason about — overloaded functions, deep nesting, tangled branching, local readability pressure — with or without explicit file targets. Do not use to split a file into new files (cf-split) or for repository-wide refactors (cf-architecture).
 ---
 Reduce real cognitive complexity in local source files while preserving behavior.
 Use this for up to three source files per session, processed one file at a time.
@@ -9,7 +9,7 @@ Do not bootstrap or require `.cflow/` artifacts.
 Before applying any flow, read references/navigation-cost.md; it owns the hard-trigger values, exemptions, and remedy rules.
 Use numeric thresholds only when native tooling can measure them; otherwise report qualitatively.
 
-Route elsewhere instead of working here: `cf-split` for file-level split review or extraction from one source file; `cf-cohesion` for cross-file placement, navigation cost, or related files that may need a local feature slice; `cf-start` for repository structure, module boundaries, ownership moves, or broad multi-file refactors.
+Route elsewhere instead of working here: `cf-split` for file-level split review or extraction from one source file; `cf-cohesion` for cross-file placement, navigation cost, or related files that may need a local feature slice; `cf-architecture` for repository structure, module boundaries, ownership moves, or broad multi-file refactors.
 
 ## Flow Selection
 

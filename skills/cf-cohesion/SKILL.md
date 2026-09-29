@@ -1,13 +1,13 @@
 ---
 name: cf-cohesion
-description: Evaluate or execute behavior-preserving local regrouping of already-related files into a cohesive feature or workflow slice. Use when the problem is navigation cost, placement, scattered files, feature-slice cohesion, or whether related files should live together. Do not use for non-code content; route single-file splits to cf-split and repository-level restructuring to cf-start.
+description: Evaluate or execute behavior-preserving local regrouping of already-related files into a cohesive feature or workflow slice. Use when the problem is navigation cost, placement, scattered files, feature-slice cohesion, or whether related files should live together. Do not use for non-code content; route single-file splits to cf-split and repository-level restructuring to cf-architecture.
 ---
 Use this skill for local cross-file cohesion review and regrouping.
 
 Use this when related files already exist but are scattered across type folders, sibling areas, or local conventions in a way that raises navigation cost.
 Do not use this for cognitive cleanup inside one file; use `cf-cognitive` for that.
 Do not use this for extracting responsibilities out of one source file; use `cf-split` for that.
-For repository structure, module boundaries, cross-feature ownership moves, or broad multi-step refactors, route to `cf-start`.
+For repository structure, module boundaries, cross-feature ownership moves, or broad multi-step refactors, route to `cf-architecture`.
 
 Do not bootstrap or require `.cflow/` artifacts.
 
@@ -52,7 +52,7 @@ The discovery flow reads none of them.
 
 - Do not create or update `.cflow/*`.
 - Keep the scope local unless the current request explicitly asks for repository-level planning.
-- If the work crosses repository boundaries, creates a new architectural layer, or needs ordered multi-step migration, route to `cf-start`.
+- If the work crosses repository boundaries, creates a new architectural layer, or needs ordered multi-step migration, route to `cf-architecture`.
 
 ## Decision Labels
 
@@ -61,7 +61,7 @@ Use these labels in discovery or evaluation:
 - `recommended`: a local slice would make one workflow cleaner to find and follow now
 - `optional`: cohesion is real, but current placement is already clear enough to navigate
 - `keep as-is`: grouping would hide ownership or reduce clarity more than it helps
-- `route`: the move crosses repository boundaries or needs broader planning through `cf-start`
+- `route`: the move crosses repository boundaries or needs design through `cf-architecture`
 
 ## Output Format
 

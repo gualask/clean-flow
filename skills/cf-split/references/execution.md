@@ -18,7 +18,7 @@ source files it lists, and evaluate the resulting owner group against the shared
 guardrails, and settle the final placement here.
 When the owner group passes the guardrails but a folder there would change module or package
 boundaries, keep the files flat in this pass and record the owner group as a `Deferred` finding
-routed to `cf-start`.
+routed to `cf-architecture`.
 
 ## Reference Audit
 

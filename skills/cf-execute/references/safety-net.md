@@ -4,7 +4,7 @@ Use after mapping and before structural edits.
 
 ## Required Inputs
 
-- live brief or explicit local behavior-preserving scope
+- live plan or explicit local behavior-preserving scope
 - named work unit, cohesive unit, or refactoring surface
 
 If required inputs are missing, stop with `Go / no-go: no-go; planning inputs missing`.
@@ -18,7 +18,7 @@ Lock behavior proportionate to refactor risk. Keep it targeted to the change sha
 
 Name what the next move may disturb:
 
-- current work unit if a live brief exists
+- current work unit if a live plan exists
 - explicit local unit when the request is already scoped
 - touched workflow, module, or feature area
 - observable behavior that must remain stable

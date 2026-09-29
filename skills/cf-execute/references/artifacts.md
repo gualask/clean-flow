@@ -1,31 +1,30 @@
 # Artifact Reference
 
-`.cflow/refactor-brief.md` is accepted plan/resume state. It is not scratch notes.
+`.cflow/execution-plan.md` is accepted plan/resume state for one approved spec. It is not scratch notes, and it does not copy the spec's design: it names the spec path and records units, state, and drift.
 
 ## Write Gate
 
-Write the brief only when:
+Write the plan only when:
 
 - the user resumes accepted Cflow work
-- the user approved a direction/target and asked for artifact-backed planning
+- the user asked to plan an approved spec
 - execution, review, or verification changed accepted unit state
 
-Do not write it during fresh assessment, target proposal, or decision discussion. A generic "yes" does not grant brief writes unless the previous checkpoint asked to create/update a plan artifact.
+Do not write it while the spec is still being designed or discussed. A generic "yes" does not grant plan writes unless the previous checkpoint asked to create/update the plan.
 
-## Fresh vs Resume
+## New Spec
 
-Existing brief is live only for resume. In fresh work:
+When planning a new spec over an existing plan that is not live:
 
-- do not read the brief unless the user asks to resume it
 - do not preserve its old work units or recommendations as defaults
-- if a new plan is approved, reset from `assets/refactor-brief.template.md`
+- reset from `assets/execution-plan.template.md`
 - carry forward only still-relevant facts
 
-## Brief Write Rules
+## Plan Write Rules
 
-When creating or updating the refactor brief:
+When creating or updating the execution plan:
 
-- create from `assets/refactor-brief.template.md` when missing or starting a fresh accepted plan
+- create from `assets/execution-plan.template.md` when missing or when planning a new spec
 - update in place only for live resume or the same approved plan
 - update the phase-specific fields named by the active phase
 - preserve unrelated live-resume fields unless evidence makes them stale

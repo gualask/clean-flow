@@ -17,7 +17,7 @@ Use it when you want Codex to:
 - reduce local cognitive complexity in a source file
 - regroup related files into a more cohesive local feature slice
 - check uncommitted work, or the last few commits, against structure rules and authoritative requirements
-- run a larger cleanup/refactor flow with artifact-backed resume
+- plan and run an approved spec, refactor or feature, in reviewable units with artifact-backed resume
 - brainstorm a new feature or idea into an approved design spec (explicit invocation only)
 
 ## Why Use It
@@ -62,10 +62,16 @@ Repository installs write to `.agents/skills`; global installs write to `$HOME/.
 Pass `--tag <tag>` to install an exact tag from the official Clean Flow repository. This supports both upgrades and downgrades; without `--tag`, the CLI installs the skills packaged in its current checkout.
 
 After installation, ask Codex to use one of the public entrypoints below.
-When the cleanup or refactor concern is already clear and confirmed, start with:
+When the concern is the structure of the repository or a subsystem, start with:
 
 ```text
-Use cf-start to assess this cleanup/refactor and recommend the next step.
+Use cf-architecture to assess the architecture of this repository and recommend the next step.
+```
+
+Once a spec is approved, plan and run it with:
+
+```text
+Use cf-execute to plan the approved spec.
 ```
 
 When the concern, lens, or desired outcome is still unclear, frame it first:
@@ -103,12 +109,10 @@ Fetch and follow instructions from https://raw.githubusercontent.com/gualask/cle
 Assesses and proposes the architecture of a repository or subsystem, including exploration without a known problem.
 Produces an evidence-backed recommendation for discussion; when the user takes up a structural change, it records it as an approved spec through the same draft → spec cycle as `cf-brainstorm`. It does not implement changes. Use `cf-scenario` to judge the worth or impact of a named change.
 
-### `cf-start`
+### `cf-execute`
 
-The main workflow controller for cleanup and refactor work, including hard-restructure planning and behavior-preserving migration units.
-Use it after the diagnostic frame is confirmed, for fresh assessment, planning, bounded execution, review, verification, and resume.
-
-It uses the bundled gitignore-aware tree helper for fresh assessment and direct target-shape work when current structure is not already established. Later phases inspect only their accepted or touched scope, while `.cflow/refactor-brief.md` carries accepted plan and resume state.
+Plans and implements an approved spec: a structural change from `cf-architecture` or a feature from `cf-brainstorm`.
+It splits the spec into reviewable units (`split`, `consolidate`, or `feature`), locks behavior with a safety net, executes one accepted unit at a time, and reviews and verifies it. `.cflow/execution-plan.md` carries the plan and resume state and points to the spec. Without an approved spec it routes to the skill that designs one instead of assessing the repository itself.
 
 ### `cf-mr-wolf`
 
@@ -181,15 +185,14 @@ It does not create `.cflow/` immediately.
 Skills that own durable artifacts create `.cflow/` only when they need it.
 When `.cflow/` is created for the first time, Clean Flow writes a `.cflow/.gitignore` containing `*`, so the directory ignores itself and the repository `.gitignore` is never touched.
 
-Once the diagnostic frame is confirmed, use `cf-start` when you want the normal cleanup/refactor lifecycle:
+The normal lifecycle for a structural change or a new feature:
 
-1. assess the repository pressure
-2. choose a safe path
-3. plan one bounded unit
-4. lock behavior with an appropriate safety net
-5. execute
-6. review and verify
-7. resume from `.cflow/refactor-brief.md` when needed
+1. design it with `cf-architecture` (structure) or `cf-brainstorm` (feature) until the spec is approved
+2. plan it with `cf-execute` into bounded units
+3. lock behavior with an appropriate safety net
+4. execute one accepted unit
+5. review and verify
+6. resume from `.cflow/execution-plan.md` when needed
 
 For direct local work, use `cf-cognitive`, `cf-split`, or `cf-cohesion` instead.
 To review what a set of changes exposes and route it, use `cf-review`: pending work before you commit, or a history range after the fact.
@@ -198,7 +201,8 @@ For lightweight follow-up tracking from an analysis or working session, use `cf-
 
 ## Documentation
 
-- [Start flow](./docs/start/doc-start.flow.md)
+- [Architecture flow](./docs/architecture/doc-architecture.flow.md)
+- [Execute flow](./docs/execute/doc-execute.flow.md)
 - [Mr Wolf flow](./docs/mr-wolf/doc-mr-wolf.flow.md)
 - [Scenario flow](./docs/scenario/doc-scenario.flow.md)
 - [Cognitive flow](./docs/cognitive/doc-cognitive.flow.md)

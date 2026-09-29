@@ -28,7 +28,7 @@ Look for:
 
 ## Required Inputs
 
-- live brief or explicit local/repo-level scope
+- live plan or explicit local/repo-level scope
 - selected split-oriented pressure or unit
 
 ## Analyze in this order
@@ -58,9 +58,6 @@ Phase-specific fields:
 - `Concentration pressure`
 - `Work units` if the current unit needs refinement
 
-If this materially changes the likely intervention mode, also update:
-
-- `Assessment summary`
-- `Target direction`
+Record a conflict with the spec in `Decision notes`.
 
 Record concrete seam questions in `Unknowns to re-check`.

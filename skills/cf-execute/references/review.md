@@ -12,7 +12,7 @@ For closure challenges, review current files, untracked files, and dense extract
 
 ## Goal
 
-Judge whether the refactor improved structure proportionately.
+Judge whether the completed work realizes the accepted structural decisions and improves the intended pressure.
 
 ## Review lens
 
@@ -22,7 +22,7 @@ If files moved, split, grouped, or renamed, read references/file-split-rules.md 
 Judge the result on four questions:
 
 - Did it reduce the pressure it was meant to reduce?
-- Are boundaries and ownership clearer?
+- Are boundaries and ownership clearer, with public collaboration distinguished from dependence on private implementation?
 - Did it avoid fake layers, dead wrappers, cleanup mania, and scope growth?
 - Is the remaining risk structural, or mostly a verification gap?
 
@@ -66,8 +66,7 @@ Phase-specific fields:
 
 - `Review notes`
 
-If review changes confidence in the target direction, also update:
+If review changes confidence in the approved spec, also update:
 
-- `Target direction`
 - `Unknowns to re-check`
-- `Decision notes`
+- `Decision notes`, naming the spec decision in question

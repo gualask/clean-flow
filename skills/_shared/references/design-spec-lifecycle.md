@@ -12,7 +12,7 @@ The draft → spec cycle shared by the skills that turn a design conversation in
 
 ## Resume Check
 
-Before creating the draft, run `ls -a .cflow/specs`: the directory is git-ignored, so search tools such as `rg` skip it. If `.cflow/specs/draft.md` already exists, stop and ask whether to resume it or discard it and start fresh, naming its owner; never overwrite it silently. Resume only a draft this skill owns; on resume, re-read the draft and continue from its oldest open question.
+Before creating the draft, run `ls -a .cflow/specs`: the directory is git-ignored, so search tools such as `rg` skip it. If `.cflow/specs/draft.md` already exists and is not a draft handed to this skill, stop and ask whether to resume it or discard it and start fresh, naming its owner; never overwrite it silently. Resume only a draft this skill owns; on resume, re-read the draft and continue from its oldest open question.
 
 ## Draft Format
 
@@ -50,6 +50,10 @@ Long conversations lose early context, so the draft is the memory, not the conve
 - After each settled answer, append one line to `Decisions`: the question and the chosen answer.
 - When an answer sends the conversation into a side exploration, the pending question stays open in `Questions`; return to the oldest open question once the side exploration resolves.
 - Before proposing approaches and again before promoting the spec, re-read `Decisions` in full and trust it over conversation memory; surface any conflict with a recent answer instead of silently overwriting the recorded decision.
+
+## Handoff
+
+An owner may hand its draft to the skill that finishes it: set `owner` to the receiver, add `- handed off by: <skill>` under `Subject`, and end the turn naming the receiver for the user to invoke; do not open the receiver in the same turn. The receiver resumes a draft it owns that records `handed off by` without asking, keeps every settled decision, and runs review and promotion.
 
 ## Review and Promotion
 

@@ -59,15 +59,15 @@ For non-runtime files, check that the change does not move runtime behavior into
 - Cleanliness is the default: optimize for the cleanest evidence-backed structure that fits the repository and request, not for the easiest or lowest-impact change.
 - Treat cognitive impact as bug-localization cost first: stable named owners that show where to inspect for likely bugs can override anti-overengineering heuristics such as flat defaults, file-count thresholds, or low-churn preference.
 - Open architecture reasoning by locating critical complexity; then define ownership, workflows, boundaries, invariants, dependency pressure, and packaging. Current structure is evidence and migration inventory, not the target to preserve.
-- Choose architecture from that diagnosis. Prefer the closest recognized reference architecture in the pragmatic form the repository needs, and involve the user before choosing custom top-level deviations.
+- Use the [architecture principles](../skills/cf-architecture/SKILL.md#principles) for structural decisions. Recognized architectures express the evidence-backed choices; they do not implicitly choose the organizing axis or require uniform internal layers. Approval belongs to the consuming flow.
 - Treat target shape as the clean end state for the assessed scope, not the first safe migration step. Do not shrink target scope or preserve current buckets because migration is risky.
 - Use cost, churn, reviewability, and behavior preservation only to stage migration after the clean target is chosen; behavior preservation is not structure preservation.
 - Do not recommend cleanup paths that preserve false ownership, accidental boundaries, global glue, unclear dependency direction, or catch-all ownership buckets.
 
 ## Pack Surface Boundaries
 
-- Keep `cf-start/SKILL.md` as the controller: identity, hard gates, flow selection slices, phase reference links, and output contracts.
-- Put phase-specific operational detail in `cf-start/references/*.md`.
+- Keep `cf-execute/SKILL.md` as the controller: identity, hard gates, flow selection slices, phase reference links, and output contracts.
+- Put phase-specific operational detail in `cf-execute/references/*.md`.
 - Keep `_shared` only for shared authoring references, scripts, and vendoring config consumed by multiple public skills or phase references.
 - Do not create separate internal skills unless a phase needs independent triggering as a real user-facing entrypoint.
 

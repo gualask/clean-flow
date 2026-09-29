@@ -66,7 +66,8 @@ Before suggesting a skill change, collect as much of this packet as possible:
 - target repository identity or short description
 - user goal in that repository
 - exact invocation path:
-  - `cf-start`
+  - `cf-architecture`
+  - `cf-execute`
   - `cf-mr-wolf`
   - `cf-scenario`
   - `cf-cognitive`
@@ -75,10 +76,10 @@ Before suggesting a skill change, collect as much of this packet as possible:
   - `cf-docs`
   - `cf-todo`
   - `cf-brainstorm`
-  - `cf-start` phase reached from flow, such as assessment, target shape, planning, execution, review, or verification
+  - `cf-execute` phase reached from flow, such as planning, execution, review, or verification
 - exact user prompt or the closest faithful paraphrase
-- whether `.cflow/refactor-brief.md` existed
-- relevant `Work units`, `Execution state`, or `Target direction` if a brief existed
+- whether `.cflow/specs/` held a draft or an approved spec, and whether `.cflow/execution-plan.md` existed
+- relevant `Work units` or `Execution state` if a plan existed
 - Codex UI trace when available, for example `Explored -> Read SKILL.md (...)`
 - what the skill actually did
 - what the user expected it to do instead

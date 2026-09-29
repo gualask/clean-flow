@@ -3,7 +3,6 @@
   "skills": {
     "cf-architecture": {
       "references": [
-        "architecture-principles.md",
         "design-spec-lifecycle.md"
       ]
     },
@@ -47,7 +46,7 @@
         "repo-tree.mjs"
       ]
     },
-    "cf-start": {
+    "cf-execute": {
       "references": [
         "file-split-rules.md",
         "local-readability-review.md",
@@ -71,12 +70,7 @@
     },
     "cf-brainstorm": {
       "references": [
-        "architecture-principles.md",
-        "navigation-cost.md",
         "design-spec-lifecycle.md"
-      ],
-      "scripts": [
-        "repo-tree.mjs"
       ]
     }
   }

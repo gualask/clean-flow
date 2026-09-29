@@ -2,7 +2,7 @@
 
 ## Required Inputs
 
-- live brief or explicit local behavior-preserving scope
+- live plan or explicit local behavior-preserving scope
 - credible safety lock
 - mapped seam with workflows, roles, and split direction
 
@@ -44,7 +44,7 @@ Before creating or moving files, read references/file-split-rules.md and referen
 - Prefer local named ownership over generic utilities or fake layers.
 - Avoid `helper`, `utils`, `common`, `shared`, `manager`, or `service` unless local convention gives clear meaning.
 - If the safety lock or a relevant check breaks, stop editing and apply references/regression-handling.md before any further change.
-- If the implementation changes what the brief assumed, record the drift.
+- If the implementation changes what the plan assumed, record the drift.
 - Report bugs separately unless behavior fixes were requested.
 
 ## Post-change closure check
@@ -73,5 +73,4 @@ Apply structural-closure.md.
 If the actual implementation changed understanding, also update:
 
 - `Concentration pressure`
-- `Target direction`
 - `Decision notes`

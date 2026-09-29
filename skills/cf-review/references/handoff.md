@@ -45,12 +45,12 @@ Recommend; do not invoke. The user decides what runs next.
 
 ### Handing To `cf-mr-wolf`
 
-`cf-mr-wolf` stops and asks which lens should drive the work whenever a broad diagnostic frame is unconfirmed. Findings arriving from here already have one, so state it explicitly or that gate fires and the handoff stalls:
+Preserve the candidate and what was actually checked. The recipient decides how to handle the current request under its own contract; a finding is not an accepted change or an implementation request. Carry:
 
-- the confirmed lens: which rule was checked and where it is written down
+- the checked rule and where it is written down
 - the finding itself, with its evidence
 - what was not checked, so the frame's edges are visible
-- that the finding is a candidate needing a decision, not a framed problem needing a plan
+- the decision still needed about the candidate
 
 Hand one finding at a time. Other findings stay in the reported list and are opened one after another.
 

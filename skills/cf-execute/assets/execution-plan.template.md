@@ -1,21 +1,17 @@
-# .cflow/refactor-brief.md
+# .cflow/execution-plan.md
 
 ## Context
 
+- approved spec: `.cflow/specs/<YYYY-MM-DD>-<topic>.md`
 - repository area:
 - project type:
 - domain gravity:
 - dominant documentation language:
 - summary of the current task:
 
-## Assessment summary
-
-- repository assessment:
-- premise check:
-- proposed intervention mode:
-- why this is proportionate now:
-
 ## Concentration pressure
+
+<!-- Filled by the split map during execution; leave empty when planning. -->
 
 - dominant dense seams:
 - mixed responsibilities:
@@ -23,6 +19,8 @@
 - scattered I/O or orchestration confusion:
 
 ## Fragmentation pressure
+
+<!-- Filled by the consolidation map during execution; leave empty when planning. -->
 
 - dominant fragmented seams:
 - pass-through wrappers:
@@ -41,19 +39,11 @@
 - user corrections:
 - open decisions, if any:
 
-## Target direction
-
-- reference target: scope, architecture, standard/custom decision, included/excluded ceremony
-- ownership and boundary model:
-- packaging direction and architectural rules:
-- split / consolidate / mixed / hard-restructure rationale:
-- temporary staging only:
-
 ## Work units
 
 - WU-01:
   - goal:
-  - mode: split | consolidate
+  - mode: split | consolidate | feature
   - priority:
   - depends on:
   - may simplify:
@@ -63,7 +53,7 @@
   - status: pending | recommended-next | active | done | deferred | dropped
 - WU-02:
   - goal:
-  - mode: split | consolidate
+  - mode: split | consolidate | feature
   - priority:
   - depends on:
   - may simplify:

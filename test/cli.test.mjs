@@ -119,7 +119,7 @@ test("global install and remove use HOME .agents and preserve foreign skills", a
 
   const io = makeIo();
   assert.equal(await main(["install", "--global"], io, dependencies), 0);
-  assert.ok((await listDirectoryNames(skillsRoot)).includes("cf-start"));
+  assert.ok((await listDirectoryNames(skillsRoot)).includes("cf-execute"));
   assert.ok(io.stdout.output.includes(`Skills destination: ${skillsRoot}`));
 
   const removeIo = makeIo();
@@ -135,7 +135,7 @@ test("repository install is idempotent and install/remove dry runs preserve the 
 
   assert.equal(await main(["install", targetRoot], makeIo()), 0);
   const installed = await listDirectoryNames(skillsRoot);
-  assert.ok(installed.includes("cf-start"));
+  assert.ok(installed.includes("cf-execute"));
   const repeatIo = makeIo();
   assert.equal(await main(["install", targetRoot], repeatIo), 0);
   assert.ok(repeatIo.stdout.output.includes(`Unchanged: ${installed.length}`));
@@ -149,12 +149,12 @@ test("repository install is idempotent and install/remove dry runs preserve the 
 test("a conflict in .agents preserves foreign skills and prevents installation", async () => {
   const targetRoot = await makeTempWorkspace();
   const skillsRoot = path.join(targetRoot, ".agents", "skills");
-  const foreignSkill = await writeSkill(skillsRoot, "cf-start");
+  const foreignSkill = await writeSkill(skillsRoot, "cf-execute");
   const before = await readText(path.join(foreignSkill, "SKILL.md"));
   const io = makeIo();
   assert.equal(await main(["install", targetRoot], io), 1);
   assert.equal(await readText(path.join(foreignSkill, "SKILL.md")), before);
-  assert.deepEqual(await listDirectoryNames(skillsRoot), ["cf-start"]);
+  assert.deepEqual(await listDirectoryNames(skillsRoot), ["cf-execute"]);
   assert.match(io.stdout.output, /Conflicts: 1/);
   assert.match(io.stdout.output, /Applied: no/);
 });
