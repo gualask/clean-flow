@@ -22,7 +22,6 @@ Create an ordered backlog of cohesive bounded work units for an approved spec.
 
 ## Selection rules
 
-- Each unit is `mode: split`, `mode: consolidate`, or `mode: feature` (behavior the spec introduces).
 - Choose exactly one next unit and record it through `artifacts.md`.
 - Name units by workflow or seam when that is more stable than a brittle file list.
 

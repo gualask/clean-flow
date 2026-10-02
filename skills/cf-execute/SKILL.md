@@ -22,7 +22,7 @@ Operate as the execution controller. Three rules hold in every phase. Pick one p
 Plan only from an approved spec or an accepted execution plan. Look for them with `ls -a .cflow .cflow/specs`: the directory is git-ignored, so search tools such as `rg` skip it. `.cflow/specs/draft.md` is not approved, even after the user says to proceed: hand it to the skill named as its `owner` and follow that skill, which promotes it. When neither exists, do not plan: hand the request to the skill that designs it and follow that skill instead:
 
 - `cf-architecture`: the structure, ownership, or boundaries of the change are not decided.
-- `cf-brainstorm`: a feature or product idea is not designed yet.
+- `cf-mr-wolf`: a feature or product idea is not designed yet.
 - `cf-cognitive`, `cf-split`, `cf-cohesion`: the request is a bounded local edit in that lens.
 
 ## Phases
@@ -35,6 +35,12 @@ Use for an approved spec without a live plan, or a live plan whose units need re
 
 - a structural spec with a target and moves: references/migration-unit-planning.md
 - any other spec: references/work-unit-planning.md
+
+Give each unit a mode by what it does to existing code:
+
+- `split`: gives a responsibility its own owner — extracting it from the place that hides it, moving code or files to their owner, rewiring callers to the new owner.
+- `consolidate`: collapses a boundary with no real responsibility — merging tiny files, removing pass-through wrappers or one-hop adapters.
+- `feature`: adds behavior the spec introduces. A behavior-preserving unit is never `feature`.
 
 A small spec can be one unit. Do not run tests, lint, typecheck, builds, or `git diff --check` to make a plan look safer, unless the user asks for health verification or names a concrete runtime risk. Stop with one checkpoint question.
 

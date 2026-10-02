@@ -208,9 +208,25 @@ test("execute inspects only the spec or unit scope and hands off without a spec"
   assert.match(specGate[1], /`\.cflow\/specs\/draft\.md` is not approved/);
   assert.match(specGate[1], /do not plan: hand the request to the skill that designs it/);
   assert.match(specGate[1], /`cf-architecture`/);
-  assert.match(specGate[1], /`cf-brainstorm`/);
+  assert.match(specGate[1], /`cf-mr-wolf`: a feature or product idea is not designed yet/);
+  assert.doesNotMatch(specGate[1], /`cf-brainstorm`/);
   assert.doesNotMatch(executeContract, /Frame Gate|assessment\.md|target-shape\.md|source-orientation\.md/);
   assert.match(executeFlow, /Spec Gate replaces cf-start's Frame Gate/);
+});
+
+test("execute defines unit modes once where both planning references are reached", async () => {
+  const executeRoot = path.join(SKILLS_ROOT, "cf-execute");
+  const executeContract = await fs.readFile(path.join(executeRoot, "SKILL.md"), "utf8");
+  const planning = /### Planning\n([\s\S]*?)\n### /.exec(executeContract);
+
+  assert.ok(planning, "cf-execute must keep a Planning phase");
+  assert.match(planning[1], /- `split`: gives a responsibility its own owner/);
+  assert.match(planning[1], /- `consolidate`: collapses a boundary with no real responsibility/);
+  assert.match(planning[1], /A behavior-preserving unit is never `feature`/);
+  for (const reference of ["work-unit-planning.md", "migration-unit-planning.md"]) {
+    const text = await fs.readFile(path.join(executeRoot, "references", reference), "utf8");
+    assert.doesNotMatch(text, /mode: (split|consolidate|feature)/, `${reference} must not redefine unit modes`);
+  }
 });
 
 test("brainstorm hands feature ownership to architecture through the shared lifecycle", async () => {
