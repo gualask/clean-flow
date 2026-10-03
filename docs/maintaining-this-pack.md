@@ -140,7 +140,7 @@ Keep in `SKILL.md`:
 - hard gates and routing laws
 - phase order or branch-order contract
 - first-level reference loading decisions
-- output contracts
+- the output section list and the output rules every flow shares
 
 Move to `references/`:
 
@@ -151,10 +151,12 @@ Move to `references/`:
 - artifact field update lists
 - execution heuristics
 - review and verification lenses
+- what each output section holds in that flow
 
 Every first-level runtime reference loaded by `SKILL.md` must be linked from `SKILL.md` with its loading condition.
 Vendored shared references may be loaded by an already-active consuming reference, but runtime text must use installed-local paths such as `references/...` or `scripts/...`.
 Do not duplicate the same rule in both `SKILL.md` and a reference unless `SKILL.md` needs a compact summary for routing.
+When removing a duplicate, prefer keeping the copy in the file the model has open when it acts, usually the flow reference's Output or Verification. Indication, not a measured effect: on cf-split (2026-10-03) moved tests ran 4/4 on one cell with the Output lines in the flow reference and 1/3 with the same lines only in `SKILL.md`, which suggests but does not separate a position effect. The same line repeated in alternative flow references, one loaded per flow, is not a duplicate.
 
 ## Key Design Decisions
 

@@ -2,8 +2,6 @@
 name: cf-split
 description: Evaluate or execute a behavior-preserving file-level split from one source file into nearby owned files. Use when the current request asks whether a file should be split or asks to perform a scoped extraction into files. Route regrouping of multiple related files to cf-cohesion and repository-level restructuring to cf-architecture.
 ---
-Use this skill for local file-level split review and execution.
-
 Use this when the current request asks whether a source file should be split into files, or asks to execute a specific local file-level extraction.
 Do not use this for cognitive cleanup inside one file; use `cf-cognitive` for that.
 Do not use this for regrouping already-split related files; use `cf-cohesion` for that.
@@ -39,7 +37,7 @@ Do not infer execution from words like "review", "check", "is this worth splitti
 Return only:
 
 - **Scope**: target file and selected flow.
-- **Decision**: candidates and recommendation, or split performed.
+- **Decision**: as the selected flow reference defines it.
 - **Checks**: commands run and pass/fail result, or why no check ran.
-- **Deferred**: only after execution edits; findings required by the report/action rule in references/navigation-cost.md. Omit this section when no split ran and in evaluation.
-- **Result**: behavior preservation, final placement decision, remaining risk, and next action.
+- **Deferred**: only after execution edits, as references/execution.md defines it. Omit this section when no split ran and in evaluation.
+- **Result**: as the selected flow reference defines it.

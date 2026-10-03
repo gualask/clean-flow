@@ -196,9 +196,13 @@ test("split owns first-level reference loading and audits consumers before editi
   }
   assert.match(
     execution,
-    /Complete the reference audit for the candidate unit before choosing the seam or placement/,
+    /Complete the reference audit for the candidate unit before choosing the seam/,
   );
-  assert.match(execution, /consumers outside the unit as compatibility evidence/);
+  const referenceAudit = await fs.readFile(
+    path.join(SHARED_REFERENCES_ROOT, "reference-audit.md"),
+    "utf8",
+  );
+  assert.match(referenceAudit, /consumers outside the candidate unit as compatibility evidence/);
   assert.match(execution, /repeat the reference audit for moved names and paths/);
   // The closing audit and verification must follow the final placement, so a move ordered by
   // the placement check cannot leave references unaudited or unverified.

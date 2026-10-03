@@ -66,7 +66,7 @@ For non-runtime files, check that the change does not move runtime behavior into
 
 ## Pack Surface Boundaries
 
-- Keep `cf-execute/SKILL.md` as the controller: identity, hard gates, flow selection slices, phase reference links, and output contracts.
+- Keep `cf-execute/SKILL.md` as the controller: identity, hard gates, phase selection, and phase reference links. Output contracts live in the phase references that produce the output.
 - Put phase-specific operational detail in `cf-execute/references/*.md`.
 - Keep `_shared` only for shared authoring references, scripts, and vendoring config consumed by multiple public skills or phase references.
 - Do not create separate internal skills unless a phase needs independent triggering as a real user-facing entrypoint.

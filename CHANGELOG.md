@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-03
+
+- `cf-split` moves the tests of extracted code next to its new files, runs them, and claims behavior preservation only when they pass; placement is settled after the split, where an owner directory overrides the count guardrails, an approved spec's location wins, and a folder that would change package boundaries stays flat and goes to `cf-architecture`.
+
 ## 2026-09-28
 
 - Added `cf-architecture`: it assesses a repository or subsystem from code evidence (owners of state and coordinators, what entry points decide, shared modules whose meaning belongs to one capability) and proposes one target tree with the smallest evidenced change. Ownership and contract rules live in its `SKILL.md`.
