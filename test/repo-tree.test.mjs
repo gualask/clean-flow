@@ -73,24 +73,39 @@ test("repo-tree context budget uses deterministic boundary bands", () => {
   }
 });
 
-test("repo-tree renders gitignore-aware names and folders views", async () => {
+test("repo-tree renders a gitignore-aware folder tree cut at the requested depth", async () => {
   const workspace = await makeRepoTreeFixture();
 
-  const names = await runRepoTree(workspace, "--mode", "names", "--full");
-  assert.match(names, /source: git ls-files -co --exclude-standard/);
-  assert.match(names, /loc: \d+ approximate/);
-  assert.match(names, /Button\.tsx \(\d+ loc\)/);
-  assert.match(names, /Button\.test\.tsx \(\d+ loc\)/);
-  assert.match(names, /useButtonState\.ts \(\d+ loc\)/);
-  assert.doesNotMatch(names, /generated\.js/);
-  assert.doesNotMatch(names, /node_modules/);
-
-  const folders = await runRepoTree(workspace, "--mode", "folders", "--full");
+  const folders = await runRepoTree(workspace);
+  assert.match(folders, /source: git ls-files -co --exclude-standard/);
+  assert.match(folders, /loc: \d+ approximate/);
   assert.match(folders, /src\/ \(4 files, \d+ loc\)/);
   assert.match(folders, /internal\/ \(1 file, \d+ loc\)/);
   assert.match(folders, /docs\/ \(1 file, \d+ loc\)/);
-  assert.doesNotMatch(folders, /Button\.tsx/);
-  assert.doesNotMatch(folders, /guide\.md/);
+  assert.doesNotMatch(folders, /Button\.tsx|guide\.md|dist|node_modules/);
+
+  const shallow = await runRepoTree(workspace, "--depth", "1");
+  assert.match(shallow, /src\/ \(4 files, \d+ loc\)/);
+  assert.match(shallow, /`-- \.\.\. \(1 directory hidden\)/);
+  assert.doesNotMatch(shallow, /internal\//);
+});
+
+test("repo-tree rejects removed options", async () => {
+  const workspace = await makeRepoTreeFixture();
+
+  for (const option of ["--mode", "--max-nodes", "--full", "--no-gitignore", "--root"]) {
+    await assert.rejects(() => runRepoTree(workspace, option, "names"), /Unknown option/);
+  }
+});
+
+test("repo-tree lists only the longest included files, longest first", async () => {
+  const workspace = await makeRepoTreeFixture();
+  await writeFixture(workspace, "src/internal/useButtonState.ts", "a\nb\nc\n");
+  await writeFixture(workspace, "src/Button.tsx", "a\nb\n");
+
+  const largest = await runRepoTree(workspace, "--largest", "2", "--include", "src");
+  assert.match(largest, /^3 loc {2}src\/internal\/useButtonState\.ts\n2 loc {2}src\/Button\.tsx\n$/m);
+  assert.doesNotMatch(largest, /Button\.types\.ts|guide\.md|generated\.js|\|--/);
 });
 
 test("repo-tree context budget measures only included files", async () => {
@@ -193,7 +208,7 @@ async function makeRepoTreeFixture() {
 }
 
 async function runRepoTree(root, ...args) {
-  const result = await execFileAsync(process.execPath, [SCRIPT_PATH, "--root", root, ...args], {
+  const result = await execFileAsync(process.execPath, [SCRIPT_PATH, root, ...args], {
     cwd: root,
   });
   return result.stdout;

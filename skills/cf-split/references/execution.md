@@ -4,15 +4,14 @@ Execute exactly one cohesive behavior-preserving file-level split.
 
 ## Preflight
 
-- If the target is an area rather than one file, run bundled `scripts/repo-tree.mjs` (resolve it from the active skill root, never from the project working directory; run `--help` first) and use its gitignore-aware file-name tree to choose the target file before reading implementation.
+- If the target is an area rather than one file, list the area's files and use them to choose the target file before reading implementation.
 - Read the whole target file, nearby imports/exports, call sites, tests, and local naming or folder conventions.
 - Complete the reference audit for the candidate unit before choosing the seam.
 
 ## Placement Check
 
-After the split, before the closing audit and verification, run bundled
-`scripts/repo-tree.mjs --mode names --include <containing directory>`, read the real source files
-it lists, and settle the final placement with the post-split re-check in
+After the split, before the closing audit and verification, list the files in the containing directory, read the real source files
+among them, and settle the final placement with the post-split re-check in
 references/file-split-rules.md.
 
 ## Tests Follow The Code

@@ -2,6 +2,10 @@
 
 ## 2026-10-03
 
+- `cf-cognitive` runs the tests that cover its target after editing and claims behavior preservation only when they pass; otherwise it reports `tests not run` and says the change is not verified by tests.
+- `repo-tree.mjs` keeps three views: the folder tree (`--depth`), `--largest N`, and `--context-budget`, all narrowed by `--include`; `--mode`, `--max-nodes`, `--full`, `--no-gitignore`, and `--root` are gone. Only `cf-cognitive` (discovery, `--depth 3` then `--largest 15`), `cf-review`, and `cf-test` receive it; `cf-split`, `cf-cohesion`, and `cf-execute` list and count files themselves, which gave the same results in paired runs.
+- `cf-cognitive` discovery ranks functions, not files, and a file past the length trigger gets `cf-cognitive first` when long functions make its length (it is checked again after slimming) or `cf-split` when distinct responsibilities do.
+- `cf-cognitive` asks which three files to take when a request names more than three.
 - `cf-split` moves the tests of extracted code next to its new files, runs them, and claims behavior preservation only when they pass; placement is settled after the split, where an owner directory overrides the count guardrails, an approved spec's location wins, and a folder that would change package boundaries stays flat and goes to `cf-architecture`.
 
 ## 2026-09-28

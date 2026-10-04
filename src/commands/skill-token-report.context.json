@@ -41,7 +41,14 @@
             "references/navigation-cost.md",
             "references/local-refactor-rules.md"
           ],
-          "conditional": []
+          "conditional": [],
+          "handoffs": [
+            {
+              "to": "cf-split:execution",
+              "kind": "conditional",
+              "context": "same-thread"
+            }
+          ]
         }
       }
     },

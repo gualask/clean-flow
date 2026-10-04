@@ -8,7 +8,7 @@ Document the runtime flow for `cf-cohesion`, the public local entrypoint for eva
 
 - Public skill: `skills/cf-cohesion/SKILL.md`
 - Runtime references: `skills/cf-cohesion/references/targeted-evaluation.md`
-- Shared sources vendored into runtime paths: `skills/_shared/references/navigation-cost.md`, `reference-audit.md`; `skills/_shared/scripts/repo-tree.mjs`
+- Shared sources vendored into runtime paths: `skills/_shared/references/navigation-cost.md`, `reference-audit.md`
 - Target artifacts: none
 
 ## High-Level Flow

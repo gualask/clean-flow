@@ -42,9 +42,9 @@ Four signals are alarm bells, not mere smells. Past these thresholds the default
 
 - nesting deeper than function -> block -> block
 - a function or method past roughly 20-30 logical lines
-- a source file past roughly 300 LOC (read it from `scripts/repo-tree.mjs` output; prefer file-level split unless a strong named exemption applies).
+- a source file past roughly 300 LOC (prefer file-level split unless a strong named exemption applies).
   This trigger fires only on implementation source; prose documentation and Markdown are never file-length candidates and are judged by their own documentation lenses.
-- a directory at or past roughly 10 direct real source files with no sub-grouping (read it from `scripts/repo-tree.mjs` output; group one owner family into a named owner folder, or hand the directory off to the route that owns that move).
+- a directory at or past roughly 10 direct real source files with no sub-grouping (group one owner family into a named owner folder, or hand the directory off to the route that owns that move).
   Count only non-generated implementation sources in the target language; barrels, re-export files, generated files, fixtures, snapshots, and tests do not count.
   This trigger reads the directory, not the unit being split: it fires whether or not the current owner group passes the placement guardrails.
 

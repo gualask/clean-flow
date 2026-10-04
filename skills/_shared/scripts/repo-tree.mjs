@@ -5,8 +5,6 @@ import { closeSync, openSync, readSync, readdirSync, realpathSync } from "node:f
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-const DEFAULT_MAX_NODES = 3000;
-const DEFAULT_DEPTH = Number.POSITIVE_INFINITY;
 const CONTEXT_TOKEN_BYTES = 4;
 const CONTEXT_BUDGETS = [
   { name: "local", maxFiles: 8, maxLoc: 800, maxTokens: 8_000 },
@@ -39,7 +37,7 @@ function main() {
   }
 
   const root = path.resolve(options.root);
-  const inventory = listFiles(root, options);
+  const inventory = listFiles(root);
   const scopedFiles = filterIncludedFiles(root, inventory.files, options.includes);
   const tree = buildTree(root, scopedFiles);
   computeTotals(tree);
@@ -50,35 +48,36 @@ function main() {
     return;
   }
 
-  const lines = [];
-  lines.push("repo-tree");
-  lines.push(`root: ${root}`);
-  lines.push(`mode: ${options.mode}`);
-  lines.push(`source: ${inventory.source}`);
-  lines.push(`files: ${tree.totalFiles}`);
-  lines.push(`directories: ${tree.totalDirectories}`);
-  lines.push(`loc: ${formatNumber(tree.totalLoc)} approximate`);
-  lines.push(`depth: ${Number.isFinite(options.depth) ? options.depth : "all"}`);
-  lines.push(`max nodes: ${options.maxNodes === 0 ? "none" : options.maxNodes}`);
+  const lines = [
+    "repo-tree",
+    `root: ${root}`,
+    `source: ${inventory.source}`,
+    `files: ${tree.totalFiles}`,
+    `loc: ${formatNumber(tree.totalLoc)} approximate`,
+  ];
   if (inventory.warning) {
     lines.push(`warning: ${inventory.warning}`);
   }
   lines.push("");
-  lines.push(...renderTree(tree, options));
+
+  if (options.largest > 0) {
+    lines.push(...renderLargest(tree, options.largest));
+  } else {
+    lines.push(`. (${formatMetrics(tree)})`);
+    renderFolders(lines, tree, "", 1, options.depth);
+  }
 
   process.stdout.write(`${lines.join("\n")}\n`);
 }
 
 function parseArgs(args) {
   const options = {
-    depth: DEFAULT_DEPTH,
     contextBudget: false,
+    depth: Number.POSITIVE_INFINITY,
     help: false,
     includes: [],
-    maxNodes: DEFAULT_MAX_NODES,
-    mode: "folders",
+    largest: 0,
     root: ".",
-    useGitignore: true,
   };
 
   for (let index = 0; index < args.length; index += 1) {
@@ -86,11 +85,6 @@ function parseArgs(args) {
 
     if (arg === "--help" || arg === "-h") {
       options.help = true;
-      continue;
-    }
-
-    if (arg === "--no-gitignore") {
-      options.useGitignore = false;
       continue;
     }
 
@@ -104,40 +98,21 @@ function parseArgs(args) {
       continue;
     }
 
-    if (arg === "--full") {
-      options.maxNodes = 0;
-      continue;
-    }
-
-    if (arg === "--root") {
-      options.root = requiredValue(args, (index += 1), arg);
-      continue;
-    }
-
-    if (arg === "--mode") {
-      options.mode = requiredValue(args, (index += 1), arg);
-      continue;
-    }
-
     if (arg === "--depth") {
       options.depth = parsePositiveInteger(requiredValue(args, (index += 1), arg), arg);
       continue;
     }
 
-    if (arg === "--max-nodes") {
-      options.maxNodes = parseNonNegativeInteger(requiredValue(args, (index += 1), arg), arg);
+    if (arg === "--largest") {
+      options.largest = parsePositiveInteger(requiredValue(args, (index += 1), arg), arg);
       continue;
     }
 
-    if (arg.startsWith("--")) {
+    if (arg.startsWith("-")) {
       throw new Error(`Unknown option: ${arg}`);
     }
 
     options.root = arg;
-  }
-
-  if (!["folders", "names"].includes(options.mode)) {
-    throw new Error(`--mode must be "folders" or "names", got: ${options.mode}`);
   }
 
   return options;
@@ -190,47 +165,26 @@ function requiredValue(args, index, flag) {
 }
 
 function parsePositiveInteger(value, flag) {
-  if (value === "all") {
-    return Number.POSITIVE_INFINITY;
-  }
-
   const parsed = Number.parseInt(value, 10);
   if (!Number.isSafeInteger(parsed) || parsed < 1) {
-    throw new Error(`${flag} must be a positive integer or "all"`);
+    throw new Error(`${flag} must be a positive integer`);
   }
   return parsed;
 }
 
-function parseNonNegativeInteger(value, flag) {
-  const parsed = Number.parseInt(value, 10);
-  if (!Number.isSafeInteger(parsed) || parsed < 0) {
-    throw new Error(`${flag} must be a non-negative integer`);
-  }
-  return parsed;
-}
-
-function listFiles(root, options) {
-  if (options.useGitignore) {
-    const gitResult = gitLsFiles(root);
-    if (gitResult.ok) {
-      return {
-        files: gitResult.files,
-        source: "git ls-files -co --exclude-standard",
-      };
-    }
-
-    const fallback = walkFilesystem(root);
+function listFiles(root) {
+  const gitResult = gitLsFiles(root);
+  if (gitResult.ok) {
     return {
-      files: fallback.files,
-      source: "filesystem fallback",
-      warning: `git inventory unavailable; used built-in directory skips only (${gitResult.reason})`,
+      files: gitResult.files,
+      source: "git ls-files -co --exclude-standard",
     };
   }
 
-  const fallback = walkFilesystem(root);
   return {
-    files: fallback.files,
-    source: "filesystem walk without gitignore",
+    files: walkFilesystem(root),
+    source: "filesystem fallback",
+    warning: `git inventory unavailable; used built-in directory skips only (${gitResult.reason})`,
   };
 }
 
@@ -298,7 +252,7 @@ function walkFilesystem(root) {
   }
 
   visit(root, "");
-  return { files: files.sort(compareNames) };
+  return files.sort(compareNames);
 }
 
 function normalizeRelativePath(value) {
@@ -312,49 +266,40 @@ function buildTree(root, files) {
     const parts = file.split("/").filter(Boolean);
     let current = treeRoot;
 
-    for (let index = 0; index < parts.length; index += 1) {
+    for (let index = 0; index < parts.length - 1; index += 1) {
       const part = parts[index];
-      const isFile = index === parts.length - 1;
-
-      if (isFile) {
-        current.files.push(createFileNode(root, file, part));
-        continue;
-      }
-
       if (!current.directories.has(part)) {
         current.directories.set(part, createDirectoryNode(part));
       }
       current = current.directories.get(part);
     }
+
+    current.files.push(createFileNode(root, file));
   }
 
-  sortTree(treeRoot);
+  sortDirectories(treeRoot);
   return treeRoot;
 }
 
 function createDirectoryNode(name) {
   return {
     directories: new Map(),
-    directFileCount: 0,
     files: [],
     measurementFailures: [],
     name,
-    totalDirectories: 0,
     totalBytes: 0,
     totalFiles: 0,
     totalLoc: 0,
   };
 }
 
-function createFileNode(root, relativePath, name) {
-  const absolutePath = path.join(root, relativePath);
-  const measurement = measureFile(absolutePath);
+function createFileNode(root, relativePath) {
+  const measurement = measureFile(path.join(root, relativePath));
 
   return {
     bytes: measurement.bytes,
     loc: measurement.loc,
     measurementError: measurement.error,
-    name,
     relativePath,
   };
 }
@@ -413,152 +358,78 @@ function closeFile(file) {
   }
 }
 
-function sortTree(node) {
-  node.files.sort((left, right) => compareNames(left.name, right.name));
+function sortDirectories(node) {
   node.directories = new Map(
     [...node.directories.entries()]
       .sort(([left], [right]) => compareNames(left, right))
       .map(([name, child]) => {
-        sortTree(child);
+        sortDirectories(child);
         return [name, child];
       }),
   );
 }
 
 function computeTotals(node) {
-  node.directFileCount = node.files.length;
   node.measurementFailures = node.files
     .filter((file) => file.measurementError)
     .map((file) => ({ error: file.measurementError, path: file.relativePath }));
   node.totalFiles = node.files.length;
-  node.totalDirectories = node.directories.size;
   node.totalBytes = node.files.reduce((sum, file) => sum + file.bytes, 0);
   node.totalLoc = node.files.reduce((sum, file) => sum + file.loc, 0);
 
   for (const child of node.directories.values()) {
     computeTotals(child);
     node.totalFiles += child.totalFiles;
-    node.totalDirectories += child.totalDirectories;
     node.totalBytes += child.totalBytes;
     node.totalLoc += child.totalLoc;
     node.measurementFailures.push(...child.measurementFailures);
   }
 }
 
-function renderTree(root, options) {
-  const state = {
-    emitted: 0,
-    maxNodes: options.maxNodes,
-    truncated: false,
-  };
-
-  const lines = [
-    options.mode === "folders" ? `. (${formatMetrics(root)})` : `. (${formatMetrics(root)})`,
-  ];
-
-  const children =
-    options.mode === "folders"
-      ? directoryEntries(root)
-      : [...directoryEntries(root), ...fileEntries(root)];
-
-  renderEntries(lines, children, "", 1, options, state);
-
-  if (state.truncated) {
-    lines.push("... output truncated; rerun with --max-nodes 0 or --full for all nodes");
-  }
-
-  return lines;
-}
-
-function renderEntries(lines, entries, prefix, depth, options, state) {
-  if (entries.length === 0) {
+function renderFolders(lines, node, prefix, depth, maxDepth) {
+  const children = [...node.directories.values()];
+  if (children.length === 0) {
     return;
   }
 
-  if (depth > options.depth) {
-    lines.push(`${prefix}\`-- ... (${pluralize(countEntryNodes(entries, options.mode), "node")} hidden)`);
+  if (depth > maxDepth) {
+    lines.push(`${prefix}\`-- ... (${pluralize(countDirectories(children), "directory", "directories")} hidden)`);
     return;
   }
 
-  for (let index = 0; index < entries.length; index += 1) {
-    if (state.maxNodes > 0 && state.emitted >= state.maxNodes) {
-      state.truncated = true;
-      return;
-    }
+  children.forEach((child, index) => {
+    const isLast = index === children.length - 1;
+    lines.push(`${prefix}${isLast ? "`-- " : "|-- "}${child.name}/ (${formatMetrics(child)})`);
+    renderFolders(lines, child, `${prefix}${isLast ? "    " : "|   "}`, depth + 1, maxDepth);
+  });
+}
 
-    const entry = entries[index];
-    const isLast = index === entries.length - 1;
-    lines.push(`${prefix}${isLast ? "`-- " : "|-- "}${formatEntry(entry, options.mode)}`);
-    state.emitted += 1;
+function countDirectories(nodes) {
+  return nodes.reduce((sum, node) => sum + 1 + countDirectories([...node.directories.values()]), 0);
+}
 
-    if (entry.kind !== "directory") {
-      continue;
-    }
+function renderLargest(tree, count) {
+  const largest = collectFiles(tree)
+    .sort((left, right) => right.loc - left.loc || compareNames(left.relativePath, right.relativePath))
+    .slice(0, count);
+  const width = formatNumber(largest[0]?.loc ?? 0).length;
+  return largest.map((file) => `${formatNumber(file.loc).padStart(width)} loc  ${file.relativePath}`);
+}
 
-    const children =
-      options.mode === "folders"
-        ? directoryEntries(entry.node)
-        : [...directoryEntries(entry.node), ...fileEntries(entry.node)];
-
-    renderEntries(lines, children, `${prefix}${isLast ? "    " : "|   "}`, depth + 1, options, state);
+function collectFiles(node, files = []) {
+  files.push(...node.files);
+  for (const child of node.directories.values()) {
+    collectFiles(child, files);
   }
+  return files;
 }
 
-function directoryEntries(node) {
-  return [...node.directories.values()].map((child) => ({
-    kind: "directory",
-    name: child.name,
-    node: child,
-  }));
-}
-
-function fileEntries(node) {
-  return node.files.map((file) => ({
-    file,
-    kind: "file",
-    name: file.name,
-  }));
-}
-
-function formatEntry(entry, mode) {
-  if (entry.kind === "file") {
-    return `${entry.name} (${formatFileMetrics(entry.file)})`;
-  }
-
-  if (mode === "folders") {
-    return `${entry.name}/ (${formatMetrics(entry.node)})`;
-  }
-
-  return `${entry.name}/ (${formatMetrics(entry.node)})`;
-}
-
-function countEntryNodes(entries, mode) {
-  let count = 0;
-
-  for (const entry of entries) {
-    count += 1;
-    if (entry.kind === "directory") {
-      const children =
-        mode === "folders"
-          ? directoryEntries(entry.node)
-          : [...directoryEntries(entry.node), ...fileEntries(entry.node)];
-      count += countEntryNodes(children, mode);
-    }
-  }
-
-  return count;
-}
-
-function pluralize(count, noun) {
-  return `${count} ${noun}${count === 1 ? "" : "s"}`;
+function pluralize(count, singular, plural = `${singular}s`) {
+  return `${count} ${count === 1 ? singular : plural}`;
 }
 
 function formatMetrics(node) {
   return `${pluralize(node.totalFiles, "file")}, ${formatNumber(node.totalLoc)} loc`;
-}
-
-function formatFileMetrics(file) {
-  return `${formatNumber(file.loc)} loc`;
 }
 
 function formatNumber(value) {
@@ -619,31 +490,24 @@ function compareNames(left, right) {
 function printHelp() {
   process.stdout.write(`repo-tree
 
-Gitignore-aware repository tree for Cflow context gathering.
-Every rendered file and directory includes approximate line count.
-Use LOC as a rough size signal, not a quality or complexity judgment.
+Gitignore-aware file inventory with approximate line counts (LOC = newline count).
+LOC is a size signal, not a quality or complexity judgment.
 
 Usage:
-  node repo-tree.mjs [root] [--mode folders|names] [--depth N|all] [--max-nodes N]
+  node repo-tree.mjs [root] [--depth N] [--include PATH ...]
+  node repo-tree.mjs [root] --largest N [--include PATH ...]
   node repo-tree.mjs [root] --context-budget [--include PATH ...]
 
+Without --largest or --context-budget it prints the directory tree, each directory with its
+recursive file count and LOC.
+
 Options:
-  --root PATH       Repository root. Defaults to current directory.
-  --mode MODE      folders: directory tree with recursive file counts.
-                   names: directory and file tree for naming/grouping review.
-  --depth N|all    Maximum tree depth. Defaults to all.
-  --max-nodes N    Maximum rendered nodes. Use 0 for no limit. Defaults to ${DEFAULT_MAX_NODES}.
-  --full           Alias for --max-nodes 0.
-  --include PATH   Limit inventory to an exact file or directory. Repeatable.
+  --depth N        Directory levels to show. Defaults to all.
+  --largest N      Print only the N longest files, longest first. Every file counts,
+                   including tests, docs, and lockfiles; narrow with --include.
   --context-budget Print only deterministic context metrics and delegation policy.
-  --no-gitignore   Walk the filesystem instead of using git exclude rules.
+  --include PATH   Limit the inventory to an exact file or directory. Repeatable.
   --help           Show this help.
-
-Modes:
-  folders          Show only directories, with recursive file and LOC counts.
-  names            Show directories and file names, with LOC counts for grouping review.
-
-Use a narrow --depth or --max-nodes when full output would bury the signal.
 
 Context budget policy:
   local       <= 8 files, <= 800 LOC, and <= 8,000 estimated tokens
@@ -654,11 +518,9 @@ Context budget policy:
 Estimated context tokens use bytes / ${CONTEXT_TOKEN_BYTES}. They are a provider-neutral size
 signal, not an exact tokenizer or billing count. The highest exceeded limit selects the next band.
 
-Default behavior uses:
-  git ls-files -co --exclude-standard
-
-That includes tracked files and untracked non-ignored files, while excluding files ignored by
-.gitignore, .git/info/exclude, and global Git excludes.
+The inventory is git ls-files -co --exclude-standard: tracked files and untracked non-ignored
+files. Outside a Git repository it walks the filesystem and skips common build and dependency
+directories.
 `);
 }
 

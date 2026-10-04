@@ -19,9 +19,6 @@
       "references": [
         "navigation-cost.md",
         "reference-audit.md"
-      ],
-      "scripts": [
-        "repo-tree.mjs"
       ]
     },
     "cf-review": {
@@ -41,9 +38,6 @@
         "navigation-cost.md",
         "reference-audit.md",
         "regression-handling.md"
-      ],
-      "scripts": [
-        "repo-tree.mjs"
       ]
     },
     "cf-execute": {
@@ -54,9 +48,6 @@
         "navigation-cost.md",
         "reference-audit.md",
         "regression-handling.md"
-      ],
-      "scripts": [
-        "repo-tree.mjs"
       ]
     },
     "cf-test": {

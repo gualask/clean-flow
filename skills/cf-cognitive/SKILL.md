@@ -8,6 +8,7 @@ Do not bootstrap or require `.cflow/` artifacts.
 
 Before applying any flow, read references/navigation-cost.md; it owns the hard-trigger values, exemptions, and remedy rules.
 Use numeric thresholds only when native tooling can measure them; otherwise report qualitatively.
+When a file passes the file-length trigger, say where its length comes from: long functions make it `cf-cognitive first`, and its length is checked again after they are slimmed; distinct responsibilities make it `route` to `cf-split` now.
 
 Route elsewhere instead of working here: `cf-split` for file-level split review or extraction from one source file; `cf-cohesion` for cross-file placement, navigation cost, or related files that may need a local feature slice; `cf-architecture` for repository structure, module boundaries, ownership moves, or broad multi-file refactors.
 
@@ -16,25 +17,27 @@ Route elsewhere instead of working here: `cf-split` for file-level split review 
 Choose exactly one flow.
 Discovery and targeted evaluation flows do not edit repository files.
 If the target, flow, or requested outcome is ambiguous, ask one focused question.
+If the request names more than three target files, ask which three to take before editing.
 Do not infer execution from words like "review", "check", "is this complex", or "should we clean this up".
 
 **Discovery** — use when no explicit file target was provided. Do discovery only. Do not edit files.
-Default to the bundled `scripts/repo-tree.mjs` before manual exploration: resolve it from the active skill root, never from the project working directory, run it with `--help` first, then use its gitignore-aware tree with LOC to rank candidate files.
-Rank from evidence, applying the canonical hard triggers first and using that LOC for the file-length trigger.
-Keep a ranked shortlist of at most three files, and do not add weak candidates just to reach three.
+Default to the bundled `scripts/repo-tree.mjs` before manual exploration: resolve it from the active skill root, never from the project working directory. Run it with `--depth 3` for the layout, then with `--largest 15`, adding `--include` for the source directories, for the candidate files.
+Read the candidate files and rank functions, not files: keep a ranked shortlist of at most three functions, each with file, line, and the hard trigger it fires, and do not add weak candidates just to reach three.
+Give the file-length verdict for each candidate file past that trigger.
 Keep a candidate that fires a hard trigger on the shortlist unless a recognized exemption clears it.
 If there is no real hotspot, report that no good local candidate was found.
 
 **Targeted evaluation** — use when explicit file targets were provided and the request asks to review, assess, evaluate, or decide whether cleanup is worthwhile. Do not edit files.
 Classify each target as `recommended`, `optional`, `keep as-is`, or `route`.
 Default to `recommended` whenever a hard trigger is past its threshold; use `optional` or `keep as-is` for such a target only by naming one of its recognized exemptions.
-When the file-length trigger fires, include an explicit file-size verdict: `route` to `cf-split`, or the named exemption that justifies its size.
+When the file-length trigger fires, include an explicit file-size verdict: `cf-cognitive first`, `route` to `cf-split`, or the named exemption that justifies its size.
 
 **Execution** — use when the request explicitly asks to refactor, reduce, clean up, fix cognitive complexity, or proceed on explicit target files or a confirmed discovery candidate. Read references/local-refactor-rules.md.
-Keep changes inside the target file unless the request explicitly asks otherwise, and do not move responsibilities to new files or shared utilities.
+Keep changes inside the target file, and do not move responsibilities to new files or shared utilities.
 Do not continue past the target files or past three files in one session.
 Flatten the target function's main path first, and treat anonymous callbacks passed to registration or lifecycle APIs as part of the local cognitive load when they carry real behavior.
-Run the smallest relevant check and report its result; if no relevant check can be run, say so explicitly.
+Run the smallest relevant check: targeted tests, typecheck or compile, lint, or a narrow smoke check.
+Then run the tests that cover the target with the repository's test runner.
 Apply the report/action separation in references/navigation-cost.md to every qualifying hard trigger.
 
 ## Output Format
@@ -44,7 +47,7 @@ Return only:
 - **Scope**: flow and target files, or discovery area.
 - **Assessment**: candidates, target decision, or hotspots addressed.
 - **Changes**: edits made, or `none` for discovery/evaluation.
-- **Checks**: commands run and pass/fail result, or why no check ran.
+- **Checks**: commands run and pass/fail result; the test command and its result, or `tests not run` with the reason.
 - **Defects**: behavior defects noticed while reading the target, with file and line. `none` is a claim that the code you moved matches its documented rules — name what you checked it against.
 - **Deferred**: only after execution edits; findings required by the report/action rule in references/navigation-cost.md. Omit this section when no cleanup ran and in discovery or targeted evaluation.
-- **Result**: behavior preservation, remaining risk, and `cf-split` or `cf-cohesion` next step when relevant.
+- **Result**: behavior preservation, remaining risk, and `cf-split` or `cf-cohesion` next step when relevant. Claim behavior preservation only when that test command passed; otherwise say it is not verified by tests.

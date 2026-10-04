@@ -16,7 +16,7 @@ Exclude rules enforced by a configured linter, formatter, type checker, or test;
 
 Route: `cf-cognitive` for function-level pressure; `cf-split` for file-level pressure
 
-Apply the hard triggers in `references/navigation-cost.md`. Take file length from bundled `scripts/repo-tree.mjs`, resolved from the active skill root after running it with `--help`.
+Apply the hard triggers in `references/navigation-cost.md`. Take file length from bundled `scripts/repo-tree.mjs`, resolved from the active skill root, with `--largest` set to the number of primary files and one `--include` per primary file.
 
 A file trigger produces one file finding; leave its internal inventory to the receiving skill. Report function triggers only for touched functions.
 
