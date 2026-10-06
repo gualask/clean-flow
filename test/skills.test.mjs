@@ -102,13 +102,12 @@ test("packaged skill runtime files stay within token budget warnings", async () 
         (flow) => flow.id === "cf-cognitive:execution",
       );
       assert.ok(cognitiveExecution, "expected a configured cf-cognitive execution flow");
-      // An explicit request to extract into a new file runs cf-split in the same turn: a line
-      // forbidding it held 0 of 2 on 2026-10-04, and the model then extracted without cf-split's
-      // test moves. Without such a request cf-cognitive only names cf-split in Deferred.
+      // A routed request ends the turn: an explicit extraction is named for cf-split, not run
+      // (2026-10-06; "do not open it" had held 0 of 2 on 2026-10-04, "do not edit files" held 1 of 1).
       assert.deepEqual(
-        cognitiveExecution.handoffs.map((handoff) => [handoff.to, handoff.kind, handoff.context]),
-        [["cf-split:execution", "conditional", "same-thread"]],
-        "cf-cognitive execution hands an explicit extraction to cf-split in the same thread",
+        cognitiveExecution.handoffs,
+        [],
+        "cf-cognitive execution ends the turn when it routes",
       );
 
       for (const warning of collectSkillTokenBudgetWarnings(report)) {
