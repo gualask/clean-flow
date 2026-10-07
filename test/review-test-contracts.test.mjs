@@ -219,8 +219,8 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
     path.join(SHARED_REFERENCES_ROOT, "dynamic-agents.md"),
     "utf8",
   );
-  // The split of pins/scenario44: the gate is read at step 2 of every pass, the
-  // delegated contract only when the policy is not `local`. Assertions follow
+  // The gate is read at step 2 of every pass, the delegated contract only when
+  // the policy is not `local`. Assertions follow
   // the text they belong to, so the gate keeps its own coverage.
   const delegatedExecution = await fs.readFile(
     path.join(SHARED_REFERENCES_ROOT, "delegated-execution.md"),
@@ -320,7 +320,7 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
   assert.match(delegatedExecution, /creates no other repository or temporary artifact/);
   assert.match(delegatedExecution, /missing report or unresolved cross-batch check cannot produce a clear result/);
   // The batched fallback is a recap-backed local pass, not a request to narrow
-  // the scope: scenario37-40 in the trial archive. The recap is a deliverable,
+  // the scope. The recap is a deliverable,
   // owned at one flat path, shared by every skill that batches, and never
   // overwritten without asking.
   assert.match(

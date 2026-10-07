@@ -179,29 +179,6 @@ test("dynamic agent inputs require retained notes only when relevant", async () 
   );
 });
 
-test("skill value trials declare their intervention instead of inheriting one case", async () => {
-  const method = await fs.readFile(
-    path.join(DOCS_ROOT, "skill-value-trials", "trial-method.md"),
-    "utf8",
-  );
-
-  for (const field of [
-    "Value claim",
-    "Population",
-    "Controlled inputs",
-    "Oracle",
-    "Metrics",
-    "Stopping rule",
-  ]) {
-    assert.match(method, new RegExp(`\\*\\*${field}\\*\\*`));
-  }
-
-  assert.doesNotMatch(
-    method,
-    /cf-trace|\.cflow\/architecture\.md|artifact-owned-by-skill|proceed in local mode|100.?400 source files/,
-  );
-});
-
 test("execute inspects only the spec or unit scope and hands off without a spec", async () => {
   const executeContract = await fs.readFile(path.join(SKILLS_ROOT, "cf-execute", "SKILL.md"), "utf8");
   const executeFlow = await fs.readFile(

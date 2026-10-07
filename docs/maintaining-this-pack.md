@@ -111,8 +111,6 @@ Pack-wide golden rules live in [golden-rules.md](./golden-rules.md).
 - Codex install prompts live in `install/codex/`.
 - Pack-wide maintainer rules live in [golden-rules.md](./golden-rules.md).
 
-For real target-repo validation, use [repo-trial-rules.md](./repo-trial-rules.md).
-
 Maintainer flow mirrors:
 
 - `cf-architecture`: [architecture/doc-architecture.flow.md](./architecture/doc-architecture.flow.md)

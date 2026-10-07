@@ -58,7 +58,7 @@ The gate is kept because it produces a behavior the baseline does not. Everythin
 
 Two removals rest on cost and on the gate's shape, not on measurement, and the record should not suggest otherwise:
 
-- `assets/mr-wolf-notes.template.md` — durable cross-session handoff memory. [`trial-method.md`](../skill-value-trials/trial-method.md) rules out a single-run A/B for value that exists across sessions and requires such a claim to be marked untested. It never was tested.
+- `assets/mr-wolf-notes.template.md` — durable cross-session handoff memory. A single-run A/B cannot measure value that exists across sessions, so that claim stays untested. It never was tested.
 - `references/derisk-agent-brief.md` — delegated counter-evidence. The delegation hypothesis is untested, not refuted: Case 7 could not test it because no arm delegated on that repository.
 
 Both stay removed on cost, and both are recoverable from Git. Neither was measured and found wanting.
