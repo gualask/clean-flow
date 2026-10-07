@@ -1,7 +1,6 @@
 # Documentation Generation
 
-Author new documentation or substantially update existing content.
-Build the doc from verified facts and a single clear purpose, not from assumptions.
+Author new documentation or substantially update existing content from verified facts and a single clear purpose.
 
 ## Ground In The Code
 
@@ -14,20 +13,16 @@ Build the doc from verified facts and a single clear purpose, not from assumptio
 - Decide what the doc is for: how-to (accomplish a task), reference (look up exact details), or explanation (understand a design and its rationale).
 - Keep that purpose consistent within a section; if the content needs another purpose, give it its own section or its own doc.
 - State the scope up front so a reader knows what the doc does and does not cover.
+- Write in the language of the repository's existing docs, even when the request uses another language.
 
 ## Place Each Concept Once
 
 - Before adding an explanation, check whether another doc already owns that concept; if so, link to it and add only what is new here.
-- Keep implementation mechanism near code according to the selected mode and source-edit scope; let the doc carry intent, contracts, and rationale.
-- Establish one home for shared values and link to it from every doc that needs them.
-
-## Keep It Lean
-
-- Write the smallest text that carries the fundamental concepts; omit historical notes and restated context.
+- Give shared values one owner and link to it from every doc that needs them.
 - Prefer concrete contracts and examples drawn from the real code over generic prose.
 
 ## Close Out
 
-- Validate links and anchors.
 - Re-read each concrete claim against the code one last time.
+- Validate links and anchors.
 - Note where the new doc should be linked from so it is discoverable.

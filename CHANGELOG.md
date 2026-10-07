@@ -2,6 +2,7 @@
 
 ## 2026-10-07
 
+- `cf-docs` drops the `standard`/`conservative` modes: implementation detail stays in the doc and is reported as a candidate move unless the request authorizes source edits. Trimming removes only restated content, history, and decoration, never a fact no other doc carries; each rule is stated once, under the same name in rules, passes, and output. Its trigger now excludes `.cflow/` in the predicate itself, and new docs follow the language of the repository's existing docs.
 - `cf-cohesion` routes without editing (a new package goes to `cf-architecture` even when the move is requested), counts files per directory in discovery with a bundled script, moves only the evaluated cluster without splitting or adding barrels, runs the moved files' tests, and uses one name per concept.
 
 ## 2026-10-03
