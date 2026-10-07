@@ -96,7 +96,11 @@ test("cohesion audits ownership and stale references across repository-controlle
   assert.match(referenceAudit, /documentation/);
   assert.match(referenceAudit, /consumers outside the candidate unit as compatibility evidence/);
   assert.doesNotMatch(referenceAudit, /ownership evidence/);
-  assert.match(targetedEvaluation, /run the reference audit for each candidate/i);
+  // The audit timing lives once, in the SKILL.md loading line (2026-10-07).
+  assert.match(
+    await fs.readFile(path.join(SKILLS_ROOT, "cf-cohesion", "SKILL.md"), "utf8"),
+    /reference-audit\.md\) holds .*Read it in targeted evaluation and execution, before the cohesion map and again for moved names and paths after moving\./,
+  );
   // Both the ownership-evidence line and the Owner Locality section were cut on
   // 2026-08-18. What carries this cell is the generic-folder prohibition, the
   // line the trials named as one of the two measured payers.
@@ -121,17 +125,17 @@ test("cohesion owns first-level reference loading in its skill contract", async 
 
   assert.match(
     cohesionContract,
-    /\[references\/targeted-evaluation\.md\]\(references\/targeted-evaluation\.md\) holds .*\. Read it in the targeted evaluation flow, and in the execution flow before any edit\./,
+    /\[references\/targeted-evaluation\.md\]\(references\/targeted-evaluation\.md\) holds .*\. Read it in targeted evaluation, and in execution before any edit\./,
   );
   for (const reference of ["reference-audit", "navigation-cost"]) {
     assert.match(
       cohesionContract,
       new RegExp(
-        `\\[references/${reference}\\.md\\]\\(references/${reference}\\.md\\) holds .*\\. Read it in the targeted evaluation and execution flows`,
+        `\\[references/${reference}\\.md\\]\\(references/${reference}\\.md\\) holds .*\\. Read it in targeted evaluation and execution`,
       ),
     );
   }
-  assert.match(cohesionContract, /The discovery flow reads none of them\./);
+  assert.match(cohesionContract, /Discovery reads none of them\./);
   assert.match(
     cohesionContract,
     /Complete or refresh the targeted evaluation before editing/,

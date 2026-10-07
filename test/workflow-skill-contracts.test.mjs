@@ -33,9 +33,23 @@ test("cohesion execution composes evaluation as a gated non-terminal preflight",
     assert.match(contract, /Continue only (?:when|for).*`recommended` or `optional`/);
     assert.match(contract, /for `keep as-is` or `route`, stop without editing/i);
   }
-  assert.match(targetedEvaluation, /this reference never edits files/);
+  // Measured 2026-10-06 on gpt-6-luna: without these lines a route still edited
+  // (cf-cognitive opened in the same turn), a requested regrouping created a Go
+  // package the evaluation had routed, and execution split a file it moved.
+  // 2026-10-07: "use `cf-cognitive` for that" was not read as a route and still edited
+  // (1 of 3 clean); "Route ... to `cf-cognitive`" routed 3 of 3. The generic package
+  // line kept the Go route 2 of 2 and let a TypeScript regrouping run.
+  assert.match(cohesionContract, /When routing, do not edit files: name the route and the reason in \*\*Result\*\*, and end the turn\./);
+  assert.match(cohesionContract, /^Route cognitive cleanup inside one file to `cf-cognitive`\.$/m);
+  assert.match(cohesionContract, /^Route extracting responsibilities out of one source file to `cf-split`\.$/m);
+  assert.doesNotMatch(cohesionContract, /use `cf-(cognitive|split)` for that/);
+  assert.match(cohesionContract, /a folder that the language or build would treat as a new package or module.*even when the request asks for the move/);
+  assert.match(cohesionContract, /do not split, merge, or rewrite file contents.*do not add barrel or re-export files/);
+  // Discovery counts with the bundled script, not with a command the model writes (3 of 3, 2026-10-07).
+  assert.match(cohesionContract, /Count with the bundled `scripts\/dir-population\.mjs`, resolved from the active skill root and never from the project working directory; do not write your own count\./);
+  assert.match(cohesionContract, /\*\*Decision\*\*: the decision label; in discovery, `candidates` or `none`; after execution, `regrouped`\./);
   assert.match(targetedEvaluation, /When targeted evaluation is the selected flow/);
-  assert.match(targetedEvaluation, /When loaded as execution preflight, emit no intermediate output/);
+  assert.match(targetedEvaluation, /When loaded before execution, emit no intermediate output/);
   assert.doesNotMatch(targetedEvaluation, /^Evaluate only\. Do not edit files\.$/m);
 });
 

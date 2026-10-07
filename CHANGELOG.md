@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-07
+
+- `cf-cohesion` routes without editing (a new package goes to `cf-architecture` even when the move is requested), counts files per directory in discovery with a bundled script, moves only the evaluated cluster without splitting or adding barrels, runs the moved files' tests, and uses one name per concept.
+
 ## 2026-10-03
 
 - `cf-cognitive` ranks functions by length and nesting, measures before and after editing, and runs the target's tests.
