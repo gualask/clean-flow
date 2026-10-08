@@ -19,7 +19,7 @@ It owns test-quality diagnosis, not test execution, production-code review, beha
 2. Measure the selected existing-file corpus, then follow the shared context, consent, and delegation contract.
 3. Run every invariant and fragility lens locally or through the test agent brief. Every assignment applies both groups. Never interrupt a dispatched agent or replace it locally because it seems slow; only an explicit current user request authorizes interruption, and a missing report leaves the pass incomplete. The controller routes once from the shared contract's completed ledger.
 4. Require a source-backed invariant and a concrete passing regression or behavior-preserving change for every candidate. Check acceptance contracts, protocol rules, intentional seams, distinct input classes, and other nearest false positives.
-5. Let the controller verify cited evidence, account for every lens, and route behavior ambiguity to `cf-scenario` or domain-model decisions to `cf-mr-wolf`.
+5. Let the controller verify cited evidence, account for every lens, and route behavior ambiguity and domain-model decisions to `cf-mr-wolf`.
 6. Return `clear` or candidate findings without editing source or test files or running tests. A batched pass persists its recap under the shared contract; a request about an existing recap follows that contract's work-through path instead of rerunning the corpus.
 
 ## Boundaries

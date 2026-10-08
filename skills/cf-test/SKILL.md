@@ -1,6 +1,6 @@
 ---
 name: cf-test
-description: "Report assertion-quality and test-contract findings for changed or explicitly targeted tests. Use when the request asks to review test quality, coverage against requirements or invariants, brittle or over-specified tests, implementation-detail coupling, negative assertions, or domain-invalid states representable by the project's types or schemas. Do not use to run or fix tests or to review production code generally; route structural change-set review to cf-review and behavior ambiguity to cf-scenario."
+description: "Report assertion-quality and test-contract findings for changed or explicitly targeted tests. Use when the request asks to review test quality, coverage against requirements or invariants, brittle or over-specified tests, implementation-detail coupling, negative assertions, or domain-invalid states representable by the project's types or schemas. Do not use to run or fix tests or to review production code generally; route structural change-set review to cf-review and behavior ambiguity to cf-mr-wolf."
 ---
 Report candidate test-quality findings against observable contracts and authoritative invariants. Do not edit repository files other than the batched pass's recap, run the test suite, or turn test style preferences into findings.
 
@@ -30,7 +30,7 @@ Exclude generated, vendored, ignored, fixture-only, snapshot-output, and deleted
 2. Read `references/dynamic-agents.md`. Run the installed-local context gate against every primary test and already-selected contract surface. Follow its policy exactly; when it is not `local`, read `references/delegated-execution.md` and follow it.
 3. Read `references/assertion-quality.md` and run both declared lens groups. For `local`, run them sequentially. For `subagent-1`, `subagent-2`, or `batched`, also read `references/test-agent-brief.md` and fill every placeholder with bounded contract surfaces. Every assignment applies both lens groups. The shared reference owns assignment and completion.
 4. De-risk every reported candidate against the cited test, contract surface, and authoritative source. Inspect only the cited evidence needed to accept, narrow, or exclude it.
-5. Route once after the complete pass. Use `cf-scenario` when expected behavior is ambiguous, `cf-mr-wolf` when a domain-model redesign such as making invalid states unrepresentable needs a decision, and a direct bounded test edit only after the invariant is confirmed.
+5. Route once after the complete pass. Route ambiguous expected behavior, and a domain-model redesign such as making invalid states unrepresentable, to `cf-mr-wolf`; edit a bounded test directly only after the invariant is confirmed.
 
 ## Artifacts
 

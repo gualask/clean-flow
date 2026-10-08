@@ -236,7 +236,7 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
 
   assert.match(metadata.description, /assertion-quality and test-contract findings/);
   assert.match(metadata.description, /cf-review/);
-  assert.match(metadata.description, /cf-scenario/);
+  assert.match(metadata.description, /behavior ambiguity to cf-mr-wolf/);
   assert.match(testContract, /primary test/);
   assert.match(testContract, /contract surfaces/);
   assert.match(testContract, /path proximity alone is insufficient/);

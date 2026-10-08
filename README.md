@@ -125,8 +125,8 @@ It is a gate: it investigates and stops, hands off to the owning skill in one li
 
 ### `cf-scenario`
 
-Decides a proposed change against the concrete scenarios it touches, grounded in the code.
-Use it when a named change needs a worth-doing decision or impact validation, not merely to explain current behavior.
+Decides a named change against the concrete scenarios it touches, grounded in the code.
+Use it when a named change needs a worth-doing decision or its cost in other scenarios weighed, not merely to explain current behavior. It opens with **Decision:** (`make it`, `do not make it`, or `make it only if` a condition), then the cost in each scenario with `file:line`. A business-alignment candidate from `cf-review` gets a `file:line` trace from the changed line to the result a user sees.
 
 ### `cf-deadcode`
 

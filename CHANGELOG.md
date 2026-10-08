@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-08
+
+- `cf-scenario` traces a business-alignment candidate from `cf-review` as `file:line` steps from the changed line to the result a user sees before comparing it with the source, opens with **Decision:** (`make it`, `do not make it`, `make it only if` a condition) followed by the cost in each other scenario with `file:line`, and uses one name per concept (named change, cost in other scenarios). `cf-test` routes ambiguous expected behavior to `cf-mr-wolf`.
+
 ## 2026-10-07
 
 - `cf-deadcode` no longer excludes removal requests in its `description`: asked to remove unused code, the model opens it and removes what its table finds.
