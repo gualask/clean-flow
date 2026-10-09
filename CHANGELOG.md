@@ -2,6 +2,7 @@
 
 ## 2026-10-08
 
+- `cf-test` reports only and never edits a test, names the action each lens produces (`strengthen`, `remove`, `rewrite`, `redesign`) so candidates group under the skill's own labels, gives every candidate the same fields as the agent brief with route `cf-mr-wolf` or `none`, names its scopes in the `description` (pending tests, a named history range, explicit tests, the existing suite), leaves persisting candidates to `cf-todo`, and uses one name per concept (authoritative source, invariant, observable contract, test case, candidate).
 - `cf-scenario` traces a business-alignment candidate from `cf-review` as `file:line` steps from the changed line to the result a user sees before comparing it with the source, opens with **Decision:** (`make it`, `do not make it`, `make it only if` a condition) followed by the cost in each other scenario with `file:line`, and uses one name per concept (named change, cost in other scenarios). `cf-test` routes ambiguous expected behavior to `cf-mr-wolf`.
 
 ## 2026-10-07

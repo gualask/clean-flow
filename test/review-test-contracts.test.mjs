@@ -234,9 +234,9 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
   );
   const flow = contextMap.skills["cf-test"].flows.default;
 
-  assert.match(metadata.description, /assertion-quality and test-contract findings/);
+  assert.match(metadata.description, /assertion-quality findings/);
   assert.match(metadata.description, /cf-review/);
-  assert.match(metadata.description, /behavior ambiguity to cf-mr-wolf/);
+  assert.match(metadata.description, /ambiguous expected behavior to cf-mr-wolf/);
   assert.match(testContract, /primary test/);
   assert.match(testContract, /contract surfaces/);
   assert.match(testContract, /path proximity alone is insufficient/);
@@ -285,7 +285,7 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
   }
   assert.match(
     assertionQuality,
-    /No locatable source and no concrete passing regression means no finding/,
+    /No locatable source and no concrete regression or behavior-preserving change means no candidate/,
   );
   assert.match(assertionQuality, /language-agnostic/);
   assert.doesNotMatch(agentBrief, /Terminal protocol \(stable contract\)/);
@@ -294,6 +294,7 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
     [
       "id",
       "primary_test",
+      "action",
       "claim",
       "evidence",
       "invariant_or_contract",

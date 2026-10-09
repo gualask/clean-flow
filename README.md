@@ -158,8 +158,8 @@ Business alignment uses explicit requirements, repository-controlled product or 
 
 ### `cf-test`
 
-Reviews changed or explicitly targeted tests against observable contracts and authoritative invariants.
-It reports missing invariants, invalid domain states, redundant or over-specified assertions, brittle strings, and implementation-detail coupling without running the suite; the only repository write is the batched pass's recap, `.cflow/cf-test-recap.md`.
+Reviews pending tests, a named history range, explicit tests, or the existing suite against observable contracts and invariants.
+It reports missing invariants, invalid domain states, redundant or over-specified assertions, brittle strings, and implementation-detail coupling, grouped by action (`remove`, `rewrite`, `strengthen`, `redesign`), without running the suite; the only repository write is the batched pass's recap, `.cflow/cf-test-recap.md`.
 
 ### `cf-docs`
 
@@ -196,7 +196,7 @@ The normal lifecycle for a structural change or a new feature:
 
 For direct local work, use `cf-cognitive`, `cf-split`, or `cf-cohesion` instead.
 To review what a set of changes exposes and route it, use `cf-review`: pending work before you commit, or a history range after the fact.
-To inspect assertion quality and test-contract coverage, run `cf-test` separately against the same pending work or named history range; `cf-review` does not classify tests or assess their assertions.
+To inspect assertion quality, run `cf-test` separately against the same pending work or named history range; `cf-review` does not classify tests or assess their assertions.
 For lightweight follow-up tracking from an analysis or working session, use `cf-todo`.
 
 ## Documentation
