@@ -168,7 +168,8 @@ It enters when the request writes a Markdown file or asks to audit existing docs
 
 ### `cf-todo`
 
-Creates and maintains a lightweight `todo.md` tracking next steps and open questions produced by an analysis or working session.
+Creates and maintains a lightweight `todo.md` tracking next steps and open questions produced by an analysis or working session, or extends an existing todo file in its own shape, in the language of the repository's docs.
+A decided action without an observable done criterion is asked about, not written.
 It enters only when the request changes the file; reading it or reporting what is left does not.
 Completed tasks stay checked in place while work remains and after the list becomes fully complete. They are removed only when a later update adds new tasks to that fully completed list.
 

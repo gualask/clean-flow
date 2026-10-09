@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-09
+
+- `cf-todo` writes in the language of the repository's existing docs even when the request uses another language, asks for a missing done criterion instead of writing the task, records an open question's impact and direction only when the session stated them, extends an existing todo file in its own shape, names the ADR or owning doc for a decided question's durable rationale in **Changes** (routed to `cf-docs`), and uses one name per concept (todo file, task, done criterion, checked-task rollover).
+
 ## 2026-10-08
 
 - `cf-test` reports only and never edits a test, names the action each lens produces (`strengthen`, `remove`, `rewrite`, `redesign`) so candidates group under the skill's own labels, gives every candidate the same fields as the agent brief with route `cf-mr-wolf` or `none`, names its scopes in the `description` (pending tests, a named history range, explicit tests, the existing suite), leaves persisting candidates to `cf-todo`, and uses one name per concept (authoritative source, invariant, observable contract, test case, candidate).

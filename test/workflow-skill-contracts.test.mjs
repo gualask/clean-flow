@@ -101,6 +101,11 @@ test("todo rolls completed tasks over only when adding new work", async () => {
     assert.match(text, /no new task/);
     assert.doesNotMatch(text, /preparing a .*commit|ask whether to empty|commit cleanup|reset/);
   }
+  assert.match(todoContract, /even when the request uses another language/);
+  assert.match(todoContract, /do not write that task until it is given/);
+  assert.match(todoContract, /only when the session stated them, impact and possible direction/);
+  assert.match(todoContract, /extend it in its own shape/);
+  assert.doesNotMatch(todoContract, /tracking file/);
 });
 
 test("delegated terminal agents keep a stable shared protocol", async () => {
