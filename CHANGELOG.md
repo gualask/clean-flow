@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-10
+
+- `cf-mr-wolf` treats a request that names a target without its change as naming none, so it investigates and asks instead of answering with a plan; routes a decidable target to the owning skill and continues under it in the same turn instead of ending on the skill's name; and uses one name per concept (decidable target, findings).
+
 ## 2026-10-09
 
 - `cf-todo` writes in the language of the repository's existing docs even when the request uses another language, asks for a missing done criterion instead of writing the task, records an open question's impact and direction only when the session stated them, extends an existing todo file in its own shape, names the ADR or owning doc for a decided question's durable rationale in **Changes** (routed to `cf-docs`), and uses one name per concept (todo file, task, done criterion, checked-task rollover).

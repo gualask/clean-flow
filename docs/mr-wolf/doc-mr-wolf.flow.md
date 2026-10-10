@@ -2,114 +2,38 @@
 
 ## Purpose
 
-Maintainer summary for `cf-mr-wolf`. Runtime behavior belongs to `skills/cf-mr-wolf/SKILL.md`; keep this file descriptive, not authoritative.
-
-`cf-mr-wolf` is a gate, not a pipeline. It performs one classification, then hands off, steps aside, or investigates and stops. It carries no workflow phases, no output contracts, and no artifact of its own.
+Maintainer summary for `cf-mr-wolf`. Runtime behavior lives in `skills/cf-mr-wolf/SKILL.md` and `skills/cf-mr-wolf/references/pushback.md`.
 
 ## Runtime Inputs
 
-- Public skill: `skills/cf-mr-wolf/SKILL.md`
-- Runtime reference: `skills/cf-mr-wolf/references/pushback.md`, read before answering when the user asserts a cause, offers an explanation, or asks for a specific change
-- Current conversation and request
-- Repository context, on the third branch below only
+- The request and conversation; the repository only on the "names none" branch.
 
-Nothing else. The classification itself is made from the request text alone; the skill reads the repository only once that classification has sent it to the investigate branch, and it commits to no direction there until the user has answered.
+## Flow
 
-## Classification
-
-The first decision is whether the request names a **decidable target**: a component, flow, contract, mechanism, or file put under decision, together with alternatives that are technical states of that thing.
+- One classification, from the request text alone: does the request name a **decidable target** — a component, flow, contract, mechanism, or file together with the change to make to it or the alternatives to choose between? A target without its change names none.
 
 | Case | Behavior |
 | --- | --- |
-| Decidable target owned by a specialist | One-line handoff naming the skill and preserving the problem |
-| Decidable target no specialist owns | Abstain — answer directly, as if the skill had not been invoked |
-| No decidable target | Investigate, report what was found in the user's terms, say it does not know which part matters, ask, and stop |
+| Decidable target owned by another skill | Route to that skill and continue under it, carrying the problem as stated |
+| Decidable target no other skill owns | Answer directly; a proposed change names its most fragile assumption, what happens if it fails, and the fallback |
+| None | Investigate, report findings in the user's terms, say which part matters is unknown, ask, stop |
 
-**Made from the request text alone, before anything is read.** In the version shipped until 2026-08-09 this held as a side effect of a blanket ban on repository inspection; once turn 1 was allowed to read code, the handoff branch investigated instead of routing. It is now stated explicitly and pinned by `test/workflow-skill-contracts.test.mjs`, so do not weaken it while editing the third branch.
+- The "none" branch names no choice and offers no alternatives, reports no confidence level, and gives no recommendation, plan, or implementation until the user answers.
+- At a later turn, when the user asserts a cause, offers an explanation, or asks for a change, `pushback.md` is read every time: keep the findings, say when the claim does not hold, when the change would not reach the stated goal, and what a reversed deliberate choice loses, leaving the decision to the user.
+- No routing table, no sibling catalogue, no artifact, no vendored files. If a specialist stops being reached, fix its `description`.
 
-Two constraints carry the third branch. It **names no choice and offers no alternatives** — any choice it names is a menu of one, and can only return what it already covers. And it produces no recommendation, plan, or implementation until the user answers.
+## Evidence
 
-The skill is also forbidden from reporting a confidence level or judging whether it is sure enough to skip the step. That is deliberate — a self-assessed threshold is satisfied nominally and produces a thorough answer to the wrong question.
-
-There is deliberately **no closing section telling the skill to stand down after the user answers**. Four such lines were deleted on 2026-08-09 after being measured in three places and earning nothing in any of them; the arm committed 6/6 without them.
-
-## Maintainer Notes
-
-- The skill carries **no routing table**. Handoff to a specialist is left to the host, which selects from the installed descriptions. Case 9 measured this directly: with and without an in-body table, all twelve runs opened exactly one specialist `SKILL.md`, and routing was correct **12 of 12 in both arms** once conditioned on the lens the user actually picked. The one apparent divergence sat in the arm that *had* the table, and it was a correct handoff to the skill matching the option that arm had offered.
-- Consequently `cf-mr-wolf` enumerates no siblings. It names the owning skill in the handoff line, but it holds no catalogue of its own. If a specialist stops being reached, fix its `description`, not this file.
-- `.cflow/execution-plan.md` is owned by `cf-execute`. `cf-mr-wolf` owns no artifact.
-- The skill has no vendored shared files and no entry in `skills/_shared/vendor.json`.
-- Keep this doc aligned with runtime files, but do not rely on it at runtime.
-
-## Why the previous flow was removed
-
-The framing, evidence, de-risking, outcome, planning, and evaluation references were removed after the value trial for this skill:
-
-- Across seven cases on `glm-5.2` and two replicated on `gpt-5.6-sol`, the reasoning scaffold never produced a better decision than no skill at all.
-- The payload was verified loaded rather than assumed: every skill-bearing run read all eight references, every no-skill run read none. What it bought was measurable in the wrong direction — the skill-bearing arm inspected *less* of the repository than its control in seven of eight pairs. One line of `decomposition.md` forbade agent-based exploration unless the user had authorized it, and the shared prompt never did; on Case 3 that meant 18 files against the control's 76.
-- Ten prompt candidates were written and tested against frozen oracles. None was promoted.
-- The one measured benefit is the question itself. On Case 8 — an underspecified request answered through a scripted responder — runs that asked scored 4.67/6 against 2.67/6 for runs that did not, with perfect separation, p = 0.0011. No no-skill run asked, in four attempts.
-
-**One quantitative claim is withdrawn and must not be cited from here or from the trial**: "skill-bearing arms score about two points below the no-skill arm, p = 0.053". The no-skill arm moved 1.75 points between sessions under identical conditions, and a retest with the whole pack installed gave +0.33, p = 0.50. The basis for removal is the *absence of an observed benefit* across many underpowered comparisons, plus a certain cost in context and the exploration suppression above — not a measured penalty.
-
-The gate is kept because it produces a behavior the baseline does not. Everything it used to carry is not.
-
-### Removed without evidence either way
-
-Two removals rest on cost and on the gate's shape, not on measurement, and the record should not suggest otherwise:
-
-- `assets/mr-wolf-notes.template.md` — durable cross-session handoff memory. A single-run A/B cannot measure value that exists across sessions, so that claim stays untested. It never was tested.
-- `references/derisk-agent-brief.md` — delegated counter-evidence. The delegation hypothesis is untested, not refuted: Case 7 could not test it because no arm delegated on that repository.
-
-Both stay removed on cost, and both are recoverable from Git. Neither was measured and found wanting.
-
-**The original rationale no longer holds and is not being reused.** It was *"a gate that restates and stops has no phase in which either could run"* — true of the branch shipped until 2026-08-09, and false of the current one. The third branch now reads the repository before it reports, so it has exactly the phase delegation would occupy, and the report it produces is exactly the kind of material notes would carry. What survives is the narrower argument: neither buys anything inside a single turn that ends in a stop, both cost context in every invocation including the two branches that never investigate, and delegation still has no case that can test it — it needs one whose answer depends on a survey wider than one agent's sequential reading. Treat both as open, not closed.
-
-## Why it names no choice and offers no alternatives
-
-Measured, not preferred. A question can only return what its options already cover, and the scripted-responder cases show the failure directly: in Case 12 the single run that recovered the requirement held only by the user is the one whose options happened to include it, and in Case 13 the run that offered four invented lenses — none of them the user's — scored 2/5 while its siblings scored 5/5. An open report has no span to get wrong.
-
-It also removes a step rather than adding one. An earlier version classified who held the answer, and misrouted defect reports into remedy menus in roughly four cases out of ten across two independent prompts. That classifier is gone.
-
-## Why it investigates before asking
-
-The branch shipped until 2026-08-09 restated the request and stopped, with no repository inspection at all. It was replaced on that date by the current text, which reads the code first and reports what it found before saying it does not know which part matters. Provenance and the reasoning that outlives the wording are kept with the trial record.
-
-Two things it buys, and one it does not. A user who never replies gets the work instead of one line. And the report is what the user corrects, so the conversation starts from evidence rather than from a paraphrase. It bought **nothing measurable** on either frozen bed against the text it replaced: n = 1 per bed against that text's 3, and nothing separated them on outcome. The case for it is the turn-1 product property, not a score.
-
-## Where the gate earns its place
-
-Measured, not assumed. The gate pays off when the current behavior is a **deliberate choice the user disagrees with** — the deciding information is in the user's head, the model cannot derive it, and the unaided guess is confidently wrong. Case 8, twelve runs grouped by behavior rather than by arm: runs that asked scored 4.67/6 against 2.67/6 for runs that did not, p = 0.0011. The two skill-bearing runs that happened not to ask scored exactly like the no-skill arm.
-
-It is neutral when the request has one sensible reading. Case 12 asked 4/4 and every no-skill run reached the same lens unaided; the case is void by its own preregistered rule and shows no effect.
-
-It is not needed when the problem is hard but **well posed**. Case 10: four of four no-skill runs found the defect and the fix shape without any help.
-
-It matters most when a problem is hard **and** ambiguous, the cell Case 10 tried and failed to reach. Two beds fill it, both measured on the shipped text on 2026-08-09 with treatment and control in one batch and one session:
-
-| Bed | Treatment | Control |
-| --- | :---: | :---: |
-| Case 13 — six independently shipped defects coexist and the user's goal decides which one counts | `T` 3/3 | 0/3 |
-| Case 14 — the holdout, built after the text was frozen, on a repository that wrote none of the copy | `R` 3/3 | 0/3 |
-
-p = 0.05 each, the minimum attainable at 3v3, and both discriminators are disjoint rather than graded. The control's failure is not search: on Case 14 a control located a cost no treatment run found, and on Case 13 a control opened the already-recording check itself without noticing what runs before it. Better analysis, of a question the user did not ask.
-
-Earlier rubric figures for Case 13 (4.00 and 4.67 against 0/5, p = 0.012) were read against a superseded endpoint and are **not** comparable to the labels above — see the Case 13 record.
-
-### Where the value comes from, and what that means for editing this skill
-
-Measured 2026-08-09: a control handed the user's deciding sentence *without having asked for it* reaches the same endpoints 6/6, level with the skill. The whole effect therefore sits in eliciting that sentence — the skill asks 12/12 where a bare model asks 1/12 across three repositories, including one it did not write. **So rules about how to handle the user's answer buy nothing and have twice failed to; anything affecting whether it asks carries the entire effect and cannot be edited without re-measuring.**
-
-## The one measured harm, and what defends against it
-
-Anyone editing this skill should know what it costs before touching the text. Same bed as Case 14, same prompt; the only change is the user. Full record in the Case 14 file.
-
-**A user who asserts a cause with certainty gets the remedy they ask for.** Three runs of three: the user says the slowdown happens because indexing is still running and asks for the call to wait for it; the function does not touch the index, and the source says so in a comment every run read. All three accepted the premise, proposed reversing that deliberate design, and dropped every finding their own turn 1 had produced. Two of the three wrote that the bypass was intentional and proposed to reverse it anyway.
-
-Score it as **dropping its own findings and reversing a deliberate design without stating the trade-off**, not as failing to contradict the user: the user's *cause* is defensible and only the *remedy* reverses the design, so an endpoint demanding the run call the premise false asks for something ground truth does not license.
-
-**What defends is `references/pushback.md`**, read on demand at turn 2 — 12 of 12 harm components at baseline against 3 of 12 with it, blind scorer, arms in one batch, and the legitimate correction still reaching its endpoint 3/3. It lives in a reference rather than `SKILL.md` because of the placement rule in `docs/golden-rules.md`: a triggered reference is re-read at the turn it is needed, resident text is not. Two things remain unproven — the reference did not separate from the resident version at three runs per arm, and the shipped English wording is a rewrite of the text those numbers came from.
-
-Two properties of the harm itself are worth keeping in view. **The control cannot suffer it**: it has no second turn for the claim to enter, so the harm is produced by the mechanism the skill exists for. And **verification switches off rather than degrades** — one reproduction read *zero files* at turn 2 before rewriting its conclusion around the user's premise.
-
-**The opposite user is handled well, and the contrast is the point.** When the user genuinely does not know and can add nothing, the same text commits to neither branch 3/3 — it diagnoses, proposes making the phenomenon measurable, and declines to put the burden back on the user. Commitment tracks what the user actually holds: information delivered → the right branch 3/3; nothing to deliver → no commitment 3/3; never asked → the wrong branch.
+- The value is the question. Runs that asked scored 4.67/6 against 2.67/6 for runs that did not (p = 0.0011); the skill asks 12/12 where a bare model asks 1/12 across three repositories. A control handed the user's deciding sentence without asking reaches the same endpoints 6/6, so rules about handling the answer buy nothing; anything that changes whether it asks needs re-measuring.
+- Hard and ambiguous problems: skill 3/3 against control 0/3 on two beds, one built after the text was frozen. Neutral when the request has one reading; not needed when the problem is hard but well posed (control 4/4).
+- Removed reasoning scaffold (framing, evidence, de-risking, outcome, planning, evaluation references): across seven cases it never beat no skill, and it cut repository inspection in seven of eight pairs (18 files against 76 in one). Notes template and delegated counter-evidence brief were removed on cost, never measured. The claim "about two points below no skill, p = 0.053" is withdrawn: the control moved 1.75 points between sessions.
+- No alternatives: offered options return only what they cover; a run with four invented lenses scored 2/5 against 5/5 for its siblings.
+- Classification from the request text: once the first turn could read code, the routing branch investigated instead of routing.
+- No routing table: 12/12 routing with and without one.
+- No closing "stand down" section: four such lines earned nothing in three places; 6/6 without them.
+- Investigating before asking: no measured gain over restating and stopping (n = 1 against 3); kept because a user who never replies still gets the findings.
+- The one measured harm: a user who asserts a cause with certainty gets the remedy, reversing a deliberate design and dropping the turn-1 findings (3/3). `pushback.md` at turn 2 cut harm components from 12/12 to 3/12, with the legitimate correction still reaching its endpoint 3/3. Resident and referenced versions did not separate at three runs per arm. When the user has nothing to add, the skill commits to no branch 3/3.
+- Known limit (2026-10-10): a true cause with a requested change that reverses a documented rule is carried out with code and docs aligned 4/5; the cost was stated before acting 1/5. A prohibition ("change nothing until they decide") held 1/2 and was not adopted; widening "the code shows" to documentation held 0/1. A false cause (1/1) and a remedy that would not reach the goal (2/2, naming the documented rule as intentional) are refused without edits. The deliberate-choice rule is unmeasured where the cost is invisible to the user.
+- Known limit (2026-10-10): the fragile-assumption line is followed halfway 2/2 — the assumption is stated, its consequence and the fallback are not. "X or Y?" questions on a named target reach `cf-scenario` 2/4, so this branch is seldom reached and the rewrite was not measurable.
+- Route and continue (2026-10-10): with "hand off in one line" the turn ended on the skill name; with "route … and continue under it" the specialist ran in the same turn without reading code first.
+- Routing: symptoms and open-shape questions open it 8/8 on Codex 0.162; it also opens first on some requests with no referent in the repository and on a named component with alternatives, then continues into the owning skill.
