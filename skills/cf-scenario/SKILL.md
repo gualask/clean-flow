@@ -18,7 +18,7 @@ Keep it lightweight. The goal is not a formal use-case document; the goal is to 
 ## Guardrails
 
 - When the named change would alter stored data or its shape, say what happens to the rows that already exist: a field it introduces is absent on every one of them, and that absence is a user-visible behavior of its own.
-- When `cf-review` routes a business-alignment candidate, verify the quoted authoritative source. Then trace each changed value from the changed line to the result a user sees, through every function that receives it, and write that trace as `file:line` steps; its last step is the actual behavior. Compare it with the source's expected behavior. Do not replace the source with product intuition or treat implementation code as the intended rule.
+- When `cf-review` routes a requirement-alignment finding, verify the quoted authoritative source. Then trace each changed value from the changed line to the result a user sees, through every function that receives it, and write that trace as `file:line` steps; its last step is the actual behavior. Compare it with the source's expected behavior. Do not replace the source with product intuition or treat implementation code as the intended rule.
 
 ## Output
 

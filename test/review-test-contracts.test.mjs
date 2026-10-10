@@ -51,7 +51,7 @@ test("review owns reference loading and remains read-only", async () => {
 
   assert.match(
     reviewMetadata.description,
-    /^Report structural, convention, and authoritative requirement findings for a set of code changes\./,
+    /^Report bugs, requirement contradictions, incomplete changes, documentation drift, and structural findings for a set of code changes\./,
   );
   assert.match(
     reviewMetadata.description,
@@ -65,11 +65,11 @@ test("review owns reference loading and remains read-only", async () => {
   assert.match(reviewContract, /Read `references\/dynamic-agents\.md`/);
   assert.match(
     reviewContract,
-    /Read `references\/sweep\.md` and `references\/navigation-cost\.md`/,
+    /Read `references\/sweep\.md`; for Structure or All, also read `references\/navigation-cost\.md`/,
   );
   assert.match(
     reviewContract,
-    /When the change is move-shaped, also read `references\/reference-audit\.md`/,
+    /When the change is move-shaped and the focus is Leftovers and docs or All, also read `references\/reference-audit\.md`/,
   );
   assert.match(
     reviewContract,
@@ -81,15 +81,26 @@ test("review owns reference loading and remains read-only", async () => {
   );
   assert.match(
     reviewContract,
-    /Do not edit repository files other than the batched pass's recap, and do not invoke another skill that edits them/,
+    /Do not edit repository files other than the batched pass's recap\./,
   );
   assert.match(reviewContract, /Owns `\.cflow\/cf-review-recap\.md`/);
+  assert.match(reviewContract, /\*\*Bugs and requirements\*\*, lenses 1–3/);
+  assert.match(reviewContract, /\*\*Leftovers and docs\*\*, lenses 4–6/);
+  assert.match(reviewContract, /\*\*Structure\*\*, lenses 7–12/);
+  assert.match(reviewContract, /Without a choice I start with Bugs and requirements\./);
+  assert.match(reviewContract, /reporting, silent, not applicable, or not selected/);
+  assert.match(reviewContract, /Name each focus not run as `not assessed`/);
+  assert.doesNotMatch(reviewContract, /reaches most of the repository/);
+  assert.match(sweep, /### Lens 1 — Bugs\n\nRoute: `cf-mr-wolf`/);
+  assert.match(sweep, /### Lens 2 — Behavior Drift\n\nRoute: `cf-mr-wolf`/);
+  assert.match(sweep, /A stale reference in documentation or examples belongs to lens 6/);
+  assert.match(sweep, /run bundled `scripts\/dir-population\.mjs`, resolved from the active skill root/);
   assert.match(reviewContract, /Create or update no other repository file/);
   assert.match(reviewContract, /references\/review-agent-brief\.md/);
   assert.match(reviewFlowDoc, /de-risks only its cited evidence and never advances `status: candidate`/);
   assert.doesNotMatch(reviewFlowDoc, /Does not confirm, de-risk, or fix a candidate/);
   assert.match(reviewContract, /For `subagent-1`, `subagent-2`, or `batched`/);
-  assert.match(reviewContract, /Every assignment applies all lenses/);
+  assert.match(reviewContract, /Every assignment applies every lens of the focus/);
   assert.match(reviewContract, /shared reference owns assignment and completion/);
   assert.doesNotMatch(reviewContract, /complete path-only manifest|compact reports|reconciles cross-batch references/);
   assert.match(reviewAgentBrief, /Logical scope manifest: \{SCOPE_MANIFEST\}/);
@@ -107,11 +118,11 @@ test("review owns reference loading and remains read-only", async () => {
       "evidence",
       "severity",
       "impact",
-      "confidence_basis",
+      "confidence",
+      "introduced",
+      "exemption",
       "route",
       "status",
-      "introduced_by_change",
-      "hard_trigger_exemption",
       "false_positive_check",
       "unknowns",
     ],
@@ -126,9 +137,8 @@ test("review owns reference loading and remains read-only", async () => {
   assert.doesNotMatch(reviewContract, /eligible — route cf-test|primary test count|no primary tests/);
   assert.match(
     reviewContract,
-    /Test files selected by the change set remain \*\*Primary files\*\*/,
+    /Test files selected by the change set remain primary files\./,
   );
-  assert.match(reviewContract, /Do not classify or count them separately/);
   assert.match(
     reviewFlowDoc,
     /Keeps selected test files in the structural sweep but does not assess their assertion quality/,
@@ -137,13 +147,13 @@ test("review owns reference loading and remains read-only", async () => {
   assert.match(reviewContract, /Primary files/);
   assert.match(reviewContract, /Deleted entries/);
   assert.match(reviewContract, /Audit surfaces/);
-  assert.match(reviewContract, /Authoritative intent sources/);
+  assert.match(reviewContract, /Authoritative sources/);
 
   for (const contract of [sweep, handoff]) {
     assert.doesNotMatch(contract, /cf-todo/);
     assert.doesNotMatch(contract, /local-refactor-rules\.md/);
   }
-  assert.match(reviewContract, /name `cf-todo` as the separate next action/);
+  assert.match(reviewContract, /Persisting findings elsewhere belongs to `cf-todo`/);
   assert.doesNotMatch(reviewContract, /hands work to directly|persist the findings/);
   assert.doesNotMatch(reviewContract, /local-refactor-rules\.md/);
   assert.doesNotMatch(sweep, /\bRead `?references\//);
@@ -155,7 +165,7 @@ test("review owns reference loading and remains read-only", async () => {
   assert.doesNotMatch(handoff, /- \*\*clear\*\*/);
   assert.match(
     sweep,
-    /## Lens 11 — Business Requirement Alignment[\s\S]*Route: `cf-scenario`/,
+    /### Lens 3 — Requirement Alignment\n\nRoute: `cf-scenario`/,
   );
   assert.match(
     sweep,
@@ -180,7 +190,7 @@ test("review owns reference loading and remains read-only", async () => {
   );
   assert.match(
     reviewContract,
-    /business correctness not assessed: no authoritative requirement source identified/,
+    /requirement alignment not assessed: no authoritative source identified/,
   );
   assert.doesNotMatch(handoff, /business correctness not assessed/);
   assert.match(
@@ -190,9 +200,9 @@ test("review owns reference loading and remains read-only", async () => {
   assert.deepEqual(reviewFlow.required, [
     "references/dynamic-agents.md",
     "references/sweep.md",
-    "references/navigation-cost.md",
   ]);
   assert.deepEqual(reviewFlow.conditional, [
+    "references/navigation-cost.md",
     "references/delegated-execution.md",
     "references/reference-audit.md",
     "references/review-agent-brief.md",

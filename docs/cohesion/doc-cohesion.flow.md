@@ -8,7 +8,7 @@ Document the runtime flow for `cf-cohesion`, the public local entrypoint for eva
 
 - Public skill: `skills/cf-cohesion/SKILL.md`
 - Runtime references: `skills/cf-cohesion/references/targeted-evaluation.md`
-- Runtime script: `skills/cf-cohesion/scripts/dir-population.mjs` (discovery count)
+- Shared script vendored into runtime paths: `skills/_shared/scripts/dir-population.mjs` (discovery count; also used by `cf-review` lens 9)
 - Shared sources vendored into runtime paths: `skills/_shared/references/navigation-cost.md`, `reference-audit.md`
 - Target artifacts: none
 

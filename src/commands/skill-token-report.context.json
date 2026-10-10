@@ -108,10 +108,10 @@
         "default": {
           "required": [
             "references/dynamic-agents.md",
-            "references/sweep.md",
-            "references/navigation-cost.md"
+            "references/sweep.md"
           ],
           "conditional": [
+            "references/navigation-cost.md",
             "references/delegated-execution.md",
             "references/reference-audit.md",
             "references/review-agent-brief.md",

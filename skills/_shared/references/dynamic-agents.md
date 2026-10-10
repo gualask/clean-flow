@@ -13,4 +13,6 @@ Treat the script's `policy` as authoritative:
 - `subagent-2`: use two non-overlapping assignments under the Agent Contract when consent allows it.
 - `batched`: do not load or delegate the corpus as one pass; cover it in non-overlapping batches.
 
+The script's `generated` line lists the lockfiles it left out of the metrics. Keep them out of the corpus too: do not read, batch, or assign them.
+
 Do not estimate the band, substitute semantic complexity, or override the count because the task feels easy or hard. An explicit user instruction to use or avoid a specific number of agents wins. If the helper is unavailable or cannot measure every selected path, report the measurement failure and ask whether to continue locally or with user-selected delegation; never guess silently.

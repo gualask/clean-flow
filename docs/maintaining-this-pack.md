@@ -89,6 +89,7 @@ Shared authoring references vendored into consuming skills:
 Shared authoring scripts vendored into consuming skills:
 
 - `skills/_shared/scripts/repo-tree.mjs`
+- `skills/_shared/scripts/dir-population.mjs`
 
 Delegated agents use the shared provider-neutral context, consent, and terminal-role contract, then explicit phase prompts that live beside the consuming reference:
 

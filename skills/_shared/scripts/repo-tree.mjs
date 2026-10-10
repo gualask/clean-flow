@@ -11,6 +11,29 @@ const CONTEXT_BUDGETS = [
   { name: "subagent-1", maxFiles: 40, maxLoc: 6_000, maxTokens: 55_000 },
   { name: "subagent-2", maxFiles: 80, maxLoc: 12_000, maxTokens: 110_000 },
 ];
+// Package-manager lockfiles: generated, often the largest file in a change set, never reviewed by reading.
+const GENERATED_FILE_NAMES = new Set([
+  "bun.lock",
+  "bun.lockb",
+  "Cargo.lock",
+  "composer.lock",
+  "deno.lock",
+  "flake.lock",
+  "Gemfile.lock",
+  "go.sum",
+  "gradle.lockfile",
+  "mix.lock",
+  "npm-shrinkwrap.json",
+  "package-lock.json",
+  "packages.lock.json",
+  "Pipfile.lock",
+  "pnpm-lock.yaml",
+  "poetry.lock",
+  "Podfile.lock",
+  "pubspec.lock",
+  "uv.lock",
+  "yarn.lock",
+]);
 const FALLBACK_IGNORED_DIRS = new Set([
   ".git",
   ".hg",
@@ -39,14 +62,18 @@ function main() {
   const root = path.resolve(options.root);
   const inventory = listFiles(root);
   const scopedFiles = filterIncludedFiles(root, inventory.files, options.includes);
-  const tree = buildTree(root, scopedFiles);
-  computeTotals(tree);
 
   if (options.contextBudget) {
+    const generated = scopedFiles.filter(isGeneratedFile);
+    const tree = buildTree(root, scopedFiles.filter((file) => !isGeneratedFile(file)));
+    computeTotals(tree);
     assertMeasurementComplete(tree);
-    printContextBudget(root, tree, inventory, options);
+    printContextBudget(root, tree, inventory, options, generated);
     return;
   }
+
+  const tree = buildTree(root, scopedFiles);
+  computeTotals(tree);
 
   const lines = [
     "repo-tree",
@@ -154,6 +181,10 @@ function normalizeInclude(root, include) {
   }
 
   return normalizeRelativePath(relativePath) || ".";
+}
+
+export function isGeneratedFile(relativePath) {
+  return GENERATED_FILE_NAMES.has(path.posix.basename(relativePath));
 }
 
 function requiredValue(args, index, flag) {
@@ -461,7 +492,7 @@ function assertMeasurementComplete(tree) {
   throw new Error(`could not measure selected files: ${failures}`);
 }
 
-function printContextBudget(root, tree, inventory, options) {
+function printContextBudget(root, tree, inventory, options, generated) {
   const estimatedTokens = Math.ceil(tree.totalBytes / CONTEXT_TOKEN_BYTES);
   const policy = classifyContextBudget({
     files: tree.totalFiles,
@@ -478,6 +509,7 @@ function printContextBudget(root, tree, inventory, options) {
   process.stdout.write(`bytes: ${tree.totalBytes}\n`);
   process.stdout.write(`estimated tokens: ${estimatedTokens} (bytes / ${CONTEXT_TOKEN_BYTES})\n`);
   process.stdout.write(`policy: ${policy}\n`);
+  process.stdout.write(`generated: ${generated.length > 0 ? generated.join(", ") : "none"}\n`);
 }
 
 function compareNames(left, right) {
@@ -506,6 +538,8 @@ Options:
   --largest N      Print only the N longest files, longest first. Every file counts,
                    including tests, docs, and lockfiles; narrow with --include.
   --context-budget Print only deterministic context metrics and delegation policy.
+                   Lockfiles are generated: left out of the metrics and listed on
+                   the generated line.
   --include PATH   Limit the inventory to an exact file or directory. Repeatable.
   --help           Show this help.
 

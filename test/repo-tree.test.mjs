@@ -138,6 +138,30 @@ test("repo-tree context budget measures only included files", async () => {
   assert.doesNotMatch(budget, /package\.json|Button\.tsx/);
 });
 
+test("repo-tree context budget leaves lockfiles out and lists them as generated", async () => {
+  const workspace = await makeRepoTreeFixture();
+  await writeFixture(workspace, "pnpm-lock.yaml", "lockfileVersion: '9.0'\n".repeat(5_000));
+  await writeFixture(workspace, "web/package-lock.json", "{}\n");
+
+  const budget = await runRepoTree(
+    workspace,
+    "--context-budget",
+    "--include",
+    "src/Button.tsx",
+    "--include",
+    "pnpm-lock.yaml",
+    "--include",
+    "web",
+  );
+  assert.match(budget, /files: 1/);
+  assert.match(budget, /loc: 1/);
+  assert.match(budget, /policy: local/);
+  assert.match(budget, /^generated: pnpm-lock\.yaml, web\/package-lock\.json$/m);
+
+  const clean = await runRepoTree(workspace, "--context-budget", "--include", "src");
+  assert.match(clean, /^generated: none$/m);
+});
+
 test("repo-tree context budget deduplicates overlapping includes", async () => {
   const workspace = await makeRepoTreeFixture();
 

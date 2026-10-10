@@ -10,7 +10,7 @@ import { makeTempWorkspace } from "./support/helpers.mjs";
 
 const execFileAsync = promisify(execFile);
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SCRIPT_PATH = path.join(REPO_ROOT, "skills", "cf-cohesion", "scripts", "dir-population.mjs");
+const SCRIPT_PATH = path.join(REPO_ROOT, "skills", "_shared", "scripts", "dir-population.mjs");
 
 async function writeFiles(root, files) {
   for (const [relativePath, content] of Object.entries(files)) {

@@ -19,6 +19,9 @@
       "references": [
         "navigation-cost.md",
         "reference-audit.md"
+      ],
+      "scripts": [
+        "dir-population.mjs"
       ]
     },
     "cf-review": {
@@ -29,6 +32,7 @@
         "reference-audit.md"
       ],
       "scripts": [
+        "dir-population.mjs",
         "repo-tree.mjs"
       ]
     },

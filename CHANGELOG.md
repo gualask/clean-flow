@@ -2,6 +2,8 @@
 
 ## 2026-10-10
 
+- `cf-review` reviews under a focus: **Bugs and requirements** (a new bug lens, behavior drift, requirement alignment), **Leftovers and docs** (stale references, incomplete transitions, documentation drift), **Structure**, or **All**. A request that names no focus gets one fixed question with Bugs and requirements as default. Bugs and behavior drift route to `cf-mr-wolf`; a stale path in documentation goes only to the documentation lens; directory population is counted by `dir-population.mjs`, now shared with `cf-cohesion`; a range covering the whole repository is reviewed like any other; persisting findings is left to `cf-todo`; one name per concept (finding, route, authoritative source, requirement alignment), with each rule stated once and the agent brief using the handoff's field names.
+- `repo-tree.mjs --context-budget` leaves lockfiles out of the metrics and lists them on a `generated` line; the context gate keeps them out of the corpus (`cf-review`, `cf-test`). Measured: `pnpm-lock.yaml` was a primary file in 3 of 3 range reviews and an agent read all 1,252 lines.
 - `cf-mr-wolf` treats a request that names a target without its change as naming none, so it investigates and asks instead of answering with a plan; routes a decidable target to the owning skill and continues under it in the same turn instead of ending on the skill's name; and uses one name per concept (decidable target, findings).
 
 ## 2026-10-09
