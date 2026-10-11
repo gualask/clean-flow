@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-11
+
+- `cf-architecture` gives one row per dimension the code already varies along besides its entry points (platform or build target, provider, storage, configuration): its variants and every place that chooses among them, or one sentence saying there is none. A choice made in more than one module gets the place where it should be made once; when the variants have their own implementations, the row names each one-variant decision left in the capability or common code (guarded by a build or runtime condition or not) and each contract part answered by refusing stubs, with the implementation it belongs in. The traced workflow also asks whether a new variant would touch one place or several, and a contract toward an environment or provider states the capability's needs. Measured: platform decisions went to the adapters in 3 of 3 runs against 0 of 2 before on a repository with Windows-only logic under `cfg`; on a repository with a single Win32/POSIX branch, no new port was proposed (0 of 2, against 2 of 2 without the conditions).
+
 ## 2026-10-10
 
 - `cf-review` reviews under a focus: **Bugs and requirements** (a new bug lens, behavior drift, requirement alignment), **Leftovers and docs** (stale references, incomplete transitions, documentation drift), **Structure**, or **All**. A request that names no focus gets one fixed question with Bugs and requirements as default. Bugs and behavior drift route to `cf-mr-wolf`; a stale path in documentation goes only to the documentation lens; directory population is counted by `dir-population.mjs`, now shared with `cf-cohesion`; a range covering the whole repository is reviewed like any other; persisting findings is left to `cf-todo`; one name per concept (finding, route, authoritative source, requirement alignment), with each rule stated once and the agent brief using the handoff's field names.
