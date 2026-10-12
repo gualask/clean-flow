@@ -1,4 +1,4 @@
-# cf-split Evaluation
+# Evaluation Flow
 
 ## Preflight
 
@@ -7,7 +7,7 @@
 
 ## Evaluation Rules
 
-- Identify natural file boundaries and classify each one with the shared file split rules.
+- Identify file-level split candidates and classify each one with references/file-split-rules.md.
 - Name what should stay in the source file.
 - Prefer no split only when `references/navigation-cost.md` shows the candidate would not improve source readability or maintenance navigation.
 - When the dominant cost is cross-file placement or repository structure rather than boundaries inside this file, say so and name `cf-cohesion` or `cf-architecture` as the next action in **Result**.

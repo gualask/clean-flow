@@ -8,7 +8,7 @@ Maintainer summary for `cf-execute`, which plans and implements an approved spec
 
 - Public skill: `skills/cf-execute/SKILL.md`
 - Phase references: `skills/cf-execute/references/*.md`
-- Shared sources vendored into runtime paths: configured `skills/_shared/references/*.md`
+- Shared sources vendored into runtime paths: configured `skills/_shared/references/*.md`; `skills/_shared/scripts/dir-population.mjs` for the split placement count
 - Artifact template: `skills/cf-execute/assets/execution-plan.template.md`
 - Input artifact: the approved spec under `.cflow/specs/`, owned by the skill that wrote it
 - Target artifact: `.cflow/execution-plan.md`

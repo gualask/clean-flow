@@ -43,7 +43,7 @@ Do not infer execution from words like "review", "check", "is this right", or "s
 
 [references/reference-audit.md](references/reference-audit.md) holds the repository-wide search categories for consumers of a moved file or symbol, and what to do with a stale reference in a read-only pass and in an editing one. Read it in targeted evaluation and execution, before the cohesion map and again for moved names and paths after moving.
 
-[references/navigation-cost.md](references/navigation-cost.md) holds the navigation-cost test that ranks every cohesion signal, the hard triggers, and the report/action separation. Read it in targeted evaluation and execution.
+[references/navigation-cost.md](references/navigation-cost.md) holds the navigation-cost test that ranks every cohesion signal, the hard triggers, and the report/action rule. Read it in targeted evaluation and execution.
 
 Discovery reads none of them.
 

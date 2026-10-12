@@ -70,7 +70,7 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
   // asserted on the contract itself rather than on a per-flow reference file.
   assert.match(
     cognitiveContract,
-    /report\/action separation in references\/navigation-cost\.md/,
+    /report\/action rule in references\/navigation-cost\.md/,
   );
   for (const flow of [splitFlow, cognitiveFlow]) {
     assert.match(flow, /complete deferred finding required by the canonical navigation-cost contract/);
@@ -200,8 +200,17 @@ test("split owns first-level reference loading and audits consumers before editi
   }
   assert.match(
     execution,
-    /Complete the reference audit for the candidate unit before choosing the seam/,
+    /Complete the reference audit for each candidate before choosing the one to extract/,
   );
+  // Placement counts come from the bundled script, as in cf-cohesion discovery (4 of 4 runs, 2026-10-12).
+  assert.match(
+    fileSplitRules,
+    /count the direct real source files of a directory with the bundled `scripts\/dir-population\.mjs --include <directory>`, resolved from the active skill root and never from the project working directory; do not write your own count\./,
+  );
+  assert.match(execution, /count the containing directory and read its real source files/);
+  assert.match(splitContract, /^Route cognitive cleanup inside one file to `cf-cognitive`\.$/m);
+  assert.match(splitContract, /^Route regrouping of already-split related files to `cf-cohesion`\.$/m);
+  assert.doesNotMatch(splitContract, /use `cf-(cognitive|cohesion)` for that/);
   const referenceAudit = await fs.readFile(
     path.join(SHARED_REFERENCES_ROOT, "reference-audit.md"),
     "utf8",

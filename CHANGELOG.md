@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-12
+
+- `cf-split` and `cf-execute` count a directory for split placement with the bundled `dir-population.mjs`, now shared by four skills, instead of a prose definition of a real source file; the model ran it from the skill path and wrote no count of its own in 4 of 4 runs that counted a directory. `cf-split` uses one name per concept (candidate, file-level split, file-length hard trigger, placement counts) and states its two routes as "Route … to …"; `cf-cognitive` defines the file-length verdict once (`route` to `cf-split`, or the named exemption), and its Assessment names the shortlist, each target's classification, or the target functions addressed. `cf-cognitive` and `cf-cohesion` call the navigation-cost section the report/action rule throughout. Measured: ten cells across `cf-split`, `cf-execute`, and `cf-cognitive` matched the previous text or the expected outcome, one run each (2026-10-12).
+
 ## 2026-10-11
 
 - `navigation-cost.md` and `file-split-rules.md` use one name per concept across their five consumers (`cf-cognitive`, `cf-cohesion`, `cf-review`, `cf-split`, `cf-execute`): owner cluster and owner folder (were owner family, owner group, owner directory, subfolder), soft signal, named exemption, naming test; `cf-review` lens 9 no longer points to a placement test the reference does not have, the directory trigger no longer names placement guardrails three consumers never receive, and three restated rules are stated once. Measured: eight cells across all five consumers matched the previous text in substance, one run each (2026-10-11).

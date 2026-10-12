@@ -42,6 +42,9 @@
         "navigation-cost.md",
         "reference-audit.md",
         "regression-handling.md"
+      ],
+      "scripts": [
+        "dir-population.mjs"
       ]
     },
     "cf-execute": {
@@ -52,6 +55,9 @@
         "navigation-cost.md",
         "reference-audit.md",
         "regression-handling.md"
+      ],
+      "scripts": [
+        "dir-population.mjs"
       ]
     },
     "cf-test": {

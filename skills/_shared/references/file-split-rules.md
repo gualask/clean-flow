@@ -1,6 +1,6 @@
 # File Split Rules
 
-Scope: behavior-preserving file-level extraction evaluation or execution.
+Scope: evaluating or executing a behavior-preserving file-level split.
 
 ## Candidate Review
 
@@ -17,15 +17,15 @@ Good candidates include:
 - focused policy or domain logic with a stable name
 
 File length alone does not pick what to extract.
-The canonical file-length trigger is not a minimum split threshold: below it, recommend extraction when a stable named owner, subcomponent, policy, or workflow would materially lower navigation cost; do not extract code just because a helper exists or a small component could technically live elsewhere.
+The file-length hard trigger is not a minimum split threshold: below it, recommend extraction when a stable named owner, subcomponent, policy, or workflow would materially lower navigation cost; do not extract code just because a helper exists or a small component could technically live elsewhere.
 
-Classify each visible boundary:
+Classify each visible candidate:
 
 - `recommended`: extraction would materially lower navigation cost now
 - `optional`: ownership is clear, but keeping it local is also reasonable
-- `keep local`: the boundary is visible but too small, too coupled, or not worth a file yet
+- `keep local`: the candidate is visible but too small, too coupled, or not worth a file yet
 
-Use `none` only when no natural file-level boundary is visible. Past the canonical file-length trigger, `none` or `keep local` for the whole file also needs a named exemption.
+Use `none` only when no file-level candidate is visible. Past the file-length hard trigger, `none` or `keep local` for the whole file also needs a named exemption.
 
 ## Grouping
 
@@ -44,11 +44,11 @@ Use those locations only when reuse already exists, the extracted owner is truly
 Place new files by nearest existing ownership, not by generic type.
 When an approved spec or plan names the target location, use it. Otherwise create extracted files flat next to the source file, then settle their final placement with the post-split re-check below.
 Choose placement for the resulting owner cluster, not only for the one file being created now.
-For placement counts, a real source file is a non-generated implementation source file in the target language. Do not count `mod.rs`, `index.ts`, barrel or re-export-only files, generated files, snapshots, fixtures, or tests.
+For placement counts, count the direct real source files of a directory with the bundled `scripts/dir-population.mjs --include <directory>`, resolved from the active skill root and never from the project working directory; do not write your own count.
 
 Keep the files flat when the extracted set is not yet a stable named owner or a folder would not reduce bug-localization cost.
 Create a new owner folder when the owner cluster is stable, the folder name is the likely place a maintainer would inspect for bugs in that local behavior, and the parent remains easier to scan after the move.
-Use these placement counts as guardrails; when one fails, keep the files flat unless the owner cluster is stable with a concrete bug-localization gain or the owner-folder rule below applies:
+Apply these placement counts; when one fails, keep the files flat unless the owner cluster is stable with a concrete bug-localization gain or the owner-folder rule below applies:
 
 - the owner cluster that would move into the owner folder contains at least three real source files
 - after moving that owner cluster, the parent directory would still contain at least two other direct real source-file peers
@@ -56,7 +56,7 @@ Use these placement counts as guardrails; when one fails, keep the files flat un
 
 When files are private children of one owner file, component, workflow, adapter, or analogous local owner, and the same parent also contains unrelated sibling owners, group that owner and its children in an owner folder, even when a placement count fails.
 Do not apply this owner-folder rule when the child files are shared across owners, the parent already belongs only to that owner, or framework/local convention forbids the folder.
-When a folder would change module or package boundaries (for example, a new Go package) and no approved spec or plan decides that boundary, keep the files flat and report the owner cluster as a deferred finding routed to `cf-architecture`; this overrides both the guardrails and the owner-folder rule.
+When a folder would change module or package boundaries (for example, a new Go package) and no approved spec or plan decides that boundary, keep the files flat and report the owner cluster as a deferred finding routed to `cf-architecture`; this overrides both the placement counts and the owner-folder rule.
 
 Do not create a new top-level architectural folder during a local split.
 
