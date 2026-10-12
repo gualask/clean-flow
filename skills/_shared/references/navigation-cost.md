@@ -13,7 +13,7 @@ Estimate it:
 - how few lines they must read at each stop before they can judge "this matters" or "skip it",
 - how much unrelated logic sits between them and the code that matters.
 
-Lowering that reading-and-holding cost is the goal. The verdict is this cost, not any single metric.
+Lowering that reading-and-holding cost is the goal.
 
 ## Jumps Are Cheap; Reading Is Expensive
 
@@ -21,12 +21,11 @@ A jump to another unit is nearly free when the reader can judge that unit's rele
 What is expensive is having to read a lot to find or understand the target.
 So prefer reducing how much must be read over reducing how many hops. Many small skippable units beat few large ones.
 A predictable jump to a small file inside a clear owner folder is often navigation relief, not navigation cost.
-Resist the pull to inline or merge responsibilities just to remove a hop; that trades a cheap jump for expensive reading.
 
-Follow single responsibility closely, with pragmatic limits: split by distinct responsibility so each unit can be judged and skipped on its own; do not shatter one indivisible behavior across units that must all be read together to understand it.
+Split by distinct responsibility so each unit can be judged and skipped on its own.
 
 A unit is a function, not only a file. Split at the smallest level that restores skippability. Same-file helpers are a first readability step, not proof that a large file should remain whole; in a large file, stable named helpers or subunits often become split candidates.
-A unit's name is its skippability test: if it cannot be named by its result or role without "and", "or", or a list of steps, it holds more than one responsibility.
+The naming test: a unit that cannot be named by its result or role without "and", "or", or a list of steps holds more than one responsibility.
 
 ## What Lowers the Cost
 
@@ -38,15 +37,15 @@ A unit's name is its skippability test: if it cannot be named by its result or r
 
 ## Hard Triggers
 
-Four signals are alarm bells, not mere smells. Past these thresholds the default verdict is that cleanup, extraction, or routing is needed, and the burden of proof inverts onto keeping the code as-is:
+Four signals are alarm bells, not soft signals. Past these thresholds the default verdict is that cleanup, extraction, or routing is needed, and the burden of proof inverts onto keeping the code as-is:
 
 - nesting deeper than function -> block -> block
 - a function or method past roughly 20-30 logical lines
-- a source file past roughly 300 LOC (prefer file-level split unless a strong named exemption applies).
+- a source file past roughly 300 LOC.
   This trigger fires only on implementation source; prose documentation and Markdown are never file-length candidates and are judged by their own documentation lenses.
-- a directory at or past roughly 10 direct real source files with no sub-grouping (group one owner family into a named owner folder, or hand the directory off to the route that owns that move).
+- a directory at or past roughly 10 direct real source files with no sub-grouping (group one owner cluster into an owner folder, or route the directory to the skill that owns that move).
   Count only non-generated implementation sources in the target language; barrels, re-export files, generated files, fixtures, snapshots, and tests do not count.
-  This trigger reads the directory, not the unit being split: it fires whether or not the current owner group passes the placement guardrails.
+  This trigger reads the directory, not the unit being split or moved: it fires whatever the active skill's placement rules decide for that unit.
 
 Past a hard trigger, `keep as-is` or "no finding" is allowed only by explicitly naming one of these exemptions:
 
@@ -55,10 +54,10 @@ Past a hard trigger, `keep as-is` or "no finding" is allowed only by explicitly 
 - data tables, constants, schemas, or generated code
 - one indivisible behavior that flattening or splitting would force readers to reassemble across units
 - for file length only: one indivisible owner with no stable internal bug/change targets; named helpers alone do not qualify
-- for directory population only: every file there already belongs to one owner, or no candidate owner family in it has three or more members
+- for directory population only: every file there already belongs to one owner, or no owner cluster in it has three or more members
 
-No named exemption, no absolution. The test below still decides the remedy: guard clauses or same-file helpers for function-level pressure; file-level split is the default remedy for file-length pressure.
-Report any finding past a hard trigger as a real hotspot. Do not minimize it with words like "minor", "light", "not yet serious", or "someday"; severity hedging is a form of downranking and is treated as a violation of this rule.
+No named exemption, no absolution. The test above still decides the remedy: guard clauses or same-file helpers for function-level pressure; file-level split is the default remedy for file-length pressure.
+Report any finding past a hard trigger at its trigger-defined severity. Do not minimize it with words like "minor", "light", "not yet serious", or "someday"; severity hedging is a form of downranking and is treated as a violation of this rule.
 
 ## Report And Action Are Separate
 
@@ -68,17 +67,17 @@ Widening the pass solely to remedy it, or dropping or softening the finding, are
 
 ## Soft Signals Are Not the Verdict
 
-Treat hop count, scattered files, and other distance or count signals, except the file-length and directory-population hard triggers above, as smells that prompt the test, never as the decision.
+Treat hop count, scattered files, and other distance or count signals, except the file-length and directory-population hard triggers above, as soft signals that prompt the test, never as the decision.
 When a soft signal and the test disagree, the test wins.
 A stable, well-named owner that tells a maintainer where to look can stay even when soft counts look high; a short file can still fail the test when it hides where behavior lives.
 
 ## What Counts as a Regression
 
-A change that satisfies a smell but raises reading cost is not a cleanup.
-Do not inline distinct responsibilities, hide ordering, or merge owners just to cut hops or shorten a call chain.
+A change that satisfies a soft signal but raises reading cost is not a cleanup.
+Do not inline distinct responsibilities, hide ordering, or merge owners just to cut hops or shorten a call chain; that trades a cheap jump for expensive reading.
 Equally, do not split one indivisible behavior into units that must all be read together, or scatter an owner so its pieces become unpredictable to locate.
 
 ## Proportionality
 
-Act only where the test shows real cost in the touched scope.
+Act only where the test shows real cost within the scope the active skill defines.
 Code that is already clear, cohesive, and proportionate is done.

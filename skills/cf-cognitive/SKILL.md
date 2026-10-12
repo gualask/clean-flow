@@ -24,12 +24,12 @@ Do not infer execution from words like "review", "check", "is this complex", or 
 Default to the bundled `scripts/repo-tree.mjs` before manual exploration: resolve it from the active skill root, never from the project working directory. Run it with `--depth 3` for the layout, then with `--largest 15`, adding `--include` for the source directories, for the candidate files.
 Read the candidate files and rank functions, not files, by both function triggers, length and nesting depth: keep a ranked shortlist of at most three functions, each with file, line, and the hard trigger it fires, and do not add weak candidates just to reach three.
 Give the file-length verdict for each candidate file past that trigger.
-Keep a candidate that fires a hard trigger on the shortlist unless a recognized exemption clears it.
+Keep a candidate that fires a hard trigger on the shortlist unless a named exemption clears it.
 If there is no real hotspot, report that no good local candidate was found.
 
 **Targeted evaluation** — use when explicit file targets were provided and the request asks to review, assess, evaluate, or decide whether cleanup is worthwhile. Do not edit files.
 Classify each target as `recommended`, `optional`, `keep as-is`, or `route`.
-Default to `recommended` whenever a hard trigger is past its threshold; use `optional` or `keep as-is` for such a target only by naming one of its recognized exemptions.
+Default to `recommended` whenever a hard trigger is past its threshold; use `optional` or `keep as-is` for such a target only by naming one of its exemptions.
 When the file-length trigger fires, include an explicit file-size verdict: `route` to `cf-split` or the named exemption that justifies its size.
 
 **Execution** — use when the request explicitly asks to refactor, reduce, clean up, fix cognitive complexity, or says to proceed on named targets or a confirmed discovery candidate. Read references/local-refactor-rules.md.

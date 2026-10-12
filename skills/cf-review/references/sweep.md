@@ -50,7 +50,7 @@ Check documents that reference changed files. Report each path, symbol, signatur
 
 ## Structure
 
-`references/navigation-cost.md` owns thresholds, naming, exemptions, and remedies for lenses 8, 9, and 12.
+`references/navigation-cost.md` owns thresholds, the naming test, exemptions, and remedies for lenses 8, 9, and 12.
 
 ### Lens 7 — Declared Invariants
 
@@ -72,7 +72,7 @@ A file trigger produces one file finding; leave its internal inventory to the sk
 
 Route: `cf-cohesion`
 
-Report a file added, moved, or renamed outside the owner cluster implied by its role, imports, and callers; a workflow spread further across type folders or siblings; or a new file in a catch-all bucket. Apply the placement test from `references/navigation-cost.md`; similar names alone do not establish cohesion.
+Report a file added, moved, or renamed outside the owner cluster implied by its role, imports, and callers; a workflow spread further across type folders or siblings; or a new file in a catch-all bucket. Judge it with the test in `references/navigation-cost.md`; similar names alone do not establish cohesion.
 
 For every directory where the change set added, moved, or renamed a file, run bundled `scripts/dir-population.mjs`, resolved from the active skill root and never from the project working directory, with one `--include` per such directory; do not write a count of your own. A directory it marks is a finding under the directory-population hard trigger unless a named exemption applies.
 

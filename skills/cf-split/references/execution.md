@@ -33,5 +33,5 @@ If a relevant check fails, apply the regression-handling contract loaded for the
 
 Use the standard output format.
 For **Decision**, report the split performed: each new file with the test file that now covers it, or `no tests`.
-For **Deferred**, after edits use the finding content required by references/navigation-cost.md; include an owner group kept flat for module or package boundaries.
+For **Deferred**, after edits use the finding content required by references/navigation-cost.md; include an owner cluster kept flat for module or package boundaries.
 For **Result**, include behavior preservation, final placement decision, remaining risk, and next action. Claim behavior preservation only when that test command passed; otherwise say it is not verified by tests.

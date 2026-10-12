@@ -12,7 +12,7 @@ Every finding carries this information. The shape is free; the content is not. A
 - **impact**: who or what else is affected, when that is not obvious from the claim.
 - **confidence**: high, medium, or low, followed by what it rests on — what was read, what was inferred, what was not checked.
 - **introduced**: whether the change set created this or found it already there.
-- **exemption**: for a hard trigger, the recognized exemption considered and why it does not apply.
+- **exemption**: for a hard trigger, the named exemption considered and why it does not apply.
 - **route**: the skill named by the lens that fired.
 - **status**: `candidate`, always. Confirming a finding, ruling it out, or fixing it belongs to the skill on its route.
 
