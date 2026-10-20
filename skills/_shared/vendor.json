@@ -4,6 +4,9 @@
     "cf-architecture": {
       "references": [
         "design-spec-lifecycle.md"
+      ],
+      "scripts": [
+        "variant-history.mjs"
       ]
     },
     "cf-cognitive": {
