@@ -7,7 +7,7 @@ The draft → spec cycle shared by the skills that turn a design conversation in
 - One working draft, `.cflow/specs/draft.md`, whichever skill owns it: only one design can be in progress at a time.
 - On explicit approval of the draft, promote it by renaming it to `.cflow/specs/<YYYY-MM-DD>-<topic>.md`; a user-stated location overrides this path.
 - Before creating the draft, create `.cflow/` if needed and write `.cflow/.gitignore` containing a single `*` line if missing; never edit the repository `.gitignore`.
-- Specs are ephemeral by design: a spec serves the implementation and is discarded once the implementation ships. When the user reports it shipped, offer to fold the spec's durable knowledge into project docs via `cf-docs`, then delete the spec file.
+- Specs are ephemeral by design: a spec serves the implementation and is discarded once the implementation ships. When the user reports it shipped, offer to fold the spec's durable knowledge into project docs via `cf-docs`; delete the spec file once the docs are updated or the user declines the offer.
 - Do not read, create, or update other `.cflow/*` artifacts.
 
 ## Resume Check

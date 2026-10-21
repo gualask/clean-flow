@@ -22,7 +22,7 @@ If files or symbols were moved, renamed, split, merged, removed, relocated, or r
 
 ## Output Format
 
-Return sections: **Current state**, **Work unit executed**, **Checks run**, **Artifacts updated**, **What remains**, **Next action**.
+Return sections: **Current state**, **Work unit executed**, **Checks run**, **Artifacts updated**, **What remains**, **Recommended next action**.
 
 ## Artifact Updates
 

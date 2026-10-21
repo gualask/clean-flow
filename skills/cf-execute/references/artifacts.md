@@ -25,7 +25,7 @@ When planning a new spec over an existing plan that is not live:
 When creating or updating the execution plan:
 
 - create from `assets/execution-plan.template.md` when missing or when planning a new spec
-- update in place only for live resume or the same approved plan
+- update in place only for live resume or the same accepted plan
 - update the phase-specific fields named by the active phase
 - preserve unrelated live-resume fields unless evidence makes them stale
 - keep user decisions, constraints, exclusions, and open unknowns explicit

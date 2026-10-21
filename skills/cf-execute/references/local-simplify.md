@@ -6,10 +6,10 @@ Do not reopen repository architecture in this phase.
 
 ## Required Inputs
 
-- recently completed bounded structural step, or explicit local touched area
+- recently completed bounded structural step, or explicit local touched scope
 - clear local simplification scope
 
-If required inputs are missing, stop with `Next action: return to planning or review`.
+If required inputs are missing, stop with `Recommended next action: return to planning or review`.
 
 ## Goal
 
@@ -21,7 +21,7 @@ Before editing code, ensure you have read references/local-refactor-rules.md in 
 ## Rules
 
 - Preserve behavior.
-- Keep the simplification local to the touched area.
+- Keep the simplification local to the touched scope.
 - Improve local readability, not architecture labels.
 - Apply the shared local refactor rules for naming, control flow, helper shape, and hot-path caution.
 - Do not create new files or abstractions unless they clearly reduce local complexity.
@@ -31,7 +31,7 @@ Before editing code, ensure you have read references/local-refactor-rules.md in 
 
 ## Output format
 
-Return sections: **Current state**, **Local simplifications applied**, **Checks run**, **Artifacts updated**, **What remains**, **Next action**.
+Return sections: **Current state**, **Local simplifications applied**, **Checks run**, **Artifacts updated**, **What remains**, **Recommended next action**.
 
 ## Artifact updates
 

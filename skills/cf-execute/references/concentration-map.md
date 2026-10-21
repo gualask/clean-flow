@@ -6,7 +6,7 @@ Do analysis first. Do not implement in this phase.
 
 Map **concentration pressure**.
 
-When the scope is a bounded local seam, do the local mapping that must exist before a safe split-oriented refactor:
+Do the local mapping of the unit's touched scope that must exist before a safe split-oriented refactor:
 
 - hidden workflows
 - role classification:
@@ -28,23 +28,18 @@ Look for:
 
 ## Required Inputs
 
-- live plan or explicit local/repo-level scope
+- live plan and the accepted unit's touched scope
 - selected split-oriented pressure or unit
 
 ## Analyze in this order
 
-1. Identify whether the scope is repo-level or a bounded local seam.
-2. Identify dense seams or the current choke point.
-3. Identify distinct workflows hiding inside the scope.
-4. Identify which responsibilities are mixed.
-5. Classify the code into entry points, orchestration, integrations, and pure logic.
-6. Identify what should stay local and what, if anything, has real shared ownership.
-7. Decide whether the safest action is:
-   - split
-   - keep local and leave it alone
-   - defer because the seam is not yet worth touching
-8. If split is justified, state the safest split direction for this seam.
-9. If split is not justified, do not route into safety-net or structural execution from this phase.
+1. Identify dense seams or the current choke point.
+2. Identify distinct workflows hiding inside the scope.
+3. Identify which responsibilities are mixed.
+4. Classify the code into entry points, orchestration, integrations, and pure logic.
+5. Identify what should stay local and what, if anything, has real shared ownership.
+6. The unit's move is the spec's decision; mapping does not re-decide it. If the map shows the split would not drop pressure, because no hidden workflow or mixed role separates or the new boundary would be generic, speculative, or harder to follow, record the conflict with the spec in `Decision notes` and ask; do not route into safety-net or structural execution.
+7. Otherwise state the safest split direction for this seam.
 
 ## Output format
 

@@ -5,7 +5,7 @@ Use after mapping and before structural edits.
 ## Required Inputs
 
 - live plan or explicit local behavior-preserving scope
-- named work unit, cohesive unit, or refactoring surface
+- named work unit and its touched scope
 
 If required inputs are missing, stop with `Go / no-go: no-go; planning inputs missing`.
 Do not invent a broader cleanup direction in this phase.
@@ -14,7 +14,7 @@ Do not invent a broader cleanup direction in this phase.
 
 Lock behavior proportionate to refactor risk. Keep it targeted to the change shape, affected contracts, and plausible failures.
 
-## Refactoring surface
+## Touched scope
 
 Name what the next move may disturb:
 
@@ -23,7 +23,7 @@ Name what the next move may disturb:
 - touched workflow, module, or feature area
 - observable behavior that must remain stable
 
-If the surface is unclear, route back.
+If the scope is unclear, route back.
 
 ## Choose the lock
 
@@ -44,7 +44,7 @@ Characterization tests lock current behavior, not ideal behavior.
 
 ## Required output
 
-Return sections: **Refactoring surface**, **Behavior to lock**, **Existing protections**, **Added or recommended protections**, **Remaining gaps**, **Go / no-go and recommended next action**.
+Return sections: **Touched scope**, **Behavior to lock**, **Existing protections**, **Added or recommended protections**, **Remaining gaps**, **Go / no-go**, **Recommended next action**.
 
 ## Artifact updates
 

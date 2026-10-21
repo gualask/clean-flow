@@ -6,7 +6,7 @@
 - credible safety lock
 - mapped fragmentation seam and artificial boundary
 
-If required inputs are missing, stop with `Next action: complete mapping or safety net first`.
+If required inputs are missing, stop with `Recommended next action: complete mapping or safety net first`.
 - If there is no credible safety lock for the current structural move, stop and route to safety-net first.
 - If the target boundary may be real, route to fragmentation-map before editing.
 - Before editing, ensure you have read references/navigation-cost.md in this invocation; that test decides consolidation value, not hop count.

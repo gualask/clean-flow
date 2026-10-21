@@ -2,14 +2,14 @@
 
 ## Required Inputs
 
-- completed unit or touched area
+- completed unit or touched scope
 - checks, risks, or behavior surface to verify
 
 If required inputs are missing, stop with `Recommended next action: return to planning or review`.
 
 ## Goal
 
-Collect risk-proportionate factual evidence that the touched area still works.
+Collect risk-proportionate factual evidence that the touched scope still works.
 
 ## Rules
 

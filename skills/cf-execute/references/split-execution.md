@@ -6,7 +6,7 @@
 - credible safety lock
 - mapped seam with workflows, roles, and split direction
 
-If required inputs are missing, stop with `Next action: complete mapping or safety net first`.
+If required inputs are missing, stop with `Recommended next action: complete mapping or safety net first`.
 - If there is no credible safety lock for the current structural move, stop and route to safety-net first.
 - If the seam is not mapped enough to name workflows, roles, and split direction, route to concentration-map.
 
@@ -21,7 +21,7 @@ Split when:
 - callers must know too much local detail
 - what moves and what stays is clear
 
-Do not split just because a file is large. If the new boundary would be generic, speculative, or harder to follow than the current code, leave it alone or route back to mapping.
+Do not split just because a file is large. If the new boundary would be generic, speculative, or harder to follow than the current code, record the conflict with the spec in `Decision notes` and ask instead of splitting.
 
 ## Split criteria
 
@@ -56,13 +56,13 @@ After compile/checks, ask:
 - Did the main workflow become easier to scan, or did the change only move bulk into a new file?
 - Does each new file have one stable local reason to exist?
 - Are private companion files grouped with their owner instead of advertised as broadly reusable peers?
-- Did the split reveal another capability in the same touched area?
+- Did the split reveal another capability in the same touched scope?
 - Is it same-unit continuation or separate follow-up?
 
 Apply clear placement fixes caused by this split when behavior-preserving.
 Apply or record same-unit follow-up covered by the same safety net.
 If follow-up widens scope, needs new safety, or changes the unit, record it for a new unit.
-Do not return `Next action: none` while a clear structural follow-up remains in the touched area.
+Do not return `Recommended next action: none` while a clear structural follow-up remains in the touched scope.
 
 ## Before finishing
 

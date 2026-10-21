@@ -19,7 +19,7 @@ Judge candidates with references/navigation-cost.md: jumps into skippable single
 
 ## Required Inputs
 
-- live plan or explicit local/repo-level scope
+- live plan and the accepted unit's touched scope
 - selected consolidation-oriented pressure or unit
 
 ## Analyze in this order
@@ -28,11 +28,7 @@ Judge candidates with references/navigation-cost.md: jumps into skippable single
 2. Identify which files or modules do too little to justify their existence.
 3. Identify whether the boundary is semantically real or artificial.
 4. Measure the indirection cost in human terms: how much must be read to understand one simple workflow, counting only hops the reader cannot skip from names and roles.
-5. Decide whether the safest action is:
-   - consolidate
-   - leave it alone
-   - defer because the seam is not yet worth touching
-6. If consolidation is not justified, do not route into safety-net or structural execution from this phase.
+5. The unit's move is the spec's decision; mapping does not re-decide it. If the map shows the boundary is real or the consolidation would not drop reading cost, record the conflict with the spec in `Decision notes` and ask; do not route into safety-net or structural execution.
 
 ## Output format
 

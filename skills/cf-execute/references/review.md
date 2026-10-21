@@ -4,11 +4,11 @@ Do review only. Do not make structural edits unless explicitly asked.
 
 ## Required Inputs
 
-- completed step or touched area
+- completed step or touched scope
 - current files relevant to the completed work
 
 If required inputs are missing, stop with `Recommended next action: return to planning or verification`.
-For closure challenges, review current files, untracked files, and dense extracted owners.
+When the user challenges a unit marked done (a closure challenge), review current files, untracked files, and dense extracted owners.
 
 ## Goal
 

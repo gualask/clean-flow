@@ -66,7 +66,7 @@ Use for a unit authorized by rule 2.
   - lock the behavior that must not change: references/safety-net.md
   - implement what the unit and the spec describe, with tests for the behavior it introduces
   - close: references/structural-closure.md
-- optional touched-area cleanup: references/local-simplify.md
+- optional touched-scope cleanup: references/local-simplify.md
 
 ### Review Or Verify
 

@@ -31,7 +31,7 @@ Return sections: **Planning scope**, **Candidate work units**, **Ordering logic*
 
 ## Artifact updates
 
-Apply `artifacts.md` only for approved artifact-backed planning.
+Apply `artifacts.md` only when planning an approved spec.
 Phase-specific fields:
 
 - `Work units`
