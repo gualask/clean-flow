@@ -2,54 +2,28 @@
 name: cf-cognitive
 description: Find or refactor local source-file cognitive complexity hotspots while preserving behavior. Use when a function or file is hard to read or reason about — overloaded functions, deep nesting, tangled branching, local readability pressure — with or without explicit file targets. Do not use to split a file into new files (cf-split) or for repository-wide refactors (cf-architecture).
 ---
-Reduce real cognitive complexity in local source files while preserving behavior.
-Use this for up to three source files per session, processed one file at a time.
-Do not bootstrap or require `.cflow/` artifacts.
+Find or reduce cognitive complexity in local source files while preserving behavior.
 
-Before applying any flow, read references/navigation-cost.md; it owns the hard-trigger values, exemptions, and remedy rules.
-Count nesting as the control blocks inside a function — every `if`, loop, `switch`, `select`, or `try`, including one that only guards a `break` or `return`; a third nested block fires the trigger.
-The file-length verdict is `route` to `cf-split`, or the named exemption that justifies the file's size.
+Route elsewhere instead of working here, and when routing do not edit files: `cf-split` for extracting responsibilities from one file into new files; `cf-cohesion` for regrouping related files; `cf-architecture` for module boundaries, ownership moves, or moving code into another package or module, even when the request names the destination.
 
-Route elsewhere instead of working here: `cf-split` for file-level split review or extraction from one source file; `cf-cohesion` for cross-file placement, navigation cost, or related files that may need a local feature slice; `cf-architecture` for repository structure, module boundaries, moving code into another package or module, ownership moves, or broad multi-file refactors, even when the request names the destination.
-When routing, do not edit files: name the route and the reason in **Result**, and end the turn.
+Measure before judging: run a command that prints, for every function in the files in scope, its logical lines and its deepest nesting of control blocks. Count nesting as the control blocks inside a function — every `if`, loop, `switch`, `select`, or `try`, including one that only guards a `break` or `return`; a third nested block fires the trigger. Read references/navigation-cost.md for the thresholds, the named exemptions that allow `keep as-is` past a threshold, the file-length verdict, and the report/action rule.
 
-## Flow Selection
+- **Discovery** (no file named): run the measure over the source files of the area, rank functions by nesting then length, and report a shortlist of at most three with file, line, and the trigger each fires. Do not edit.
+- **Evaluation** (a file named, asked whether it is worth cleaning): classify it `recommended`, `optional`, `keep as-is`, or `route`, naming the exemption when a trigger fires and the verdict is not `recommended`; for a long function, say what the four tests of Execution would extract, or which test keeps it whole; give the file-length verdict. Do not edit.
+- **Execution** (asked to reduce, refactor, or fix): stay inside the file, do not create files or move responsibilities to shared utilities. Flatten the main path first (guard clauses, early returns). Then shape the code top-down with four tests:
+  - **level**: the function that orchestrates a behavior reads as a list of steps at one level of abstraction; what sits below that level moves to named functions placed below it in call order, as long as the caller can be read without opening them (when it cannot, the two are conjoined and stay together).
+  - **owner**: when state outlives a single step, because callbacks, threads, or later calls read and change it (flags, timers, handles, a running process), give it one named owner that hides it. Write its release once, next to where it is acquired, so that every exit path reaches it, errors included; use the form the language and the repository use for that: a destructor or drop guard, `defer`, a `with`, `using`, or try-with-resources block, or a `stop` operation called from the cleanup of a lifecycle callback (a UI effect, a test fixture, a request handler). The orchestration still reads how the behavior starts and how it stops. Do not hand the whole lifecycle to the owner as one call, and do not leave the state in the orchestration. Locals that one step builds and returns need no owner.
+  - **pure core**: a computation that only uses its inputs leaves the code that touches the outside world (timers, I/O, state, framework calls) as a named pure function; the call stays where it is and receives the computed value.
+  - **consistency**: shape every extraction with the forms the file and the repository already use (how they declare inner and top-level functions, how they build stateful owners, how they name) before choosing a form of your own. When a repository form and the call order of **level** clash, keep the repository form; the orchestration already gives the top-down reading.
 
-Choose exactly one flow.
-Discovery and targeted evaluation flows do not edit repository files.
-If the target, flow, or requested outcome is ambiguous, ask one focused question.
-If the request names more than three target files, ask which three to take before editing.
-Do not infer execution from words like "review", "check", "is this complex", or "should we clean this up".
-
-**Discovery** — use when no explicit file target was provided. Do discovery only. Do not edit files.
-Default to the bundled `scripts/repo-tree.mjs` before manual exploration: resolve it from the active skill root, never from the project working directory. Run it with `--depth 3` for the layout, then with `--largest 15`, adding `--include` for the source directories, for the candidate files.
-Read the candidate files and rank functions, not files, by both function triggers, length and nesting depth: keep a ranked shortlist of at most three functions, each with file, line, and the hard trigger it fires, and do not add weak candidates just to reach three.
-Give the file-length verdict for each candidate file past that trigger.
-Keep a candidate that fires a hard trigger on the shortlist unless a named exemption clears it.
-If the shortlist is empty, report that no good local candidate was found.
-
-**Targeted evaluation** — use when explicit file targets were provided and the request asks to review, assess, evaluate, or decide whether cleanup is worthwhile. Do not edit files.
-Classify each target as `recommended`, `optional`, `keep as-is`, or `route`.
-Default to `recommended` whenever a hard trigger is past its threshold; use `optional` or `keep as-is` for such a target only by naming one of its exemptions.
-When the file-length trigger fires, include the file-length verdict.
-
-**Execution** — use when the request explicitly asks to refactor, reduce, clean up, fix cognitive complexity, or says to proceed on named targets or a confirmed discovery candidate. Read references/local-refactor-rules.md.
-Before editing, run a command that prints the logical lines and deepest nesting of every function in the target file; if none fires a hard trigger, do not edit: say so in **Assessment** and ask whether a minor cleanup is still wanted.
-Keep changes inside the target file, and do not move responsibilities to new files or shared utilities.
-Do not continue past the target files or past three files in one session.
-Flatten the target function's main path first, and treat anonymous callbacks passed to registration or lifecycle APIs as part of the local cognitive load when they carry real behavior.
-Run the smallest relevant check: targeted tests, typecheck or compile, lint, or a narrow smoke check.
-Then run the tests that cover the target with the repository's test runner.
-After the edits, run a command that prints the logical lines and deepest nesting of every function in each modified file, and the file's line count; apply the report/action rule in references/navigation-cost.md to every hard trigger still firing.
+  A long function that passes all four tests stays as it is. Run the tests that cover the file with the repository's test runner, then measure again.
 
 ## Output Format
 
 Return only:
 
-- **Scope**: flow and target files, or discovery area.
-- **Assessment**: the shortlist, each target's classification, or the target functions addressed.
-- **Changes**: edits made, or `none` for discovery/evaluation.
-- **Checks**: commands run and pass/fail result; the test command and its result, or `tests not run` with the reason.
-- **Defects**: behavior defects noticed while reading the target, with file and line. `none` is a claim that the code you read matches its documented rules — name what you checked it against.
-- **Deferred**: only after execution edits; findings required by the report/action rule in references/navigation-cost.md. Omit this section when no cleanup ran and in discovery or targeted evaluation.
-- **Result**: behavior preservation, remaining risk, and `cf-split` or `cf-cohesion` next step when relevant. Claim behavior preservation only when that test command passed; otherwise say it is not verified by tests.
+- **Assessment**: shortlist, classification, or the functions addressed, with the measures before and after; after execution, each unit extracted or kept whole with the test that decided it.
+- **Checks**: commands run and results; the test command and its result, or `tests not run` with the reason.
+- **Defects**: behavior defects noticed against the code's documented rules, with file and line, or `none` naming what you checked against.
+- **Deferred**: after execution only, per the report/action rule.
+- **Result**: behavior preservation claimed only when the tests passed; next step when a route applies.

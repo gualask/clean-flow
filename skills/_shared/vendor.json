@@ -11,11 +11,7 @@
     },
     "cf-cognitive": {
       "references": [
-        "local-refactor-rules.md",
         "navigation-cost.md"
-      ],
-      "scripts": [
-        "repo-tree.mjs"
       ]
     },
     "cf-cohesion": {

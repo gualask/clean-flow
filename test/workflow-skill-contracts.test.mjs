@@ -69,11 +69,11 @@ test("cognitive routes to split and cohesion up front, not by post-edit conditio
   // identical input, and no bed ever exercised either clause.
   assert.match(
     cognitiveContract,
-    /Route elsewhere instead of working here: `cf-split`.*`cf-cohesion`.*`cf-architecture`/s,
+    /Route elsewhere instead of working here, and when routing do not edit files: `cf-split`.*`cf-cohesion`.*`cf-architecture`/s,
   );
   assert.match(
     cognitiveContract,
-    /`cf-split` or `cf-cohesion` next step when relevant/,
+    /next step when a route applies/,
   );
   for (const contract of [cognitiveContract, flowDoc]) {
     assert.doesNotMatch(contract, /After editing a target file, route to/);

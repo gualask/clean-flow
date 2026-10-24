@@ -58,6 +58,7 @@ For non-runtime files, check that the change does not move runtime behavior into
 ## Refactor Decision Principle
 
 - Cflow's mission is obsessive pursuit of the cleanest practical structure: maximum domain and ownership clarity, minimum justified ceremony, and no boilerplate that does not pay for a real boundary or risk.
+- Ground every refactor or structure principle in the established software-engineering literature, and cite the source in the `docs/` mirror. Treat that literature as a strong prior, not as absolute truth: its authors reasoned at length from deep experience, so a principle that departs from it needs evidence of why, such as a tool or a constraint that changed since it was written or a measured trial; that an alternative looks better is not evidence.
 - Cleanliness is the default: optimize for the cleanest evidence-backed structure that fits the repository and request, not for the easiest or lowest-impact change.
 - Treat cognitive impact as bug-localization cost first: stable named owners that show where to inspect for likely bugs can override anti-overengineering heuristics such as flat defaults, file-count thresholds, or low-churn preference.
 - Open architecture reasoning by locating critical complexity; then define ownership, workflows, boundaries, invariants, dependency pressure, and packaging. Current structure is evidence and migration inventory, not the target to preserve.

@@ -56,10 +56,11 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
     assert.match(navigationCost, new RegExp(field));
   }
   assert.match(navigationCost, /Widening the pass solely to remedy it/);
-  for (const contract of [cohesionContract, splitContract, cognitiveContract]) {
+  for (const contract of [cohesionContract, splitContract]) {
     assert.match(contract, /\*\*Deferred\*\*: only after execution edits/);
     assert.match(contract, /Omit this section when no .* ran/);
   }
+  assert.match(cognitiveContract, /- \*\*Deferred\*\*: after execution only, per the report\/action rule\./);
   // The report/action rule is owned by navigation-cost.md, asserted above, and reaches a
   // split through the mandatory Deferred slot rather than through a restated clause.
   for (const execution of [splitExecution]) {
@@ -70,7 +71,7 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
   // asserted on the contract itself rather than on a per-flow reference file.
   assert.match(
     cognitiveContract,
-    /report\/action rule in references\/navigation-cost\.md/,
+    /references\/navigation-cost\.md for the thresholds.*the report\/action rule/,
   );
   for (const flow of [splitFlow, cognitiveFlow]) {
     assert.match(flow, /complete deferred finding required by the canonical navigation-cost contract/);
@@ -242,18 +243,17 @@ test("cognitive owns first-level reference loading in its skill contract", async
   );
   assert.match(
     cognitiveContract,
-    /Before applying any flow, read references\/navigation-cost\.md/,
+    /Read references\/navigation-cost\.md for the thresholds/,
   );
-  assert.match(
-    cognitiveContract,
-    /Read references\/local-refactor-rules\.md/,
-  );
+  // local-refactor-rules.md left cf-cognitive on 2026-10-24: its rules are the
+  // four tests in the body, and without it the lifecycle cell kept its shape.
+  assert.doesNotMatch(cognitiveContract, /local-refactor-rules\.md/);
   // The three per-flow reference files were merged into SKILL.md on 2026-08-16,
   // so the contract itself must carry all three flows and ship no flow file.
   for (const flow of [
-    /\*\*Discovery\*\* —/,
-    /\*\*Targeted evaluation\*\* —/,
-    /\*\*Execution\*\* —/,
+    /- \*\*Discovery\*\* \(/,
+    /- \*\*Evaluation\*\* \(/,
+    /- \*\*Execution\*\* \(/,
   ]) {
     assert.match(cognitiveContract, flow);
   }
@@ -266,15 +266,14 @@ test("cognitive owns first-level reference loading in its skill contract", async
   // nobody wrote `none` at all on the defective one.
   assert.match(
     cognitiveContract,
-    /- \*\*Defects\*\*: behavior defects noticed while reading the target, with file and line\. `none` is a claim/,
+    /- \*\*Defects\*\*: behavior defects noticed against the code's documented rules, with file and line, or `none` naming what you checked against\./,
   );
-  assert.match(cognitiveContract, /name what you checked it against\./);
   const shipped = await fs.readdir(
     path.join(SKILLS_ROOT, "cf-cognitive", "references"),
   );
   assert.deepEqual(
     shipped.filter((f) => f.endsWith(".md")).sort(),
-    ["local-refactor-rules.md", "navigation-cost.md"],
+    ["navigation-cost.md"],
   );
   assert.match(
     localRefactorRules,

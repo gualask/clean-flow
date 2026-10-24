@@ -37,10 +37,9 @@ The naming test: a unit that cannot be named by its result or role without "and"
 
 ## Hard Triggers
 
-Four signals are alarm bells, not soft signals. Past these thresholds the default verdict is that cleanup, extraction, or routing is needed, and the burden of proof inverts onto keeping the code as-is:
+Three signals are alarm bells, not soft signals. Past these thresholds the default verdict is that cleanup, extraction, or routing is needed, and the burden of proof inverts onto keeping the code as-is:
 
 - nesting deeper than function -> block -> block
-- a function or method past roughly 20-30 logical lines
 - a source file past roughly 300 LOC.
   This trigger fires only on implementation source; prose documentation and Markdown are never file-length candidates and are judged by their own documentation lenses.
 - a directory at or past roughly 10 direct real source files with no sub-grouping (group one owner cluster into an owner folder, or route the directory to the skill that owns that move).
@@ -67,7 +66,7 @@ Widening the pass solely to remedy it, or dropping or softening the finding, are
 
 ## Soft Signals Are Not the Verdict
 
-Treat hop count, scattered files, and other distance or count signals, except the file-length and directory-population hard triggers above, as soft signals that prompt the test, never as the decision.
+Treat hop count, scattered files, a function past roughly 20-30 logical lines, and other distance or count signals, except the file-length and directory-population hard triggers above, as soft signals that prompt the test, never as the decision.
 When a soft signal and the test disagree, the test wins.
 A stable, well-named owner that tells a maintainer where to look can stay even when soft counts look high; a short file can still fail the test when it hides where behavior lives.
 

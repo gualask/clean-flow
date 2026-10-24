@@ -38,8 +38,7 @@
         },
         "execution": {
           "required": [
-            "references/navigation-cost.md",
-            "references/local-refactor-rules.md"
+            "references/navigation-cost.md"
           ],
           "conditional": []
         }
