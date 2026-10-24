@@ -31,7 +31,6 @@ Report every finding with these fields:
 - `lens`
 - `claim`
 - `evidence`
-- `severity`
 - `impact`
 - `confidence`
 - `introduced`
@@ -41,6 +40,6 @@ Report every finding with these fields:
 - `false_positive_check`
 - `unknowns`
 
-`evidence` is exact file and line; `severity` is the level the lens rule assigns; `confidence` carries its basis; `introduced` says whether the change created it; `exemption` names the hard-trigger exemption considered and why it fails; give route `controller-owned` and status `candidate`; `false_positive_check` is the nearest counter-evidence checked.
+`evidence` is exact file and line; `confidence` carries its basis; `introduced` says whether the change created it; `exemption` names the hard-trigger exemption considered and why it fails; give route `controller-owned` and status `candidate`; `false_positive_check` is the nearest counter-evidence checked.
 
 List every lens in these rules as reporting, silent, or not applicable with the absent condition. Separately list every reference from this batch to another manifest path that may require cross-batch reconciliation, plus remaining unknowns. If no finding survives, say `Findings: none`. The controller owns cross-batch reconciliation, de-risking, the complete lens ledger, routes, and the shipping recommendation.

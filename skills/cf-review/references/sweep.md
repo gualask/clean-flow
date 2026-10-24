@@ -64,7 +64,7 @@ Exclude rules enforced by a configured linter, formatter, type checker, or test;
 
 Route: `cf-cognitive` for function-level pressure; `cf-split` for file-level pressure
 
-Apply the nesting and file-length hard triggers in `references/navigation-cost.md`; function length is one of its soft signals. Take file length from bundled `scripts/repo-tree.mjs`, resolved from the active skill root, with `--largest` set to the number of primary files and one `--include` per primary file.
+Apply the nesting and file-length hard triggers in `references/navigation-cost.md`. Report each changed function past 20 logical lines as a function finding routed to `cf-cognitive`, which decides whether anything moves; length is not a hard trigger, so it does not hold the result. Take file length from bundled `scripts/repo-tree.mjs`, resolved from the active skill root, with `--largest` set to the number of primary files and one `--include` per primary file.
 
 A file trigger produces one file finding; leave its internal inventory to the skill on its route. Report function triggers only for functions with changed code.
 

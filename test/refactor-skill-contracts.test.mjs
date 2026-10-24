@@ -47,7 +47,6 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
     "exact unit",
     "claim",
     "evidence",
-    "trigger-defined severity",
     "impact when not obvious",
     "confidence with its basis",
     "owning route",
@@ -55,6 +54,7 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
   ]) {
     assert.match(navigationCost, new RegExp(field));
   }
+  assert.doesNotMatch(navigationCost, /severity/i);
   assert.match(navigationCost, /Widening the pass solely to remedy it/);
   for (const contract of [cohesionContract, splitContract]) {
     assert.match(contract, /\*\*Deferred\*\*: only after execution edits/);

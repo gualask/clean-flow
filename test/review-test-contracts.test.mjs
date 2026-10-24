@@ -116,7 +116,6 @@ test("review owns reference loading and remains read-only", async () => {
       "lens",
       "claim",
       "evidence",
-      "severity",
       "impact",
       "confidence",
       "introduced",
@@ -158,7 +157,12 @@ test("review owns reference loading and remains read-only", async () => {
   assert.doesNotMatch(reviewContract, /local-refactor-rules\.md/);
   assert.doesNotMatch(sweep, /\bRead `?references\//);
   assert.doesNotMatch(sweep, /references\/reference-audit\.md/);
-  assert.match(handoff, /Severity belongs to the rule that fired/);
+  for (const contract of [handoff, reviewAgentBrief]) {
+    assert.doesNotMatch(contract, /severity/i);
+  }
+  assert.match(handoff, /introduced a finding from lens 1, 2, 3, 4, or 10, a lens 8 hard trigger/);
+  assert.match(sweep, /Report each changed function past 20 logical lines as a function finding routed to `cf-cognitive`/);
+  assert.match(sweep, /it does not hold the result/);
   assert.match(handoff, /hold for confirmation/);
   assert.match(handoff, /proceed with follow-up/);
   assert.match(handoff, /Use exactly one result for a non-empty finding set/);

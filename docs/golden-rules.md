@@ -48,9 +48,9 @@ For non-runtime files, check that the change does not move runtime behavior into
 
 ## Finding Content
 
-- When a skill, reference, or template records findings for later work, require every finding to carry claim, evidence, severity, impact, confidence with its basis, route, and status. Require the content; do not impose a serialization. Skills are single-writer by design, and a model reads several shapes at the same cost as one, so a shared format buys nothing while a shared checklist prevents real content gaps.
+- When a skill, reference, or template records findings for later work, require every finding to carry claim, evidence, impact, confidence with its basis, route, and status. Require the content; do not impose a serialization. Skills are single-writer by design, and a model reads several shapes at the same cost as one, so a shared format buys nothing while a shared checklist prevents real content gaps.
 - State impact only when it is not already obvious from the claim; state every other element explicitly, including when it does not apply.
-- Keep severity a property of the rule that fired, never of how recent, small, or easy to fix the finding looks. Age and effort belong in separate fields.
+- Never soften or drop a finding because it is old, small, or easy to fix; whether the change introduced it is its own field.
 - Apply the checklist to a template when that template is already being changed; do not open templates only to conform them.
 - Let a detecting skill report a violation only when the remedy is confined to a unit the finding can name. A smell whose fix propagates to every site sharing a shape does not converge: no single pass clears it, so it returns on every later pass until the output becomes noise a reader skips, while the propagating fix is itself the runaway-refactor failure these passes exist to prevent. Judge a candidate lens on that test, not on how objective its trigger looks.
 - When a detecting skill excludes a category on those grounds, name the excluded families and the rationalization in its runtime text. A category left unmentioned gets re-added by the next author who finds it useful.

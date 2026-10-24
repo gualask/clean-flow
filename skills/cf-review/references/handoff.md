@@ -8,7 +8,6 @@ Every finding carries this information. The shape is free; the content is not. A
 
 - **claim**: what is wrong, in one sentence, as a fact about the code.
 - **evidence**: a path with a line or range, or a command and the output it produced. No locatable evidence, no finding.
-- **severity**: the level assigned to the rule that fired by the mapping below.
 - **impact**: who or what else is affected, when that is not obvious from the claim.
 - **confidence**: high, medium, or low, followed by what it rests on — what was read, what was inferred, what was not checked.
 - **introduced**: whether the change set created this or found it already there.
@@ -16,17 +15,7 @@ Every finding carries this information. The shape is free; the content is not. A
 - **route**: the skill named by the lens that fired.
 - **status**: `candidate`, always. Confirming a finding, ruling it out, or fixing it belongs to the skill on its route.
 
-`severity` and `introduced` are independent. A pre-existing violation is not a lighter violation; it is the same violation with a different urgency. Do not hedge a hard-trigger finding with softening words, and do not let `introduced: no` become a reason to shrink it.
-
-## Severity
-
-Severity belongs to the rule that fired. Do not adjust it for age, confidence, change size, or ease of repair:
-
-- Lenses 1, 2, 3, 4, 8, and 10: `high`.
-- Lens 5: `high` when old and new reachable flows coexist or the change made runtime code unreachable; `medium` for a callerless compatibility shim or non-runtime leftover.
-- Lenses 6, 9, and 12: `medium`.
-- Lens 7: the declared level, or `medium` when none is stated.
-- Lens 11: `low`.
+A pre-existing violation is not a lighter violation; it is the same violation with a different urgency. Do not hedge a hard-trigger finding with softening words, and do not let `introduced: no` become a reason to shrink it.
 
 ## Grouping
 
@@ -55,7 +44,7 @@ Carry the quoted rule and its authoritative source, the changed behavior that ap
 
 Use exactly one result for a non-empty finding set:
 
-- **hold for confirmation**: at least one introduced `high` finding exists, or a declared invariant explicitly makes the violation blocking.
+- **hold for confirmation**: the change set introduced a finding from lens 1, 2, 3, 4, or 10, a lens 8 hard trigger, or a lens 5 transition that leaves old and new reachable flows side by side or makes runtime code unreachable; or a declared invariant explicitly makes the violation blocking.
 - **proceed with follow-up**: findings exist, but none meets the hold rule.
 
 State what must be confirmed; never present a finding as a confirmed shipping failure.
