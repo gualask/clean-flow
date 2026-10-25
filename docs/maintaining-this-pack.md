@@ -71,7 +71,6 @@ Public skill entrypoints:
 - `skills/cf-execute/references/split-execution.md`
 - `skills/cf-execute/references/consolidation-execution.md`
 - `skills/cf-execute/references/structural-closure.md`
-- `skills/cf-execute/references/local-simplify.md`
 - `skills/cf-execute/references/review.md`
 - `skills/cf-execute/references/verify.md`
 
@@ -79,8 +78,6 @@ Shared authoring references vendored into consuming skills:
 
 - `skills/_shared/references/design-spec-lifecycle.md`
 - `skills/_shared/references/navigation-cost.md`
-- `skills/_shared/references/local-refactor-rules.md`
-- `skills/_shared/references/local-readability-review.md`
 - `skills/_shared/references/file-split-rules.md`
 - `skills/_shared/references/reference-audit.md`
 - `skills/_shared/references/regression-handling.md`

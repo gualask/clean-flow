@@ -49,8 +49,6 @@
     "cf-execute": {
       "references": [
         "file-split-rules.md",
-        "local-readability-review.md",
-        "local-refactor-rules.md",
         "navigation-cost.md",
         "reference-audit.md",
         "regression-handling.md"

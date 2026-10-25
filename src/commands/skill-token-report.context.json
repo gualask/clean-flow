@@ -188,9 +188,6 @@
           ],
           "conditional": [
             "references/regression-handling.md",
-            "references/local-simplify.md",
-            "references/local-readability-review.md",
-            "references/local-refactor-rules.md",
             "references/artifacts.md",
             "assets/execution-plan.template.md"
           ]
@@ -206,9 +203,6 @@
           ],
           "conditional": [
             "references/regression-handling.md",
-            "references/local-simplify.md",
-            "references/local-readability-review.md",
-            "references/local-refactor-rules.md",
             "references/artifacts.md",
             "assets/execution-plan.template.md"
           ]
@@ -220,9 +214,6 @@
           ],
           "conditional": [
             "references/regression-handling.md",
-            "references/local-simplify.md",
-            "references/local-readability-review.md",
-            "references/local-refactor-rules.md",
             "references/reference-audit.md",
             "references/artifacts.md",
             "assets/execution-plan.template.md",
@@ -231,8 +222,7 @@
         },
         "review": {
           "required": [
-            "references/review.md",
-            "references/local-readability-review.md"
+            "references/review.md"
           ],
           "conditional": [
             "references/file-split-rules.md",

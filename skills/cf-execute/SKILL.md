@@ -66,7 +66,7 @@ Use for a unit authorized by rule 2.
   - lock the behavior that must not change: references/safety-net.md
   - implement what the unit and the spec describe, with tests for the behavior it introduces
   - close: references/structural-closure.md
-- optional touched-scope cleanup: references/local-simplify.md
+- touched-scope cleanup, only when the user asks for it: follow `cf-cognitive` on the touched scope
 
 ### Review Or Verify
 

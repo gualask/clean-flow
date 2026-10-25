@@ -225,6 +225,32 @@ test("execute defines unit modes once where both planning references are reached
   }
 });
 
+test("execute routes touched-scope cleanup to cognitive instead of carrying its own remedy", async () => {
+  const executeRoot = path.join(SKILLS_ROOT, "cf-execute");
+  const executeContract = await fs.readFile(path.join(executeRoot, "SKILL.md"), "utf8");
+  const unitExecution = /### Unit Execution\n([\s\S]*?)\n### /.exec(executeContract);
+  const shipped = await fs.readdir(path.join(executeRoot, "references"));
+
+  assert.ok(unitExecution, "cf-execute must keep a Unit Execution phase");
+  assert.match(
+    unitExecution[1],
+    /- touched-scope cleanup, only when the user asks for it: follow `cf-cognitive` on the touched scope/,
+  );
+  assert.doesNotMatch(executeContract, /local-simplify\.md|local-refactor-rules\.md/);
+  for (const gone of ["local-simplify.md", "local-refactor-rules.md", "local-readability-review.md"]) {
+    assert.ok(!shipped.includes(gone), `${gone} must not ship with cf-execute`);
+  }
+
+  // Review finds long functions and routes them, as cf-review's lens 8 does;
+  // the remedy stays in cf-cognitive and length never holds closure.
+  const review = await fs.readFile(path.join(executeRoot, "references", "review.md"), "utf8");
+  assert.match(
+    review,
+    /Report each function in the touched scope past 20 logical lines as a cleanup candidate routed to `cf-cognitive`, which decides whether anything moves; it never blocks closure\./,
+  );
+  assert.doesNotMatch(review, /local-readability-review\.md/);
+});
+
 test("brainstorm hands feature ownership to architecture through the shared lifecycle", async () => {
   const read = (...parts) => fs.readFile(path.join(...parts), "utf8");
   const brainstorm = await read(SKILLS_ROOT, "cf-brainstorm", "SKILL.md");

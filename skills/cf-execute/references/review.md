@@ -16,7 +16,7 @@ Judge whether the completed work realizes the accepted structural decisions and 
 
 ## Review lens
 
-Read references/local-readability-review.md before judging readability.
+Report each function in the touched scope past 20 logical lines as a cleanup candidate routed to `cf-cognitive`, which decides whether anything moves; it never blocks closure.
 If files moved, split, grouped, or renamed, read references/file-split-rules.md and references/navigation-cost.md before judging placement.
 
 Judge the result on four questions:
@@ -32,7 +32,7 @@ Before closure, run a second pass shaped by the actual change:
 
 - moved, renamed, newly related, or newly private files -> placement and cohesion
 - touched owner folders, nearby feature folders, or suspicious call-site vocabulary -> cohesion scan
-- large or dense extracted owners -> split and local readability
+- large or dense extracted owners -> split
 - public API, exports, imports, or barrel changes -> reference audit
 - async, lifecycle, persistence, user-visible, or cross-flow behavior -> verification / `cf-scenario`
 

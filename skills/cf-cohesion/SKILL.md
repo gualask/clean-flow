@@ -64,5 +64,5 @@ Return only:
 - **Cohesion map**: files considered, owner cluster, outliers, and nearby precedent; in discovery, the candidate shortlist with each directory's count.
 - **Decision**: the decision label; in discovery, `candidates` or `none`; after execution, `regrouped`.
 - **Checks**: commands run and pass/fail result, or why no check ran.
-- **Deferred**: only after execution edits; findings required by the report/action rule in references/navigation-cost.md. Omit this section when no regrouping ran and in discovery or targeted evaluation.
+- **Deferred**: only after execution edits; findings required by the report/action rule in references/navigation-cost.md, and each function past 20 logical lines in a file the regrouping modified as a finding routed to `cf-cognitive`, which decides whether anything moves. Omit this section when no regrouping ran and in discovery or targeted evaluation.
 - **Result**: behavior preservation, final placement decision, remaining risk, and next action. Claim behavior preservation only when those tests passed; otherwise say it is not verified by tests.

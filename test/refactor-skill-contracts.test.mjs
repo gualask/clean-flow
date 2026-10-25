@@ -67,6 +67,17 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
     assert.match(execution, /For \*\*Deferred\*\*, after edits/);
     assert.match(execution, /required by references\/navigation-cost\.md/);
   }
+  // Function length left the hard triggers on 2026-10-24, and with it the split's
+  // Deferred finding on a long function it leaves behind (1 run against 1). Split
+  // and cohesion report it the way cf-review's lens 8 and cf-execute's review do.
+  assert.match(
+    splitExecution,
+    /report each function past 20 logical lines in a file the split modified as a finding routed to `cf-cognitive`, which decides whether anything moves/,
+  );
+  assert.match(
+    cohesionContract,
+    /each function past 20 logical lines in a file the regrouping modified as a finding routed to `cf-cognitive`, which decides whether anything moves/,
+  );
   // cf-cognitive carries its execution flow in SKILL.md, so the same rule is
   // asserted on the contract itself rather than on a per-flow reference file.
   assert.match(
@@ -237,10 +248,6 @@ test("cognitive owns first-level reference loading in its skill contract", async
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
     "utf8",
   );
-  const localRefactorRules = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "local-refactor-rules.md"),
-    "utf8",
-  );
   assert.match(
     cognitiveContract,
     /Read references\/navigation-cost\.md for the thresholds/,
@@ -275,14 +282,5 @@ test("cognitive owns first-level reference loading in its skill contract", async
     shipped.filter((f) => f.endsWith(".md")).sort(),
     ["navigation-cost.md"],
   );
-  assert.match(
-    localRefactorRules,
-    /hard-trigger values, exemptions, and remedy rules come from `references\/navigation-cost\.md`/,
-  );
-  assert.match(
-    localRefactorRules,
-    /nested try\/catch blocks that make control flow hard to follow/,
-  );
   assert.doesNotMatch(cognitiveContract, /## Shared Triggers/);
-  assert.doesNotMatch(localRefactorRules, /read `references\/navigation-cost\.md`/i);
 });
