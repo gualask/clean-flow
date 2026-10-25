@@ -5,7 +5,6 @@ import test from "node:test";
 
 import {
   DOCS_ROOT,
-  REPO_ROOT,
   SHARED_REFERENCES_ROOT,
   SKILLS_ROOT,
   TERMINAL_AGENT_PROTOCOL,

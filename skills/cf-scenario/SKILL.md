@@ -20,6 +20,10 @@ Keep it lightweight. The goal is not a formal use-case document; the goal is to 
 - When the named change would alter stored data or its shape, say what happens to the rows that already exist: a field it introduces is absent on every one of them, and that absence is a user-visible behavior of its own.
 - When `cf-review` routes a requirement-alignment finding, verify the quoted authoritative source. Then trace each changed value from the changed line to the result a user sees, through every function that receives it, and write that trace as `file:line` steps; its last step is the actual behavior. Compare it with the source's expected behavior. Do not replace the source with product intuition or treat implementation code as the intended rule.
 
-## Output
+## Output Format
 
-Open with `**Decision:**` and exactly one of `make it`, `do not make it`, or `make it only if` followed by the condition. Then write `**Cost in other scenarios:**` with one line per scenario the named change touches, each with `file:line`.
+Return only:
+
+- **Decision**: exactly one of `make it`, `do not make it`, or `make it only if` followed by the condition.
+- **Cost in other scenarios**: one line per scenario the named change touches, each with `file:line`.
+- **Trace**: when `cf-review` routed the change, the `file:line` steps from the changed line to the result a user sees and how that result compares with the source; otherwise omit this slot.
