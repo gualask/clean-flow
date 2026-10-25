@@ -135,18 +135,13 @@ It closes the pass with a table pairing every name that crosses a boundary as a 
 
 ### `cf-cognitive`
 
-Finds or reduces local cognitive complexity in up to three source files.
+Finds or reduces local cognitive complexity in source files.
 Use it for overloaded functions, deep nesting, hard-to-scan branching, or local readability pressure.
 
-### `cf-split`
+### `cf-placement`
 
-Evaluates or performs a behavior-preserving split of one source file into nearby owned files.
-Use it when a file has grown past its natural responsibilities.
-
-### `cf-cohesion`
-
-Evaluates or performs local regrouping of already-related files.
-Use it when a workflow or feature is scattered across folders and navigation cost is the problem.
+Splits a source file that has grown too large into nearby files, or regroups scattered related files into one folder, preserving behavior.
+Use it when a file mixes responsibilities, when related files are hard to find, or to ask whether a file should be split or files should live together.
 
 ### `cf-review`
 
@@ -195,7 +190,7 @@ The normal lifecycle for a structural change or a new feature:
 5. review and verify
 6. resume from `.cflow/execution-plan.md` when needed
 
-For direct local work, use `cf-cognitive`, `cf-split`, or `cf-cohesion` instead.
+For direct local work, use `cf-cognitive` or `cf-placement` instead.
 To review what a set of changes exposes and route it, use `cf-review`: pending work before you commit, or a history range after the fact.
 To inspect assertion quality, run `cf-test` separately against the same pending work or named history range; `cf-review` does not classify tests or assess their assertions.
 For lightweight follow-up tracking from an analysis or working session, use `cf-todo`.
@@ -207,8 +202,7 @@ For lightweight follow-up tracking from an analysis or working session, use `cf-
 - [Mr Wolf flow](./docs/mr-wolf/doc-mr-wolf.flow.md)
 - [Scenario flow](./docs/scenario/doc-scenario.flow.md)
 - [Cognitive flow](./docs/cognitive/doc-cognitive.flow.md)
-- [Split flow](./docs/split/doc-split.flow.md)
-- [Cohesion flow](./docs/cohesion/doc-cohesion.flow.md)
+- [Placement flow](./docs/placement/doc-placement.flow.md)
 - [Review flow](./docs/review/doc-review.flow.md)
 - [Test flow](./docs/test/doc-test.flow.md)
 - [Docs flow](./docs/docs/doc-docs.flow.md)

@@ -1,6 +1,6 @@
 ---
 name: cf-execute
-description: "Plan and implement an approved spec — a structural change from cf-architecture or a feature from cf-brainstorm — or resume its `.cflow` execution plan. Use when the user asks to plan, execute, continue, or check work on an approved spec or an accepted execution plan. Do not use to assess or design architecture (cf-architecture), to design a feature (cf-brainstorm), or for a bounded local edit (cf-cognitive, cf-split, cf-cohesion)."
+description: "Plan and implement an approved spec — a structural change from cf-architecture or a feature from cf-brainstorm — or resume its `.cflow` execution plan. Use when the user asks to plan, execute, continue, or check work on an approved spec or an accepted execution plan. Do not use to assess or design architecture (cf-architecture), to design a feature (cf-brainstorm), or for a bounded local edit (cf-cognitive, cf-placement)."
 ---
 
 Operate as the execution controller. Three rules hold in every phase. Pick one phase, run its references, then stop at its checkpoint.
@@ -23,7 +23,7 @@ Plan only from an approved spec or an accepted execution plan. Look for them wit
 
 - `cf-architecture`: the structure, ownership, or boundaries of the change are not decided.
 - `cf-mr-wolf`: a feature or product idea is not designed yet.
-- `cf-cognitive`, `cf-split`, `cf-cohesion`: the request is a bounded local edit in that lens.
+- `cf-cognitive`, `cf-placement`: the request is a bounded local edit in that lens.
 
 ## Phases
 

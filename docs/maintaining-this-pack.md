@@ -52,8 +52,7 @@ Public skill entrypoints:
 - `cf-scenario`
 - `cf-deadcode`
 - `cf-cognitive`
-- `cf-split`
-- `cf-cohesion`
+- `cf-placement`
 - `cf-review`
 - `cf-test`
 - `cf-docs`
@@ -118,8 +117,7 @@ Maintainer flow mirrors:
 - `cf-scenario`: [scenario/doc-scenario.flow.md](./scenario/doc-scenario.flow.md)
 - `cf-deadcode`: [deadcode/doc-deadcode.flow.md](./deadcode/doc-deadcode.flow.md)
 - `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
-- `cf-split`: [split/doc-split.flow.md](./split/doc-split.flow.md)
-- `cf-cohesion`: [cohesion/doc-cohesion.flow.md](./cohesion/doc-cohesion.flow.md)
+- `cf-placement`: [placement/doc-placement.flow.md](./placement/doc-placement.flow.md)
 - `cf-review`: [review/doc-review.flow.md](./review/doc-review.flow.md)
 - `cf-test`: [test/doc-test.flow.md](./test/doc-test.flow.md)
 - `cf-docs`: [docs/doc-docs.flow.md](./docs/doc-docs.flow.md)

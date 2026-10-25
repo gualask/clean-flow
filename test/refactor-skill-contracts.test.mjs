@@ -14,20 +14,8 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
     path.join(SHARED_REFERENCES_ROOT, "navigation-cost.md"),
     "utf8",
   );
-  const cohesionContract = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cohesion", "SKILL.md"),
-    "utf8",
-  );
-  const splitContract = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-split", "SKILL.md"),
-    "utf8",
-  );
-  const splitExecution = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-split", "references", "execution.md"),
-    "utf8",
-  );
-  const splitFlow = await fs.readFile(
-    path.join(DOCS_ROOT, "split", "doc-split.flow.md"),
+  const placementContract = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-placement", "SKILL.md"),
     "utf8",
   );
   const cognitiveContract = await fs.readFile(
@@ -56,27 +44,13 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
   }
   assert.doesNotMatch(navigationCost, /severity/i);
   assert.match(navigationCost, /Widening the pass solely to remedy it/);
-  for (const contract of [cohesionContract, splitContract]) {
-    assert.match(contract, /\*\*Deferred\*\*: only after execution edits/);
-    assert.match(contract, /Omit this section when no .* ran/);
-  }
   assert.match(cognitiveContract, /- \*\*Deferred\*\*: after execution only, per the report\/action rule\./);
-  // The report/action rule is owned by navigation-cost.md, asserted above, and reaches a
-  // split through the mandatory Deferred slot rather than through a restated clause.
-  for (const execution of [splitExecution]) {
-    assert.match(execution, /For \*\*Deferred\*\*, after edits/);
-    assert.match(execution, /required by references\/navigation-cost\.md/);
-  }
-  // Function length left the hard triggers on 2026-10-24, and with it the split's
-  // Deferred finding on a long function it leaves behind (1 run against 1). Split
-  // and cohesion report it the way cf-review's lens 8 and cf-execute's review do.
+  // Function length left the hard triggers on 2026-10-24; without this slot line a
+  // split and a regrouping both deferred `none` (1 run each, 2026-10-25). It matches
+  // cf-review's lens 8 and cf-execute's review.
   assert.match(
-    splitExecution,
-    /report each function past 20 logical lines in a file the split modified as a finding routed to `cf-cognitive`, which decides whether anything moves/,
-  );
-  assert.match(
-    cohesionContract,
-    /each function past 20 logical lines in a file the regrouping modified as a finding routed to `cf-cognitive`, which decides whether anything moves/,
+    placementContract,
+    /- \*\*Deferred\*\*: each function past 20 logical lines in a file you modified, routed to `cf-cognitive`; each owner cluster kept flat because a folder would be a new package or module, routed to `cf-architecture`; or `none`\./,
   );
   // cf-cognitive carries its execution flow in SKILL.md, so the same rule is
   // asserted on the contract itself rather than on a per-flow reference file.
@@ -84,98 +58,49 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
     cognitiveContract,
     /references\/navigation-cost\.md for the thresholds.*the report\/action rule/,
   );
-  for (const flow of [splitFlow, cognitiveFlow]) {
-    assert.match(flow, /complete deferred finding required by the canonical navigation-cost contract/);
+  assert.match(cognitiveFlow, /complete deferred finding required by the canonical navigation-cost contract/);
+});
+
+test("placement carries its gates in the body and ships no references", async () => {
+  const placementContract = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-placement", "SKILL.md"),
+    "utf8",
+  );
+
+  // cf-placement merged cf-split and cf-cohesion on 2026-10-25, built around the
+  // gates the bare model missed; every line below held in its trial cells.
+  assert.match(placementContract, /When the request only asks whether to split or regroup, answer and do not edit\./);
+  assert.match(
+    placementContract,
+    /With no file or area named, count the direct source files per directory with the bundled `scripts\/dir-population\.mjs`, resolved from the active skill root, name the best candidate, and do not edit\./,
+  );
+  assert.match(
+    placementContract,
+    /a new package or module, move files across features, or change module boundaries, do not edit: name `cf-architecture` and the reason in \*\*Result\*\*, and end the turn\./,
+  );
+  assert.match(placementContract, /kept flat where a folder would be a new package or module/);
+  assert.match(placementContract, /A regrouping moves whole files without rewriting them\./);
+  assert.match(placementContract, /Move the tests of each moved unit next to its new file, update every reference/);
+  // "smallest relevant check" left an unused export that the repository's knip
+  // rejected (2 of 2); the scoped hint ran knip and nothing unrelated.
+  assert.match(
+    placementContract,
+    /run those tests and the checks a move can break \(types, lint, unused exports\), scoped to what changed\./,
+  );
+  assert.match(
+    placementContract,
+    /- \*\*Defects\*\*: behavior defects noticed against the code's documented rules, with file and line, or `none` naming what you checked against\./,
+  );
+  assert.doesNotMatch(placementContract, /references\//);
+  await assert.rejects(fs.readdir(path.join(SKILLS_ROOT, "cf-placement", "references")));
+  for (const removed of ["cf-split", "cf-cohesion"]) {
+    await assert.rejects(fs.readdir(path.join(SKILLS_ROOT, removed)));
   }
 });
 
-test("cohesion audits ownership and stale references across repository-controlled text", async () => {
-  const referenceAudit = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "reference-audit.md"),
-    "utf8",
-  );
-  const targetedEvaluation = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cohesion", "references", "targeted-evaluation.md"),
-    "utf8",
-  );
-  const cohesionFlow = await fs.readFile(
-    path.join(DOCS_ROOT, "cohesion", "doc-cohesion.flow.md"),
-    "utf8",
-  );
-
-  assert.match(referenceAudit, /repository-wide/);
-  assert.match(referenceAudit, /configuration/);
-  assert.match(referenceAudit, /documentation/);
-  assert.match(referenceAudit, /consumers outside the candidate unit as compatibility evidence/);
-  assert.doesNotMatch(referenceAudit, /ownership evidence/);
-  // The audit timing lives once, in the SKILL.md loading line (2026-10-07).
-  assert.match(
-    await fs.readFile(path.join(SKILLS_ROOT, "cf-cohesion", "SKILL.md"), "utf8"),
-    /reference-audit\.md\) holds .*Read it in targeted evaluation and execution, before the cohesion map and again for moved names and paths after moving\./,
-  );
-  // Both the ownership-evidence line and the Owner Locality section were cut on
-  // 2026-08-18. What carries this cell is the generic-folder prohibition, the
-  // line the trials named as one of the two measured payers.
-  assert.match(
-    targetedEvaluation,
-    /Do not create `common`, `shared`, `utils`, or similar generic folders/,
-  );
-  assert.doesNotMatch(targetedEvaluation, /ownership evidence/i);
-  assert.match(cohesionFlow, /code, configuration, and documentation/);
-  assert.doesNotMatch(cohesionFlow, /unless a move is explicitly requested/);
-});
-
-test("cohesion owns first-level reference loading in its skill contract", async () => {
-  const cohesionContract = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cohesion", "SKILL.md"),
-    "utf8",
-  );
-  const targetedEvaluation = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cohesion", "references", "targeted-evaluation.md"),
-    "utf8",
-  );
-
-  assert.match(
-    cohesionContract,
-    /\[references\/targeted-evaluation\.md\]\(references\/targeted-evaluation\.md\) holds .*\. Read it in targeted evaluation, and in execution before any edit\./,
-  );
-  for (const reference of ["reference-audit", "navigation-cost"]) {
-    assert.match(
-      cohesionContract,
-      new RegExp(
-        `\\[references/${reference}\\.md\\]\\(references/${reference}\\.md\\) holds .*\\. Read it in targeted evaluation and execution`,
-      ),
-    );
-  }
-  assert.match(cohesionContract, /Discovery reads none of them\./);
-  assert.match(
-    cohesionContract,
-    /Complete or refresh the targeted evaluation before editing/,
-  );
-  for (const reference of [targetedEvaluation]) {
-    assert.doesNotMatch(reference, /Ensure you have read references\//);
-  }
-});
-
-test("split owns first-level reference loading and audits consumers before editing", async () => {
-  const splitContract = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-split", "SKILL.md"),
-    "utf8",
-  );
+test("execute split phases read the shared split references and count with the bundled script", async () => {
   const fileSplitRules = await fs.readFile(
     path.join(SHARED_REFERENCES_ROOT, "file-split-rules.md"),
-    "utf8",
-  );
-  const evaluation = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-split", "references", "evaluation.md"),
-    "utf8",
-  );
-  const execution = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-split", "references", "execution.md"),
-    "utf8",
-  );
-  const splitFlow = await fs.readFile(
-    path.join(DOCS_ROOT, "split", "doc-split.flow.md"),
     "utf8",
   );
   const startSplitExecution = await fs.readFile(
@@ -186,22 +111,11 @@ test("split owns first-level reference loading and audits consumers before editi
     path.join(SKILLS_ROOT, "cf-execute", "references", "review.md"),
     "utf8",
   );
+  const referenceAudit = await fs.readFile(
+    path.join(SHARED_REFERENCES_ROOT, "reference-audit.md"),
+    "utf8",
+  );
 
-  assert.match(
-    splitContract,
-    /Read references\/evaluation\.md, references\/file-split-rules\.md, and references\/navigation-cost\.md/,
-  );
-  assert.match(
-    splitContract,
-    /Read references\/execution\.md, references\/file-split-rules\.md, references\/navigation-cost\.md, and references\/reference-audit\.md/,
-  );
-  assert.match(
-    splitContract,
-    /If a verification check fails, read references\/regression-handling\.md/,
-  );
-  for (const reference of [evaluation, execution]) {
-    assert.doesNotMatch(reference, /ensure you have read references\//i);
-  }
   assert.match(fileSplitRules, /hard-trigger values and exemptions come from `references\/navigation-cost\.md`/);
   assert.doesNotMatch(fileSplitRules, /read `references\/navigation-cost\.md`/i);
   for (const phaseReference of [startSplitExecution, startReview]) {
@@ -210,37 +124,16 @@ test("split owns first-level reference loading and audits consumers before editi
       /read references\/file-split-rules\.md and references\/navigation-cost\.md/,
     );
   }
-  assert.match(
-    execution,
-    /Complete the reference audit for each candidate before choosing the one to extract/,
-  );
-  // Placement counts come from the bundled script, as in cf-cohesion discovery (4 of 4 runs, 2026-10-12).
+  // Placement counts come from the bundled script (4 of 4 runs, 2026-10-12).
   assert.match(
     fileSplitRules,
     /count the direct real source files of a directory with the bundled `scripts\/dir-population\.mjs --include <directory>`, resolved from the active skill root and never from the project working directory; do not write your own count\./,
   );
-  assert.match(execution, /count the containing directory and read its real source files/);
-  assert.match(splitContract, /^Route cognitive cleanup inside one file to `cf-cognitive`\.$/m);
-  assert.match(splitContract, /^Route regrouping of already-split related files to `cf-cohesion`\.$/m);
-  assert.doesNotMatch(splitContract, /use `cf-(cognitive|cohesion)` for that/);
-  const referenceAudit = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "reference-audit.md"),
-    "utf8",
-  );
+  assert.match(referenceAudit, /repository-wide/);
+  assert.match(referenceAudit, /configuration/);
+  assert.match(referenceAudit, /documentation/);
   assert.match(referenceAudit, /consumers outside the candidate unit as compatibility evidence/);
-  assert.match(execution, /repeat the reference audit for moved names and paths/);
-  // The closing audit and verification must follow the final placement, so a move ordered by
-  // the placement check cannot leave references unaudited or unverified.
-  const placementAt = execution.indexOf("## Placement Check");
-  const auditAt = execution.indexOf("## Reference Audit");
-  const verifyAt = execution.indexOf("## Verification");
-  assert.ok(placementAt > 0 && auditAt > 0 && verifyAt > 0);
-  assert.ok(
-    placementAt < auditAt && auditAt < verifyAt,
-    "placement must settle before the closing reference audit and verification",
-  );
-  assert.match(splitFlow, /Before execution edits, audit repository-controlled consumers/);
-  assert.match(splitFlow, /fixing stale code, configuration, and documentation references/);
+  assert.doesNotMatch(referenceAudit, /ownership evidence/);
 });
 
 test("cognitive owns first-level reference loading in its skill contract", async () => {

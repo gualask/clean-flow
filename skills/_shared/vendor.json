@@ -14,15 +14,6 @@
         "navigation-cost.md"
       ]
     },
-    "cf-cohesion": {
-      "references": [
-        "navigation-cost.md",
-        "reference-audit.md"
-      ],
-      "scripts": [
-        "dir-population.mjs"
-      ]
-    },
     "cf-review": {
       "references": [
         "delegated-execution.md",
@@ -33,17 +24,6 @@
       "scripts": [
         "dir-population.mjs",
         "repo-tree.mjs"
-      ]
-    },
-    "cf-split": {
-      "references": [
-        "file-split-rules.md",
-        "navigation-cost.md",
-        "reference-audit.md",
-        "regression-handling.md"
-      ],
-      "scripts": [
-        "dir-population.mjs"
       ]
     },
     "cf-execute": {
@@ -69,6 +49,11 @@
     "cf-brainstorm": {
       "references": [
         "design-spec-lifecycle.md"
+      ]
+    },
+    "cf-placement": {
+      "scripts": [
+        "dir-population.mjs"
       ]
     }
   }

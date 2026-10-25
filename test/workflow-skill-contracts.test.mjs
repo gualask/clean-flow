@@ -15,45 +15,7 @@ import {
   skillTextFiles,
 } from "./support/skill-contract-helpers.mjs";
 
-test("cohesion execution composes evaluation as a gated non-terminal preflight", async () => {
-  const cohesionContract = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cohesion", "SKILL.md"),
-    "utf8",
-  );
-  const targetedEvaluation = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-cohesion", "references", "targeted-evaluation.md"),
-    "utf8",
-  );
-  const cohesionFlow = await fs.readFile(
-    path.join(DOCS_ROOT, "cohesion", "doc-cohesion.flow.md"),
-    "utf8",
-  );
-
-  for (const contract of [cohesionContract, cohesionFlow]) {
-    assert.match(contract, /Continue only (?:when|for).*`recommended` or `optional`/);
-    assert.match(contract, /for `keep as-is` or `route`, stop without editing/i);
-  }
-  // Measured 2026-10-06 on gpt-6-luna: without these lines a route still edited
-  // (cf-cognitive opened in the same turn), a requested regrouping created a Go
-  // package the evaluation had routed, and execution split a file it moved.
-  // 2026-10-07: "use `cf-cognitive` for that" was not read as a route and still edited
-  // (1 of 3 clean); "Route ... to `cf-cognitive`" routed 3 of 3. The generic package
-  // line kept the Go route 2 of 2 and let a TypeScript regrouping run.
-  assert.match(cohesionContract, /When routing, do not edit files: name the route and the reason in \*\*Result\*\*, and end the turn\./);
-  assert.match(cohesionContract, /^Route cognitive cleanup inside one file to `cf-cognitive`\.$/m);
-  assert.match(cohesionContract, /^Route extracting responsibilities out of one source file to `cf-split`\.$/m);
-  assert.doesNotMatch(cohesionContract, /use `cf-(cognitive|split)` for that/);
-  assert.match(cohesionContract, /a folder that the language or build would treat as a new package or module.*even when the request asks for the move/);
-  assert.match(cohesionContract, /do not split, merge, or rewrite file contents.*do not add barrel or re-export files/);
-  // Discovery counts with the bundled script, not with a command the model writes (3 of 3, 2026-10-07).
-  assert.match(cohesionContract, /Count with the bundled `scripts\/dir-population\.mjs`, resolved from the active skill root and never from the project working directory; do not write your own count\./);
-  assert.match(cohesionContract, /\*\*Decision\*\*: the decision label; in discovery, `candidates` or `none`; after execution, `regrouped`\./);
-  assert.match(targetedEvaluation, /When targeted evaluation is the selected flow/);
-  assert.match(targetedEvaluation, /When loaded before execution, emit no intermediate output/);
-  assert.doesNotMatch(targetedEvaluation, /^Evaluate only\. Do not edit files\.$/m);
-});
-
-test("cognitive routes to split and cohesion up front, not by post-edit condition", async () => {
+test("cognitive routes to placement up front, not by post-edit condition", async () => {
   const cognitiveContract = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
     "utf8",
@@ -69,7 +31,7 @@ test("cognitive routes to split and cohesion up front, not by post-edit conditio
   // identical input, and no bed ever exercised either clause.
   assert.match(
     cognitiveContract,
-    /Route elsewhere instead of working here, and when routing do not edit files: `cf-split`.*`cf-cohesion`.*`cf-architecture`/s,
+    /Route elsewhere instead of working here, and when routing do not edit files: `cf-placement`.*`cf-architecture`/s,
   );
   assert.match(
     cognitiveContract,
@@ -79,7 +41,7 @@ test("cognitive routes to split and cohesion up front, not by post-edit conditio
     assert.doesNotMatch(contract, /After editing a target file, route to/);
     assert.doesNotMatch(
       contract,
-      /route through `cf-split` evaluation only when remaining file-level pressure is demonstrated/,
+      /route through `cf-(?:split|placement)` evaluation only when remaining file-level pressure is demonstrated/,
     );
   }
 });

@@ -44,26 +44,10 @@
         }
       }
     },
-    "cf-cohesion": {
+    "cf-placement": {
       "flows": {
-        "discovery": {
+        "default": {
           "required": [],
-          "conditional": []
-        },
-        "targeted-evaluation": {
-          "required": [
-            "references/targeted-evaluation.md",
-            "references/reference-audit.md",
-            "references/navigation-cost.md"
-          ],
-          "conditional": []
-        },
-        "execution": {
-          "required": [
-            "references/targeted-evaluation.md",
-            "references/reference-audit.md",
-            "references/navigation-cost.md"
-          ],
           "conditional": []
         }
       }
@@ -124,29 +108,6 @@
         "default": {
           "required": [],
           "conditional": []
-        }
-      }
-    },
-    "cf-split": {
-      "flows": {
-        "evaluation": {
-          "required": [
-            "references/evaluation.md",
-            "references/file-split-rules.md",
-            "references/navigation-cost.md"
-          ],
-          "conditional": []
-        },
-        "execution": {
-          "required": [
-            "references/execution.md",
-            "references/file-split-rules.md",
-            "references/navigation-cost.md",
-            "references/reference-audit.md"
-          ],
-          "conditional": [
-            "references/regression-handling.md"
-          ]
         }
       }
     },

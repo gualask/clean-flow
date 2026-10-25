@@ -1,10 +1,10 @@
 ---
 name: cf-cognitive
-description: Find or refactor local source-file cognitive complexity hotspots while preserving behavior. Use when a function or file is hard to read or reason about — overloaded functions, deep nesting, tangled branching, local readability pressure — with or without explicit file targets. Do not use to split a file into new files (cf-split) or for repository-wide refactors (cf-architecture).
+description: Find or refactor local source-file cognitive complexity hotspots while preserving behavior. Use when a function or file is hard to read or reason about — overloaded functions, deep nesting, tangled branching, local readability pressure — with or without explicit file targets. Do not use to split a file into new files (cf-placement) or for repository-wide refactors (cf-architecture).
 ---
 Find or reduce cognitive complexity in local source files while preserving behavior.
 
-Route elsewhere instead of working here, and when routing do not edit files: `cf-split` for extracting responsibilities from one file into new files; `cf-cohesion` for regrouping related files; `cf-architecture` for module boundaries, ownership moves, or moving code into another package or module, even when the request names the destination.
+Route elsewhere instead of working here, and when routing do not edit files: `cf-placement` for extracting responsibilities from one file into new files or regrouping related files; `cf-architecture` for module boundaries, ownership moves, or moving code into another package or module, even when the request names the destination.
 
 Measure before judging: run a command that prints, for every function in the files in scope, its logical lines and its deepest nesting of control blocks. Count nesting as the control blocks inside a function — every `if`, loop, `switch`, `select`, or `try`, including one that only guards a `break` or `return`; a third nested block fires the trigger. Read references/navigation-cost.md for the thresholds, the named exemptions that allow `keep as-is` past a threshold, the file-length verdict, and the report/action rule.
 

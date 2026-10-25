@@ -102,7 +102,7 @@ test("packaged skill runtime files stay within token budget warnings", async () 
         (flow) => flow.id === "cf-cognitive:execution",
       );
       assert.ok(cognitiveExecution, "expected a configured cf-cognitive execution flow");
-      // A routed request ends the turn: an explicit extraction is named for cf-split, not run
+      // A routed request ends the turn: an explicit extraction is named for cf-placement, not run
       // (2026-10-06; "do not open it" had held 0 of 2 on 2026-10-04, "do not edit files" held 1 of 1).
       assert.deepEqual(
         cognitiveExecution.handoffs,

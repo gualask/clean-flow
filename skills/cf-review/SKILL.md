@@ -66,7 +66,7 @@ If the current request names no range and nothing is pending, say so and stop; n
 
 ## Routing
 
-Each lens carries a fixed route, listed in `references/sweep.md`: `cf-mr-wolf`, `cf-scenario`, `cf-docs`, `cf-cognitive`, `cf-split`, `cf-cohesion`, or `cf-architecture`. A finding no lens routes goes to `cf-mr-wolf`.
+Each lens carries a fixed route, listed in `references/sweep.md`: `cf-mr-wolf`, `cf-scenario`, `cf-docs`, `cf-cognitive`, `cf-placement`, or `cf-architecture`. A finding no lens routes goes to `cf-mr-wolf`.
 
 Route, do not invoke: name the route and let the user choose what to open next.
 

@@ -77,12 +77,12 @@ test("cf-docs routes by Markdown write intent or an audit request", async () => 
   }
 });
 
-test("cf-cohesion discovery excludes non-code content", async () => {
-  const skillFile = path.join(SKILLS_ROOT, "cf-cohesion", "SKILL.md");
+test("cf-placement excludes non-code content", async () => {
+  const skillFile = path.join(SKILLS_ROOT, "cf-placement", "SKILL.md");
   const skill = await fs.readFile(skillFile, "utf8");
   const description = parseFrontmatter(
     skill,
-    "skills/cf-cohesion/SKILL.md",
+    "skills/cf-placement/SKILL.md",
   ).description;
 
   assert.match(description, /Do not use for non-code content/);
@@ -189,7 +189,6 @@ test("navigation-cost is the single source of hard-trigger threshold values", as
     path.join(SHARED_REFERENCES_ROOT, "file-split-rules.md"),
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
     path.join(SKILLS_ROOT, "cf-review", "references", "sweep.md"),
-    path.join(SKILLS_ROOT, "cf-split", "references", "evaluation.md"),
   ];
 
   for (const file of consumers) {

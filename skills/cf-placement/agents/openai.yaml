@@ -1,0 +1,6 @@
+interface:
+  display_name: "Cflow:placement"
+  short_description: "Split a file into nearby files or regroup related files into owner folders"
+  default_prompt: "Use $cf-placement to split a file or regroup related files while preserving behavior."
+policy:
+  allow_implicit_invocation: true
