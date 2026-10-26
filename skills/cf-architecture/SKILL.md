@@ -16,7 +16,7 @@ A state or policy belongs to the capability when any interface invoking the use 
 
 For each dimension the code varies along (platform or build target, provider, storage, configuration, or an analogous one), name its variants and every place that decides among them, in code, build conditions and UI, and where that decision should be made once. Where the variants have implementations of their own, run the bundled `scripts/variant-history.mjs`, resolved from the active skill root and never from the project working directory, with `--repo .` and the directories of those implementations: for every commit that added one it lists the files changed outside it. Cite that list and the commit as evidence; do not write your own count.
 
-Output: one target tree. Under each directory, what it owns and the `file:line` that proves it; then what stays as it is, with the same evidence. No plan, no priorities, no steps: the plan comes after the user replies to the tree. Present it in the conversation, without implementing changes or creating files.
+Present one target tree in the conversation, without implementing changes or creating files. No plan, no priorities, no steps: the plan comes after the user replies to the tree.
 
 ## Feature Handoff
 
@@ -27,3 +27,10 @@ When `cf-brainstorm` hands over its draft, its product decisions are settled: do
 - Owns `.cflow/specs/draft.md` for the architecture being designed or the feature handed over, and promotes it to the approved spec.
 
 When the user replies to a tree that changes the structure, read [references/spec.md](references/spec.md): it holds how that tree becomes an approved spec.
+
+## Output Format
+
+Return only:
+
+- **Target tree**: one tree; under each directory, what it owns and the `file:line` that proves it.
+- **Unchanged**: what stays as it is, with the same evidence.
