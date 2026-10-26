@@ -98,13 +98,9 @@ test("placement carries its gates in the body and ships no references", async ()
   }
 });
 
-test("execute split phases read the shared split references and count with the bundled script", async () => {
+test("execute review reads the shared split references and the rules count with the bundled script", async () => {
   const fileSplitRules = await fs.readFile(
     path.join(SHARED_REFERENCES_ROOT, "file-split-rules.md"),
-    "utf8",
-  );
-  const startSplitExecution = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-execute", "references", "split-execution.md"),
     "utf8",
   );
   const startReview = await fs.readFile(
@@ -118,12 +114,7 @@ test("execute split phases read the shared split references and count with the b
 
   assert.match(fileSplitRules, /hard-trigger values and exemptions come from `references\/navigation-cost\.md`/);
   assert.doesNotMatch(fileSplitRules, /read `references\/navigation-cost\.md`/i);
-  for (const phaseReference of [startSplitExecution, startReview]) {
-    assert.match(
-      phaseReference,
-      /read references\/file-split-rules\.md and references\/navigation-cost\.md/,
-    );
-  }
+  assert.match(startReview, /read references\/file-split-rules\.md and references\/navigation-cost\.md/);
   // Placement counts come from the bundled script (4 of 4 runs, 2026-10-12).
   assert.match(
     fileSplitRules,

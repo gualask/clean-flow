@@ -137,48 +137,15 @@
             "references/navigation-cost.md"
           ]
         },
-        "structural-split": {
+        "unit-execution": {
           "required": [
-            "references/concentration-map.md",
-            "references/safety-net.md",
-            "references/split-execution.md",
-            "references/file-split-rules.md",
-            "references/navigation-cost.md",
-            "references/structural-closure.md",
-            "references/reference-audit.md"
-          ],
-          "conditional": [
-            "references/regression-handling.md",
-            "references/artifacts.md",
-            "assets/execution-plan.template.md"
-          ]
-        },
-        "structural-consolidate": {
-          "required": [
-            "references/fragmentation-map.md",
-            "references/navigation-cost.md",
-            "references/safety-net.md",
-            "references/consolidation-execution.md",
-            "references/structural-closure.md",
-            "references/reference-audit.md"
-          ],
-          "conditional": [
-            "references/regression-handling.md",
-            "references/artifacts.md",
-            "assets/execution-plan.template.md"
-          ]
-        },
-        "feature-unit": {
-          "required": [
-            "references/safety-net.md",
-            "references/structural-closure.md"
+            "references/unit-execution.md"
           ],
           "conditional": [
             "references/regression-handling.md",
             "references/reference-audit.md",
             "references/artifacts.md",
-            "assets/execution-plan.template.md",
-            "references/navigation-cost.md"
+            "assets/execution-plan.template.md"
           ]
         },
         "review": {

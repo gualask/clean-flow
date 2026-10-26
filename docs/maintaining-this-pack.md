@@ -62,14 +62,9 @@ Public skill entrypoints:
 `cf-execute` phase references:
 
 - `skills/cf-execute/references/artifacts.md`
-- `skills/cf-execute/references/concentration-map.md`
-- `skills/cf-execute/references/fragmentation-map.md`
 - `skills/cf-execute/references/work-unit-planning.md`
 - `skills/cf-execute/references/migration-unit-planning.md`
-- `skills/cf-execute/references/safety-net.md`
-- `skills/cf-execute/references/split-execution.md`
-- `skills/cf-execute/references/consolidation-execution.md`
-- `skills/cf-execute/references/structural-closure.md`
+- `skills/cf-execute/references/unit-execution.md`
 - `skills/cf-execute/references/review.md`
 - `skills/cf-execute/references/verify.md`
 

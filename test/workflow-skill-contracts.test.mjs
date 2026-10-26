@@ -195,7 +195,7 @@ test("execute routes touched-scope cleanup to cognitive instead of carrying its 
   assert.ok(unitExecution, "cf-execute must keep a Unit Execution phase");
   assert.match(
     unitExecution[1],
-    /- touched-scope cleanup, only when the user asks for it: follow `cf-cognitive` on the touched scope/,
+    /Touched-scope cleanup, only when the user asks for it: follow `cf-cognitive` on the touched scope\./,
   );
   assert.doesNotMatch(executeContract, /local-simplify\.md|local-refactor-rules\.md/);
   for (const gone of ["local-simplify.md", "local-refactor-rules.md", "local-readability-review.md"]) {
@@ -210,6 +210,35 @@ test("execute routes touched-scope cleanup to cognitive instead of carrying its 
     /Report each function in the touched scope past 20 logical lines as a cleanup candidate routed to `cf-cognitive`, which decides whether anything moves; it never blocks closure\./,
   );
   assert.doesNotMatch(review, /local-readability-review\.md/);
+});
+
+test("execute runs every unit through one execution reference that closes on the full check", async () => {
+  const executeRoot = path.join(SKILLS_ROOT, "cf-execute");
+  const executeContract = await fs.readFile(path.join(executeRoot, "SKILL.md"), "utf8");
+  const unitExecution = await fs.readFile(path.join(executeRoot, "references", "unit-execution.md"), "utf8");
+  const shipped = await fs.readdir(path.join(executeRoot, "references"));
+
+  assert.match(executeContract, /Use for a unit authorized by rule 2: references\/unit-execution\.md\./);
+  // The split and consolidation chains bought nothing the bare model did not do given the plan (2026-10-26).
+  for (const gone of [
+    "concentration-map.md",
+    "fragmentation-map.md",
+    "safety-net.md",
+    "split-execution.md",
+    "consolidation-execution.md",
+    "structural-closure.md",
+  ]) {
+    assert.ok(!shipped.includes(gone), `${gone} must not ship with cf-execute`);
+    assert.doesNotMatch(executeContract, new RegExp(gone.replace(".", "\\.")));
+  }
+  // The full check is the line the bare model skips (0 of 2, 2026-10-26).
+  assert.match(
+    unitExecution,
+    /Before marking the unit `done`, run the repository's full check command: the `test` script or the command its CI runs\. A unit whose full check fails stays `active`/,
+  );
+  assert.match(unitExecution, /read references\/regression-handling\.md before any further edit/);
+  assert.match(unitExecution, /read references\/reference-audit\.md and fix every stale reference it finds/);
+  assert.match(unitExecution, /## Output Format\n\nReturn only:\n\n- \*\*Changes\*\*:[^\n]+\n- \*\*Checks\*\*:[^\n]+\n- \*\*Result\*\*:/);
 });
 
 test("brainstorm hands feature ownership to architecture through the shared lifecycle", async () => {

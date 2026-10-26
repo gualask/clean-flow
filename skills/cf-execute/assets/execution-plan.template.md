@@ -6,7 +6,7 @@
 
 ## Concentration pressure
 
-<!-- Filled by the split map during execution; leave empty when planning. -->
+<!-- Filled while executing a `split` unit; leave empty when planning. -->
 
 - dominant dense seams:
 - mixed responsibilities:
@@ -15,7 +15,7 @@
 
 ## Fragmentation pressure
 
-<!-- Filled by the consolidation map during execution; leave empty when planning. -->
+<!-- Filled while executing a `consolidate` unit; leave empty when planning. -->
 
 - dominant fragmented seams:
 - pass-through wrappers:
