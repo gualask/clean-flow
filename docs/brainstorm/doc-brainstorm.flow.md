@@ -1,25 +1,33 @@
-# cf-brainstorm Flow
+# cf-brainstorm
 
-## Purpose
+Runtime: [SKILL.md](../../skills/cf-brainstorm/SKILL.md), shared [design-spec-lifecycle.md](../../skills/_shared/references/design-spec-lifecycle.md).
 
-Maintainer summary for the explicit-only design flow that turns one feature or product idea into an approved spec without starting implementation.
+## Basis
 
-## Runtime Inputs
+Vincent, [superpowers brainstorming skill](https://github.com/obra/superpowers/blob/2ce8aa15d05bd57213e6f746f953aafb7ded7a8b/skills/brainstorming/SKILL.md), is the base for the dialogue:
 
-- Public skill: `skills/cf-brainstorm/SKILL.md`
-- Shared reference: `design-spec-lifecycle.md` (draft → spec cycle, draft format, handoff)
-- Working artifact: `.cflow/specs/draft.md`
-- Approved artifact: `.cflow/specs/<YYYY-MM-DD>-<topic>.md`
+- **No code before an approved design, however small:** "Nothing gets built until your human partner approves the design doc: the short one for a small change, the full one for a project."
+- **Look before asking:** "Never ask what the project or their context already answers."
+- **Independent subsystems one at a time:** "brainstorm them one at a time."
+- **One question per turn, building on the last answer:** "Each message ends with one question".
+- **A recommended default with the question:** "A proposal they can correct, plus your reason for it, often beats a question."
+- **One recommended approach:** "Recommend one and say why".
+- **An assumption stays open:** "A default they never heard is one they couldn't reject."
+- **Approval covers what was shown:** "Approval covers what you showed them."
 
-## High-Level Flow
+Other sources:
 
-1. Resume or replace an existing draft explicitly, checking `.cflow/specs` with `ls` because the directory is git-ignored and search tools skip it.
-2. Inspect current project context and decompose independent ideas.
-3. Record only decision-relevant questions and answers in the draft; a question is settled only by the user's answer, and an assumption used to proceed stays open as the working default.
-4. Recommend an approach, adding alternatives only for real trade-offs.
-5. Present a design proportionate to the idea (behavior, components, data flow, errors, testing) and complete it in the draft.
-6. When the design adds or changes state, coordination, a contract, or an entry point in existing code, hand the draft to `cf-architecture` and end the turn naming it for the user to invoke: brainstorm does not decide which module owns them. Measured: architecture opened in brainstorm's own turn kept the state in the adapter (1 adapter, 1 borderline); opened fresh on the same handed-over draft it chose the capability 2/2. Measured (2026-09-29, LOC feature on Termetrix): brainstorm with the architecture principles loaded put the shared per-root result in the VS Code adapter; cf-architecture put it in the capability 2/2, and the same prompt without skills left it in the adapter.
-3b. Clarification measured (2026-10-21, CSV export idea on a VS Code extension, gpt-6.1-sol high): one question per turn with 2–3 options and a recommended default, each answer appended to `Decisions`; on "proceed" with two questions open they stay open as working defaults and the draft expands to the full design (4 turns from the idea to the architecture recommendation). The same model without the pack decides everything in one turn and, on "proceed", implements (20 files). Two independent ideas in one request: one draft, the second idea recorded as deferred (1 run); without the pack both are designed together.
-3c. Boundaries under explicit invocation: whether a named change is worth it goes to `cf-scenario`, a symptom with no named change to `cf-mr-wolf` (1 run each); the earlier text sent value judgments to `cf-mr-wolf`, which its own description excludes, and the model followed the descriptions.
-3d. A shipped spec: the lifecycle offers `cf-docs` and deletes the spec only once the docs are updated or the offer is declined (1 run under brainstorm, 1 under architecture); the earlier "offer …, then delete" deleted first (1 run).
-7. Otherwise self-review and ask the user to review the draft. After explicit approval, rename it to the approved spec and end the turn with the spec path, without planning or implementing.
+- **Design before code, in proportion.** Ubl, [Design Docs at Google](https://www.industrialempathy.com/posts/design-docs-at-google/): "Early identification of design issues when making changes is still cheap"; "focus on the parts that are relevant to the design and its trade-offs"; docs "tend to get out of sync with reality over time", hence the spec is ephemeral.
+- **No premature solution.** Laban et al., [LLMs Get Lost In Multi-Turn Conversation](https://arxiv.org/abs/2505.06120): models "prematurely attempt to generate final solutions, on which they overly rely."
+- **Targeted questions.** Mu et al., [ClarifyGPT](https://arxiv.org/abs/2310.10996): "targeted clarifying questions".
+- **YAGNI.** Fowler, [Yagni](https://martinfowler.com/bliki/Yagni.html): a presumed capability "should not be built now".
+- **Small units with clear interfaces.** Parnas, [On the Criteria…](https://www.win.tue.nl/~wstomv/edu/2ip30/references/criteria_for_modularization.pdf) (1972): an interface "chosen to reveal as little as possible about its inner workings."
+- **The draft is the memory.** Liu et al., [Lost in the Middle](https://arxiv.org/abs/2307.03172): models "do not robustly make use of information in long input contexts."
+- **Decisions appended, never rewritten.** Nygard, [Documenting Architecture Decisions](https://www.cognitect.com/blog/2011/11/15/documenting-architecture-decisions): "keep the old one around, but mark it as superseded."
+- **Self-review once, then the user's.** Huang et al., [LLMs Cannot Self-Correct Reasoning Yet](https://arxiv.org/abs/2310.01798) (ICLR 2024): models "struggle to self-correct their responses without external feedback".
+- **Approval is not a request to implement.** Qu et al., [Overeager Coding Agents](https://arxiv.org/abs/2605.18583): "the agent sometimes does more than asked".
+- **Resume check with `ls -a`.** [ripgrep README](https://github.com/BurntSushi/ripgrep/blob/master/README.md): ripgrep "will respect gitignore rules and automatically skip hidden files/directories".
+
+## No external source
+
+Kept on the pack's own runs or on the user's decision: the boundaries to `cf-scenario`, `cf-mr-wolf` and `cf-architecture`; the handoff to `cf-architecture`; 2–4 options when the answers are enumerable; one draft at a time and no silent overwrite; returning to the oldest open question after a side exploration; deleting a shipped spec only after the docs step; the docs language.

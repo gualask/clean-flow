@@ -1,39 +1,41 @@
-# cf-review Flow
+# cf-review
 
-## Purpose
+Runtime: [SKILL.md](../../skills/cf-review/SKILL.md), [references/handoff.md](../../skills/cf-review/references/handoff.md), [references/reference-audit.md](../../skills/cf-review/references/reference-audit.md), [references/review-agent-brief.md](../../skills/cf-review/references/review-agent-brief.md), [references/sweep.md](../../skills/cf-review/references/sweep.md), shared [delegated-execution.md](../../skills/_shared/references/delegated-execution.md), shared [dynamic-agents.md](../../skills/_shared/references/dynamic-agents.md), shared [navigation-cost.md](../../skills/_shared/references/navigation-cost.md), shared [dir-population.mjs](../../skills/_shared/scripts/dir-population.mjs), shared [repo-tree.mjs](../../skills/_shared/scripts/repo-tree.mjs).
 
-Document the runtime flow for `cf-review`, the public entrypoint that checks a bounded set of changes for bugs, contradicted requirements, unfinished changes, stale documentation, and structure.
+## Basis
 
-It is a detector, not a fixer: it produces candidate findings with evidence and routes them to the skills that own them.
+Google, [What to look for in a code review](https://google.github.io/eng-practices/review/reviewer/looking-for.html), is the base for most lenses:
 
-The change set is the reference point that keeps findings verifiable, and it comes from one of two selectors: pending work by default, or a history range the request names. Everything after selection is identical for both.
+- **Whole files** read, not only changed lines: "Sometimes you have to look at the whole file to be sure that the change actually makes sense." Generated code may be scanned over.
+- **Lens 1, bugs**: "making sure that there are no bugs that you see just by reading the code."
+- **Lens 3, requirements**: "Does this CL do what the developer intended?"
+- **Lens 6, docs**: "If a CL changes how users build, test, interact with, or release code, check to see that it also updates associated documentation".
+- **Lens 8, complexity**: "'Too complex' usually means 'can't be understood quickly by code readers.'"
+- **Lens 9, placement**: "Does this change belong in your codebase, or in a library?"
+- **Lens 11, over-engineering**: "developers have made the code more generic than it needs to be".
+- **`not assessed`** for what was not reviewed: "note in a comment which parts you reviewed."
+- **Test quality to cf-test**: "Tests do not test themselves".
 
-## Runtime Inputs
+Other sources:
 
-- Public skill: `skills/cf-review/SKILL.md`
-- Runtime references: `skills/cf-review/references/sweep.md`, `review-agent-brief.md`, `handoff.md`, `reference-audit.md`
-- Shared sources vendored into runtime paths: `skills/_shared/references/dynamic-agents.md`, `delegated-execution.md`, `navigation-cost.md`; `skills/_shared/scripts/repo-tree.mjs`, `dir-population.mjs`
-- Owned artifact: `.cflow/cf-review-recap.md`, under the shared delegated-execution contract
+- **Report; never diagnose.** Google, [How to write code review comments](https://google.github.io/eng-practices/review/reviewer/comments.html): "it is the developer's responsibility to fix a CL, not the reviewer's."
+- **Introduced problems held, pre-existing ones reported.** Google, [Handling pushback](https://google.github.io/eng-practices/review/reviewer/pushback.html): new complexity "must be cleaned up before submission"; surrounding problems get "a bug for the cleanup". [The Standard of Code Review](https://google.github.io/eng-practices/review/reviewer/standard.html): approve a CL that "definitely improves the overall code health … even if the CL isn't perfect".
+- **One focus per pass.** Braz et al., [Less is More](https://arxiv.org/abs/2202.04586) (ICSE 2022): asking reviewers to focus on security "increases eight times the probability of vulnerability detection"; a checklist adds nothing further.
+- **Tool-enforced rules out of lens 7.** Bacchelli & Bird, [Modern Code Review](https://sback.it/publications/icse2013.pdf) (ICSE 2013): "Automating these tasks frees reviewers to look for deeper, more subtle defects."
+- **Lens 2, refactor claims.** Fowler, [Definition Of Refactoring](https://martinfowler.com/bliki/DefinitionOfRefactoring.html): a refactoring changes structure "without changing its observable behavior."
+- **Lens 4 and the reference audit.** Fowler, [Published Interface](https://martinfowler.com/bliki/PublishedInterface.html): "anything published so you can't reach the calling code needs more complicated treatment."
+- **Lens 5, incomplete transition.** Sato, [Parallel Change](https://martinfowler.com/bliki/ParallelChange.html): "Once all usages have been migrated to the new version, you perform the contract phase to remove the old version".
+- **Lenses 9 and 12, cohesion.** Martin, [The Single Responsibility Principle](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html): "Gather together the things that change for the same reasons."
+- **Lens 10, dependency direction and policy in an adapter.** Martin, [The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html): "source code dependencies can only point inwards." Cockburn, [Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/): "code pertaining to the inside part should not leak into the outside part".
+- **Lens 11, indirection.** Fowler, [Function Length](https://martinfowler.com/bliki/FunctionLength.html): a function is justified by "the separation between intention and implementation".
+- **Lens 12, one owner for a derived value.** Thomas, [Orthogonality and the DRY Principle](https://www.artima.com/articles/orthogonality-and-the-dry-principle): "every piece of system knowledge should have one authoritative, unambiguous representation".
+- **The implementation is not its own requirement.** Konstantinou et al., [Can we find bugs using LLM-generated oracles?](https://arxiv.org/abs/2410.21136): generated oracles "mainly capture the actual program behavior". Barr et al., [The Oracle Problem](http://www0.cs.ucl.ac.uk/staff/M.Harman/tse-oracle.pdf) (TSE 2015): without an adequate source "the final source of test oracle information remains the human".
+- **Complete the sweep; verify cited evidence.** Cemri et al., [Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/html/2503.13657v3): failure modes "Premature termination" and "No or incomplete verification".
+- **Context gate, compact reports, recap file.** Anthropic, [Effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): context is "a finite resource with diminishing marginal returns"; subagents return "a condensed, distilled summary"; "Structured note-taking" persists outside the context window.
+- **Consent and a filled brief.** Anthropic, [How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system): "multi-agent systems use about 15× more tokens than chats"; without clear boundaries "agents duplicate work, leave gaps".
+- **Read-only terminal agents.** Yan, [Don't Build Multi-Agents](https://cognition.ai/blog/dont-build-multi-agents): "Actions carry implicit decisions, and conflicting decisions carry bad results".
+- **Raw scope in the brief, no suspected findings.** Sharma et al., [Towards Understanding Sycophancy](https://arxiv.org/abs/2310.13548) (ICLR 2024): feedback can favor "responses that match user beliefs over truthful ones".
 
-## High-Level Flow
+## No external source
 
-1. Resolve one change set: pending work by default (staged, unstaged, and untracked together), or a named history range when the request asks for one. A clean tree never implies a range; with nothing pending and no range the pass stops. A range covering the whole repository is reviewed like any other.
-2. Separate selected existing files, deleted entries, external reference or documentation audit surfaces, and authoritative sources. Read primary files from the working tree and old deletion names from the diff or range base.
-3. Select the focus. Twelve lenses form three foci: **Bugs and requirements** (1 bugs, 2 behavior drift under a refactor claim, 3 requirement alignment), **Leftovers and docs** (4 stale references in code after a move, 5 incomplete transition, 6 documentation drift), **Structure** (7 declared invariants, 8 structural pressure, 9 placement and directory population, 10 dependency direction, 11 local anti-patterns, 12 responsibility and ownership), plus **All**. A request that names a focus gets it; otherwise the pass answers with one fixed question (change set in one line, the four foci, the default sentence) and stops; accepting without choosing selects Bugs and requirements. Measured: the question in prose or with descriptions after a colon came back as bare focus names 3 of 3 and a parenthesized "recommended" was dropped, so the foci carry self-explaining names and the default is its own sentence.
-4. Measure primary files and identified authoritative sources before loading them in full, then follow the shared context, consent, and delegation contract. The gate leaves lockfiles out and lists them as `generated`; they stay out of the corpus (before: `pnpm-lock.yaml` a primary file in 3 of 3 range reviews, read in full by an agent). Measured on a 12-commit range: batched locally in three batches, each appended to the recap before the next was read; a fresh session on that recap checked only the first entry and stopped; with consent from the repository's `AGENTS.md` one agent returned every brief field and the controller verified its citations.
-5. Load the sweep contract; load navigation-cost only for Structure or All, and reference-audit only for move-shaped changes under Leftovers and docs or All.
-6. Run every lens of the focus locally or through the review agent brief; lenses outside it are marked `not selected`. Every assignment applies every lens of the focus. Lens 1 reports code that fails or returns a wrong result for an input it accepts, routed to `cf-mr-wolf` (measured on a division by a zero subtotal: the previous structural-only sweep missed it in 1 of 1, the model without the pack found it, the focused pass found it 7 of 7). Lens 5 counts an old module kept only to forward to its replacement as an incomplete transition (missed 0 of 2 when the line said "paths", found 2 of 2 after). Lens 8 reports each changed function past 20 logical lines, routed to `cf-cognitive`, without holding the result: as a soft signal it was silent on a 31-line function 1 of 1 and at "roughly 20–30" 1 of 1; at 20 it found it 2 of 2, with no new noise on the earlier change set 2 of 2. Findings carry no severity; the hold rule names its lenses. Lens 9 counts directories with `dir-population.mjs` from the skill root. The ownership lens requires the owner of the information that determines a derived value to derive it and remain its single source of truth; consumers must not redefine it. The dependency lens also reports state, cache, run coordination, cancellation, or result-acceptance policy added to a module bound to one delivery environment when more than one entry point uses it, routed to `cf-architecture`. A stale path in documentation belongs to lens 6, never lens 4. Never interrupt a dispatched agent or replace it locally because it seems slow; only an explicit current user request authorizes interruption, and a missing report leaves the sweep incomplete. The controller takes the shared contract's completed ledger and verifies its cited evidence.
-7. Keep repeated-shape smells out through the bounded-remedy gate, and keep file triggers at one finding while the other lenses of the focus continue.
-8. When findings exist, load the handoff contract to assign finding content, routing, and `hold` or `proceed`; the clean path does not load it. The handoff maps routes and recommends a single finding across all routes (worded per route, one run recommended one per route); the fixed routes, the `cf-mr-wolf` default, and "route, do not invoke" stay in `SKILL.md` as routing law. The agent brief lists the same finding fields under the same names. A handoff to mr-wolf carries the checked rule (for a bug, the triggering input), evidence, limits, and unresolved decision; it does not claim a frame that mr-wolf would otherwise gate.
-9. State that test assertion quality was not assessed and recommend running `cf-test` separately against the same pending work or named history range when it adds or changes executable tests. Do not classify or count tests for this recommendation.
-
-## Boundaries
-
-- Does not edit repository files apart from its batched pass's recap; persisting findings elsewhere belongs to `cf-todo`, which may write in the same turn when the request asks for it.
-- Keeps selected test files in the structural sweep but does not assess their assertion quality, classify or count them separately, or invoke `cf-test`.
-- Never presents an empty structural sweep as an unqualified `clear` or `commit-ready`; test assertion quality and every focus not run remain explicit coverage limits.
-- Does not confirm or fix a candidate; the controller de-risks only its cited evidence and never advances `status: candidate`.
-- Does not report a smell whose remedy no nameable unit can clear.
-- Owns only its recap. A request about an existing recap follows the shared contract's work-through path instead of rerunning the corpus; other `.cflow` state and todo files stay outside this skill.
-- Does not claim requirement alignment when no authoritative source was identified or sources conflict; that is a coverage limitation, not a finding.
-- A request to review an unchanged file opens the skill, which stops for lack of a change set instead of routing (2 of 2).
+Kept on the pack's own runs or on the user's decision: the bounded-remedy gate; the navigation-cost thresholds; pending work as the default change set; the reference audit's search categories; stale doc paths under lens 6; grouping and first-finding order; route, do not invoke; the policy band from the script; never interrupting a slow agent; working through a recap.

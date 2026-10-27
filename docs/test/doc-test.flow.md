@@ -1,31 +1,21 @@
-# cf-test Flow
+# cf-test
 
-## Purpose
+Runtime: [SKILL.md](../../skills/cf-test/SKILL.md), [references/assertion-quality.md](../../skills/cf-test/references/assertion-quality.md), [references/test-agent-brief.md](../../skills/cf-test/references/test-agent-brief.md), shared [delegated-execution.md](../../skills/_shared/references/delegated-execution.md), shared [dynamic-agents.md](../../skills/_shared/references/dynamic-agents.md), shared [repo-tree.mjs](../../skills/_shared/scripts/repo-tree.mjs).
 
-Document the runtime flow for `cf-test`, the public entrypoint for checking test assertions against observable contracts and invariants. It leaves source and test files unchanged; a batched pass writes its own recap.
+## Basis
 
-It owns assertion-quality diagnosis, not test execution, production-code review, expected-behavior decisions, or fixes.
+- **No observable contract, no candidate.** Kuefler, [Unit Testing](https://abseil.io/resources/swe-book/html/ch12.html) (*Software Engineering at Google*): "make calls against its public API rather than its implementation details."
+- **Invariants never read from the implementation; candidates stay candidates.** Konstantinou et al., [Can we find bugs using LLM-generated oracles?](https://arxiv.org/abs/2410.21136): generated oracles "mirror the program's actual behavior rather than the expected one". Barr et al., [The Oracle Problem](http://www0.cs.ucl.ac.uk/staff/M.Harman/tse-oracle.pdf) (TSE 2015): without an adequate source "the final source of test oracle information remains the human".
+- **Lens 1, a missing invariant shown by a regression that still passes.** Google, [What to look for](https://google.github.io/eng-practices/review/reviewer/looking-for.html): "Will the tests actually fail when the code is broken?" Vera-Pérez et al., [Pseudo-tested Methods](https://arxiv.org/abs/1807.05030) (EMSE 2019): methods "covered by the test suite, yet no test case fails when the method body is removed".
+- **`remove` first.** Khorikov, *Unit Testing Principles* ([chapter 1](https://enterprisecraftsmanship.com/files/Unit-Testing-Chapter-1-Excerpt.pdf)): "Keep only tests of positive net value in the suite".
+- **Lens 2, a negative assertion needs a contract.** Trenk & Bly, [Test Doubles](https://abseil.io/resources/swe-book/html/ch13.html): interaction testing is warranted when "Differences in the number or order of calls to a function would cause undesired behavior".
+- **Lens 3, invalid states representable.** Minsky, [Effective ML Revisited](https://blog.janestreet.com/effective-ml-revisited/): "Make illegal states unrepresentable". King, [Parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/).
+- **Lens 4, redundant rows.** [Equivalence partitioning](https://en.wikipedia.org/wiki/Equivalence_partitioning): "test cases are designed to cover each partition at least once".
+- **Lenses 5–7, brittleness.** Kuefler, [Unit Testing](https://abseil.io/resources/swe-book/html/ch12.html): "a brittle test is one that fails in the face of an unrelated change to production code that does not introduce any real bugs." Meszaros, [Fragile Test](http://xunitpatterns.com/Fragile%20Test.html): Overspecified Software, "the tests describe how the software should do something, not what it should achieve"; Sensitive Equality, objects "converted to strings and compared with an expected string". Fowler, [Mocks Aren't Stubs](https://martinfowler.com/articles/mocksArentStubs.html): "Mockist tests are thus more coupled to the implementation of a method."
+- **Seams that are contracts.** Khorikov, [When to Mock](https://enterprisecraftsmanship.com/posts/when-to-mock/): "Intra-system communications are implementation details"; the way the system talks to the external world: "It's part of the contract".
+- **No style candidates.** Panichella et al., [Test smells 20 years later](https://digitalcollection.zhaw.ch/handle/11475/25672) (EMSE 2022): multiple smells "virtually never correlated with semantic or maintainability flaws".
+- **Agent policy** (shared with cf-review): see the [cf-review mirror](../review/doc-review.flow.md).
 
-## Runtime Inputs
+## No external source
 
-- Public skill: `skills/cf-test/SKILL.md`
-- Runtime references: `skills/cf-test/references/assertion-quality.md`, `test-agent-brief.md`
-- Shared sources vendored into runtime paths: `skills/_shared/references/dynamic-agents.md`, `delegated-execution.md`; `skills/_shared/scripts/repo-tree.mjs`
-- Owned artifact: `.cflow/cf-test-recap.md`, under the shared delegated-execution contract
-
-## High-Level Flow
-
-1. Resolve one test scope: pending tests, the existing suite when the working tree holds no test change, a named history range, or explicit tests. Separate primary tests, contract surfaces, authoritative sources, and exclusions without loading the corpus in full. A document is an authoritative source only when it names the tested behavior, never by path proximity alone.
-2. Measure the primary tests and contract surfaces, then follow the shared context, consent, and delegation contract; the lockfiles the gate lists as `generated` stay out of the corpus.
-3. Run every invariant and fragility lens locally or through the test agent brief. Every assignment applies both groups. Never interrupt a dispatched agent or replace it locally because it seems slow; only an explicit current user request authorizes interruption, and a missing report leaves the pass incomplete.
-4. Require an invariant or observable contract and a concrete regression or behavior-preserving change for every candidate. Check acceptance tests, protocol rules, intentional seams, distinct input classes, and other nearest false positives.
-5. Group candidates by the action their lens names: `remove` (absence without an invariant, redundant assertion), `rewrite` (over-specified, brittle string, implementation-detail coupling), `strengthen` (missing observable invariant), `redesign` (invalid domain states). Route ambiguous expected behavior and domain-model redesign to `cf-mr-wolf`; every other candidate carries route `none`.
-6. Return `clear` or candidates without editing source or test files or running tests. A batched pass persists its recap under the shared contract; a request about an existing recap follows that contract's work-through path instead of rerunning the corpus.
-
-## Boundaries
-
-- Does not infer invariants from the implementation under test or from testing style.
-- Does not treat TypeScript as required; invalid-state analysis applies to any project type or schema system.
-- Does not review production structure or general change-set quality.
-- Does not prescribe a type redesign, confirm expected behavior, or fix a candidate.
-- Owns only its recap, not other skills' `.cflow` state or todo files; persisting candidates elsewhere belongs to `cf-todo`.
+Kept on the pack's own runs or on the user's decision: a source's silence is not evidence; existing tests or documents count as authoritative only when designated or when they name the behavior; lens 2's `remove` side; one candidate per test case or table; scope selection; lens 3 prescribing no type shape; the `low` tier and the action order; the policy band from the script; never interrupting a slow agent; working through a recap.

@@ -13,14 +13,14 @@ Clean Flow (Cflow): source pack of Codex skills for cleanup/refactor flows. This
 
 - `skills/` — authoring source for public skills (`cf-*`) and `_shared/` (vendored references/scripts, `vendor.json`)
 - `src/` — install/materialize/sync logic (`commands/`, `lib/`)
-- `docs/` — maintainer mirrors of the runtime flows; `docs/maintaining-this-pack.md` is the guide
+- `docs/` — one mirror per skill with the sources its rules rest on; `docs/maintaining-this-pack.md` is the guide
 - `test/` — Node test suites
 
 ## Rules
 
 - ESM only (`.mjs`, `type: module`); pnpm; single dev dep: `tiktoken`.
-- Runtime contracts live in `SKILL.md` + linked references; keep `docs/` mirrors in sync when changing them.
+- Runtime contracts live in `SKILL.md` + linked references. A skill's mirror in `docs/` holds only the literature each rule rests on, quoted and linked: when a rule is added or changed, add or update its source there; never restate the contract.
 - Content shared across skills lives once in `skills/_shared` (`references/`, `scripts/`); `vendor.json` maps which skills receive which files. At install time each shared file is copied into the consuming skills' `references/`/`scripts/`, replacing a placeholder file that must exist there and start with a `Cflow vendored placeholder: <relative-path>` comment. To share content: author it in `_shared`, map it in `vendor.json`, add the placeholder in each consuming skill — never edit the vendored copies.
 - Install must stay idempotent; don't bootstrap `.cflow/` here.
 - Run `pnpm test` before committing.
-- `CHANGELOG.md` is written only when releasing to `main`, from the commits since the previous release; work on `dev` adds nothing to it. Follow Keep a Changelog: one heading per release (`## <version> - <date>`), changes grouped under `Added`, `Changed`, `Fixed`, `Removed`, one short line per user-visible change saying what changed for whoever installs the pack. No measurements, run counts, token counts or rationale: those live in the `docs/` mirrors.
+- `CHANGELOG.md` is written only when releasing to `main`, from the commits since the previous release; work on `dev` adds nothing to it. Follow Keep a Changelog: one heading per release (`## <version> - <date>`), changes grouped under `Added`, `Changed`, `Fixed`, `Removed`, one short line per user-visible change saying what changed for whoever installs the pack. No measurements, run counts, token counts or rationale.

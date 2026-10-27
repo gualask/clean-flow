@@ -26,7 +26,7 @@ Cflow has two maintainer concerns:
    - `--friction` alone opts into the separate `install/friction/` assets under `~/.agents/cflow`; see [Friction Log](./friction-log.md)
 2. public runtime flows
    - runtime contracts live in the public `SKILL.md` files, first-level linked references, and vendored shared references loaded by an active runtime reference
-   - per-public-skill flow docs are maintainer mirrors used to review and validate the runtime contracts
+   - per-public-skill mirrors hold the sources each rule rests on, quoted and linked; they do not restate the contract
 
 ## Repository Layout
 
@@ -87,7 +87,7 @@ Pack-wide golden rules live in [golden-rules.md](./golden-rules.md).
 - Codex install prompts live in `install/codex/`.
 - Pack-wide maintainer rules live in [golden-rules.md](./golden-rules.md).
 
-Maintainer flow mirrors:
+Mirrors (sources of each skill's rules):
 
 - `cf-architecture`: [architecture/doc-architecture.flow.md](./architecture/doc-architecture.flow.md)
 - `cf-mr-wolf`: [mr-wolf/doc-mr-wolf.flow.md](./mr-wolf/doc-mr-wolf.flow.md)
@@ -133,7 +133,7 @@ When removing a duplicate, prefer keeping the copy in the file the model has ope
 ## Key Design Decisions
 
 - Cflow does not depend on `AGENTS.md` for manual start or artifact-backed resume.
-- Each public skill's maintainer flow mirror lives in `docs/<public-skill>/doc-*.flow.md`; do not keep duplicate flow copies in maintainer overview docs. When a mirror and the runtime disagree, `SKILL.md` and its loaded references win; fix the mirror.
+- Each public skill's mirror lives in `docs/<public-skill>/doc-*.flow.md` and holds the literature each of its rules rests on, with the quote and the link; the contract itself lives only in `SKILL.md` and its references. Measurements stay out of the mirrors.
 - `_shared` is authoring source for references and scripts vendored into more than one runtime skill directory; content one skill uses lives in that skill.
 
 ## Skill Change Validation

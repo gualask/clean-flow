@@ -4,7 +4,6 @@ import path from "node:path";
 import test from "node:test";
 
 import {
-  DOCS_ROOT,
   REPO_ROOT,
   SHARED_REFERENCES_ROOT,
   SKILLS_ROOT,
@@ -31,10 +30,6 @@ test("review owns reference loading and remains read-only", async () => {
   );
   const reviewAgentBrief = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-review", "references", "review-agent-brief.md"),
-    "utf8",
-  );
-  const reviewFlowDoc = await fs.readFile(
-    path.join(DOCS_ROOT, "review", "doc-review.flow.md"),
     "utf8",
   );
   const referenceAudit = await fs.readFile(
@@ -87,7 +82,8 @@ test("review owns reference loading and remains read-only", async () => {
   assert.match(reviewContract, /\*\*Bugs and requirements\*\*, lenses 1–3/);
   assert.match(reviewContract, /\*\*Leftovers and docs\*\*, lenses 4–6/);
   assert.match(reviewContract, /\*\*Structure\*\*, lenses 7–12/);
-  assert.match(reviewContract, /Without a choice I start with Bugs and requirements\./);
+  assert.match(reviewContract, /Otherwise take Bugs and requirements\./);
+  assert.doesNotMatch(reviewContract, /What should this review focus on\?/);
   assert.match(reviewContract, /reporting, silent, not applicable, or not selected/);
   assert.match(reviewContract, /Name each focus not run as `not assessed`/);
   assert.doesNotMatch(reviewContract, /reaches most of the repository/);
@@ -97,8 +93,6 @@ test("review owns reference loading and remains read-only", async () => {
   assert.match(sweep, /run bundled `scripts\/dir-population\.mjs`, resolved from the active skill root/);
   assert.match(reviewContract, /Create or update no other repository file/);
   assert.match(reviewContract, /references\/review-agent-brief\.md/);
-  assert.match(reviewFlowDoc, /de-risks only its cited evidence and never advances `status: candidate`/);
-  assert.doesNotMatch(reviewFlowDoc, /Does not confirm, de-risk, or fix a candidate/);
   assert.match(reviewContract, /For `subagent-1`, `subagent-2`, or `batched`/);
   assert.match(reviewContract, /Every assignment applies every lens of the focus/);
   assert.match(reviewContract, /shared reference owns assignment and completion/);
@@ -138,11 +132,6 @@ test("review owns reference loading and remains read-only", async () => {
     reviewContract,
     /Test files selected by the change set remain primary files\./,
   );
-  assert.match(
-    reviewFlowDoc,
-    /Keeps selected test files in the structural sweep but does not assess their assertion quality/,
-  );
-  assert.match(reviewFlowDoc, /Never presents an empty structural sweep as an unqualified `clear`/);
   assert.match(reviewContract, /Primary files/);
   assert.match(reviewContract, /Deleted entries/);
   assert.match(reviewContract, /Audit surfaces/);

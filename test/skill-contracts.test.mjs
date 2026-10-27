@@ -65,12 +65,7 @@ test("cf-docs routes by Markdown write intent or an audit request", async () => 
   const label = "skills/cf-docs/SKILL.md";
   const description = parseFrontmatter(skill, label).description;
   const body = parseBody(skill, label);
-  const flow = await fs.readFile(
-    path.join(DOCS_ROOT, "docs", "doc-docs.flow.md"),
-    "utf8",
-  );
-
-  for (const contract of [description, body, flow]) {
+  for (const contract of [description, body]) {
     assert.match(contract, /writes a Markdown file/);
     assert.match(contract, /audit (?:or fact-check )?(?:existing )?(?:docs|them) against the code/i);
     assert.match(contract, /do not use (?:it )?otherwise/i);
@@ -116,7 +111,7 @@ test("materialized skill files only link runtime files that exist", async () => 
   }
 });
 
-test("every public skill has a maintainer flow doc", async () => {
+test("every public skill has a maintainer flow doc whose links resolve", async () => {
   for (const skillName of await publicSkillNames(SKILLS_ROOT)) {
     const shortName = skillName.replace(/^cf-/, "");
     const flowDoc = path.join(DOCS_ROOT, shortName, `doc-${shortName}.flow.md`);
@@ -125,6 +120,17 @@ test("every public skill has a maintainer flow doc", async () => {
       fs.access(flowDoc),
       `${skillName} is missing ${path.relative(REPO_ROOT, flowDoc)}`,
     );
+
+    // A mirror holds the sources of the skill's rules and links to its runtime
+    // files; a link left behind by a rename is the error it can carry.
+    const mirror = await fs.readFile(flowDoc, "utf8");
+    for (const [, target] of mirror.matchAll(/\]\(([^)\s#]+)(?:#[^)]*)?\)/g)) {
+      if (/^[a-z]+:/i.test(target)) continue;
+      await assert.doesNotReject(
+        fs.access(path.resolve(path.dirname(flowDoc), target)),
+        `${path.relative(REPO_ROOT, flowDoc)} links to missing ${target}`,
+      );
+    }
   }
 });
 
@@ -141,20 +147,6 @@ test("delegated agents cannot be interrupted for perceived slowness", async () =
   assert.match(contract, /only an explicit request from the user.*interrupt/is);
   assert.match(contract, /redo its assignment locally/i);
   assert.match(contract, /missing report.*incomplete/is);
-
-  for (const [skill, flow] of [
-    ["cf-review", path.join(DOCS_ROOT, "review", "doc-review.flow.md")],
-    ["cf-test", path.join(DOCS_ROOT, "test", "doc-test.flow.md")],
-  ]) {
-    const mirror = await fs.readFile(flow, "utf8");
-    assert.match(mirror, /Never interrupt a dispatched agent/i, `${skill} mirror`);
-    assert.match(
-      mirror,
-      /Only an explicit current user request authorizes interruption/i,
-      `${skill} mirror`,
-    );
-    assert.match(mirror, /missing report leaves .* incomplete/i, `${skill} mirror`);
-  }
 });
 
 test("cf-review assigns derived values to one authoritative owner", async () => {
@@ -162,12 +154,7 @@ test("cf-review assigns derived values to one authoritative owner", async () => 
     path.join(SKILLS_ROOT, "cf-review", "references", "sweep.md"),
     "utf8",
   );
-  const flow = await fs.readFile(
-    path.join(DOCS_ROOT, "review", "doc-review.flow.md"),
-    "utf8",
-  );
-
-  for (const contract of [sweep, flow]) {
+  for (const contract of [sweep]) {
     assert.match(contract, /derived value/i);
     assert.match(contract, /owner of the information that determines/i);
     assert.match(contract, /derive (?:the value|it)/i);

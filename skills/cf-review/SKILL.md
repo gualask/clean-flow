@@ -33,18 +33,7 @@ The pass runs one focus, each a group of lenses from `references/sweep.md`:
 - **Structure**, lenses 7–12: does the change keep the code easy to maintain.
 - **All**: every lens.
 
-When the current request names what to look at — bugs, requirements, leftovers, docs, structure, or a complete review — take the matching focus. Otherwise, once the change set is resolved and before measuring or reading primary files, answer with this question in the language of the request, filled in, and stop:
-
-```text
-<the change set in one line: selector and changed files>. What should this review focus on?
-1. Bugs and requirements
-2. Leftovers and docs
-3. Structure
-4. All
-Without a choice I start with Bugs and requirements.
-```
-
-A reply that accepts without choosing selects Bugs and requirements.
+When the current request names what to look at — bugs, requirements, leftovers, docs, structure, or a complete review — take the matching focus. Otherwise take Bugs and requirements.
 
 ## Hard Gates
 

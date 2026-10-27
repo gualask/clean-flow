@@ -2,7 +2,7 @@
 name: cf-test
 description: "Report assertion-quality findings for pending tests, a named history range, explicit tests, or the existing suite. Use when the request asks to review assertion quality, coverage against invariants, brittle or over-specified tests, implementation-detail coupling, negative assertions, or invalid domain states representable by the project's types or schemas. Do not use to run or fix tests or to review production code generally; route structural change-set review to cf-review and ambiguous expected behavior to cf-mr-wolf."
 ---
-Report assertion-quality candidates against observable contracts and invariants. Do not edit repository files other than the batched pass's recap, run the test suite, or turn test style preferences into candidates.
+Report assertion-quality candidates against observable contracts and invariants. Do not edit repository files other than the batched pass's recap, or turn test style preferences into candidates.
 
 ## Scope
 

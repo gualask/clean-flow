@@ -16,7 +16,7 @@ A state or policy belongs to the capability when any interface invoking the use 
 
 For each dimension the code varies along (platform or build target, provider, storage, configuration, or an analogous one), name its variants and every place that decides among them, in code, build conditions and UI, and where that decision should be made once. Where the variants have implementations of their own, run the bundled `scripts/variant-history.mjs`, resolved from the active skill root and never from the project working directory, with `--repo .` and the directories of those implementations: for every commit that added one it lists the files changed outside it. Cite that list and the commit as evidence; do not write your own count.
 
-Present one target tree in the conversation, without implementing changes or creating files. No plan, no priorities, no steps: the plan comes after the user replies to the tree.
+Present one target tree in the conversation, without implementing changes or creating files.
 
 ## Feature Handoff
 

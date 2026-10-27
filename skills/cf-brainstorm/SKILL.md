@@ -8,7 +8,6 @@ Do not write code, scaffold projects, or start implementation until the design h
 
 ## Boundaries
 
-- Explicit invocation only. If this skill was reached without the user asking to brainstorm, hand back to `cf-mr-wolf`.
 - Whether a named change is worth it belongs to `cf-scenario`; the goal behind a symptom or an undecided change belongs to `cf-mr-wolf`; restructuring existing code belongs to `cf-architecture`.
 
 ## Ownership Handoff

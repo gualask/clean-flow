@@ -4,7 +4,6 @@ import path from "node:path";
 import test from "node:test";
 
 import {
-  DOCS_ROOT,
   SHARED_REFERENCES_ROOT,
   SKILLS_ROOT,
 } from "./support/skill-contract-helpers.mjs";
@@ -20,10 +19,6 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
   );
   const cognitiveContract = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
-    "utf8",
-  );
-  const cognitiveFlow = await fs.readFile(
-    path.join(DOCS_ROOT, "cognitive", "doc-cognitive.flow.md"),
     "utf8",
   );
 
@@ -58,7 +53,6 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
     cognitiveContract,
     /references\/navigation-cost\.md for the thresholds.*the report\/action rule/,
   );
-  assert.match(cognitiveFlow, /complete deferred finding required by the canonical navigation-cost contract/);
 });
 
 test("placement carries its gates in the body and ships no references", async () => {

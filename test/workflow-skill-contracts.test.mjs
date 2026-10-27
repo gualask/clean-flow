@@ -4,7 +4,6 @@ import path from "node:path";
 import test from "node:test";
 
 import {
-  DOCS_ROOT,
   SHARED_REFERENCES_ROOT,
   SKILLS_ROOT,
   TERMINAL_AGENT_PROTOCOL,
@@ -17,10 +16,6 @@ import {
 test("cognitive routes to placement up front, not by post-edit condition", async () => {
   const cognitiveContract = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
-    "utf8",
-  );
-  const flowDoc = await fs.readFile(
-    path.join(DOCS_ROOT, "cognitive", "doc-cognitive.flow.md"),
     "utf8",
   );
 
@@ -36,7 +31,7 @@ test("cognitive routes to placement up front, not by post-edit condition", async
     cognitiveContract,
     /next step when a route applies/,
   );
-  for (const contract of [cognitiveContract, flowDoc]) {
+  for (const contract of [cognitiveContract]) {
     assert.doesNotMatch(contract, /After editing a target file, route to/);
     assert.doesNotMatch(
       contract,
@@ -50,12 +45,7 @@ test("todo rolls completed tasks over only when adding new work", async () => {
     path.join(SKILLS_ROOT, "cf-todo", "SKILL.md"),
     "utf8",
   );
-  const todoFlow = await fs.readFile(
-    path.join(DOCS_ROOT, "todo", "doc-todo.flow.md"),
-    "utf8",
-  );
-
-  for (const text of [todoContract, todoFlow]) {
+  for (const text of [todoContract]) {
     assert.match(text, /at least one existing task is unchecked/);
     assert.match(text, /every existing task is checked/);
     assert.match(text, /add(?:s|ing)? new tasks?/);
