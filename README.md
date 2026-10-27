@@ -151,8 +151,9 @@ It reports missing invariants, invalid domain states, redundant or over-specifie
 
 ### `cf-docs`
 
-Writes, updates, trims, and restructures Markdown docs, READMEs, and design notes against the code.
+Writes, updates, trims, and reorganizes Markdown docs, READMEs, and design notes against the code, with one owner doc per fact.
 It enters when the request writes a Markdown file or asks to audit existing docs against the code; reading a doc to answer something else never triggers it.
+A reorganization proposes the target tree and moves files only after you confirm; a CHANGELOG and AGENTS.md or CLAUDE.md follow their own rules (AGENTS.md always in English).
 
 ### `cf-todo`
 

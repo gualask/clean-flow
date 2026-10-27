@@ -18,7 +18,7 @@ Apply each pass below to the docs in scope, then report findings; edit only when
 
 ## Leanness Pass
 
-- Mark historical and migration notes, restated context, decorative wording, and multi-paragraph explanations that carry a single idea.
+- Mark historical and migration notes that give no reason for the current design, restated context, decorative wording, and multi-paragraph explanations that carry a single idea.
 - Before removing a sentence, find where else its fact lives; if nowhere, keep the fact.
 - Report implementation detail as a candidate move to a source comment, following the Implementation detail rule.
 

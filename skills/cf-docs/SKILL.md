@@ -1,8 +1,7 @@
 ---
 name: cf-docs
-description: Write accurate, lean, nonduplicative documentation. Use when the request writes a Markdown file outside `.cflow/` — authoring, updating, trimming, or restructuring docs, READMEs, or design notes — or asks to audit or fact-check them against the code; do not use otherwise. Files under `.cflow/` belong to the Cflow skill that wrote them.
+description: Write or audit Markdown documentation. Use when the request writes a Markdown file outside `.cflow/` — a doc, README, CHANGELOG, AGENTS.md or CLAUDE.md, or a design note, including updating, trimming, or reorganizing docs — or asks to audit or fact-check docs against the code. Do not use to read a doc to answer a question, for a todo file (cf-todo), or for files under `.cflow/`; do not use otherwise.
 ---
-Operate as a documentation author and reviewer.
 Produce docs that are accurate against the code, lean, and free of duplicated concepts.
 
 Use this pass when the current request writes a Markdown file, or asks to audit existing docs against the code. Do not use it otherwise, nor for files under `.cflow/`: they are artifacts owned by other Cflow skills.
@@ -23,18 +22,25 @@ Read `references/review.md`.
 Use when the request is to write new documentation or substantially author or update doc content.
 Read `references/generate.md`.
 
-If the target docs, flow, or requested outcome is ambiguous, ask one focused question.
+### Reorganize Flow
+
+Use when the request is to reorganize, regroup, or restructure existing docs.
+Read `references/reorganize.md`.
+
 Do not infer authoring from words like "review", "check", or "is this accurate".
+
+When the target is a CHANGELOG, or an AGENTS.md or CLAUDE.md, also read `references/changelog.md` or `references/agents-md.md`: each holds the rules of that file.
 
 ## Core Rules
 
-Apply these in both flows; each flow reference says how.
+Apply these in every flow; each flow reference says how.
 
 - **Accuracy**: check every checkable claim against the code — versions, paths, command names, constants, thresholds, file and symbol names — and fix or report drift instead of trusting the existing text. If the repository contains no source code to check against, say so in **Checks** and apply the remaining rules.
-- **Duplication**: explain a concept fully in the doc that owns it and link to it from elsewhere; remove the same concept restated across docs or within a doc.
-- **Leanness**: remove only restated content, historical or migration notes, and decorative wording. A fact that no other doc or source comment carries stays in the doc; never delete it.
+- **Duplication**: before writing a fact, search the docs for it. A fact another doc already owns gets a link, not a second explanation; when the doc being written becomes the owner, replace the old copy with a link. Remove the same concept restated across docs or within a doc.
+- **Leanness**: remove only restated content, historical or migration notes that give no reason for the current design, and decorative wording. A fact that no other doc or source comment carries stays in the doc; never delete it.
 - **Implementation detail**: a doc carries intent, contracts, and rationale; detail that only a code reader needs belongs in a source comment. Move it there only when the request authorizes source edits; otherwise leave it in the doc and report it as a candidate move.
 - **Structure**: keep decision and explanation content out of exhaustive reference lists, and do not mix how-to, reference, and explanation in one section.
+- **Language**: write in the language of the repository's existing docs, even when the request uses another language; AGENTS.md and CLAUDE.md are always in English.
 - **Scope**: review or edit only the docs the request targets, preserve the author's voice and the project's doc conventions, and do not rewrite untouched docs on preference alone.
 
 ## Output Format

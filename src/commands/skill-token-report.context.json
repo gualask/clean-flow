@@ -66,13 +66,28 @@
           "required": [
             "references/review.md"
           ],
-          "conditional": []
+          "conditional": [
+            "references/changelog.md",
+            "references/agents-md.md"
+          ]
         },
         "generate": {
           "required": [
             "references/generate.md"
           ],
-          "conditional": []
+          "conditional": [
+            "references/changelog.md",
+            "references/agents-md.md"
+          ]
+        },
+        "reorganize": {
+          "required": [
+            "references/reorganize.md"
+          ],
+          "conditional": [
+            "references/changelog.md",
+            "references/agents-md.md"
+          ]
         }
       }
     },

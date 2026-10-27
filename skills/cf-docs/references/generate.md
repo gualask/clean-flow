@@ -13,7 +13,6 @@ Author new documentation or substantially update existing content from verified 
 - Decide what the doc is for: how-to (accomplish a task), reference (look up exact details), or explanation (understand a design and its rationale).
 - Keep that purpose consistent within a section; if the content needs another purpose, give it its own section or its own doc.
 - State the scope up front so a reader knows what the doc does and does not cover.
-- Write in the language of the repository's existing docs, even when the request uses another language.
 
 ## Place Each Concept Once
 
