@@ -18,23 +18,11 @@
       "references": [
         "delegated-execution.md",
         "dynamic-agents.md",
-        "navigation-cost.md",
-        "reference-audit.md"
+        "navigation-cost.md"
       ],
       "scripts": [
         "dir-population.mjs",
         "repo-tree.mjs"
-      ]
-    },
-    "cf-execute": {
-      "references": [
-        "file-split-rules.md",
-        "navigation-cost.md",
-        "reference-audit.md",
-        "regression-handling.md"
-      ],
-      "scripts": [
-        "dir-population.mjs"
       ]
     },
     "cf-test": {

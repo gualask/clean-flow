@@ -1,6 +1,6 @@
 ---
 name: cf-mr-wolf
-description: "Recover the goal behind a reported symptom, or the shape of a change nobody has decided yet. Use when the user reports a symptom, an experience, or a doubt without naming what should change, or asks what a change would consist of while its shape is still open — even when the target is already named. Do not use once the request names both its target and the change to make to it, even when voiced as a doubt: a named component with its technical alternatives, a proposal whose worth or impact is the question, a bounded edit, a defect whose fix is one localized edit, or code review."
+description: "Recover the goal behind a reported symptom, or the shape of a change nobody has decided yet. Use when the user reports a symptom, an experience, or a doubt without naming what should change, or asks what a change would consist of while its shape is still open — even when the target is already named. Do not use once the request names both its target and the change to make to it, even when voiced as a doubt: a named component with its technical alternatives, a proposal whose worth or impact is the question, a bounded edit, a defect whose fix is one localized edit, a request to clean up or refactor a named area, or code review."
 ---
 
 Do not implement code changes here.

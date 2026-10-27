@@ -12,4 +12,4 @@ Besides the lifecycle sections, the spec holds:
 
 For a draft handed over by `cf-brainstorm`, keep its sections and add the target tree of the touched modules, with what each directory owns and the `file:line`, and a `Moves` table only for existing code the feature must relocate, with the same evidence rule; add a migration order only when there are moves.
 
-An approved spec ends this skill; the skill that plans its implementation is `cf-execute`.
+An approved spec ends this skill.

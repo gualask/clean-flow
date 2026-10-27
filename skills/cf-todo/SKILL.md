@@ -1,6 +1,6 @@
 ---
 name: cf-todo
-description: Create or update a lightweight todo file tracking next steps and open questions from an analysis or working session. Use when the request asks to write, add to, update, or check off a todo.md, or to record remaining work and open questions in a todo file. Do not use to read an existing todo file or to answer what it contains. Do not use for Cflow execution plans or resume state (cf-execute owns them), or for project documentation (cf-docs).
+description: Create or update a lightweight todo file tracking next steps and open questions from an analysis or working session. Use when the request asks to write, add to, update, or check off a todo.md, or to record remaining work and open questions in a todo file. Do not use to read an existing todo file or to answer what it contains. Do not use for project documentation (cf-docs).
 ---
 Operate as the keeper of a lightweight todo file and keep it current.
 

@@ -37,4 +37,4 @@ Run the phases in order. Do not skip ahead while decision-relevant questions are
 
 ## Terminal State
 
-The skill that plans the approved spec's implementation is `cf-execute`.
+An approved spec ends this skill.

@@ -2,8 +2,8 @@
 
 # Clean Flow
 
-Clean Flow is a Codex skill pack for cleanup and refactor planning, migration, and execution.
-It helps an agent understand the repository, choose the right refactor path, keep work resumable, and avoid uncontrolled rewrites while still treating hard restructures as first-class when the architecture is the real problem.
+Clean Flow is a Codex skill pack for cleanup and refactor work.
+It helps an agent understand the repository, choose the right refactor path, and avoid uncontrolled rewrites while still treating hard restructures as first-class when the architecture is the real problem.
 
 Use it when you want Codex to:
 
@@ -17,7 +17,6 @@ Use it when you want Codex to:
 - reduce local cognitive complexity in a source file
 - regroup related files into a more cohesive local feature slice
 - check uncommitted work, or the last few commits, against structure rules and authoritative requirements
-- plan and run an approved spec, refactor or feature, in reviewable units with artifact-backed resume
 - brainstorm a new feature or idea into an approved design spec (explicit invocation only)
 
 ## Why Use It
@@ -30,8 +29,7 @@ Clean Flow gives Codex a practical operating system for that work:
 - **Domain-led**: architecture reviews start from product workflows, ownership, and external boundaries before current folders.
 - **Clean target first**: recommendations optimize for the cleanest evidence-backed structure, not the easiest low-impact workaround.
 - **Low ceremony**: boundaries, abstractions, and layers are justified by real ownership, integration, or risk.
-- **Migration-safe**: execution phases require a credible safety net before structural edits and preserve behavior unless a behavior change is explicit.
-- **Resumable**: longer flows store durable state in `.cflow/` artifacts.
+- **Resumable**: design conversations keep their questions and decisions in a `.cflow/specs/draft.md` draft until the spec is approved.
 - **Scoped**: local cleanup, file splitting, cohesion work, and broad refactors use different entrypoints.
 
 ## Quick Start
@@ -68,10 +66,10 @@ When the concern is the structure of the repository or a subsystem, start with:
 Use cf-architecture to assess the architecture of this repository and recommend the next step.
 ```
 
-Once a spec is approved, plan and run it with:
+Once a spec is approved, ask Codex to implement it; its own planning and tools carry the work:
 
 ```text
-Use cf-execute to plan the approved spec.
+Implement the approved spec in .cflow/specs/<date>-<topic>.md.
 ```
 
 When the concern, lens, or desired outcome is still unclear, frame it first:
@@ -108,11 +106,6 @@ Fetch and follow instructions from https://raw.githubusercontent.com/gualask/cle
 
 Assesses and proposes the architecture of a repository or subsystem, including exploration without a known problem.
 Produces one target tree with what each directory owns and the `file:line` that proves it, for discussion and without a plan; when the user takes up a structural change, it records it as an approved spec through the same draft → spec cycle as `cf-brainstorm`. It does not implement changes. Use `cf-scenario` to judge the worth or impact of a named change.
-
-### `cf-execute`
-
-Plans and implements an approved spec: a structural change from `cf-architecture` or a feature from `cf-brainstorm`.
-It splits the spec into reviewable units (`split`, `consolidate`, or `feature`), locks behavior with a safety net, executes one accepted unit at a time, and reviews and verifies it. `.cflow/execution-plan.md` carries the plan and resume state and points to the spec. Without an approved spec it routes to the skill that designs one instead of assessing the repository itself.
 
 ### `cf-mr-wolf`
 
@@ -184,11 +177,8 @@ When `.cflow/` is created for the first time, Clean Flow writes a `.cflow/.gitig
 The normal lifecycle for a structural change or a new feature:
 
 1. design it with `cf-architecture` (structure) or `cf-brainstorm` (feature) until the spec is approved
-2. plan it with `cf-execute` into bounded units
-3. lock behavior with an appropriate safety net
-4. execute one accepted unit
-5. review and verify
-6. resume from `.cflow/execution-plan.md` when needed
+2. ask the agent to implement the approved spec
+3. review the result with `cf-review`
 
 For direct local work, use `cf-cognitive` or `cf-placement` instead.
 To review what a set of changes exposes and route it, use `cf-review`: pending work before you commit, or a history range after the fact.
@@ -198,7 +188,6 @@ For lightweight follow-up tracking from an analysis or working session, use `cf-
 ## Documentation
 
 - [Architecture flow](./docs/architecture/doc-architecture.flow.md)
-- [Execute flow](./docs/execute/doc-execute.flow.md)
 - [Mr Wolf flow](./docs/mr-wolf/doc-mr-wolf.flow.md)
 - [Scenario flow](./docs/scenario/doc-scenario.flow.md)
 - [Cognitive flow](./docs/cognitive/doc-cognitive.flow.md)

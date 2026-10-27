@@ -8,7 +8,7 @@ Document the runtime flow for `cf-placement`, the public local entrypoint for sp
 
 - Public skill: `skills/cf-placement/SKILL.md`, which carries the whole flow in its body
 - Runtime references: none
-- Shared script vendored into runtime paths: `skills/_shared/scripts/dir-population.mjs` (discovery count; also used by `cf-review` lens 9 and `cf-execute`)
+- Shared script vendored into runtime paths: `skills/_shared/scripts/dir-population.mjs` (discovery count; also used by `cf-review` lens 9)
 - Target artifacts: none
 
 ## High-Level Flow
@@ -21,7 +21,7 @@ Document the runtime flow for `cf-placement`, the public local entrypoint for sp
 6. A regrouping moves whole files without rewriting them. On a 17-file TS model directory the diff held only moves and import paths (2 of 2); without the skill the model moved helpers between files and removed re-exports (1 of 1).
 7. Move the tests of each moved unit next to its new file, update every reference. Without the skill, tests stayed in the original file in every split run (0 of 4).
 8. Run those tests and the checks a move can break (types, lint, unused exports), scoped to what changed. With "smallest relevant check", and with "typecheck and those tests", the split left an unused export that the repository's knip check rejected (2 of 2); with the scoped hint knip ran and passed in 4 of 4 TS runs, and the run whose commands were counted ran no build, e2e or full suite (2026-10-25).
-9. Each function past 20 logical lines in a modified file is a Deferred finding routed to `cf-cognitive`, as in `cf-review` lens 8 and `cf-execute` review. Without the line Deferred was `none` on the split and on the regrouping (1 run each); without the skill no run deferred anything (0 of 6). The pack does not define a logical line, and the misses sit at the threshold. With an AST count of non-blank, non-comment lines that leaves out bracket-only lines, 7 of 8 split and regrouping runs deferred every function past 20; the eighth missed two of 21 and 22 lines. Counting bracket-only lines as well, functions of 23–27 lines that some runs left out cross the threshold (2026-10-25).
+9. Each function past 20 logical lines in a modified file is a Deferred finding routed to `cf-cognitive`, as in `cf-review` lens 8. Without the line Deferred was `none` on the split and on the regrouping (1 run each); without the skill no run deferred anything (0 of 6). The pack does not define a logical line, and the misses sit at the threshold. With an AST count of non-blank, non-comment lines that leaves out bracket-only lines, 7 of 8 split and regrouping runs deferred every function past 20; the eighth missed two of 21 and 22 lines. Counting bracket-only lines as well, functions of 23–27 lines that some runs left out cross the threshold (2026-10-25).
 
 ## Output Slots
 

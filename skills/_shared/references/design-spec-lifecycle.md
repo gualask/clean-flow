@@ -59,7 +59,7 @@ An owner may hand its draft to the skill that finishes it: set `owner` to the re
 
 1. **Self-review**: re-read the draft once with fresh eyes and fix inline, without re-reviewing: placeholders or vague requirements, internal contradictions, scope too large for one implementation effort, requirements readable in two ways.
 2. **User review**: ask the user to review the draft; apply requested changes and re-run the self-review.
-3. **Promotion**: after explicit approval, promote the draft and end the turn. Reply with the spec path and the skill that plans its implementation, for the user to invoke. Do not open that skill or start planning: approving the spec is not a request to plan or implement it.
+3. **Promotion**: after explicit approval, promote the draft and end the turn with the spec path. Do not start implementing: approving the spec is not a request to implement it.
 
 ## Language
 

@@ -38,7 +38,7 @@ test("review owns reference loading and remains read-only", async () => {
     "utf8",
   );
   const referenceAudit = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "reference-audit.md"),
+    path.join(SKILLS_ROOT, "cf-review", "references", "reference-audit.md"),
     "utf8",
   );
   const contextMap = JSON.parse(
@@ -199,7 +199,7 @@ test("review owns reference loading and remains read-only", async () => {
   assert.doesNotMatch(handoff, /business correctness not assessed/);
   assert.match(
     referenceAudit,
-    /When the active pass is read-only, report each surviving stale reference and do not modify it/,
+    /Report each surviving stale reference and do not modify it/,
   );
   assert.deepEqual(reviewFlow.required, [
     "references/dynamic-agents.md",

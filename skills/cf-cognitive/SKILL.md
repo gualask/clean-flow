@@ -1,6 +1,6 @@
 ---
 name: cf-cognitive
-description: Find or refactor local source-file cognitive complexity hotspots while preserving behavior. Use when a function or file is hard to read or reason about — overloaded functions, deep nesting, tangled branching, local readability pressure — with or without explicit file targets. Do not use to split a file into new files (cf-placement) or for repository-wide refactors (cf-architecture).
+description: Find or refactor local source-file cognitive complexity hotspots while preserving behavior. Use when a function or file is hard to read or reason about — overloaded functions, deep nesting, tangled branching, local readability pressure — with or without explicit file targets. Do not use to split a file into new files (cf-placement) or for refactors or cleanups spanning several modules or the whole repository (cf-architecture).
 ---
 Find or reduce cognitive complexity in local source files while preserving behavior.
 

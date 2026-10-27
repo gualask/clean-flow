@@ -47,7 +47,7 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
   assert.match(cognitiveContract, /- \*\*Deferred\*\*: after execution only, per the report\/action rule\./);
   // Function length left the hard triggers on 2026-10-24; without this slot line a
   // split and a regrouping both deferred `none` (1 run each, 2026-10-25). It matches
-  // cf-review's lens 8 and cf-execute's review.
+  // cf-review's lens 8.
   assert.match(
     placementContract,
     /- \*\*Deferred\*\*: each function past 20 logical lines in a file you modified, routed to `cf-cognitive`; each owner cluster kept flat because a folder would be a new package or module, routed to `cf-architecture`; or `none`\./,
@@ -98,33 +98,19 @@ test("placement carries its gates in the body and ships no references", async ()
   }
 });
 
-test("execute review reads the shared split references and the rules count with the bundled script", async () => {
-  const fileSplitRules = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "file-split-rules.md"),
-    "utf8",
-  );
-  const startReview = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-execute", "references", "review.md"),
-    "utf8",
-  );
+test("reference audit is local to review, read-only, and repository-wide", async () => {
   const referenceAudit = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "reference-audit.md"),
+    path.join(SKILLS_ROOT, "cf-review", "references", "reference-audit.md"),
     "utf8",
   );
 
-  assert.match(fileSplitRules, /hard-trigger values and exemptions come from `references\/navigation-cost\.md`/);
-  assert.doesNotMatch(fileSplitRules, /read `references\/navigation-cost\.md`/i);
-  assert.match(startReview, /read references\/file-split-rules\.md and references\/navigation-cost\.md/);
-  // Placement counts come from the bundled script (4 of 4 runs, 2026-10-12).
-  assert.match(
-    fileSplitRules,
-    /count the direct real source files of a directory with the bundled `scripts\/dir-population\.mjs --include <directory>`, resolved from the active skill root and never from the project working directory; do not write your own count\./,
-  );
+  // cf-execute, its only other consumer, was removed on 2026-10-26: the audit lives in review alone.
+  await assert.rejects(fs.readFile(path.join(SHARED_REFERENCES_ROOT, "reference-audit.md"), "utf8"));
   assert.match(referenceAudit, /repository-wide/);
   assert.match(referenceAudit, /configuration/);
   assert.match(referenceAudit, /documentation/);
-  assert.match(referenceAudit, /consumers outside the candidate unit as compatibility evidence/);
-  assert.doesNotMatch(referenceAudit, /ownership evidence/);
+  assert.match(referenceAudit, /consumers outside the change set as compatibility evidence/);
+  assert.doesNotMatch(referenceAudit, /authorizes edits|candidate unit/);
 });
 
 test("cognitive owns first-level reference loading in its skill contract", async () => {

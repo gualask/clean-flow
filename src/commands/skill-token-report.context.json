@@ -111,66 +111,6 @@
         }
       }
     },
-    "cf-execute": {
-      "flows": {
-        "spec-gate": {
-          "required": [],
-          "conditional": []
-        },
-        "work-unit-planning": {
-          "required": [
-            "references/work-unit-planning.md"
-          ],
-          "conditional": [
-            "references/artifacts.md",
-            "assets/execution-plan.template.md",
-            "references/navigation-cost.md"
-          ]
-        },
-        "migration-unit-planning": {
-          "required": [
-            "references/migration-unit-planning.md"
-          ],
-          "conditional": [
-            "references/artifacts.md",
-            "assets/execution-plan.template.md",
-            "references/navigation-cost.md"
-          ]
-        },
-        "unit-execution": {
-          "required": [
-            "references/unit-execution.md"
-          ],
-          "conditional": [
-            "references/regression-handling.md",
-            "references/reference-audit.md",
-            "references/artifacts.md",
-            "assets/execution-plan.template.md"
-          ]
-        },
-        "review": {
-          "required": [
-            "references/review.md"
-          ],
-          "conditional": [
-            "references/file-split-rules.md",
-            "references/navigation-cost.md",
-            "references/artifacts.md",
-            "assets/execution-plan.template.md"
-          ]
-        },
-        "verify": {
-          "required": [
-            "references/verify.md"
-          ],
-          "conditional": [
-            "references/reference-audit.md",
-            "references/artifacts.md",
-            "assets/execution-plan.template.md"
-          ]
-        }
-      }
-    },
     "cf-test": {
       "flows": {
         "default": {

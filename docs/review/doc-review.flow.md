@@ -11,8 +11,8 @@ The change set is the reference point that keeps findings verifiable, and it com
 ## Runtime Inputs
 
 - Public skill: `skills/cf-review/SKILL.md`
-- Runtime references: `skills/cf-review/references/sweep.md`, `review-agent-brief.md`, `handoff.md`
-- Shared sources vendored into runtime paths: `skills/_shared/references/dynamic-agents.md`, `delegated-execution.md`, `navigation-cost.md`, `reference-audit.md`; `skills/_shared/scripts/repo-tree.mjs`, `dir-population.mjs`
+- Runtime references: `skills/cf-review/references/sweep.md`, `review-agent-brief.md`, `handoff.md`, `reference-audit.md`
+- Shared sources vendored into runtime paths: `skills/_shared/references/dynamic-agents.md`, `delegated-execution.md`, `navigation-cost.md`; `skills/_shared/scripts/repo-tree.mjs`, `dir-population.mjs`
 - Owned artifact: `.cflow/cf-review-recap.md`, under the shared delegated-execution contract
 
 ## High-Level Flow
