@@ -56,15 +56,7 @@ test("repo-tree runs when invoked through a symbolic link", async () => {
 
 test("repo-tree context budget uses deterministic boundary bands", () => {
   for (const [metrics, expected] of [
-    [{ files: 8, loc: 800, estimatedTokens: 8_000 }, "local"],
-    [{ files: 9, loc: 800, estimatedTokens: 8_000 }, "subagent-1"],
-    [{ files: 8, loc: 801, estimatedTokens: 8_000 }, "subagent-1"],
-    [{ files: 8, loc: 800, estimatedTokens: 8_001 }, "subagent-1"],
-    [{ files: 40, loc: 6_000, estimatedTokens: 55_000 }, "subagent-1"],
-    [{ files: 41, loc: 6_000, estimatedTokens: 55_000 }, "subagent-2"],
-    [{ files: 40, loc: 6_001, estimatedTokens: 55_000 }, "subagent-2"],
-    [{ files: 40, loc: 6_000, estimatedTokens: 55_001 }, "subagent-2"],
-    [{ files: 80, loc: 12_000, estimatedTokens: 110_000 }, "subagent-2"],
+    [{ files: 80, loc: 12_000, estimatedTokens: 110_000 }, "local"],
     [{ files: 81, loc: 12_000, estimatedTokens: 110_000 }, "batched"],
     [{ files: 80, loc: 12_001, estimatedTokens: 110_000 }, "batched"],
     [{ files: 80, loc: 12_000, estimatedTokens: 110_001 }, "batched"],
@@ -181,8 +173,7 @@ test("repo-tree context budget classifies byte thresholds", async () => {
   const workspace = await makeRepoTreeFixture();
 
   for (const [bytes, tokens, policy] of [
-    [32_001, 8_001, "subagent-1"],
-    [220_001, 55_001, "subagent-2"],
+    [440_000, 110_000, "local"],
     [440_001, 110_001, "batched"],
   ]) {
     await writeFixture(workspace, "budget/large.txt", "x".repeat(bytes));

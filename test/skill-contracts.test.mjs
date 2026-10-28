@@ -134,21 +134,6 @@ test("every public skill has a maintainer flow doc whose links resolve", async (
   }
 });
 
-test("delegated agents cannot be interrupted for perceived slowness", async () => {
-  // Completion lives in the delegated contract: it is read only when the
-  // policy is not `local`.
-  const contract = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "delegated-execution.md"),
-    "utf8",
-  );
-
-  assert.match(contract, /Wait for every dispatched agent to finish/i);
-  assert.match(contract, /Never interrupt.*because it seems slow/is);
-  assert.match(contract, /only an explicit request from the user.*interrupt/is);
-  assert.match(contract, /redo its assignment locally/i);
-  assert.match(contract, /missing report.*incomplete/is);
-});
-
 test("cf-review assigns derived values to one authoritative owner", async () => {
   const sweep = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-review", "references", "sweep.md"),

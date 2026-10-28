@@ -16,8 +16,8 @@
     },
     "cf-review": {
       "references": [
-        "delegated-execution.md",
-        "dynamic-agents.md",
+        "batched-execution.md",
+        "context-gate.md",
         "navigation-cost.md"
       ],
       "scripts": [
@@ -27,8 +27,8 @@
     },
     "cf-test": {
       "references": [
-        "delegated-execution.md",
-        "dynamic-agents.md"
+        "batched-execution.md",
+        "context-gate.md"
       ],
       "scripts": [
         "repo-tree.mjs"

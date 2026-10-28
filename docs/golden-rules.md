@@ -13,11 +13,8 @@ For non-runtime files, check that the change does not move runtime behavior into
 - Keep runtime behavior in the relevant `SKILL.md`, a first-level reference linked from that skill, or a vendored shared reference loaded by an active runtime reference.
 - Keep `docs/` maintainer-only; do not assume docs are visible at runtime.
 - Keep first-level reference loading decisions in the consuming `SKILL.md`; a reference should not decide whether it should have been read.
-- A reference may own local subpath selection after it is active, including agent paths bound to that reference.
-- Do not repeat phase-entry gates inside local subpath or agent selection; if the whole reference should not run yet, the gate belongs in the consuming `SKILL.md`.
-- Bind every agent contract to the smallest active reference that owns its phase or task; keep shared agent rules separate from phase-specific prompt, input, and output contracts.
-- Make terminal agent roles explicit in both agent selection and the agent-bound prompt contract; a terminal agent must not activate skills, route prerequisites, or delegate again.
-- In agent-bound references, prefer `Selection`, `Required Inputs`, `Valid Inputs`, `Assumptions`, `Prompt Contract`, and `Expected Output` sections over generic `Preconditions` headings.
+- A reference may own local subpath selection after it is active.
+- Do not repeat phase-entry gates inside local subpath selection; if the whole reference should not run yet, the gate belongs in the consuming `SKILL.md`.
 
 ## Runtime Skill Text
 
@@ -79,7 +76,7 @@ For non-runtime files, check that the change does not move runtime behavior into
 Use this checklist additively: when a changed file has multiple roles, apply every matching line plus the category rules above.
 
 - `SKILL.md`: trigger conditions, hard gates, routing, first-level reference loading decisions, and the procedure and output contract that pay on every invocation.
-- `references/*.md`: operational rules, local subpath selection, agent binding, input contracts, prompt contracts, and output contracts for a flow or phase loaded only in some invocations; not first-level loading logic.
+- `references/*.md`: operational rules, local subpath selection, input contracts, and output contracts for a flow or phase loaded only in some invocations; not first-level loading logic.
 - `docs/*.md`: maintainer-only explanation; no runtime dependency.
 - `templates` and `assets`: artifact shape, examples, or review rubrics only.
 - `_shared`: shared authoring references, scripts, helpers, and vendoring config consumed by more than one public skill.

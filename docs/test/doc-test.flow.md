@@ -1,6 +1,6 @@
 # cf-test
 
-Runtime: [SKILL.md](../../skills/cf-test/SKILL.md), [references/assertion-quality.md](../../skills/cf-test/references/assertion-quality.md), [references/test-agent-brief.md](../../skills/cf-test/references/test-agent-brief.md), shared [delegated-execution.md](../../skills/_shared/references/delegated-execution.md), shared [dynamic-agents.md](../../skills/_shared/references/dynamic-agents.md), shared [repo-tree.mjs](../../skills/_shared/scripts/repo-tree.mjs).
+Runtime: [SKILL.md](../../skills/cf-test/SKILL.md), [references/assertion-quality.md](../../skills/cf-test/references/assertion-quality.md), shared [batched-execution.md](../../skills/_shared/references/batched-execution.md), shared [context-gate.md](../../skills/_shared/references/context-gate.md), shared [repo-tree.mjs](../../skills/_shared/scripts/repo-tree.mjs).
 
 ## Basis
 
@@ -14,8 +14,8 @@ Runtime: [SKILL.md](../../skills/cf-test/SKILL.md), [references/assertion-qualit
 - **Lenses 5–7, brittleness.** Kuefler, [Unit Testing](https://abseil.io/resources/swe-book/html/ch12.html): "a brittle test is one that fails in the face of an unrelated change to production code that does not introduce any real bugs." Meszaros, [Fragile Test](http://xunitpatterns.com/Fragile%20Test.html): Overspecified Software, "the tests describe how the software should do something, not what it should achieve"; Sensitive Equality, objects "converted to strings and compared with an expected string". Fowler, [Mocks Aren't Stubs](https://martinfowler.com/articles/mocksArentStubs.html): "Mockist tests are thus more coupled to the implementation of a method."
 - **Seams that are contracts.** Khorikov, [When to Mock](https://enterprisecraftsmanship.com/posts/when-to-mock/): "Intra-system communications are implementation details"; the way the system talks to the external world: "It's part of the contract".
 - **No style candidates.** Panichella et al., [Test smells 20 years later](https://digitalcollection.zhaw.ch/handle/11475/25672) (EMSE 2022): multiple smells "virtually never correlated with semantic or maintainability flaws".
-- **Agent policy** (shared with cf-review): see the [cf-review mirror](../review/doc-review.flow.md).
+- **Context gate and recap file** (shared with cf-review): see the [cf-review mirror](../review/doc-review.flow.md).
 
 ## No external source
 
-Kept on the pack's own runs or on the user's decision: a source's silence is not evidence; existing tests or documents count as authoritative only when designated or when they name the behavior; lens 2's `remove` side; one candidate per test case or table; scope selection; lens 3 prescribing no type shape; the `low` tier and the action order; the policy band from the script; never interrupting a slow agent; working through a recap.
+Kept on the pack's own runs or on the user's decision: a source's silence is not evidence; existing tests or documents count as authoritative only when designated or when they name the behavior; lens 2's `remove` side; one candidate per test case or table; scope selection; lens 3 prescribing no type shape; the `low` tier and the action order; the policy band from the script; working through a recap.

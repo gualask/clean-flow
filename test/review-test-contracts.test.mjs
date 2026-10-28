@@ -7,7 +7,6 @@ import {
   REPO_ROOT,
   SHARED_REFERENCES_ROOT,
   SKILLS_ROOT,
-  assertStableFields,
   parseFrontmatter,
 } from "./support/skill-contract-helpers.mjs";
 
@@ -26,10 +25,6 @@ test("review owns reference loading and remains read-only", async () => {
   );
   const handoff = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-review", "references", "handoff.md"),
-    "utf8",
-  );
-  const reviewAgentBrief = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-review", "references", "review-agent-brief.md"),
     "utf8",
   );
   const referenceAudit = await fs.readFile(
@@ -57,7 +52,7 @@ test("review owns reference loading and remains read-only", async () => {
     reviewMetadata.description,
     /\b(?:evidence|candidate|owning routes|sweep|lens|reference|handoff|audit surface|primary file)\b/i,
   );
-  assert.match(reviewContract, /Read `references\/dynamic-agents\.md`/);
+  assert.match(reviewContract, /Read `references\/context-gate\.md`/);
   assert.match(
     reviewContract,
     /Read `references\/sweep\.md`; for Structure or All, also read `references\/navigation-cost\.md`/,
@@ -92,36 +87,9 @@ test("review owns reference loading and remains read-only", async () => {
   assert.match(sweep, /A stale reference in documentation or examples belongs to lens 6/);
   assert.match(sweep, /run bundled `scripts\/dir-population\.mjs`, resolved from the active skill root/);
   assert.match(reviewContract, /Create or update no other repository file/);
-  assert.match(reviewContract, /references\/review-agent-brief\.md/);
-  assert.match(reviewContract, /For `subagent-1`, `subagent-2`, or `batched`/);
-  assert.match(reviewContract, /Every assignment applies every lens of the focus/);
-  assert.match(reviewContract, /shared reference owns assignment and completion/);
-  assert.doesNotMatch(reviewContract, /complete path-only manifest|compact reports|reconciles cross-batch references/);
-  assert.match(reviewAgentBrief, /Logical scope manifest: \{SCOPE_MANIFEST\}/);
-  assert.match(reviewAgentBrief, /cross-batch reconciliation/);
-  assert.doesNotMatch(reviewContract, /Two agents receive non-overlapping groups/);
-  assert.doesNotMatch(reviewAgentBrief, /Terminal protocol \(stable contract\)/);
-  assert.match(reviewAgentBrief, /terminal read-only change-set review agent/);
-  assert.match(reviewAgentBrief, /Do not edit files, run tests, create artifacts/);
-  assert.match(reviewAgentBrief, /activate skills, route prerequisites, delegate again/);
-  assertStableFields(
-    reviewAgentBrief,
-    [
-      "lens",
-      "claim",
-      "evidence",
-      "impact",
-      "confidence",
-      "introduced",
-      "exemption",
-      "route",
-      "status",
-      "false_positive_check",
-      "unknowns",
-    ],
-    "review agent brief",
-  );
-  assert.match(reviewAgentBrief, /route `controller-owned` and status `candidate`/);
+  assert.match(reviewContract, /For `batched`, every batch applies every lens of the focus/);
+  assert.match(reviewContract, /shared reference owns batching and completion/);
+  assert.doesNotMatch(reviewContract, /complete path-only manifest|compact report|reconciles cross-batch references/);
   assert.match(reviewContract, /Test assertion quality/);
   assert.match(reviewContract, /not assessed in this pass/);
   assert.match(reviewContract, /same pending work or named history range/);
@@ -146,9 +114,7 @@ test("review owns reference loading and remains read-only", async () => {
   assert.doesNotMatch(reviewContract, /local-refactor-rules\.md/);
   assert.doesNotMatch(sweep, /\bRead `?references\//);
   assert.doesNotMatch(sweep, /references\/reference-audit\.md/);
-  for (const contract of [handoff, reviewAgentBrief]) {
-    assert.doesNotMatch(contract, /severity/i);
-  }
+  assert.doesNotMatch(handoff, /severity/i);
   assert.match(handoff, /introduced a finding from lens 1, 2, 3, 4, or 10, a lens 8 hard trigger/);
   assert.match(sweep, /Report each changed function past 20 logical lines as a function finding routed to `cf-cognitive`/);
   assert.match(sweep, /it does not hold the result/);
@@ -191,20 +157,19 @@ test("review owns reference loading and remains read-only", async () => {
     /Report each surviving stale reference and do not modify it/,
   );
   assert.deepEqual(reviewFlow.required, [
-    "references/dynamic-agents.md",
+    "references/context-gate.md",
     "references/sweep.md",
   ]);
   assert.deepEqual(reviewFlow.conditional, [
     "references/navigation-cost.md",
-    "references/delegated-execution.md",
+    "references/batched-execution.md",
     "references/reference-audit.md",
-    "references/review-agent-brief.md",
     "references/handoff.md",
   ]);
   assert.equal(reviewFlow.handoffs, undefined);
 });
 
-test("cf-test owns assertion quality with deterministic provider-neutral delegation", async () => {
+test("cf-test owns assertion quality with a deterministic context gate", async () => {
   const testContract = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-test", "SKILL.md"),
     "utf8",
@@ -214,19 +179,15 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
     path.join(SKILLS_ROOT, "cf-test", "references", "assertion-quality.md"),
     "utf8",
   );
-  const agentBrief = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-test", "references", "test-agent-brief.md"),
+  const contextGate = await fs.readFile(
+    path.join(SHARED_REFERENCES_ROOT, "context-gate.md"),
     "utf8",
   );
-  const dynamicAgents = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "dynamic-agents.md"),
-    "utf8",
-  );
-  // The gate is read at step 2 of every pass, the delegated contract only when
-  // the policy is not `local`. Assertions follow
+  // The gate is read at step 2 of every pass, the batched contract only when
+  // the policy is `batched`. Assertions follow
   // the text they belong to, so the gate keeps its own coverage.
-  const delegatedExecution = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "delegated-execution.md"),
+  const batchedExecution = await fs.readFile(
+    path.join(SHARED_REFERENCES_ROOT, "batched-execution.md"),
     "utf8",
   );
   const contextMap = JSON.parse(
@@ -244,13 +205,11 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
   assert.match(testContract, /contract surfaces/);
   assert.match(testContract, /path proximity alone is insufficient/);
   assert.doesNotMatch(testContract, /adjacent repository docs/);
-  assert.match(testContract, /Read `references\/dynamic-agents\.md`/);
+  assert.match(testContract, /Read `references\/context-gate\.md`/);
   assert.match(testContract, /Read `references\/assertion-quality\.md`/);
-  assert.match(testContract, /references\/test-agent-brief\.md/);
-  assert.match(testContract, /For `subagent-1`, `subagent-2`, or `batched`/);
-  assert.match(testContract, /Every assignment applies both lens groups/);
-  assert.match(testContract, /shared reference owns assignment and completion/);
-  assert.doesNotMatch(testContract, /complete path-only manifest|compact reports|reconcile cross-batch references/);
+  assert.match(testContract, /For `batched`, every batch applies both lens groups/);
+  assert.match(testContract, /shared reference owns batching and completion/);
+  assert.doesNotMatch(testContract, /complete path-only manifest|compact report|reconcile cross-batch references/);
   // The recap is the pass's one repository write, declared in the pack's own
   // ownership idiom, and every other write stays banned.
   assert.match(testContract, /Owns `\.cflow\/cf-test-recap\.md`/);
@@ -259,11 +218,6 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
     testContract,
     /Do not edit repository files other than the batched pass's recap/,
   );
-  assert.match(agentBrief, /Logical scope manifest: \{SCOPE_MANIFEST\}/);
-  assert.match(agentBrief, /cross-batch reconciliation/);
-  assert.match(agentBrief, /Do not edit files, run tests, create artifacts/);
-  assert.match(agentBrief, /delegate again, confirm candidates, decide final routing/);
-  assert.doesNotMatch(agentBrief, /run broad test suites/);
   assert.doesNotMatch(testContract, /assign one lens group to each/);
   for (const slot of ["Scope", "Context budget", "Lenses", "Findings", "Handoff", "Result"]) {
     assert.match(
@@ -291,73 +245,34 @@ test("cf-test owns assertion quality with deterministic provider-neutral delegat
     /No locatable source and no concrete regression or behavior-preserving change means no candidate/,
   );
   assert.match(assertionQuality, /language-agnostic/);
-  assert.doesNotMatch(agentBrief, /Terminal protocol \(stable contract\)/);
-  assertStableFields(
-    agentBrief,
-    [
-      "id",
-      "primary_test",
-      "action",
-      "claim",
-      "evidence",
-      "invariant_or_contract",
-      "concrete_regression",
-      "severity",
-      "confidence_basis",
-      "route",
-      "status",
-      "false_positive_check",
-      "unknowns",
-    ],
-    "test agent brief",
-  );
-  assert.match(agentBrief, /route `controller-owned` and status `candidate`/);
-  assert.match(dynamicAgents, /policy.*authoritative/s);
-  assert.match(dynamicAgents, /`batched`/);
+  assert.match(contextGate, /policy.*authoritative/s);
+  assert.match(contextGate, /`batched`/);
   // The gate names no other reference: the consuming skill is the only router.
-  assert.doesNotMatch(dynamicAgents, /delegated-execution\.md/);
-  assert.doesNotMatch(dynamicAgents, /## Recap File/);
-  assert.match(delegatedExecution, /Read this when the context gate returns anything other than `local`/);
-  assert.doesNotMatch(delegatedExecution, /dynamic-agents\.md/);
-  assert.match(delegatedExecution, /Batching changes source loading, never the logical scope/);
-  assert.match(delegatedExecution, /keeps only the reports in its context/);
-  assert.match(delegatedExecution, /creates no other repository or temporary artifact/);
-  assert.match(delegatedExecution, /missing report or unresolved cross-batch check cannot produce a clear result/);
-  // The batched fallback is a recap-backed local pass, not a request to narrow
-  // the scope. The recap is a deliverable,
-  // owned at one flat path, shared by every skill that batches, and never
+  assert.doesNotMatch(contextGate, /batched-execution\.md/);
+  assert.doesNotMatch(contextGate, /## Recap File/);
+  assert.match(batchedExecution, /Read this when the context gate returns `batched`/);
+  assert.doesNotMatch(batchedExecution, /context-gate\.md/);
+  assert.match(batchedExecution, /Batching changes source loading, never the logical scope/);
+  assert.match(batchedExecution, /create no other repository or temporary artifact/);
+  assert.match(batchedExecution, /missing batch report or unresolved cross-batch check cannot produce a clear result/);
+  // The recap is a deliverable, owned by each skill that batches, and never
   // overwritten without asking.
-  assert.match(
-    delegatedExecution,
-    /When agents are unavailable or declined, still make the complete pass locally/,
-  );
-  assert.match(delegatedExecution, /## Recap File/);
-  assert.match(delegatedExecution, /The consuming skill owns its own recap at the path its Artifacts contract names/);
+  assert.match(batchedExecution, /## Recap File/);
+  assert.match(batchedExecution, /The consuming skill owns its own recap at the path its Artifacts contract names/);
   // One recap per skill, at `.cflow/<skill>-recap.md`, named by each skill's own
   // Artifacts contract: the shared text names no path, so two batching skills
   // never collide on one file.
-  assert.doesNotMatch(delegatedExecution, /`\.cflow\/recap\.md`/);
-  assert.match(delegatedExecution, /Each batching skill has its own recap and writes no other skill's/);
-  assert.match(delegatedExecution, /Delegated agents write nothing/);
-  assert.match(delegatedExecution, /never overwrite it silently/);
-  assert.doesNotMatch(delegatedExecution, /narrower-scope fallback for/);
-  assert.match(delegatedExecution, /runtime default/);
-  assertStableFields(
-    delegatedExecution,
-    [
-      "runtime_model_selection: controller-owned",
-      "runtime_effort_selection: controller-owned",
-      "reusable_brief_model_values: forbidden",
-    ],
-    "delegated execution contract",
-  );
+  assert.doesNotMatch(batchedExecution, /`\.cflow\/recap\.md`/);
+  assert.match(batchedExecution, /Each batching skill has its own recap and writes no other skill's/);
+  assert.match(batchedExecution, /never overwrite it silently/);
+  assert.doesNotMatch(batchedExecution, /narrower-scope fallback for/);
+  for (const contract of [contextGate, batchedExecution]) {
+    assert.doesNotMatch(contract, /\bagents?\b|delegat/i);
+  }
 
   assert.deepEqual(flow.required, [
-    "references/dynamic-agents.md",
+    "references/context-gate.md",
     "references/assertion-quality.md",
   ]);
-  assert.deepEqual(flow.conditional, [
-    "references/delegated-execution.md",
-    "references/test-agent-brief.md",
-  ]);
+  assert.deepEqual(flow.conditional, ["references/batched-execution.md"]);
 });

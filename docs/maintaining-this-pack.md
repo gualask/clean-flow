@@ -59,19 +59,14 @@ Shared authoring references vendored into consuming skills:
 
 - `skills/_shared/references/design-spec-lifecycle.md`
 - `skills/_shared/references/navigation-cost.md`
-- `skills/_shared/references/dynamic-agents.md`
+- `skills/_shared/references/context-gate.md`
+- `skills/_shared/references/batched-execution.md`
 
 Shared authoring scripts vendored into consuming skills:
 
 - `skills/_shared/scripts/repo-tree.mjs`
 - `skills/_shared/scripts/dir-population.mjs`
 - `skills/_shared/scripts/variant-history.mjs`
-
-Delegated agents use the shared provider-neutral context, consent, and terminal-role contract, then explicit phase prompts that live beside the consuming reference:
-
-- `skills/_shared/references/dynamic-agents.md`
-- `skills/cf-review/references/review-agent-brief.md`
-- `skills/cf-test/references/test-agent-brief.md`
 
 ## Golden Rules
 
@@ -118,8 +113,7 @@ Move to `references/`:
 
 - phase-specific preflight
 - detailed decision tables
-- local subpath and agent selection
-- prompt, input, and output contracts for agents selected by that reference
+- local subpath selection
 - artifact field update lists
 - execution heuristics
 - review and verification lenses
@@ -174,7 +168,6 @@ When changing the pack:
 - update this document when maintainer rules change
 - if artifact structure changes, update the owning skill's `assets/*.template.md`
 - if install/remove behavior changes, update `src/` and filesystem tests
-- if delegated-agent behavior changes, update the agent brief reference, the consuming `SKILL.md`, the affected flow doc, and tests together
 - keep `README.md` focused on user-facing install and usage
 
 ## Testing

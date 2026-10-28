@@ -6,11 +6,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const CONTEXT_TOKEN_BYTES = 4;
-const CONTEXT_BUDGETS = [
-  { name: "local", maxFiles: 8, maxLoc: 800, maxTokens: 8_000 },
-  { name: "subagent-1", maxFiles: 40, maxLoc: 6_000, maxTokens: 55_000 },
-  { name: "subagent-2", maxFiles: 80, maxLoc: 12_000, maxTokens: 110_000 },
-];
+const LOCAL_BUDGET = { maxFiles: 80, maxLoc: 12_000, maxTokens: 110_000 };
 // Package-manager lockfiles: generated, often the largest file in a change set, never reviewed by reading.
 const GENERATED_FILE_NAMES = new Set([
   "bun.lock",
@@ -468,17 +464,11 @@ function formatNumber(value) {
 }
 
 export function classifyContextBudget({ files, loc, estimatedTokens }) {
-  for (const budget of CONTEXT_BUDGETS) {
-    if (
-      files <= budget.maxFiles &&
-      loc <= budget.maxLoc &&
-      estimatedTokens <= budget.maxTokens
-    ) {
-      return budget.name;
-    }
-  }
-
-  return "batched";
+  return files <= LOCAL_BUDGET.maxFiles &&
+    loc <= LOCAL_BUDGET.maxLoc &&
+    estimatedTokens <= LOCAL_BUDGET.maxTokens
+    ? "local"
+    : "batched";
 }
 
 function assertMeasurementComplete(tree) {
@@ -537,20 +527,18 @@ Options:
   --depth N        Directory levels to show. Defaults to all.
   --largest N      Print only the N longest files, longest first. Every file counts,
                    including tests, docs, and lockfiles; narrow with --include.
-  --context-budget Print only deterministic context metrics and delegation policy.
+  --context-budget Print only deterministic context metrics and pass policy.
                    Lockfiles are generated: left out of the metrics and listed on
                    the generated line.
   --include PATH   Limit the inventory to an exact file or directory. Repeatable.
   --help           Show this help.
 
 Context budget policy:
-  local       <= 8 files, <= 800 LOC, and <= 8,000 estimated tokens
-  subagent-1  <= 40 files, <= 6,000 LOC, and <= 55,000 estimated tokens
-  subagent-2  <= 80 files, <= 12,000 LOC, and <= 110,000 estimated tokens
-  batched     anything larger; keep one logical scope and process file batches
+  local    <= 80 files, <= 12,000 LOC, and <= 110,000 estimated tokens
+  batched  anything larger; keep one logical scope and process file batches
 
 Estimated context tokens use bytes / ${CONTEXT_TOKEN_BYTES}. They are a provider-neutral size
-signal, not an exact tokenizer or billing count. The highest exceeded limit selects the next band.
+signal, not an exact tokenizer or billing count. Exceeding any one limit selects batched.
 
 The inventory is git ls-files -co --exclude-standard: tracked files and untracked non-ignored
 files. Outside a Git repository it walks the filesystem and skips common build and dependency

@@ -12,20 +12,6 @@ export const DOCS_ROOT = path.join(REPO_ROOT, "docs");
 export const SHARED_REFERENCES_ROOT = path.join(SKILLS_ROOT, "_shared", "references");
 export const DESCRIPTION_MAX_CHARS = 1024;
 
-export const TERMINAL_AGENT_PROTOCOL = [
-  "filesystem_writes: forbidden",
-  "test_execution: forbidden",
-  "artifact_creation: forbidden",
-  "skill_activation: forbidden",
-  "prerequisite_routing: forbidden",
-  "further_delegation: forbidden",
-  "candidate_confirmation: forbidden",
-  "final_routing_decision: forbidden",
-  "scope_expansion: forbidden",
-  "runtime_model_selection: controller-owned",
-  "runtime_effort_selection: controller-owned",
-];
-
 export async function publicSkillNames(root) {
   const entries = await fs.readdir(root, { withFileTypes: true });
   return entries

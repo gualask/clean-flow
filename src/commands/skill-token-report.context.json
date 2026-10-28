@@ -105,14 +105,13 @@
       "flows": {
         "default": {
           "required": [
-            "references/dynamic-agents.md",
+            "references/context-gate.md",
             "references/sweep.md"
           ],
           "conditional": [
             "references/navigation-cost.md",
-            "references/delegated-execution.md",
+            "references/batched-execution.md",
             "references/reference-audit.md",
-            "references/review-agent-brief.md",
             "references/handoff.md"
           ]
         }
@@ -130,12 +129,11 @@
       "flows": {
         "default": {
           "required": [
-            "references/dynamic-agents.md",
+            "references/context-gate.md",
             "references/assertion-quality.md"
           ],
           "conditional": [
-            "references/delegated-execution.md",
-            "references/test-agent-brief.md"
+            "references/batched-execution.md"
           ]
         }
       }

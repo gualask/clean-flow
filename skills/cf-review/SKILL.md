@@ -46,9 +46,9 @@ When the current request names what to look at — bugs, requirements, leftovers
 ## Flow
 
 1. Resolve the change set from the current request. List primary files, deleted entries, and authoritative sources separately. Select the focus as **Focus** says.
-2. Read `references/dynamic-agents.md`. Run its installed-local context gate against every primary file and already-identified authoritative source before loading them in full. Follow its policy exactly; when it is not `local`, read `references/delegated-execution.md` and follow it.
+2. Read `references/context-gate.md`. Run its installed-local context gate against every primary file and already-identified authoritative source before loading them in full. Follow its policy exactly; when it is `batched`, read `references/batched-execution.md` and follow it.
 3. Read `references/sweep.md`; for Structure or All, also read `references/navigation-cost.md`. When the change is move-shaped and the focus is Leftovers and docs or All, also read `references/reference-audit.md`. Run every lens of the focus against its declared surface. Within the focus all lenses are mandatory; only a lens whose observable condition is absent may be not applicable.
-4. For `local`, run the sweep sequentially. For `subagent-1`, `subagent-2`, or `batched`, read `references/review-agent-brief.md` and fill every placeholder. Every assignment applies every lens of the focus. The shared reference owns assignment and completion; treat its merged ledger as the completed sweep before step 5.
+4. For `local`, run the sweep sequentially. For `batched`, every batch applies every lens of the focus. The shared reference owns batching and completion; treat its merged ledger as the completed sweep before step 5.
 5. When the sweep produced at least one finding, read `references/handoff.md` and build the routing output. With no findings, do not read it: report `Findings: none`, `Handoff: none`, and `Result: clear for the completed sweep`.
 
 If the current request names no range and nothing is pending, say so and stop; never widen the pass to the repository.
@@ -61,7 +61,7 @@ Route, do not invoke: name the route and let the user choose what to open next.
 
 ## Artifacts
 
-- Owns `.cflow/cf-review-recap.md`: the batched pass's recap, written under the Recap File contract in `references/delegated-execution.md`. It is the pass's one repository write.
+- Owns `.cflow/cf-review-recap.md`: the batched pass's recap, written under the Recap File contract in `references/batched-execution.md`. It is the pass's one repository write.
 - When it already exists and the request is about it, work through it under the same contract instead of running the Flow.
 - Create or update no other repository file, including todo files and any other `.cflow/*` file. Persisting findings elsewhere belongs to `cf-todo`.
 
@@ -71,7 +71,7 @@ Return only:
 
 - **Scope**: which change set was resolved and how, primary file count and list, deleted entries, audit surfaces inspected, and authoritative sources checked.
 - **Focus**: the selected focus and whether the request named it or the default was taken.
-- **Context budget**: measured files, LOC, estimated tokens, selected policy, consent source, and actual model or `runtime default`; use `local` when no agent ran.
+- **Context budget**: measured files, LOC, estimated tokens, and selected policy.
 - **Lenses**: every lens by number, each marked as reporting, silent, not applicable, or not selected. A `not applicable` mark must name the condition that was absent; a mark without one is a lens that was skipped, and skipping is what this slot exists to make visible. `not selected` is only for a lens outside the focus.
 - **Findings**: every finding, grouped by file, in the shape `references/handoff.md` defines.
 - **Handoff**: with findings, each route mapped to the findings it receives, and the single finding to open first; otherwise `none`.

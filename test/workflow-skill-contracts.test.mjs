@@ -6,8 +6,6 @@ import test from "node:test";
 import {
   SHARED_REFERENCES_ROOT,
   SKILLS_ROOT,
-  TERMINAL_AGENT_PROTOCOL,
-  assertStableFields,
   publicSkillNames,
   skillAssetFiles,
   skillTextFiles,
@@ -59,21 +57,6 @@ test("todo rolls completed tasks over only when adding new work", async () => {
   assert.doesNotMatch(todoContract, /tracking file/);
 });
 
-test("delegated terminal agents keep a stable shared protocol", async () => {
-  const delegatedExecution = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "delegated-execution.md"),
-    "utf8",
-  );
-
-  assert.match(delegatedExecution, /## Delegated Terminal Agent Protocol/);
-  assert.match(delegatedExecution, /restricts only the delegated role/);
-  assertStableFields(
-    delegatedExecution,
-    [...TERMINAL_AGENT_PROTOCOL, "reusable_brief_model_values: forbidden"],
-    "shared delegated terminal agent protocol",
-  );
-});
-
 test("cf-mr-wolf is a gate and carries no runtime references", async () => {
   const skill = await fs.readFile(path.join(SKILLS_ROOT, "cf-mr-wolf", "SKILL.md"), "utf8");
   const entries = await fs.readdir(path.join(SKILLS_ROOT, "cf-mr-wolf"), {
@@ -119,20 +102,6 @@ test("cf-mr-wolf is a gate and carries no runtime references", async () => {
   assert.match(skill, /\[references\/pushback\.md\]\(references\/pushback\.md\)/);
   assert.match(skill, /Read it before answering whenever/);
   assert.match(skill, /every time/i);
-});
-
-test("dynamic agent inputs require retained notes only when relevant", async () => {
-  const delegatedExecution = await fs.readFile(
-    path.join(SHARED_REFERENCES_ROOT, "delegated-execution.md"),
-    "utf8",
-  );
-
-  assert.match(delegatedExecution, /exact evidence question or candidate findings/);
-  assert.match(delegatedExecution, /When retained notes exist and matter to the pass/);
-  assert.doesNotMatch(
-    delegatedExecution,
-    /notes path or compact notes summary, and exact evidence question/,
-  );
 });
 
 test("brainstorm hands feature ownership to architecture through the shared lifecycle", async () => {
