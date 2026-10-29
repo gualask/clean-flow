@@ -2,9 +2,9 @@
 
 Read this when the context gate returns `batched`.
 
-Batching changes source loading, never the logical scope. Use it only when the consuming skill requires a complete corpus pass; otherwise ask for a narrower evidence scope.
+Batching changes source loading, never the logical scope.
 
-- Preserve the resolved path order and build non-overlapping file batches that each remeasure `local`. If one file alone exceeds that band, report that it cannot be safely batched and ask the user how to proceed instead of guessing.
+- Preserve the resolved path order and build non-overlapping file batches that each remeasure `local`.
 - Read one batch at a time against the complete path-only scope manifest, all consuming lenses, relevant authoritative sources, and explicit exclusions. Other batches are unavailable source content, not excluded logical scope.
 - Close every batch with one compact report containing its complete lens ledger, candidates with cited evidence, references to other manifest paths that need cross-batch reconciliation, and unknowns. Append it to the recap file before reading the next batch; create no other repository or temporary artifact.
 - After the last batch, reconcile cross-batch references, verify cited evidence, merge one complete ledger, and route or report only once. A missing batch report or unresolved cross-batch check cannot produce a clear result.

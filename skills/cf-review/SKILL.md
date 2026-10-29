@@ -37,11 +37,7 @@ When the current request names what to look at — bugs, requirements, leftovers
 
 ## Hard Gates
 
-**Report; never diagnose.** Do not expand a file-level trigger into an inventory of the problems inside that file; continue running the other lenses of the focus, but leave deeper diagnosis, causes, and remedies to the skill on the finding's route. A file that breaks a file-level trigger is one finding.
-
 **Report only violations whose remedy is confined to a nameable unit.** A smell whose fix propagates to every site sharing a shape — and which therefore no single commit can clear — stays out, however real it is. `references/sweep.md` names the excluded families and the rationalization to refuse.
-
-**Complete the sweep before any routing.** Do not name a route, propose a fix, or start a deeper look while findings are still being collected. Routing happens once, after the last lens of the focus has run. Stopping mid-sweep to act on the first finding is the failure this gate exists to prevent.
 
 ## Flow
 

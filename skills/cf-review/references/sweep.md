@@ -10,7 +10,7 @@ Exclude data clumps, primitive obsession, feature envy, temporal coupling, leaky
 
 Route: `cf-mr-wolf`
 
-On changed code and the code it calls or that calls it, report code that fails, returns a wrong result, or loses data for an input or state it accepts: unguarded division or arithmetic, missing null or undefined handling, off-by-one bounds, unhandled errors or rejections, mismatched units, races, leaked resources, and analogous project-specific forms. Name the input or state that triggers it and what happens. A behavior a written requirement decides belongs to lens 3; a behavior change under a refactor claim belongs to lens 2.
+On changed code and the code it calls or that calls it, report code that fails, returns a wrong result, or loses data for an input or state it accepts. Name the input or state that triggers it and what happens. A behavior a written requirement decides belongs to lens 3; a behavior change under a refactor claim belongs to lens 2.
 
 ### Lens 2 — Behavior Drift
 

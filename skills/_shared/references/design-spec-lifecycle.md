@@ -12,7 +12,7 @@ The draft → spec cycle shared by the skills that turn a design conversation in
 
 ## Resume Check
 
-Before creating the draft, run `ls -a .cflow/specs`: the directory is git-ignored, so search tools such as `rg` skip it. If `.cflow/specs/draft.md` already exists and is not a draft handed to this skill, stop and ask whether to resume it or discard it and start fresh, naming its owner; never overwrite it silently. Resume only a draft this skill owns; on resume, re-read the draft and continue from its oldest open question.
+Before creating the draft, run `ls -a .cflow/specs`: the directory is git-ignored, so search tools such as `rg` skip it. Resume only a draft this skill owns; on resume, re-read the draft and continue from its oldest open question.
 
 ## Draft Format
 

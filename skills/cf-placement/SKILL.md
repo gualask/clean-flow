@@ -4,7 +4,7 @@ description: Split a source file that has grown too large into nearby files, or 
 ---
 Split a source file into nearby files, or regroup related files into owner folders, while preserving behavior.
 
-When the request only asks whether to split or regroup, answer and do not edit. With no file or area named, count the direct source files per directory with the bundled `scripts/dir-population.mjs`, resolved from the active skill root, name the best candidate, and do not edit. When a regrouping would create a folder the language or build treats as a new package or module, move files across features, or change module boundaries, do not edit: name `cf-architecture` and the reason in **Result**, and end the turn.
+With no file or area named, count the direct source files per directory with the bundled `scripts/dir-population.mjs`, resolved from the active skill root, and name the best candidate. When a regrouping would create a folder the language or build treats as a new package or module, move files across features, or change module boundaries, do not edit: name `cf-architecture` and the reason in **Result**, and end the turn.
 
 A split extracts named owners (a hook, component, adapter, parser, policy) into files next to the source, kept flat where a folder would be a new package or module. A regrouping moves whole files without rewriting them. Move the tests of each moved unit next to its new file, update every reference, then run those tests and the checks a move can break (types, lint, unused exports), scoped to what changed.
 

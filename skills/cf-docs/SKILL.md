@@ -27,8 +27,6 @@ Read `references/generate.md`.
 Use when the request is to reorganize, regroup, or restructure existing docs.
 Read `references/reorganize.md`.
 
-Do not infer authoring from words like "review", "check", or "is this accurate".
-
 When the target is a CHANGELOG, or an AGENTS.md or CLAUDE.md, also read `references/changelog.md` or `references/agents-md.md`: each holds the rules of that file.
 
 ## Core Rules

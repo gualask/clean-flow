@@ -15,14 +15,12 @@ Resolve exactly one test scope:
 
 Treat every selected test file as a **primary test** and inspect it as a whole. Treat changed production files in the same change set, production files directly imported by explicit tests, and identified authoritative sources as **contract surfaces**. Requirements, product or domain documentation, and acceptance criteria are **authoritative sources** only when they name the tested behavior; path proximity alone is insufficient. Contract surfaces provide evidence but are not themselves review targets.
 
-Exclude generated, vendored, ignored, fixture-only, snapshot-output, and deleted files unless an authoritative source makes one directly relevant. If the repository holds no test file at all, report that and stop. Never widen a test scope to production files.
+Exclude generated, vendored, ignored, fixture-only, snapshot-output, and deleted files unless an authoritative source makes one directly relevant.
 
 ## Hard Gates
 
 - No invariant or observable contract, no candidate. A preference is not an invariant.
 - Report one candidate per test case or test table. Do not turn one candidate into a repository-wide pattern inventory.
-- Keep every candidate at status `candidate`. Confirming expected behavior or a domain-model redesign belongs to the user or the Handoff destination.
-- Complete both lens groups before routing or assigning actions.
 
 ## Flow
 

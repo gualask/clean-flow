@@ -18,7 +18,6 @@ Google, [What to look for in a code review](https://google.github.io/eng-practic
 
 Other sources:
 
-- **Report; never diagnose.** Google, [How to write code review comments](https://google.github.io/eng-practices/review/reviewer/comments.html): "it is the developer's responsibility to fix a CL, not the reviewer's."
 - **Introduced problems held, pre-existing ones reported.** Google, [Handling pushback](https://google.github.io/eng-practices/review/reviewer/pushback.html): new complexity "must be cleaned up before submission"; surrounding problems get "a bug for the cleanup". [The Standard of Code Review](https://google.github.io/eng-practices/review/reviewer/standard.html): approve a CL that "definitely improves the overall code health … even if the CL isn't perfect".
 - **One focus per pass.** Braz et al., [Less is More](https://arxiv.org/abs/2202.04586) (ICSE 2022): asking reviewers to focus on security "increases eight times the probability of vulnerability detection"; a checklist adds nothing further.
 - **Tool-enforced rules out of lens 7.** Bacchelli & Bird, [Modern Code Review](https://sback.it/publications/icse2013.pdf) (ICSE 2013): "Automating these tasks frees reviewers to look for deeper, more subtle defects."
@@ -30,7 +29,7 @@ Other sources:
 - **Lens 11, indirection.** Fowler, [Function Length](https://martinfowler.com/bliki/FunctionLength.html): a function is justified by "the separation between intention and implementation".
 - **Lens 12, one owner for a derived value.** Thomas, [Orthogonality and the DRY Principle](https://www.artima.com/articles/orthogonality-and-the-dry-principle): "every piece of system knowledge should have one authoritative, unambiguous representation".
 - **The implementation is not its own requirement.** Konstantinou et al., [Can we find bugs using LLM-generated oracles?](https://arxiv.org/abs/2410.21136): generated oracles "mainly capture the actual program behavior". Barr et al., [The Oracle Problem](http://www0.cs.ucl.ac.uk/staff/M.Harman/tse-oracle.pdf) (TSE 2015): without an adequate source "the final source of test oracle information remains the human".
-- **Complete the sweep; verify cited evidence.** Cemri et al., [Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/html/2503.13657v3): failure modes "Premature termination" and "No or incomplete verification".
+- **Verify cited evidence.** Cemri et al., [Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/html/2503.13657v3): failure mode "No or incomplete verification".
 - **Context gate, recap file.** Anthropic, [Effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): context is "a finite resource with diminishing marginal returns"; "Structured note-taking" persists outside the context window.
 
 ## No external source

@@ -14,4 +14,4 @@ Runtime: [SKILL.md](../../skills/cf-placement/SKILL.md), shared [dir-population.
 
 ## No external source
 
-Kept on the pack's own runs or on the user's decision: an evaluation answers without editing; discovery names one candidate; moves across features route to `cf-architecture`; the examples of named owners; owner clusters kept flat deferred to `cf-architecture`; reference updates and scoped checks; the Assessment slot naming covering tests; the Defects slot; non-code content out of scope.
+Kept on the pack's own runs or on the user's decision: discovery names one candidate; moves across features route to `cf-architecture`; the examples of named owners; owner clusters kept flat deferred to `cf-architecture`; reference updates and scoped checks; the Assessment slot naming covering tests; the Defects slot; non-code content out of scope.

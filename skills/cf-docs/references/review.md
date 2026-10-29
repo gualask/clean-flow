@@ -30,6 +30,5 @@ Apply each pass below to the docs in scope, then report findings; edit only when
 
 ## Verification And Editing
 
-- When the request is review-only, report findings with concrete locations and proposed changes; do not edit.
 - When the request asks for fixes or trimming, apply the smallest edits that resolve the findings, preserving the author's voice and the project's conventions.
 - Validate that internal links and anchors resolve after any edit.

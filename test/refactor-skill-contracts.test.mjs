@@ -63,10 +63,9 @@ test("placement carries its gates in the body and ships no references", async ()
 
   // cf-placement merged cf-split and cf-cohesion on 2026-10-25, built around the
   // gates the bare model missed; every line below held in its trial cells.
-  assert.match(placementContract, /When the request only asks whether to split or regroup, answer and do not edit\./);
   assert.match(
     placementContract,
-    /With no file or area named, count the direct source files per directory with the bundled `scripts\/dir-population\.mjs`, resolved from the active skill root, name the best candidate, and do not edit\./,
+    /With no file or area named, count the direct source files per directory with the bundled `scripts\/dir-population\.mjs`, resolved from the active skill root, and name the best candidate\./,
   );
   assert.match(
     placementContract,
