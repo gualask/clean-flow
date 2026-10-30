@@ -154,13 +154,7 @@ It reports missing invariants, invalid domain states, redundant or over-specifie
 Writes, updates, trims, and reorganizes Markdown docs, READMEs, and design notes against the code, with one owner doc per fact.
 It enters when the request writes a Markdown file or asks to audit existing docs against the code; reading a doc to answer something else never triggers it.
 A reorganization proposes the target tree and moves files only after you confirm; a CHANGELOG and AGENTS.md or CLAUDE.md follow their own rules (AGENTS.md always in English).
-
-### `cf-todo`
-
-Creates and maintains a lightweight `todo.md` tracking next steps and open questions produced by an analysis or working session, or extends an existing todo file in its own shape, in the language of the repository's docs.
-A decided action without an observable done criterion is asked about, not written.
-It enters only when the request changes the file; reading it or reporting what is left does not.
-Completed tasks stay checked in place while work remains and after the list becomes fully complete. They are removed only when a later update adds new tasks to that fully completed list.
+It also keeps a lightweight `todo.md` of next steps and open questions from an analysis or working session, recorded as the session decided them: a decided action without an observable done criterion is asked about, not written, and completed tasks stay checked in place until a later update adds new tasks to a fully completed list.
 
 ### `cf-brainstorm`
 
@@ -184,7 +178,7 @@ The normal lifecycle for a structural change or a new feature:
 For direct local work, use `cf-cognitive` or `cf-placement` instead.
 To review what a set of changes exposes and route it, use `cf-review`: pending work before you commit, or a history range after the fact.
 To inspect assertion quality, run `cf-test` separately against the same pending work or named history range; `cf-review` does not classify tests or assess their assertions.
-For lightweight follow-up tracking from an analysis or working session, use `cf-todo`.
+For lightweight follow-up tracking from an analysis or working session, ask `cf-docs` to write or update the todo file.
 
 ## Documentation
 
@@ -196,6 +190,5 @@ For lightweight follow-up tracking from an analysis or working session, use `cf-
 - [Review flow](./docs/review/doc-review.flow.md)
 - [Test flow](./docs/test/doc-test.flow.md)
 - [Docs flow](./docs/docs/doc-docs.flow.md)
-- [Todo flow](./docs/todo/doc-todo.flow.md)
 - [Brainstorm flow](./docs/brainstorm/doc-brainstorm.flow.md)
 - [Maintaining this pack](./docs/maintaining-this-pack.md)

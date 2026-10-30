@@ -1,6 +1,6 @@
 # cf-docs
 
-Runtime: [SKILL.md](../../skills/cf-docs/SKILL.md), [references/review.md](../../skills/cf-docs/references/review.md), [generate.md](../../skills/cf-docs/references/generate.md), [reorganize.md](../../skills/cf-docs/references/reorganize.md), [changelog.md](../../skills/cf-docs/references/changelog.md), [agents-md.md](../../skills/cf-docs/references/agents-md.md).
+Runtime: [SKILL.md](../../skills/cf-docs/SKILL.md), [references/review.md](../../skills/cf-docs/references/review.md), [generate.md](../../skills/cf-docs/references/generate.md), [reorganize.md](../../skills/cf-docs/references/reorganize.md), [changelog.md](../../skills/cf-docs/references/changelog.md), [agents-md.md](../../skills/cf-docs/references/agents-md.md), [todo.md](../../skills/cf-docs/references/todo.md).
 
 ## Basis
 
@@ -11,8 +11,12 @@ Runtime: [SKILL.md](../../skills/cf-docs/SKILL.md), [references/review.md](../..
 - **CHANGELOG.** [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/): "Changelogs are for humans, not machines"; an `Unreleased` section at the top; "Using commit log diffs as changelogs is a bad idea: they're full of noise." [Common Changelog](https://common-changelog.org/), "a stricter subset", conflicts with it on `Unreleased`, categories and their order, so the reference keeps the format the repository already follows and defaults to Keep a Changelog.
 - **AGENTS.md and CLAUDE.md.** Claude Code, [Best practices](https://code.claude.com/docs/en/best-practices): "every line in it takes a little of Claude's attention on every task"; it lists "Describe your architecture and file layout" as outdated advice because "Claude reads the repo itself", and keeps "Anything you've had to correct twice already". Claude Code, [Memory](https://code.claude.com/docs/en/memory): its checkup "cuts content Claude can derive from the codebase, such as directory layouts, dependency lists, and architecture overviews, and keeps pitfalls, rationale, and conventions that differ from tool defaults".
 
+- **Todo: every task has a done criterion; ask when it is missing.** Wake, [INVEST in Good Stories, and SMART Tasks](https://xp123.com/invest-in-good-stories-and-smart-tasks/) (2003): "The key measure is, “can we mark it as done?”"
+- **Todo: durable rationale goes to an owning doc, not the todo file.** Nygard, [Documenting Architecture Decisions](https://www.cognitect.com/blog/2011/11/15/documenting-architecture-decisions): "We will keep a collection of records for "architecturally significant" decisions".
+
 ## No external source
 
 - Confirming the target tree before any file moves: the user's decision, since moving and renaming are invasive.
 - AGENTS.md and CLAUDE.md always in English: the user's decision; no measurement found that English performs better.
 - Keeping historical notes that give the reason for the current design: the pack's own runs.
+- Todo file: one ordered file; GFM checkboxes; the default path and extending an existing file; the two sections; checking tasks in place and the rollover rule; routing an open question to `cf-mr-wolf`; only Language and Scope of the Core Rules; recording the session's decisions as given, not checked against the code: the pack's own runs.

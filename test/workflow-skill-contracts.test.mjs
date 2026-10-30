@@ -39,8 +39,9 @@ test("cognitive routes to placement up front, not by post-edit condition", async
 });
 
 test("todo rolls completed tasks over only when adding new work", async () => {
+  const docsContract = await fs.readFile(path.join(SKILLS_ROOT, "cf-docs", "SKILL.md"), "utf8");
   const todoContract = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-todo", "SKILL.md"),
+    path.join(SKILLS_ROOT, "cf-docs", "references", "todo.md"),
     "utf8",
   );
   for (const text of [todoContract]) {
@@ -50,10 +51,15 @@ test("todo rolls completed tasks over only when adding new work", async () => {
     assert.match(text, /no new task/);
     assert.doesNotMatch(text, /preparing a .*commit|ask whether to empty|commit cleanup|reset/);
   }
-  assert.match(todoContract, /even when the request uses another language/);
+  assert.match(docsContract, /checks off a todo\.md recording remaining work and open questions/);
+  assert.match(docsContract, /### Todo Flow/);
+  assert.match(docsContract, /Read only `references\/todo\.md`/);
+  assert.match(docsContract, /even when the request uses another language/);
+  assert.match(docsContract, /Todo Flow keeps only Language and Scope/);
+  assert.match(todoContract, /Record the session's decisions as given/);
   assert.match(todoContract, /do not write that task until it is given/);
-  assert.match(todoContract, /only when the session stated them, impact and possible direction/);
-  assert.match(todoContract, /extend it in its own shape/);
+  assert.match(todoContract, /indented lines for what is needed to decide\./);
+  assert.match(todoContract, /in its own shape/);
   assert.doesNotMatch(todoContract, /tracking file/);
 });
 

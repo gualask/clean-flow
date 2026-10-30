@@ -109,7 +109,7 @@ test("review owns reference loading and remains read-only", async () => {
     assert.doesNotMatch(contract, /cf-todo/);
     assert.doesNotMatch(contract, /local-refactor-rules\.md/);
   }
-  assert.match(reviewContract, /Persisting findings elsewhere belongs to `cf-todo`/);
+  assert.match(reviewContract, /Persisting findings in a todo file belongs to `cf-docs`/);
   assert.doesNotMatch(reviewContract, /hands work to directly|persist the findings/);
   assert.doesNotMatch(reviewContract, /local-refactor-rules\.md/);
   assert.doesNotMatch(sweep, /\bRead `?references\//);

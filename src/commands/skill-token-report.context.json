@@ -88,6 +88,12 @@
             "references/changelog.md",
             "references/agents-md.md"
           ]
+        },
+        "todo": {
+          "required": [
+            "references/todo.md"
+          ],
+          "conditional": []
         }
       }
     },
@@ -135,14 +141,6 @@
           "conditional": [
             "references/batched-execution.md"
           ]
-        }
-      }
-    },
-    "cf-todo": {
-      "flows": {
-        "default": {
-          "required": [],
-          "conditional": []
         }
       }
     }

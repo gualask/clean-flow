@@ -52,7 +52,6 @@ Public skill entrypoints:
 - `cf-review`
 - `cf-test`
 - `cf-docs`
-- `cf-todo`
 - `cf-brainstorm`
 
 Shared authoring references vendored into consuming skills:
@@ -93,7 +92,6 @@ Mirrors (sources of each skill's rules):
 - `cf-review`: [review/doc-review.flow.md](./review/doc-review.flow.md)
 - `cf-test`: [test/doc-test.flow.md](./test/doc-test.flow.md)
 - `cf-docs`: [docs/doc-docs.flow.md](./docs/doc-docs.flow.md)
-- `cf-todo`: [todo/doc-todo.flow.md](./todo/doc-todo.flow.md)
 - `cf-brainstorm`: [brainstorm/doc-brainstorm.flow.md](./brainstorm/doc-brainstorm.flow.md)
 
 ## Runtime Reference Rules

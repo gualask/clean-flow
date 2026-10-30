@@ -59,7 +59,7 @@ Route, do not invoke: name the route and let the user choose what to open next.
 
 - Owns `.cflow/cf-review-recap.md`: the batched pass's recap, written under the Recap File contract in `references/batched-execution.md`. It is the pass's one repository write.
 - When it already exists and the request is about it, work through it under the same contract instead of running the Flow.
-- Create or update no other repository file, including todo files and any other `.cflow/*` file. Persisting findings elsewhere belongs to `cf-todo`.
+- Create or update no other repository file, including todo files and any other `.cflow/*` file. Persisting findings in a todo file belongs to `cf-docs`.
 
 ## Output Format
 
