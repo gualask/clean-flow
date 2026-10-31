@@ -10,4 +10,4 @@ Runtime: [SKILL.md](../../skills/cf-deadcode/SKILL.md).
 
 ## No external source
 
-Kept on the pack's own runs or on the user's decision: the table form; the example list of boundary names; opening only on a request about unused code.
+Kept on the pack's own runs or on the user's decision: the table form and the report limited to its unpaired rows; the example list of boundary names; opening only on a request about unused code.
