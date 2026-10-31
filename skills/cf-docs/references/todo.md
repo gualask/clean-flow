@@ -4,6 +4,8 @@ A todo file is a working list, not documentation of the code.
 
 Record the session's decisions as given: do not check, reword, or check off a task against the code. A rationale never goes in the todo file.
 
+A review or test finding is not a decision: record it as an open question carrying its evidence and route; it becomes a task only when the user decides it.
+
 - The todo file is `todo.md` at the repository root unless the request names another path or a todo file already exists. Extend an existing one in its own shape: add tasks and open questions where its structure puts them and keep its sections; never create a second todo file for the same work.
 - When a task lacks an observable done criterion, ask for the criterion and do not write that task until it is given.
 - A new todo file has a header line naming the topic and the session it comes from, then two sections:
