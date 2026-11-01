@@ -1,6 +1,6 @@
 # Assertion Quality
 
-Run both lens groups against every primary test. A lens is silent when checked with no candidate and not applicable only when its observable precondition is absent. Each lens names the action its candidates carry.
+Run every lens group against every primary test. A lens is silent when checked with no candidate and not applicable only when its observable precondition is absent. Each lens names the action its candidates carry.
 
 ## Invariant Lenses
 
@@ -39,6 +39,20 @@ Report exact or broad string coupling when the wording is not part of an observa
 ### 7. Implementation-Detail Coupling — `rewrite`
 
 Report assertions about private wiring, collaborator identity, helper calls, internal data shapes, or construction sequence when the observable contract does not expose them. Dependency-injection seams, emitted commands, and collaborator identity may themselves be part of the observable contract; check before reporting.
+
+## Suite Lenses
+
+### 8. Duplicated Setup — `rewrite`
+
+Report setup written by hand in several test files, or beside a shared helper that already does it, so that a change to a production type's shape or to that setup forces editing every copy. The setup may be a helper, a builder, a literal of a production type, or an analogous construction in the project's idiom. Name the copies and the shared home.
+
+### 9. Nondeterministic Test — `rewrite`
+
+Report a test case whose outcome can change without a code change. Sources include a fixed wait for asynchronous work instead of awaiting a condition or controlling the clock, a real clock or unseeded randomness the assertion depends on, the iteration order of an unordered collection, state or order shared with another test, a real resource (a fixed file name, a port, a global) shared with tests that may run concurrently, and analogous sources in the project's runtime. Name the source and the interleaving or value that flips the result.
+
+### 10. Cross-Layer Repetition — `remove`
+
+Group the test cases of a higher layer by the branch of the higher layer each one reaches. Within a group, cases that differ only in which branch of the delegated unit produced the higher layer's input repeat a test of the delegated unit: keep one per group and report the rest, naming the delegation (file:line) and the test of the delegated unit that already covers each. Read the delegated unit's existing tests as evidence, not as review targets.
 
 ## Evidence And Severity
 

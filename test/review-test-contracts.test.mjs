@@ -207,7 +207,7 @@ test("cf-test owns assertion quality with a deterministic context gate", async (
   assert.doesNotMatch(testContract, /adjacent repository docs/);
   assert.match(testContract, /Read `references\/context-gate\.md`/);
   assert.match(testContract, /Read `references\/assertion-quality\.md`/);
-  assert.match(testContract, /For `batched`, every batch applies both lens groups/);
+  assert.match(testContract, /For `batched`, every batch applies every lens group/);
   assert.match(testContract, /shared reference owns batching and completion/);
   assert.doesNotMatch(testContract, /complete path-only manifest|compact report|reconcile cross-batch references/);
   // The recap is the pass's one repository write, declared in the pack's own
@@ -237,6 +237,9 @@ test("cf-test owns assertion quality with a deterministic context gate", async (
     "Over-Specified Test",
     "Brittle String Assertion",
     "Implementation-Detail Coupling",
+    "Duplicated Setup",
+    "Nondeterministic Test",
+    "Cross-Layer Repetition",
   ]) {
     assert.match(assertionQuality, new RegExp(lens));
   }
