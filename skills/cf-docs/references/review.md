@@ -19,8 +19,6 @@ Apply each pass below to the docs in scope, then report findings; edit only when
 ## Leanness Pass
 
 - Mark historical and migration notes that give no reason for the current design, restated context, decorative wording, and multi-paragraph explanations that carry a single idea.
-- Before removing a sentence, find where else its fact lives; if nowhere, keep the fact.
-- Report implementation detail as a candidate move to a source comment, following the Implementation detail rule.
 
 ## Structure Pass
 
@@ -31,4 +29,6 @@ Apply each pass below to the docs in scope, then report findings; edit only when
 ## Verification And Editing
 
 - When the request asks for fixes or trimming, apply the smallest edits that resolve the findings, preserving the author's voice and the project's conventions.
+- Remove a sentence only after naming where its fact lives. A sentence that gives the reason for a choice ("not X: …", "because …") is a decision wherever it sits, and keeps its reason and its numbers.
+- Do not rewrite a sentence that has no finding.
 - Validate that internal links and anchors resolve after any edit.

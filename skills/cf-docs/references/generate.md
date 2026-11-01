@@ -24,4 +24,4 @@ Author new documentation or substantially update existing content from verified 
 
 - Re-read each concrete claim against the code one last time.
 - Validate links and anchors.
-- Note where the new doc should be linked from so it is discoverable.
+- Name in **Result** where the new doc should be linked from so it is discoverable.

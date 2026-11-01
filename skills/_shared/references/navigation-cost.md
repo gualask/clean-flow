@@ -53,7 +53,7 @@ Past a hard trigger, `keep as-is` or "no finding" is allowed only by explicitly 
 - data tables, constants, schemas, or generated code
 - one indivisible behavior that flattening or splitting would force readers to reassemble across units
 - for file length only: one indivisible owner with no stable internal bug/change targets; named helpers alone do not qualify
-- for directory population only: every file there already belongs to one owner, or no owner cluster in it has three or more members
+- for directory population only: every file there belongs to the same owner cluster, or no owner cluster in it has three or more members. An owner cluster is the files whose names share the owner they serve (`invoice-*`, `user-session.*`); a module or layer folder is not one by itself
 
 No named exemption, no absolution. The test above still decides the remedy: guard clauses or same-file helpers for function-level pressure; file-level split is the default remedy for file-length pressure.
 Report any finding past a hard trigger without minimizing it with words like "minor", "light", "not yet serious", or "someday"; hedging is a form of downranking and is treated as a violation of this rule.

@@ -34,4 +34,4 @@ Other sources:
 
 ## No external source
 
-Kept on the pack's own runs or on the user's decision: the bounded-remedy gate; the navigation-cost thresholds; pending work as the default change set; the reference audit's search categories; stale doc paths under lens 6; grouping and first-finding order; route, do not invoke; the policy band from the script; working through a recap.
+Kept on the pack's own runs or on the user's decision: the bounded-remedy gate; the navigation-cost thresholds; the owner cluster of the directory-population exemption read from shared file names; pending work as the default change set; the reference audit's search categories; stale doc paths under lens 6; grouping and first-finding order; route, do not invoke; the policy band from the script; working through a recap.
