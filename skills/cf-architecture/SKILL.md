@@ -9,6 +9,8 @@ Pay particular attention to:
 - ownership: who decides what, and whether the same decision is made in more than one place; when it is, name where it should be made once;
 - abstractions: the ones missing and the ones that serve nothing. A new adapter or contract must separate variants the code already implements in separate modules; otherwise do not propose it.
 
+Where the repository states its structure (an architecture doc, dependency rules, a layering), check the code against it: every import or call that crosses a stated boundary the wrong way is a finding, and so is every cycle between modules; name each with its `file:line`.
+
 A state or policy belongs to the capability when any interface invoking the use case would need it (lifecycle, cancellation, result acceptance, cache, workflow rules, or an analogous one); to an adapter only when it exists because of one environment or presentation session. Judge the decision, not the framework mechanism implementing it or where it runs. Do not draw the tree while such a state or policy remains assigned to an adapter.
 
 For each dimension the code varies along (platform or build target, provider, storage, configuration, or an analogous one), name its variants and every place that decides among them, in code, build conditions and UI, and where that decision should be made once. Where the variants have implementations of their own, run the bundled `scripts/variant-history.mjs`, resolved from the active skill root and never from the project working directory, with `--repo .` and the directories of those implementations: for every commit that added one it lists the files changed outside it. Cite that list and the commit as evidence; do not write your own count.
