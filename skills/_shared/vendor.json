@@ -14,17 +14,6 @@
         "navigation-cost.md"
       ]
     },
-    "cf-review": {
-      "references": [
-        "batched-execution.md",
-        "context-gate.md",
-        "navigation-cost.md"
-      ],
-      "scripts": [
-        "dir-population.mjs",
-        "repo-tree.mjs"
-      ]
-    },
     "cf-test": {
       "references": [
         "batched-execution.md",
@@ -42,6 +31,23 @@
     "cf-placement": {
       "scripts": [
         "dir-population.mjs"
+      ]
+    },
+    "cf-clean": {
+      "references": [
+        "batched-execution.md",
+        "context-gate.md",
+        "navigation-cost.md",
+        "string-boundaries.md"
+      ],
+      "scripts": [
+        "dir-population.mjs",
+        "repo-tree.mjs"
+      ]
+    },
+    "cf-deadcode": {
+      "references": [
+        "string-boundaries.md"
       ]
     }
   }

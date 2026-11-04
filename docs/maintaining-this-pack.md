@@ -49,7 +49,7 @@ Public skill entrypoints:
 - `cf-deadcode`
 - `cf-cognitive`
 - `cf-placement`
-- `cf-review`
+- `cf-clean`
 - `cf-test`
 - `cf-docs`
 - `cf-brainstorm`
@@ -60,6 +60,7 @@ Shared authoring references vendored into consuming skills:
 - `skills/_shared/references/navigation-cost.md`
 - `skills/_shared/references/context-gate.md`
 - `skills/_shared/references/batched-execution.md`
+- `skills/_shared/references/string-boundaries.md`
 
 Shared authoring scripts vendored into consuming skills:
 
@@ -89,7 +90,7 @@ Mirrors (sources of each skill's rules):
 - `cf-deadcode`: [deadcode/doc-deadcode.flow.md](./deadcode/doc-deadcode.flow.md)
 - `cf-cognitive`: [cognitive/doc-cognitive.flow.md](./cognitive/doc-cognitive.flow.md)
 - `cf-placement`: [placement/doc-placement.flow.md](./placement/doc-placement.flow.md)
-- `cf-review`: [review/doc-review.flow.md](./review/doc-review.flow.md)
+- `cf-clean`: [clean/doc-clean.flow.md](./clean/doc-clean.flow.md)
 - `cf-test`: [test/doc-test.flow.md](./test/doc-test.flow.md)
 - `cf-docs`: [docs/doc-docs.flow.md](./docs/doc-docs.flow.md)
 - `cf-brainstorm`: [brainstorm/doc-brainstorm.flow.md](./brainstorm/doc-brainstorm.flow.md)
@@ -147,7 +148,7 @@ Token budget report:
 
 ```bash
 pnpm report
-pnpm report -- cf-review
+pnpm report -- cf-clean
 ```
 
 The report recursively inventories Markdown under each materialized skill's `references/` and `assets/`, then separates that inventory from configured flow stacks. `src/commands/skill-token-report.context.json` is local maintainer input: each flow lists required files, conditional files, and handoffs that can add another skill in the same thread. The estimate counts the pack discovery metadata once, adds each activated `SKILL.md`, and reports both required and maximum reachable contract tokens. It excludes system and developer instructions, tools, conversation history, project files, and dynamic command output.

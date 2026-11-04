@@ -134,9 +134,9 @@ test("every public skill has a maintainer flow doc whose links resolve", async (
   }
 });
 
-test("cf-review assigns derived values to one authoritative owner", async () => {
+test("cf-clean assigns derived values to one authoritative owner", async () => {
   const sweep = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-review", "references", "sweep.md"),
+    path.join(SKILLS_ROOT, "cf-clean", "references", "sweep.md"),
     "utf8",
   );
   for (const contract of [sweep]) {
@@ -159,7 +159,7 @@ test("navigation-cost is the single source of hard-trigger threshold values", as
 
   const consumers = [
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),
-    path.join(SKILLS_ROOT, "cf-review", "references", "sweep.md"),
+    path.join(SKILLS_ROOT, "cf-clean", "references", "sweep.md"),
   ];
 
   for (const file of consumers) {

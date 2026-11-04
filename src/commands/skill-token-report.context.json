@@ -55,7 +55,9 @@
     "cf-deadcode": {
       "flows": {
         "default": {
-          "required": [],
+          "required": [
+            "references/string-boundaries.md"
+          ],
           "conditional": []
         }
       }
@@ -107,15 +109,17 @@
         }
       }
     },
-    "cf-review": {
+    "cf-clean": {
       "flows": {
         "default": {
           "required": [
             "references/context-gate.md",
-            "references/sweep.md"
+            "references/sweep.md",
+            "references/navigation-cost.md",
+            "references/string-boundaries.md"
           ],
           "conditional": [
-            "references/navigation-cost.md",
+            "references/map.md",
             "references/batched-execution.md",
             "references/reference-audit.md",
             "references/handoff.md"

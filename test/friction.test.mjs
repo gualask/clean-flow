@@ -365,9 +365,9 @@ test("a global install conflict does not disable friction", async () => {
   });
   await writeSkill(
     path.join(fixture.homeDirectory, ".agents", "skills"),
-    "cf-review",
+    "cf-clean",
     {
-      "SKILL.md": `---\nname: "cf-review"\ndescription: "Foreign"\n---\n\n# foreign\n`,
+      "SKILL.md": `---\nname: "cf-clean"\ndescription: "Foreign"\n---\n\n# foreign\n`,
     },
   );
 
@@ -414,7 +414,7 @@ for (const scenario of ["unreadable home", "unwritable bin", "unwritable AGENTS.
       await chmod(restrictedPath, restoredMode);
     }
 
-    assert.match(await readText(path.join(fixture.homeDirectory, ".agents", "skills", "cf-review", "SKILL.md")), /name: cf-review/);
+    assert.match(await readText(path.join(fixture.homeDirectory, ".agents", "skills", "cf-clean", "SKILL.md")), /name: cf-clean/);
     assert.match(io.stderr.output, /Warning: Friction cleanup incomplete:.*(?:EACCES|EPERM)/);
     assert.match(io.stdout.output, /Friction applied: no/);
 

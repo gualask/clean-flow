@@ -10,25 +10,29 @@ import {
   parseFrontmatter,
 } from "./support/skill-contract-helpers.mjs";
 
-test("review owns reference loading and remains read-only", async () => {
-  const reviewContract = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-review", "SKILL.md"),
+test("cf-clean owns reference loading and remains read-only", async () => {
+  const cleanContract = await fs.readFile(
+    path.join(SKILLS_ROOT, "cf-clean", "SKILL.md"),
     "utf8",
   );
-  const reviewMetadata = parseFrontmatter(
-    reviewContract,
-    "skills/cf-review/SKILL.md",
+  const cleanMetadata = parseFrontmatter(
+    cleanContract,
+    "skills/cf-clean/SKILL.md",
   );
   const sweep = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-review", "references", "sweep.md"),
+    path.join(SKILLS_ROOT, "cf-clean", "references", "sweep.md"),
     "utf8",
   );
   const handoff = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-review", "references", "handoff.md"),
+    path.join(SKILLS_ROOT, "cf-clean", "references", "handoff.md"),
     "utf8",
   );
   const referenceAudit = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-review", "references", "reference-audit.md"),
+    path.join(SKILLS_ROOT, "cf-clean", "references", "reference-audit.md"),
+    "utf8",
+  );
+  const stringBoundaries = await fs.readFile(
+    path.join(SHARED_REFERENCES_ROOT, "string-boundaries.md"),
     "utf8",
   );
   const contextMap = JSON.parse(
@@ -37,136 +41,120 @@ test("review owns reference loading and remains read-only", async () => {
       "utf8",
     ),
   );
-  const reviewFlow = contextMap.skills["cf-review"].flows.default;
+  const cleanFlow = contextMap.skills["cf-clean"].flows.default;
 
+  // Triggered by name or a Cflow cleanup, never by a generic review.
+  assert.match(cleanMetadata.description, /^Check code against what the Cflow skills ask\b/);
   assert.match(
-    reviewMetadata.description,
-    /^Report bugs, requirement contradictions, incomplete changes, documentation drift, and structural findings for a set of code changes\./,
+    cleanMetadata.description,
+    /Use only when the request names cf-clean or asks for a Cflow cleanup or alignment pass on pending work, commits, a path, or the repository\./,
   );
-  assert.match(
-    reviewMetadata.description,
-    /Use only when the current request explicitly asks for a review\b/,
-  );
-  assert.match(reviewMetadata.description, /Do not use to fix findings\b/);
+  assert.match(cleanMetadata.description, /Do not use for a generic code review, a bug hunt, or test assertion quality/);
   assert.doesNotMatch(
-    reviewMetadata.description,
+    cleanMetadata.description,
     /\b(?:evidence|candidate|owning routes|sweep|lens|reference|handoff|audit surface|primary file)\b/i,
   );
-  assert.match(reviewContract, /Read `references\/context-gate\.md`/);
+
+  // Any target; pending work by default, the repository when nothing is pending.
+  assert.match(cleanContract, /\*\*Pending work\*\*/);
+  assert.match(cleanContract, /\*\*A named history range\*\*/);
+  assert.match(cleanContract, /\*\*Paths\*\*/);
+  assert.match(cleanContract, /\*\*The repository\*\*/);
+  assert.match(cleanContract, /With no target named, take pending work; with nothing pending, take the repository\./);
+  assert.doesNotMatch(cleanContract, /never widen the pass to the repository/);
+  assert.match(cleanContract, /`introduced` does not apply/);
+  assert.match(cleanContract, /Primary files/);
+  assert.match(cleanContract, /Deleted entries/);
+  assert.match(cleanContract, /Audit surfaces/);
+
+  // No focus: every lens runs; bugs are listed when seen, never hunted.
+  assert.doesNotMatch(cleanContract, /\bfocus\b/i);
+  assert.match(cleanContract, /The pass does not hunt bugs\. A bug seen while reading goes under \*\*Bugs seen\*\*/);
+  assert.match(cleanContract, /`bugs not searched for`/);
+  assert.match(cleanContract, /reporting, silent, or not applicable/);
+
   assert.match(
-    reviewContract,
-    /Read `references\/sweep\.md`; for Structure or All, also read `references\/navigation-cost\.md`/,
+    cleanContract,
+    /Check whether `\.cflow\/cf-clean-map\.md` exists by testing that path directly: `\.cflow\/` is git-ignored, so a file search that honors ignore files does not list it\. When the target is the repository, an area of that map, or a request to continue from it, read `references\/map\.md`, which .+ Otherwise read `references\/context-gate\.md`, which/,
   );
   assert.match(
-    reviewContract,
-    /When the change is move-shaped and the focus is Leftovers and docs or All, also read `references\/reference-audit\.md`/,
+    cleanContract,
+    /Read `references\/sweep\.md` for .+, `references\/navigation-cost\.md` for .+, and `references\/string-boundaries\.md` for /,
   );
+  assert.match(cleanContract, /When the target is a move-shaped change, also read `references\/reference-audit\.md` for /);
+  assert.match(cleanContract, /When the sweep produced at least one finding, read `references\/handoff\.md`, which /);
   assert.match(
-    reviewContract,
-    /When the sweep produced at least one finding, read `references\/handoff\.md`/,
-  );
-  assert.match(
-    reviewContract,
+    cleanContract,
     /With no findings, do not read it: report `Findings: none`, `Handoff: none`, and `Result: clear for the completed sweep`/,
   );
-  assert.match(
-    reviewContract,
-    /Do not edit repository files other than the batched pass's recap\./,
-  );
-  assert.match(reviewContract, /Owns `\.cflow\/cf-review-recap\.md`/);
-  assert.match(reviewContract, /\*\*Bugs and requirements\*\*, lenses 1–3/);
-  assert.match(reviewContract, /\*\*Leftovers and docs\*\*, lenses 4–6/);
-  assert.match(reviewContract, /\*\*Structure\*\*, lenses 7–12/);
-  assert.match(reviewContract, /Otherwise take Bugs and requirements\./);
-  assert.doesNotMatch(reviewContract, /What should this review focus on\?/);
-  assert.match(reviewContract, /reporting, silent, not applicable, or not selected/);
-  assert.match(reviewContract, /Name each focus not run as `not assessed`/);
-  assert.doesNotMatch(reviewContract, /reaches most of the repository/);
-  assert.match(sweep, /### Lens 1 — Bugs\n\nRoute: `cf-mr-wolf`/);
-  assert.match(sweep, /### Lens 2 — Behavior Drift\n\nRoute: `cf-mr-wolf`/);
-  assert.match(sweep, /A stale reference in documentation or examples belongs to lens 6/);
-  assert.match(sweep, /run bundled `scripts\/dir-population\.mjs`, resolved from the active skill root/);
-  assert.match(reviewContract, /Create or update no other repository file/);
-  assert.match(reviewContract, /For `batched`, every batch applies every lens of the focus/);
-  assert.match(reviewContract, /shared reference owns batching and completion/);
-  assert.doesNotMatch(reviewContract, /complete path-only manifest|compact report|reconciles cross-batch references/);
-  assert.match(reviewContract, /Test assertion quality/);
-  assert.match(reviewContract, /not assessed in this pass/);
-  assert.match(reviewContract, /same pending work or named history range/);
-  assert.match(reviewContract, /Do not classify tests, report a test count/);
-  assert.match(reviewContract, /never unqualified `clear` or `commit-ready`/);
-  assert.doesNotMatch(reviewContract, /eligible — route cf-test|primary test count|no primary tests/);
-  assert.match(
-    reviewContract,
-    /Test files selected by the change set remain primary files\./,
-  );
-  assert.match(reviewContract, /Primary files/);
-  assert.match(reviewContract, /Deleted entries/);
-  assert.match(reviewContract, /Audit surfaces/);
-  assert.match(reviewContract, /Authoritative sources/);
+  assert.match(cleanContract, /Do not edit repository files other than the recap and the map under `\.cflow\/`\./);
+  assert.match(cleanContract, /Owns `\.cflow\/cf-clean-map\.md`/);
+  assert.match(cleanContract, /When the recap already exists and the request is about it/);
+  assert.match(cleanContract, /When `references\/map\.md` builds the map or stops on an existing one, return only what it names\. Otherwise return only:/);
+  assert.match(cleanContract, /\*\*Coverage\*\*: when the pass swept an area of the map/);
+  assert.match(cleanContract, /Owns `\.cflow\/cf-clean-recap\.md`/);
+  assert.match(cleanContract, /Create or update no other repository file/);
+  assert.match(cleanContract, /For `batched`, every batch applies every lens\./);
+  assert.match(cleanContract, /shared reference owns batching and completion/);
+  assert.match(cleanContract, /not assessed in this pass/);
+  assert.match(cleanContract, /Do not classify tests, report a test count/);
+  assert.match(cleanContract, /never unqualified `clear` or `commit-ready`/);
+  assert.match(cleanContract, /Persisting findings in a todo file belongs to `cf-docs`/);
+  assert.doesNotMatch(cleanContract, /cf-scenario/);
 
-  for (const contract of [sweep, handoff]) {
-    assert.doesNotMatch(contract, /cf-todo/);
-    assert.doesNotMatch(contract, /local-refactor-rules\.md/);
+  for (const [lens, route] of [
+    ["1 — Stale References", "cf-mr-wolf"],
+    ["2 — Incomplete Change", "cf-mr-wolf"],
+    ["3 — Documentation Drift", "cf-docs"],
+    ["4 — Declared Invariants", "cf-mr-wolf"],
+    ["6 — Placement And Cohesion", "cf-placement"],
+    ["7 — Dependency Direction And Owner Placement", "cf-architecture"],
+    ["8 — Local Anti-Patterns", "cf-cognitive"],
+    ["9 — Responsibility And Ownership", "cf-mr-wolf"],
+    ["10 — String Boundaries", "cf-deadcode"],
+  ]) {
+    assert.match(sweep, new RegExp(`### Lens ${lens}\\n\\nRoute: \`${route}\``));
   }
-  assert.match(reviewContract, /Persisting findings in a todo file belongs to `cf-docs`/);
-  assert.doesNotMatch(reviewContract, /hands work to directly|persist the findings/);
-  assert.doesNotMatch(reviewContract, /local-refactor-rules\.md/);
-  assert.doesNotMatch(sweep, /\bRead `?references\//);
-  assert.doesNotMatch(sweep, /references\/reference-audit\.md/);
-  assert.doesNotMatch(handoff, /severity/i);
-  assert.match(handoff, /introduced a finding from lens 1, 2, 3, 4, or 10, a lens 8 hard trigger/);
-  assert.match(sweep, /Report each changed function past 20 logical lines as a function finding routed to `cf-cognitive`/);
+  assert.doesNotMatch(sweep, /Bugs|Behavior Drift|Requirement Alignment/);
+  assert.match(sweep, /A stale reference in documentation or examples belongs to lens 3/);
+  assert.match(sweep, /run bundled `scripts\/dir-population\.mjs`, resolved from the active skill root/i);
+  assert.match(sweep, /Report each function with changed code past 20 logical lines as a function finding routed to `cf-cognitive`/);
   assert.match(sweep, /it does not hold the result/);
-  assert.match(handoff, /hold for confirmation/);
-  assert.match(handoff, /proceed with follow-up/);
-  assert.match(handoff, /Use exactly one result for a non-empty finding set/);
-  assert.doesNotMatch(handoff, /- \*\*clear\*\*/);
-  assert.match(
-    sweep,
-    /### Lens 3 — Requirement Alignment\n\nRoute: `cf-scenario`/,
-  );
-  assert.match(
-    sweep,
-    /Conflicting, ambiguous, or absent sources produce no finding/,
-  );
-  assert.match(
-    sweep,
-    /Do not derive intent from implementation/,
-  );
-  assert.match(
-    sweep,
-    /Resolve sources from requirements in the current request or commit messages/,
-  );
-  assert.match(
-    sweep,
-    /List checked sources in \*\*Scope\*\*/,
-  );
+  assert.match(sweep, /Build the table in `references\/string-boundaries\.md`/);
+  assert.doesNotMatch(sweep, /\bRead `?references\//);
   assert.doesNotMatch(sweep, /## (?:Contents|What Counts As A Finding|Bounded Remedies)/);
   assert.match(
     sweep,
     /Exclude data clumps, primitive obsession, feature envy, temporal coupling, leaky abstractions/,
   );
-  assert.match(
-    reviewContract,
-    /requirement alignment not assessed: no authoritative source identified/,
-  );
-  assert.doesNotMatch(handoff, /business correctness not assessed/);
-  assert.match(
-    referenceAudit,
-    /Report each surviving stale reference and do not modify it/,
-  );
-  assert.deepEqual(reviewFlow.required, [
+  assert.match(stringBoundaries, /\| name \| consumer file:line \| producer file:line \|/);
+
+  for (const contract of [sweep, handoff]) {
+    assert.doesNotMatch(contract, /cf-todo/);
+    assert.doesNotMatch(contract, /local-refactor-rules\.md/);
+  }
+  assert.doesNotMatch(handoff, /severity/i);
+  assert.doesNotMatch(handoff, /cf-scenario/);
+  assert.match(handoff, /introduced a finding from lens 1 or 7, a lens 5 hard trigger, or a lens 2 transition/);
+  assert.match(handoff, /hold for confirmation/);
+  assert.match(handoff, /proceed with follow-up/);
+  assert.match(handoff, /On a path or the repository, report the finding count per route and the first finding to open/);
+  assert.doesNotMatch(handoff, /- \*\*clear\*\*/);
+  assert.match(referenceAudit, /Report each surviving stale reference and do not modify it/);
+
+  assert.deepEqual(cleanFlow.required, [
     "references/context-gate.md",
     "references/sweep.md",
-  ]);
-  assert.deepEqual(reviewFlow.conditional, [
     "references/navigation-cost.md",
+    "references/string-boundaries.md",
+  ]);
+  assert.deepEqual(cleanFlow.conditional, [
+    "references/map.md",
     "references/batched-execution.md",
     "references/reference-audit.md",
     "references/handoff.md",
   ]);
-  assert.equal(reviewFlow.handoffs, undefined);
+  assert.equal(cleanFlow.handoffs, undefined);
 });
 
 test("cf-test owns assertion quality with a deterministic context gate", async () => {
@@ -199,7 +187,7 @@ test("cf-test owns assertion quality with a deterministic context gate", async (
   const flow = contextMap.skills["cf-test"].flows.default;
 
   assert.match(metadata.description, /assertion-quality findings/);
-  assert.match(metadata.description, /cf-review/);
+  assert.match(metadata.description, /cf-clean/);
   assert.match(metadata.description, /ambiguous expected behavior to cf-mr-wolf/);
   assert.match(testContract, /primary test/);
   assert.match(testContract, /contract surfaces/);

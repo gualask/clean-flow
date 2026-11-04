@@ -119,7 +119,7 @@ It is a gate: it investigates and stops, hands off to the owning skill in one li
 ### `cf-scenario`
 
 Decides a named change against the concrete scenarios it touches, grounded in the code.
-Use it when a named change needs a worth-doing decision or its cost in other scenarios weighed, not merely to explain current behavior. It opens with **Decision:** (`make it`, `do not make it`, or `make it only if` a condition), then the cost in each scenario with `file:line`. A business-alignment candidate from `cf-review` gets a `file:line` trace from the changed line to the result a user sees.
+Use it when a named change needs a worth-doing decision or its cost in other scenarios weighed, not merely to explain current behavior. It opens with **Decision:** (`make it`, `do not make it`, or `make it only if` a condition), then the cost in each scenario with `file:line`. When a doc, spec, or requirement states the behavior a change alters, it gets a `file:line` trace from the changed line to the result a user sees.
 
 ### `cf-deadcode`
 
@@ -136,13 +136,11 @@ Use it for overloaded functions, deep nesting, hard-to-scan branching, or local 
 Splits a source file that has grown too large into nearby files, or regroups scattered related files into one folder, preserving behavior.
 Use it when a file mixes responsibilities, when related files are hard to find, or to ask whether a file should be split or files should live together.
 
-### `cf-review`
+### `cf-clean`
 
-Checks a bounded change set against structural rules, repository conventions, behavior-preservation claims, documentation, and authoritative requirements.
+Checks code against what the other Cflow skills ask: structure, placement, readability, dead names, dependency direction, ownership, leftovers, and documentation drift, each finding routed to the skill that resolves it.
 
-The change set is uncommitted work by default, or a named history range such as recent commits or a branch against its base. Selected files, including tests, are reviewed as whole units for structural and repository-level concerns. Test assertion quality remains a separate pass. Findings remain evidenced candidates, are limited to remedies a nameable unit can clear, and are routed without being confirmed or fixed; the only repository write is the batched pass's recap, `.cflow/cf-review-recap.md`.
-
-Business alignment uses explicit requirements, repository-controlled product or domain documentation and acceptance criteria, or linked primary external contracts. Without one, the result says that business correctness was not assessed.
+Invoke it by name or ask for a Cflow cleanup or alignment pass; a generic review request does not trigger it. The target is pending work by default, or a named history range, a path, or the whole repository. It does not hunt bugs: one seen while reading is listed apart, with the note that bugs were not searched for. Test assertion quality remains a separate pass. Findings remain evidenced candidates, are limited to remedies a nameable unit can clear, and are routed without being confirmed or fixed; on the whole repository it first maps the code into areas and sweeps one area per run, tracking coverage in `.cflow/cf-clean-map.md`; its only repository writes are that map and the recap, `.cflow/cf-clean-recap.md`.
 
 ### `cf-test`
 
@@ -173,11 +171,11 @@ The normal lifecycle for a structural change or a new feature:
 
 1. design it with `cf-architecture` (structure) or `cf-brainstorm` (feature) until the spec is approved
 2. ask the agent to implement the approved spec
-3. review the result with `cf-review`
+3. check the result against Cflow with `cf-clean`
 
 For direct local work, use `cf-cognitive` or `cf-placement` instead.
-To review what a set of changes exposes and route it, use `cf-review`: pending work before you commit, or a history range after the fact.
-To inspect assertion quality, run `cf-test` separately against the same pending work or named history range; `cf-review` does not classify tests or assess their assertions.
+To check code against Cflow and route what it finds, use `cf-clean`: pending work before you commit, a history range after the fact, a path, or the whole repository.
+To inspect assertion quality, run `cf-test` separately against the same target; `cf-clean` does not classify tests or assess their assertions.
 For lightweight follow-up tracking from an analysis or working session, ask `cf-docs` to write or update the todo file.
 
 ## Documentation
@@ -187,7 +185,7 @@ For lightweight follow-up tracking from an analysis or working session, ask `cf-
 - [Scenario flow](./docs/scenario/doc-scenario.flow.md)
 - [Cognitive flow](./docs/cognitive/doc-cognitive.flow.md)
 - [Placement flow](./docs/placement/doc-placement.flow.md)
-- [Review flow](./docs/review/doc-review.flow.md)
+- [Clean flow](./docs/clean/doc-clean.flow.md)
 - [Test flow](./docs/test/doc-test.flow.md)
 - [Docs flow](./docs/docs/doc-docs.flow.md)
 - [Brainstorm flow](./docs/brainstorm/doc-brainstorm.flow.md)

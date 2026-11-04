@@ -1,6 +1,6 @@
 # cf-deadcode
 
-Runtime: [SKILL.md](../../skills/cf-deadcode/SKILL.md).
+Runtime: [SKILL.md](../../skills/cf-deadcode/SKILL.md), shared [string-boundaries.md](../../skills/_shared/references/string-boundaries.md).
 
 ## Basis
 

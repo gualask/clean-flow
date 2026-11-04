@@ -42,7 +42,7 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
   assert.match(cognitiveContract, /- \*\*Deferred\*\*: after execution only, per the report\/action rule\./);
   // Function length left the hard triggers on 2026-10-24; without this slot line a
   // split and a regrouping both deferred `none` (1 run each, 2026-10-25). It matches
-  // cf-review's lens 8.
+  // cf-clean's lens 5.
   assert.match(
     placementContract,
     /- \*\*Deferred\*\*: each function past 20 logical lines in a file you modified, routed to `cf-cognitive`; each owner cluster kept flat because a folder would be a new package or module, routed to `cf-architecture`; or `none`\./,
@@ -93,7 +93,7 @@ test("placement carries its gates in the body and ships no references", async ()
 
 test("reference audit is local to review, read-only, and repository-wide", async () => {
   const referenceAudit = await fs.readFile(
-    path.join(SKILLS_ROOT, "cf-review", "references", "reference-audit.md"),
+    path.join(SKILLS_ROOT, "cf-clean", "references", "reference-audit.md"),
     "utf8",
   );
 
@@ -102,7 +102,7 @@ test("reference audit is local to review, read-only, and repository-wide", async
   assert.match(referenceAudit, /repository-wide/);
   assert.match(referenceAudit, /configuration/);
   assert.match(referenceAudit, /documentation/);
-  assert.match(referenceAudit, /consumers outside the change set as compatibility evidence/);
+  assert.match(referenceAudit, /consumers outside the change as compatibility evidence/);
   assert.doesNotMatch(referenceAudit, /authorizes edits|candidate unit/);
 });
 

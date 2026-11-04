@@ -59,6 +59,11 @@ function main() {
   const inventory = listFiles(root);
   const scopedFiles = filterIncludedFiles(root, inventory.files, options.includes);
 
+  if (options.areas.length > 0) {
+    printAreas(root, scopedFiles, inventory, options.areas);
+    return;
+  }
+
   if (options.contextBudget) {
     const generated = scopedFiles.filter(isGeneratedFile);
     const tree = buildTree(root, scopedFiles.filter((file) => !isGeneratedFile(file)));
@@ -95,6 +100,7 @@ function main() {
 
 function parseArgs(args) {
   const options = {
+    areas: [],
     contextBudget: false,
     depth: Number.POSITIVE_INFINITY,
     help: false,
@@ -118,6 +124,11 @@ function parseArgs(args) {
 
     if (arg === "--include") {
       options.includes.push(requiredValue(args, (index += 1), arg));
+      continue;
+    }
+
+    if (arg === "--area") {
+      options.areas.push(requiredValue(args, (index += 1), arg));
       continue;
     }
 
@@ -502,6 +513,56 @@ function printContextBudget(root, tree, inventory, options, generated) {
   process.stdout.write(`generated: ${generated.length > 0 ? generated.join(", ") : "none"}\n`);
 }
 
+function printAreas(root, files, inventory, areaArgs) {
+  const areas = areaArgs.map((area) => normalizeInclude(root, area));
+  const repeated = areas.filter((area, index) => areas.indexOf(area) !== index);
+  if (repeated.length > 0) {
+    throw new Error(`--area repeated: ${[...new Set(repeated)].join(", ")}`);
+  }
+  if (areas.includes(".")) {
+    throw new Error("--area must name a path below the repository root");
+  }
+
+  const generated = files.filter(isGeneratedFile);
+  const members = new Map(areas.map((area) => [area, []]));
+  const rest = [];
+  for (const file of files.filter((candidate) => !isGeneratedFile(candidate))) {
+    const owner = areas
+      .filter((area) => file === area || file.startsWith(`${area}/`))
+      .sort((left, right) => right.length - left.length)[0];
+    (owner === undefined ? rest : members.get(owner)).push(file);
+  }
+
+  const empty = areas.filter((area) => members.get(area).length === 0);
+  if (empty.length > 0) {
+    throw new Error(`--area holds no files of its own: ${empty.join(", ")}`);
+  }
+
+  const rows = [...areas.map((area) => [area, members.get(area)]), ["(rest)", rest]];
+  const total = { files: 0, loc: 0, estimatedTokens: 0 };
+  const lines = ["areas", `root: ${root}`, `source: ${inventory.source}`];
+  for (const [name, areaFiles] of rows) {
+    const tree = buildTree(root, areaFiles);
+    computeTotals(tree);
+    assertMeasurementComplete(tree);
+    const metrics = {
+      files: tree.totalFiles,
+      loc: tree.totalLoc,
+      estimatedTokens: Math.ceil(tree.totalBytes / CONTEXT_TOKEN_BYTES),
+    };
+    total.files += metrics.files;
+    total.loc += metrics.loc;
+    total.estimatedTokens += metrics.estimatedTokens;
+    const policy = metrics.files === 0 ? "empty" : classifyContextBudget(metrics);
+    lines.push(`area ${name}: files ${metrics.files}, loc ${metrics.loc}, estimated tokens ${metrics.estimatedTokens}, policy ${policy}`);
+  }
+  lines.push(`total: files ${total.files}, loc ${total.loc}, estimated tokens ${total.estimatedTokens}`);
+  lines.push(`generated: ${generated.length > 0 ? generated.join(", ") : "none"}`);
+  lines.push("(rest) files:");
+  lines.push(...(rest.length > 0 ? rest.sort(compareNames).map((file) => `  ${file}`) : ["  none"]));
+  process.stdout.write(`${lines.join("\n")}\n`);
+}
+
 function compareNames(left, right) {
   return left.localeCompare(right, "en", {
     numeric: true,
@@ -519,6 +580,7 @@ Usage:
   node repo-tree.mjs [root] [--depth N] [--include PATH ...]
   node repo-tree.mjs [root] --largest N [--include PATH ...]
   node repo-tree.mjs [root] --context-budget [--include PATH ...]
+  node repo-tree.mjs [root] --area PATH [--area PATH ...]
 
 Without --largest or --context-budget it prints the directory tree, each directory with its
 recursive file count and LOC.
@@ -531,6 +593,9 @@ Options:
                    Lockfiles are generated: left out of the metrics and listed on
                    the generated line.
   --include PATH   Limit the inventory to an exact file or directory. Repeatable.
+  --area PATH      Partition the inventory: each file goes to the longest area path
+                   containing it, files under none go to (rest), which is listed.
+                   Prints each area's metrics and policy and the total. Repeatable.
   --help           Show this help.
 
 Context budget policy:

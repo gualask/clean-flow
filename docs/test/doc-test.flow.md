@@ -17,7 +17,7 @@ Runtime: [SKILL.md](../../skills/cf-test/SKILL.md), [references/assertion-qualit
 - **Lens 10, a higher-layer case that repeats a test of the delegated unit.** Vocke, [The Practical Test Pyramid](https://martinfowler.com/articles/practical-test-pyramid.html), "Avoid Test Duplication": "If you have tested all conditions confidently on a lower-level test, there's no need to keep a higher-level test in your test suite"; "You don't test all the conditional logic and edge cases that your lower-level tests already cover in the higher-level test again"; "I delete high-level tests that are already covered on a lower level (given they don't provide extra value)". One case per higher-layer branch: [Equivalence partitioning](https://en.wikipedia.org/wiki/Equivalence_partitioning), "test cases are designed to cover each partition at least once".
 - **Seams that are contracts.** Khorikov, [When to Mock](https://enterprisecraftsmanship.com/posts/when-to-mock/): "Intra-system communications are implementation details"; the way the system talks to the external world: "It's part of the contract".
 - **No style candidates.** Panichella et al., [Test smells 20 years later](https://digitalcollection.zhaw.ch/handle/11475/25672) (EMSE 2022): multiple smells "virtually never correlated with semantic or maintainability flaws".
-- **Context gate and recap file** (shared with cf-review): see the [cf-review mirror](../review/doc-review.flow.md).
+- **Context gate and recap file** (shared with cf-clean): see the [cf-clean mirror](../clean/doc-clean.flow.md).
 
 ## No external source
 

@@ -15,5 +15,5 @@ Run separate repository-wide searches for the categories that apply instead of r
 - documentation and examples that name changed paths, symbols, commands, or behavior
 
 Use repository-native search tools and respect generated, vendored, dependency, build-output, and ignored directories.
-Treat consumers outside the change set as compatibility evidence.
+Treat consumers outside the change as compatibility evidence.
 Report each surviving stale reference and do not modify it.

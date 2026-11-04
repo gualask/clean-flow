@@ -207,6 +207,34 @@ test("repo-tree context budget rejects unmatched or unreadable includes", async 
   );
 });
 
+test("repo-tree areas partition every file and list the rest", async () => {
+  const workspace = await makeRepoTreeFixture();
+  await writeFixture(workspace, "pnpm-lock.yaml", "lockfileVersion: '9.0'\n");
+
+  const areas = await runRepoTree(workspace, "--area", "src", "--area", "src/internal");
+  assert.match(areas, /^area src: files 3, loc 3, estimated tokens \d+, policy local$/m);
+  assert.match(areas, /^area src\/internal: files 1, loc 1, estimated tokens \d+, policy local$/m);
+  assert.match(areas, /^area \(rest\): files 3, loc 4, estimated tokens \d+, policy local$/m);
+  assert.match(areas, /^total: files 7, loc 8, estimated tokens \d+$/m);
+  assert.match(areas, /^generated: pnpm-lock\.yaml$/m);
+  assert.match(areas, /^\(rest\) files:\n  \.gitignore\n  docs\/guide\.md\n  package\.json$/m);
+
+  const complete = await runRepoTree(workspace, "--area", "src", "--area", "docs", "--area", "package.json", "--area", ".gitignore");
+  assert.match(complete, /^area \(rest\): files 0, loc 0, estimated tokens 0, policy empty$/m);
+  assert.match(complete, /^\(rest\) files:\n  none$/m);
+});
+
+test("repo-tree areas reject repeated, root, and empty areas", async () => {
+  const workspace = await makeRepoTreeFixture();
+
+  await assert.rejects(() => runRepoTree(workspace, "--area", "src", "--area", "src/"), /--area repeated: src/);
+  await assert.rejects(() => runRepoTree(workspace, "--area", "."), /--area must name a path below the repository root/);
+  await assert.rejects(
+    () => runRepoTree(workspace, "--area", "src", "--area", "src/internal/useButtonState.ts", "--area", "src/internal"),
+    /--area holds no files of its own: src\/internal/,
+  );
+});
+
 async function makeRepoTreeFixture() {
   const workspace = await makeTempWorkspace("repo-tree-");
   await writeFixture(workspace, ".gitignore", "dist/\nnode_modules/\n");
