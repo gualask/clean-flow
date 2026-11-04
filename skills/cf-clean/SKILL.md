@@ -66,7 +66,7 @@ When `references/map.md` builds the map or stops on an existing one, return only
 - **Target**: which target was resolved and how, primary file count and list, deleted entries, and audit surfaces inspected.
 - **Context budget**: measured files, LOC, estimated tokens, and selected policy.
 - **Lenses**: every lens by number, each marked as reporting, silent, or not applicable. A `not applicable` mark must name the condition that was absent; a mark without one is a lens that was skipped, and skipping is what this slot exists to make visible.
-- **Findings**: every finding, grouped by file, in the shape `references/handoff.md` defines.
+- **Findings**: every finding, grouped by file, in the shape `references/handoff.md` defines. When the pass wrote the recap, the recap holds them: give the finding count per file and per route, and name the recap.
 - **Bugs seen**: each bug noticed while reading, with its evidence, or `none seen`; always followed by `bugs not searched for`.
 - **Handoff**: with findings, each route mapped to the findings it receives, and the single finding to open first; otherwise `none`.
 - **Test assertion quality**: `not assessed in this pass`; recommend running `cf-test` against the same target when it holds executable tests. Do not classify tests, report a test count, or run `cf-test` from this pass.

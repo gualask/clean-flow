@@ -19,7 +19,7 @@ A pre-existing violation is not a lighter violation; it is the same violation wi
 
 ## Grouping
 
-Group findings by affected primary file or audit surface, ordered by how many findings each carries. Report every finding: the sweep produces one line of claim per violation, not an analysis, so the full set stays readable. If one file carries so many findings that its list buries the rest, say that in **Result** and name it as the first thing to open.
+Group findings by affected primary file or audit surface, ordered by how many findings each carries. Report every finding, in the recap when the pass wrote one: the sweep produces one line of claim per violation, not an analysis, so the full set stays readable. If one file carries so many findings that its list buries the rest, say that in **Result** and name it as the first thing to open.
 
 ## Routing Table
 
