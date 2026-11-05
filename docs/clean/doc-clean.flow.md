@@ -9,7 +9,6 @@ Google, [What to look for in a code review](https://google.github.io/eng-practic
 - **Whole files** read, not only changed lines: "Sometimes you have to look at the whole file to be sure that the change actually makes sense." Generated code may be scanned over.
 - **Lens 3, docs**: "If a CL changes how users build, test, interact with, or release code, check to see that it also updates associated documentation".
 - **Lens 5, complexity**: "'Too complex' usually means 'can't be understood quickly by code readers.'"
-- **Lens 6, placement**: "Does this change belong in your codebase, or in a library?"
 - **Lens 8, over-engineering**: "developers have made the code more generic than it needs to be".
 - **`bugs not searched for`** stated, not implied: "note in a comment which parts you reviewed."
 - **Test quality to cf-test**: "Tests do not test themselves".
@@ -23,7 +22,8 @@ Other sources:
 - **Lenses 6 and 9, cohesion.** Martin, [The Single Responsibility Principle](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html): "Gather together the things that change for the same reasons."
 - **Lens 7, dependency direction and policy in an adapter.** Martin, [The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html): "source code dependencies can only point inwards." Cockburn, [Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/): "code pertaining to the inside part should not leak into the outside part".
 - **Lens 8, indirection.** Fowler, [Function Length](https://martinfowler.com/bliki/FunctionLength.html): a function is justified by "the separation between intention and implementation".
-- **Lens 9, one owner for a derived value.** Thomas, [Orthogonality and the DRY Principle](https://www.artima.com/articles/orthogonality-and-the-dry-principle): "every piece of system knowledge should have one authoritative, unambiguous representation".
+- **Lens 9, one representation for each piece of knowledge, not for each piece of text.** Thomas, [Orthogonality and the DRY Principle](https://www.artima.com/articles/orthogonality-and-the-dry-principle): "Most people take DRY to mean you shouldn't duplicate code. That's not its intention."; "every piece of system knowledge should have one authoritative, unambiguous representation"; otherwise "the two or three different representations will most likely fall out of step with each other."
+- **Lens 9, search for an existing implementation of what changed code defines.** GitClear, [AI Copilot Code Quality: 2025 Look Back at 12 Months of Data](https://www.gitclear.com/ai_assistant_code_quality_2025_research): "We observe a spike in the prevalence of duplicate code blocks, along with increases in short-term churn code, and the continued decline of moved lines (code reuse)."
 - **Lens 10, names paired by convention.** The sources are in the [cf-deadcode mirror](../deadcode/doc-deadcode.flow.md).
 - **Verify cited evidence.** Cemri et al., [Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/html/2503.13657v3): failure mode "No or incomplete verification".
 - **Context gate, recap file, map file.** Anthropic, [Effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): context is "a finite resource with diminishing marginal returns"; "Structured note-taking" persists outside the context window.

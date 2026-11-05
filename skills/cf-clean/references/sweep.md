@@ -72,7 +72,11 @@ Route: `cf-mr-wolf`
 
 Apply the naming test in `references/navigation-cost.md` to functions, files, or directories with changed code. Report one finding per nameable owner that holds unrelated responsibilities; do not propose redistribution.
 
-Report a derived value that a consumer stores, declares, or maintains instead of obtaining it from the owner of the information that determines it. That owner must derive the value and remain its single source of truth; consumers must not redefine it or require coordinated updates.
+Report each piece of knowledge that primary files represent in more than one place: a derived value, rule, constant, format, validation, mapping, or algorithm that cannot change in one place without the same change in another. Name the place that should own it and every copy with its `file:line`. Code that reads alike but would change for different reasons is not a copy; code written differently that encodes the same rule is.
+
+A derived value that a consumer stores, declares, or maintains instead of obtaining it from the owner of the information that determines it is a copy. That owner must derive the value and remain its single source of truth; consumers must not redefine it or require coordinated updates.
+
+For each function, constant, pattern, or format that changed code defines, search the repository for an existing one encoding the same knowledge, by its distinctive literals and by the names of the concept. A match is a copy, even when the two share no text.
 
 ## Dead Names
 

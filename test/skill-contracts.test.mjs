@@ -134,18 +134,19 @@ test("every public skill has a maintainer flow doc whose links resolve", async (
   }
 });
 
-test("cf-clean assigns derived values to one authoritative owner", async () => {
+test("cf-clean gives each piece of knowledge one authoritative owner", async () => {
   const sweep = await fs.readFile(
     path.join(SKILLS_ROOT, "cf-clean", "references", "sweep.md"),
     "utf8",
   );
-  for (const contract of [sweep]) {
-    assert.match(contract, /derived value/i);
-    assert.match(contract, /owner of the information that determines/i);
-    assert.match(contract, /derive (?:the value|it)/i);
-    assert.match(contract, /single source of truth/i);
-    assert.match(contract, /consumers? must not redefine it/i);
-  }
+  assert.match(sweep, /each piece of knowledge that primary files represent in more than one place/);
+  assert.match(sweep, /Name the place that should own it and every copy with its `file:line`/);
+  assert.match(sweep, /would change for different reasons is not a copy/);
+  assert.match(sweep, /derived value/i);
+  assert.match(sweep, /owner of the information that determines/i);
+  assert.match(sweep, /single source of truth/i);
+  assert.match(sweep, /consumers? must not redefine it/i);
+  assert.match(sweep, /search the repository for an existing one encoding the same knowledge/);
 });
 
 test("navigation-cost is the single source of hard-trigger threshold values", async () => {
