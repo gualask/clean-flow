@@ -26,7 +26,7 @@ Run the phases in order. Do not skip ahead while decision-relevant questions are
 2. **Scope check**: if the idea spans multiple independent subsystems, say so immediately and help decompose it; brainstorm one sub-idea at a time, each with its own spec.
 3. **Question plan**: create the draft; while context is fresh, write only the decision-relevant questions a credible design needs; do not add questions merely to cover a category.
 4. **Clarify**: ask one decision-relevant question at a time, each building on prior answers. Append new questions only when answers expose a real decision, and move on when the design is sufficiently determined or the user asks to proceed.
-5. **Approaches**: lead with one recommended approach and why. Add alternatives only when the trade-off is genuinely close.
+5. **Approaches**: lead with one recommended approach and why.
 6. **Design**: present and confirm sections in proportion to their complexity; collapse sections for a small design. Cover only the behavior, components, data flow, error handling, and testing that materially shape the idea.
 7. **Spec**: expand the draft into the full design spec.
 8. **Review and promotion**: unless handed off, run the lifecycle's self-review, user review, and promotion.

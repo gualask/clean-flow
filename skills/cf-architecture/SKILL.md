@@ -19,7 +19,7 @@ Present one target tree in the conversation.
 
 ## Feature Handoff
 
-When `cf-brainstorm` hands over its draft, its product decisions are settled: do not reopen them. Decide ownership only for what the feature adds or changes, in the same form: the target tree of the touched modules. Stay in the modules the feature touches; name a problem outside them in one line, outside the tree. Present the tree in the conversation; on the user's reply, read [references/spec.md](references/spec.md).
+When `cf-brainstorm` hands over its draft, its product decisions are settled: do not reopen them. Decide ownership only for what the feature adds or changes, in the same form: the target tree of the touched modules. Stay in the modules the feature touches; name a problem outside them in one line, outside the tree. When the tree needs a capability that no dependency in the project's manifests provides, do not pick a library from memory: name the capability with the tree and ask the user whether to search online for current candidates; until they choose, it stays an open question in the draft. Present the tree in the conversation; on the user's reply, read [references/spec.md](references/spec.md).
 
 ## Artifacts
 
