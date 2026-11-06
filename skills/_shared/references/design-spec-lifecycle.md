@@ -12,7 +12,7 @@ The draft → spec cycle shared by the skills that turn a design conversation in
 
 ## Resume Check
 
-Before creating the draft, run `ls -a .cflow/specs`: the directory is git-ignored, so search tools such as `rg` skip it. Resume only a draft this skill owns; on resume, re-read the draft and continue from its oldest open question.
+Run it first, before anything else in the cycle: `ls -a .cflow/specs`; the directory is git-ignored, so search tools such as `rg` skip it. Resume only a draft this skill owns; on resume, re-read the draft and continue from its oldest open question.
 
 ## Draft Format
 
@@ -42,14 +42,14 @@ Create the draft with these sections, then add the sections the owner's spec req
 - question -> chosen answer
 ```
 
-## Working the Draft
+## Writing the Draft
 
-Long conversations lose early context, so the draft is the memory, not the conversation.
+Write the draft once the design is settled, not while the conversation runs, from the conversation:
 
-- Seed `Questions` while context is fresh; mark a question settled only when the user answers it, and append new ones as they emerge. An assumption you proceed with stays open, noted as the working default.
-- After each settled question, append one line to `Decisions`: the question and the chosen answer.
-- When an answer sends the conversation into a side exploration, the pending question stays open in `Questions`; return to the oldest open question once the side exploration resolves.
-- Before proposing approaches and again before promoting the draft, re-read `Decisions` in full and trust it over conversation memory; surface any conflict with a recent answer instead of silently overwriting the recorded decision.
+- `Questions`: every decision-relevant question raised; settled only when the user answered it. An assumption you proceeded with stays open, noted as the working default.
+- `Decisions`: one line per settled answer, the question and the chosen answer, in the order given.
+
+Once the draft exists, append later answers to `Decisions` and never rewrite a recorded one. Before promoting, re-read `Decisions` in full and surface any conflict with a recent answer instead of silently overwriting the recorded decision.
 
 ## Handoff
 

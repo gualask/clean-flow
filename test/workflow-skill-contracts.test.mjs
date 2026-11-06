@@ -123,6 +123,17 @@ test("brainstorm hands feature ownership to architecture through the shared life
   assert.match(lifecycle, /end the turn naming the receiver for the user to invoke; do not open the receiver in the same turn/);
 });
 
+test("brainstorm writes the draft only once the design is settled", async () => {
+  const read = (...parts) => fs.readFile(path.join(...parts), "utf8");
+  const brainstorm = await read(SKILLS_ROOT, "cf-brainstorm", "SKILL.md");
+  const lifecycle = await read(SHARED_REFERENCES_ROOT, "design-spec-lifecycle.md");
+
+  assert.match(lifecycle, /Write the draft once the design is settled, not while the conversation runs/);
+  assert.doesNotMatch(lifecycle, /draft is the memory|while context is fresh/);
+  assert.match(brainstorm, /\*\*Spec\*\*: write the draft, then expand it/);
+  assert.doesNotMatch(brainstorm, /create the draft|\*\*Question plan\*\*/);
+});
+
 test("packaged skill routing only names skills that exist in the pack", async () => {
   const skillNames = await publicSkillNames(SKILLS_ROOT);
   const known = new Set(skillNames);
