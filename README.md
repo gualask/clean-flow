@@ -2,10 +2,10 @@
 
 # Clean Flow
 
-Clean Flow is a Codex skill pack for cleanup and refactor work.
+Clean Flow is a skill pack for cleanup and refactor work, for Claude Code and Codex.
 It helps an agent understand the repository, choose the right refactor path, and avoid uncontrolled rewrites while still treating hard restructures as first-class when the architecture is the real problem.
 
-Use it when you want Codex to:
+Use it when you want the agent to:
 
 - clarify an unclear cleanup or refactor goal before touching code
 - judge whether the current structure is right, and plan a repository-level refactor when it is not
@@ -22,7 +22,7 @@ Use it when you want Codex to:
 ## Why Use It
 
 Refactors often fail because the agent starts moving code before it understands the problem, the current boundaries, or the behavior that must stay fixed.
-Clean Flow gives Codex a practical operating system for that work:
+Clean Flow gives the agent a practical operating system for that work:
 
 - **Problem first**: unclear requests are framed before implementation.
 - **Repository aware**: structure and evidence are read from the codebase when the work happens, never from a stored map that can drift.
@@ -34,39 +34,59 @@ Clean Flow gives Codex a practical operating system for that work:
 
 ## Quick Start
 
-Install or update Clean Flow globally for Codex:
+Clean Flow installs as the `cflow` plugin from this repository's marketplace. Its skills are named `cflow:cf-clean`, `cflow:cf-docs`, and so on; asking for `cf-clean` by name works too.
 
-```text
-Fetch and follow instructions from https://raw.githubusercontent.com/gualask/clean-flow/refs/heads/main/install/codex/GLOBAL.md and sync Cflow globally.
-```
-
-Or install/update it only in the current repository:
-
-```text
-Fetch and follow instructions from https://raw.githubusercontent.com/gualask/clean-flow/refs/heads/main/install/codex/LOCAL.md and sync Cflow in the current repository only.
-```
-
-CLI alternatives:
+Claude Code:
 
 ```bash
-node ./bin/cflow-skills.mjs install /path/to/repo
-node ./bin/cflow-skills.mjs install --global
-node ./bin/cflow-skills.mjs install /path/to/repo --dry-run
-node ./bin/cflow-skills.mjs install /path/to/repo --tag 0.0.1
+claude plugin install cflow --marketplace gualask/clean-flow
 ```
 
-The installer materializes packaged skills and vendors shared authoring files into the consuming skill directories.
-Repository installs write to `.agents/skills`; global installs write to `$HOME/.agents/skills`, matching Codex skill discovery.
-Pass `--tag <tag>` to install an exact tag from the official Clean Flow repository. This supports both upgrades and downgrades; without `--tag`, the CLI installs the skills packaged in its current checkout.
+Codex:
 
-After installation, ask Codex to use one of the public entrypoints below.
+```bash
+codex plugin marketplace add gualask/clean-flow
+codex plugin add cflow@clean-flow
+```
+
+Start a new session after installing. A new version reaches you when a release changes the plugin version.
+
+### Updates
+
+Claude Code updates the plugin on its own once auto-update is on: in a session run `/plugin`, open **Marketplaces**, select `clean-flow`, and choose **Enable auto-update**. The update lands when a session starts, and the next session loads it. To update by hand, run `claude plugin update cflow@clean-flow`.
+
+To update in Codex, run these by hand or from a scheduled job of your own:
+
+```bash
+codex plugin marketplace upgrade clean-flow
+codex plugin add cflow@clean-flow
+```
+
+To stay on one release, add the marketplace at its tag: `claude plugin marketplace add gualask/clean-flow#<tag>` or `codex plugin marketplace add gualask/clean-flow --ref <tag>`. Only tags from the first plugin release on carry the marketplace.
+
+### Moving From The Old Installer
+
+`cflow-skills install` and `remove` are gone, and a script that calls them now fails. The copies the old installer wrote to `~/.agents/skills` or `<repo>/.agents/skills` stay behind, and Codex lists them next to the plugin. Move them once, from a checkout of this repository:
+
+```bash
+node ./bin/cflow-skills.mjs migrate --global
+node ./bin/cflow-skills.mjs migrate /path/to/repo
+```
+
+`migrate` installs the Codex plugin first, with `codex` from your PATH or the one bundled in the Codex IDE extension, then removes only the skill directories the old installer wrote; when it finds no `codex` it changes nothing; `--global` also removes the friction logger and its `AGENTS.md` block, keeping the logs. Running it again changes nothing. `--dry-run` shows what it would do. Or ask Codex:
+
+```text
+Fetch and follow instructions from https://raw.githubusercontent.com/gualask/clean-flow/refs/heads/main/install/codex/GLOBAL.md and migrate Cflow.
+```
+
+After installation, ask the agent to use one of the public entrypoints below.
 When the concern is the structure of the repository or a subsystem, start with:
 
 ```text
 Use cf-architecture to assess the architecture of this repository and recommend the next step.
 ```
 
-Once a spec is approved, ask Codex to implement it; its own planning and tools carry the work:
+Once a spec is approved, ask the agent to implement it; its own planning and tools carry the work:
 
 ```text
 Implement the approved spec in .cflow/specs/<date>-<topic>.md.
@@ -81,21 +101,9 @@ Use cf-mr-wolf to frame this cleanup/refactor before assessment.
 <details>
 <summary>Uninstall</summary>
 
-Remove only Clean Flow-owned skill directories:
-
 ```bash
-node ./bin/cflow-skills.mjs remove /path/to/repo
-node ./bin/cflow-skills.mjs remove --global
-```
-
-Codex prompt shortcuts:
-
-```text
-Fetch and follow instructions from https://raw.githubusercontent.com/gualask/clean-flow/refs/heads/main/install/codex/GLOBAL.md and uninstall Cflow globally.
-```
-
-```text
-Fetch and follow instructions from https://raw.githubusercontent.com/gualask/clean-flow/refs/heads/main/install/codex/LOCAL.md and uninstall Cflow from the current repository only.
+claude plugin uninstall cflow@clean-flow
+codex plugin remove cflow@clean-flow
 ```
 
 </details>
@@ -161,8 +169,7 @@ Invoke it explicitly ("let's brainstorm ..."); it never triggers on its own, and
 
 ## First Use And Resume
 
-Installing the pack only syncs materialized skills.
-It does not create `.cflow/` immediately.
+Installing the plugin does not create `.cflow/`.
 
 Skills that own durable artifacts create `.cflow/` only when they need it.
 When `.cflow/` is created for the first time, Clean Flow writes a `.cflow/.gitignore` containing `*`, so the directory ignores itself and the repository `.gitignore` is never touched.
@@ -180,13 +187,5 @@ For lightweight follow-up tracking from an analysis or working session, ask `cf-
 
 ## Documentation
 
-- [Architecture flow](./docs/architecture/doc-architecture.flow.md)
-- [Mr Wolf flow](./docs/mr-wolf/doc-mr-wolf.flow.md)
-- [Scenario flow](./docs/scenario/doc-scenario.flow.md)
-- [Cognitive flow](./docs/cognitive/doc-cognitive.flow.md)
-- [Placement flow](./docs/placement/doc-placement.flow.md)
-- [Clean flow](./docs/clean/doc-clean.flow.md)
-- [Test flow](./docs/test/doc-test.flow.md)
-- [Docs flow](./docs/docs/doc-docs.flow.md)
-- [Brainstorm flow](./docs/brainstorm/doc-brainstorm.flow.md)
+- [Sources of each skill's rules](./docs/sources/)
 - [Maintaining this pack](./docs/maintaining-this-pack.md)

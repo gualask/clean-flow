@@ -1,0 +1,20 @@
+{
+  "name": "clean-flow",
+  "interface": {
+    "displayName": "Clean Flow"
+  },
+  "plugins": [
+    {
+      "name": "cflow",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

@@ -1,34 +1,22 @@
-import { readFile } from "node:fs/promises";
+// Temporary CLI: only `migrate` is left, for installations made by the old installer.
+// Cflow installs as a plugin; see README.md.
+
 import os from "node:os";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
-import { installFriction, removeFriction } from "./commands/install-friction.mjs";
-import { installSkills } from "./commands/install.mjs";
-import { removeSkills } from "./commands/remove.mjs";
-import { installFromTag } from "./lib/install-from-tag.mjs";
-import { createMaterializedSkills } from "./lib/materialize-skills.mjs";
-
-const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SKILLS_SOURCE_ROOT = path.join(PACKAGE_ROOT, "skills");
-const FRICTION_SOURCE_ROOT = path.join(PACKAGE_ROOT, "install", "friction");
+import { MARKETPLACE_SOURCE, migrate } from "./commands/migrate.mjs";
 
 const HELP_TEXT = `Usage:
-  cflow-skills install <repo-path> [--tag <tag>] [--dry-run]
-  cflow-skills install --global [--tag <tag>] [--friction] [--dry-run]
-  cflow-skills remove <repo-path> [--dry-run]
-  cflow-skills remove --global [--dry-run]
+  cflow-skills migrate --global [--dry-run]
+  cflow-skills migrate <repo-path> [--dry-run]
 
-Notes:
-  - install syncs packaged, materialized skills into <repo>/.agents/skills
-  - --tag installs an exact Git tag from the official Clean Flow repository
-    and can be used to upgrade or downgrade an existing installation
-  - --global targets ~/.agents/skills
-  - --friction enables the always-on friction log during global install;
-    its optional logger is installed into ~/.agents/cflow/bin;
-    omitting it disables a previous friction installation but keeps its logs
-  - remove deletes only Cflow-owned skill directories; global remove also
-    removes the friction pieces and their AGENTS.md block
+Moves an installation made by the old installer onto the cflow plugin:
+  - removes the Cflow-owned skill directories from ~/.agents/skills (--global)
+    or <repo>/.agents/skills, and keeps every other skill
+  - --global also removes the friction logger and its AGENTS.md block, keeping its logs
+  - installs the cflow plugin in Codex first, with codex from PATH or the one bundled in
+    the Codex IDE extension; when neither is found it changes nothing
+Running it again changes nothing.
 `;
 
 export async function main(
@@ -37,7 +25,6 @@ export async function main(
   dependencies = {},
 ) {
   let options;
-
   try {
     options = parseArgs(argv);
   } catch (error) {
@@ -50,66 +37,31 @@ export async function main(
     return 0;
   }
 
-  if (options.tag) {
-    try {
-      return await (dependencies.installFromTag ?? installFromTag)({
-        tag: options.tag,
-        installArgs: buildInstallArgs(options),
-        io,
-      });
-    } catch (error) {
-      io.stderr.write(`Error: ${error.message}\n`);
-      return 1;
-    }
-  }
-
-  const resolutionContext = {
-    environment: dependencies.environment ?? process.env,
-    homeDirectory: dependencies.homeDirectory ?? os.homedir(),
-  };
-  const destinations = resolveDestinations(options, resolutionContext);
+  const environment = dependencies.environment ?? process.env;
+  const homeDirectory = dependencies.homeDirectory ?? os.homedir();
+  const skillsRoot = options.global
+    ? path.resolve(homeDirectory, ".agents", "skills")
+    : path.resolve(options.targetPath, ".agents", "skills");
+  const friction = options.global
+    ? {
+        cflowHome: path.resolve(environment.CFLOW_HOME || path.join(homeDirectory, ".agents", "cflow")),
+        agentsFile: path.resolve(environment.CODEX_HOME || path.join(homeDirectory, ".codex"), "AGENTS.md"),
+      }
+    : null;
 
   try {
-    const result =
-      options.command === "install"
-        ? await installAll({
-            skillsDestinationRoot: destinations.skillsRoot,
-            dryRun: options.dryRun,
-            onWarning: message => io.stderr.write(`${message}\n`),
-          })
-        : await removeSkills({
-            destinationRoot: destinations.skillsRoot,
-            dryRun: options.dryRun,
-          });
-
-    result.skillsDestinationRoot = destinations.skillsRoot;
-
-    if (options.global) {
-      const frictionTargets = resolveFrictionTargets(resolutionContext);
-      const frictionDryRun =
-        options.dryRun || (result.conflicts?.length ?? 0) > 0;
-
-      result.friction =
-        options.command === "install" && options.friction
-          ? await installFriction({
-              sourceRoot: FRICTION_SOURCE_ROOT,
-              cflowHome: frictionTargets.cflowHome,
-              agentsFile: frictionTargets.agentsFile,
-              version: await readPackageVersion(),
-              dryRun: frictionDryRun,
-            })
-          : await removeFriction({
-              cflowHome: frictionTargets.cflowHome,
-              agentsFile: frictionTargets.agentsFile,
-              dryRun: frictionDryRun,
-            });
-    }
-
+    const result = await migrate({
+      skillsRoot,
+      friction,
+      dryRun: options.dryRun,
+      environment,
+      homeDirectory,
+      // CFLOW_MARKETPLACE points the migration at a local checkout, for trying it before a release.
+      marketplaceSource: environment.CFLOW_MARKETPLACE || MARKETPLACE_SOURCE,
+      runCodex: dependencies.runCodex ?? null,
+    });
     writeSummary(io.stdout, result);
-    for (const warning of result.friction?.warnings ?? []) {
-      io.stderr.write(`Warning: ${warning}\n`);
-    }
-    return result.command === "install" && result.conflicts.length > 0 ? 1 : 0;
+    return result.plugin.status === "codex-missing" ? 1 : 0;
   } catch (error) {
     io.stderr.write(`Error: ${error.message}\n`);
     return 1;
@@ -118,240 +70,70 @@ export async function main(
 
 function parseArgs(argv) {
   const args = [...argv];
-
-  if (args.length === 0) {
-    return { help: true };
-  }
-
-  if (args[0] === "--help" || args[0] === "-h") {
+  if (args.length === 0 || args[0] === "--help" || args[0] === "-h") {
     return { help: true };
   }
 
   const command = args.shift();
-  if (!["install", "remove"].includes(command)) {
-    throw new Error(`Unknown command: ${command}`);
+  if (command !== "migrate") {
+    throw new Error(
+      command === "install" || command === "remove"
+        ? `${command} is gone: Cflow installs as a plugin (see README.md). Run "cflow-skills migrate" once to move an existing installation.`
+        : `Unknown command: ${command}`,
+    );
   }
 
   let dryRun = false;
   let global = false;
-  let friction = false;
-  let tag = null;
   const positionals = [];
-
-  while (args.length > 0) {
-    const arg = args.shift();
-
+  for (const arg of args) {
     if (arg === "--help" || arg === "-h") {
       return { help: true };
     }
-
     if (arg === "--dry-run") {
       dryRun = true;
-      continue;
-    }
-
-    if (arg === "--global") {
+    } else if (arg === "--global") {
       global = true;
-      continue;
-    }
-
-    if (arg === "--friction") {
-      friction = true;
-      continue;
-    }
-
-    if (arg === "--tag" || arg.startsWith("--tag=")) {
-      if (tag !== null) {
-        throw new Error("--tag may be passed only once");
-      }
-
-      if (arg === "--tag") {
-        const value = args.shift();
-        if (!value || value.startsWith("-")) {
-          throw new Error("--tag requires a value");
-        }
-        tag = value;
-      } else {
-        tag = arg.slice("--tag=".length);
-        if (!tag) {
-          throw new Error("--tag requires a value");
-        }
-      }
-      continue;
-    }
-
-    if (arg.startsWith("-")) {
+    } else if (arg.startsWith("-")) {
       throw new Error(`Unknown option: ${arg}`);
+    } else {
+      positionals.push(arg);
     }
-
-    positionals.push(arg);
   }
 
   if (global && positionals.length > 0) {
     throw new Error("Pass either a repository path or --global, not both");
   }
-
   if (!global && positionals.length !== 1) {
     throw new Error("Pass exactly one repository path, or use --global");
   }
 
-  if (friction && !global) {
-    throw new Error("--friction requires --global");
-  }
-
-  if (friction && command !== "install") {
-    throw new Error("--friction applies to install only");
-  }
-
-  if (tag && command !== "install") {
-    throw new Error("--tag applies to install only");
-  }
-
-  return {
-    help: false,
-    command,
-    dryRun,
-    global,
-    friction,
-    tag,
-    targetPath: global ? null : positionals[0],
-  };
-}
-
-function buildInstallArgs(options) {
-  const args = ["install"];
-
-  if (options.global) {
-    args.push("--global");
-  } else {
-    args.push(options.targetPath);
-  }
-
-  if (options.friction) {
-    args.push("--friction");
-  }
-  if (options.dryRun) {
-    args.push("--dry-run");
-  }
-
-  return args;
-}
-
-async function installAll({ skillsDestinationRoot, dryRun, onWarning }) {
-  const materialized = await createMaterializedSkills(SKILLS_SOURCE_ROOT, { onWarning });
-  try {
-    const result = await installSkills({
-      sourceRoot: materialized.skillsRoot,
-      destinationRoot: skillsDestinationRoot,
-      dryRun,
-      onWarning,
-    });
-    return {
-      ...result,
-      sourceRoot: SKILLS_SOURCE_ROOT,
-      skillsSourceRoot: SKILLS_SOURCE_ROOT,
-    };
-  } finally {
-    await materialized.cleanup();
-  }
-}
-
-export function resolveDestinations(
-  options,
-  { homeDirectory = os.homedir() } = {},
-) {
-  if (options.global) {
-    return {
-      skillsRoot: path.resolve(homeDirectory, ".agents", "skills"),
-    };
-  }
-
-  const targetRoot = path.resolve(options.targetPath);
-  return {
-    skillsRoot: path.resolve(targetRoot, ".agents", "skills"),
-  };
-}
-
-function resolveFrictionTargets({ environment, homeDirectory }) {
-  const codexHome = environment.CODEX_HOME || path.join(homeDirectory, ".codex");
-  return {
-    cflowHome: path.resolve(
-      environment.CFLOW_HOME || path.join(homeDirectory, ".agents", "cflow"),
-    ),
-    agentsFile: path.resolve(codexHome, "AGENTS.md"),
-  };
-}
-
-async function readPackageVersion() {
-  const raw = await readFile(path.join(PACKAGE_ROOT, "package.json"), "utf8");
-  return JSON.parse(raw).version;
+  return { help: false, dryRun, global, targetPath: global ? null : positionals[0] };
 }
 
 function writeSummary(stream, result) {
-  if (result.command === "install") {
-    stream.write(`Command: install\n`);
-    stream.write(`Skills source: ${result.skillsSourceRoot}\n`);
-    stream.write(`Skills destination: ${result.skillsDestinationRoot}\n`);
-    stream.write(`Dry run: ${result.dryRun ? "yes" : "no"}\n`);
-    stream.write(`Added: ${result.added.length}\n`);
-    stream.write(`Updated: ${result.updated.length}\n`);
-    stream.write(`Unchanged: ${result.unchanged.length}\n`);
-    stream.write(`Pruned: ${result.pruned.length}\n`);
-    stream.write(`Conflicts: ${result.conflicts.length}\n`);
-    stream.write(`Applied: ${result.applied ? "yes" : "no"}\n`);
-    writeEntries(stream, "Added entries", result.added);
-    writeEntries(stream, "Updated entries", result.updated);
-    writeEntries(stream, "Pruned entries", result.pruned);
-    writeConflicts(stream, result.conflicts);
-    writeFrictionSummary(stream, result.friction);
+  if (result.plugin.status === "codex-missing") {
+    const commands = result.plugin.commands.map(args => `codex ${args.join(" ")}`).join(" && ");
+    stream.write("Nothing changed: codex was found neither on PATH nor in a Codex IDE extension.\n");
+    stream.write(`Install the cflow plugin first (from the Codex extension, or with ${commands}), then run migrate again.\n`);
     return;
   }
 
-  stream.write(`Command: remove\n`);
-  stream.write(`Skills destination: ${result.skillsDestinationRoot}\n`);
-  stream.write(`Dry run: ${result.dryRun ? "yes" : "no"}\n`);
-  stream.write(`Removed: ${result.removed.length}\n`);
-  stream.write(`Kept: ${result.kept.length}\n`);
-  writeEntries(stream, "Removed entries", result.removed);
-  writeFrictionSummary(stream, result.friction);
-}
-
-function writeFrictionSummary(stream, friction) {
-  if (!friction) {
-    return;
+  if (result.codex) {
+    stream.write(`Codex: ${result.codex.path}${result.codex.from === "extension" ? " (bundled in the Codex IDE extension)" : ""}\n`);
+  }
+  const verb = result.dryRun ? "Would remove" : "Removed";
+  stream.write(`Skills directory: ${result.skillsRoot}\n`);
+  stream.write(`${verb} old Cflow skills: ${result.removed.length === 0 ? "none" : result.removed.join(", ")}\n`);
+  for (const action of result.friction) {
+    stream.write(`${result.dryRun ? "Would have " : ""}${action}\n`);
   }
 
-  stream.write(`Friction home: ${friction.cflowHome}\n`);
-  for (const file of friction.files) {
-    stream.write(`Friction ${file.name}: ${file.action}\n`);
-  }
-  if (friction.command === "remove-friction" && friction.files.length === 0) {
-    stream.write(`Friction files: none found\n`);
-  }
-  stream.write(`Friction AGENTS.md: ${friction.agentsFile} (${friction.agents.action})\n`);
-  stream.write(`Friction applied: ${friction.applied ? "yes" : "no"}\n`);
-}
-
-function writeEntries(stream, label, entries) {
-  if (entries.length === 0) {
-    return;
-  }
-
-  stream.write(`${label}:\n`);
-  for (const entry of entries) {
-    stream.write(`- ${entry.kind ? `${entry.kind}: ` : ""}${entry.name}\n`);
-  }
-}
-
-function writeConflicts(stream, conflicts) {
-  if (conflicts.length === 0) {
-    return;
-  }
-
-  stream.write(`Conflicts:\n`);
-  for (const conflict of conflicts) {
-    stream.write(
-      `- ${conflict.kind ? `${conflict.kind}: ` : ""}${conflict.name}: ${conflict.reason} (${conflict.targetDir || conflict.targetFile})\n`,
-    );
-  }
+  const plugin = {
+    "already-installed": "Codex plugin: already installed",
+    installed: "Codex plugin: installed; start a new Codex session to use it",
+    "would-install": `Codex plugin: would run ${(result.plugin.commands ?? []).map(args => `codex ${args.join(" ")}`).join(" && ")}`,
+  }[result.plugin.status];
+  stream.write(`${plugin}\n`);
+  stream.write("Claude Code, if you use it: claude plugin install cflow --marketplace gualask/clean-flow\n");
 }

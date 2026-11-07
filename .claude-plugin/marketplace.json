@@ -1,0 +1,13 @@
+{
+  "name": "clean-flow",
+  "owner": {
+    "name": "gualask"
+  },
+  "description": "Marketplace of the cflow plugin.",
+  "plugins": [
+    {
+      "name": "cflow",
+      "source": "./"
+    }
+  ]
+}

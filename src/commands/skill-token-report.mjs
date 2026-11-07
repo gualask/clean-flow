@@ -11,7 +11,6 @@ import {
   formatSkillTokenReport,
   skillTokenBudgetsFromEnv,
 } from "../lib/skill-token-report.mjs";
-import { createMaterializedSkills } from "../lib/materialize-skills.mjs";
 import {
   DEFAULT_TOKEN_MODEL,
   resolveTokenEncoding,
@@ -147,28 +146,22 @@ async function main() {
           ? DEFAULT_CONTEXT_MAP
           : null;
     const contextMap = await readContextMap(contextMapPath);
-    const materialized = await createMaterializedSkills(skillsRoot);
+    const report = await buildSkillTokenReport({
+      skillsRoot,
+      rootForLabels: skillsRoot,
+      encoder: resolved.encoder,
+      budgets: skillTokenBudgetsFromEnv(),
+      skillName: options.skillName,
+      contextMap,
+    });
 
-    try {
-      const report = await buildSkillTokenReport({
-        skillsRoot: materialized.skillsRoot,
-        rootForLabels: materialized.skillsRoot,
-        encoder: resolved.encoder,
-        budgets: skillTokenBudgetsFromEnv(),
-        skillName: options.skillName,
-        contextMap,
-      });
-
-      process.stdout.write(
-        formatSkillTokenReport(report, {
-          model: options.model,
-          encodingName: resolved.encodingName,
-          source: resolved.source,
-        }),
-      );
-    } finally {
-      await materialized.cleanup();
-    }
+    process.stdout.write(
+      formatSkillTokenReport(report, {
+        model: options.model,
+        encodingName: resolved.encodingName,
+        source: resolved.source,
+      }),
+    );
 
     if (options.showEncoding && resolved.note) {
       process.stdout.write(`\nEncoding note: ${resolved.note}\n`);

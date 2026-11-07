@@ -1,6 +1,0 @@
-interface:
-  display_name: "Cflow:docs"
-  short_description: "Write, review, or reorganize accurate, lean docs"
-  default_prompt: "Use $cf-docs to write, review, or reorganize documentation against the code for accuracy, redundancy, and leanness."
-policy:
-  allow_implicit_invocation: true

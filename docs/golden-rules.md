@@ -6,7 +6,7 @@ Use these rules when changing Cflow runtime skills, references, templates, docs,
 
 Before changing any Cflow pack file, identify which rules apply by file type, runtime role, and public or installable surface; evaluate the full change against all of them and do not stop at the first matching issue.
 For runtime guidance, review each changed sentence for empty-context clarity, state-based or current-request gates, progressive disclosure, proportionality, and current-skill self-reference.
-For non-runtime files, check that the change does not move runtime behavior into maintainer-only docs, duplicate guidance that belongs in a linked reference, or create installable/public surfaces that the rules reserve for skills or `_shared` authoring sources.
+For non-runtime files, check that the change does not move runtime behavior into maintainer-only docs, duplicate guidance that belongs in a linked reference, or create installable/public surfaces that the rules reserve for skills or `shared/` authoring sources.
 
 ## Runtime Placement
 
@@ -67,7 +67,7 @@ For non-runtime files, check that the change does not move runtime behavior into
 
 ## Pack Surface Boundaries
 
-- Keep `_shared` only for shared authoring references, scripts, and vendoring config consumed by more than one public skill; content one skill uses lives in that skill.
+- Keep `shared/` only for shared authoring references, scripts, and vendoring config consumed by more than one public skill; content one skill uses lives in that skill.
 - Do not create separate internal skills unless a phase needs independent triggering as a real user-facing entrypoint.
 - Merge public skills that route to each other and share gates, scripts, and output slots into one skill, with one description that keeps the trigger words of both. cf-split and cf-cohesion merged into cf-placement (2026-10-25): every gate held in 7 cells, and on an 18-prompt routing battery the four former split and cohesion prompts opened cf-placement while no cognitive, architecture, or no-skill prompt did.
 
@@ -79,5 +79,5 @@ Use this checklist additively: when a changed file has multiple roles, apply eve
 - `references/*.md`: operational rules, local subpath selection, input contracts, and output contracts for a flow or phase loaded only in some invocations; not first-level loading logic.
 - `docs/*.md`: maintainer-only explanation; no runtime dependency.
 - `templates` and `assets`: artifact shape, examples, or review rubrics only.
-- `_shared`: shared authoring references, scripts, helpers, and vendoring config consumed by more than one public skill.
+- `shared/`: shared authoring references, scripts, helpers, and vendoring config consumed by more than one public skill.
 - tests: guard contracts and package behavior; never act as an alternate source of runtime behavior.

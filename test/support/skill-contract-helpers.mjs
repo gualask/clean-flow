@@ -9,7 +9,7 @@ export const REPO_ROOT = path.resolve(
 );
 export const SKILLS_ROOT = path.join(REPO_ROOT, "skills");
 export const DOCS_ROOT = path.join(REPO_ROOT, "docs");
-export const SHARED_REFERENCES_ROOT = path.join(SKILLS_ROOT, "_shared", "references");
+export const SHARED_REFERENCES_ROOT = path.join(REPO_ROOT, "shared", "references");
 export const DESCRIPTION_MAX_CHARS = 1024;
 
 export async function publicSkillNames(root) {

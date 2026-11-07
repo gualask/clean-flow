@@ -1,0 +1,29 @@
+{
+  "name": "cflow",
+  "version": "0.4.4",
+  "description": "Cleanup and refactor skills: frame the goal, assess the architecture, weigh a change, find dead code, simplify and regroup code, check work and tests, keep docs accurate, and turn ideas into specs.",
+  "author": {
+    "name": "gualask"
+  },
+  "homepage": "https://github.com/gualask/clean-flow",
+  "repository": "https://github.com/gualask/clean-flow",
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Clean Flow",
+    "shortDescription": "Skills for cleanup and refactor work",
+    "developerName": "gualask",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use cf-architecture to assess the architecture of this repository and recommend the next step.",
+      "Use cf-clean on the uncommitted changes.",
+      "Use cf-mr-wolf to frame this cleanup before assessment."
+    ],
+    "websiteURL": "https://github.com/gualask/clean-flow"
+  }
+}

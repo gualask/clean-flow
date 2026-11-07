@@ -1,66 +1,25 @@
-# Managing Local Cflow For Codex
+# Migrating Repository Cflow For Codex
 
-## Goal
+Cflow installs as the `cflow` plugin. This moves an installation the old installer made in one repository onto it, or installs the plugin when there is nothing to move. The plugin is installed for the user, not for the repository.
 
-Manage the `clean-flow` installation for a specific repository without using `npx`.
+Prerequisites: `git`, `node`, and either `codex` on PATH or the Codex IDE extension (its bundled `codex` is used).
 
-Support these actions:
-
-- sync into a specific repository, for both first install and later updates
-- sync an exact Git tag to upgrade or downgrade
-- uninstall from a specific repository
-
-Local sync installs or updates Cflow skills into `.agents/skills`.
-
-## Prerequisites
-
-- `git` available
-- `node` available
-
-## Step 1: Temporary Clone Model
-
-Each action below uses its own temporary shallow clone of this repository and attempts to remove it at shell exit. Cleanup failures emit a warning without changing the command result.
-
-## Step 2: Choose The Action
-
-### Sync Locally
-
-Use this when the user explicitly asked to install, sync, or update only the current repository, unless they gave a different target path.
-If the user named an exact Git tag, assign it to `CFLOW_TAG`; otherwise leave `CFLOW_TAG` empty to install the latest checkout.
+Use the current repository unless the user gave a different path.
 
 ```bash
-TMP_ROOT="$(mktemp -d)"
-PACK_ROOT="$TMP_ROOT/clean-flow"
 TARGET_REPO="${TARGET_REPO:-$PWD}"
-CFLOW_TAG="${CFLOW_TAG:-}"
-
+TMP_ROOT="$(mktemp -d)"
 cleanup() {
   rm -rf "$TMP_ROOT" || printf 'Warning: could not clean temporary checkout: %s\n' "$TMP_ROOT" >&2
 }
-
 trap cleanup EXIT
 
-git clone --depth 1 https://github.com/gualask/clean-flow.git "$PACK_ROOT"
-if [ -n "$CFLOW_TAG" ]; then
-  node "$PACK_ROOT/bin/cflow-skills.mjs" install "$TARGET_REPO" --tag "$CFLOW_TAG"
-else
-  node "$PACK_ROOT/bin/cflow-skills.mjs" install "$TARGET_REPO"
-fi
+git clone --depth 1 https://github.com/gualask/clean-flow.git "$TMP_ROOT/clean-flow"
+node "$TMP_ROOT/clean-flow/bin/cflow-skills.mjs" migrate "$TARGET_REPO"
 ```
 
-### Uninstall Locally
+`migrate` installs the Codex plugin first, then removes only the skill directories in `<repo>/.agents/skills` that the old installer wrote. Running it again changes nothing.
 
-```bash
-TMP_ROOT="$(mktemp -d)"
-PACK_ROOT="$TMP_ROOT/clean-flow"
-TARGET_REPO="${TARGET_REPO:-$PWD}"
+Report its output, and tell the user to start a new Codex session.
 
-cleanup() {
-  rm -rf "$TMP_ROOT" || printf 'Warning: could not clean temporary checkout: %s\n' "$TMP_ROOT" >&2
-}
-
-trap cleanup EXIT
-
-git clone --depth 1 https://github.com/gualask/clean-flow.git "$PACK_ROOT"
-node "$PACK_ROOT/bin/cflow-skills.mjs" remove "$TARGET_REPO"
-```
+To uninstall instead: `codex plugin remove cflow@clean-flow`.

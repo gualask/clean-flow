@@ -1,0 +1,12 @@
+#!/bin/sh
+# Blocks a commit whose vendored copies or plugin manifests are out of line.
+# Enabled by `pnpm install` (the prepare script sets core.hooksPath to .githooks).
+set -e
+node src/commands/vendor.mjs --check || {
+  echo "pre-commit: a vendored copy differs from shared/; run pnpm vendor and stage the copies" >&2
+  exit 1
+}
+node --test test/plugin.test.mjs >/dev/null || {
+  echo "pre-commit: plugin checks failed; run node --test test/plugin.test.mjs" >&2
+  exit 1
+}

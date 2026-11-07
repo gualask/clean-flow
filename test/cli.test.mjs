@@ -1,172 +1,193 @@
 import assert from "node:assert/strict";
 import path from "node:path";
 import test from "node:test";
+import { chmod, mkdir, readFile, writeFile } from "node:fs/promises";
 
-import { main, resolveDestinations } from "../src/index.mjs";
-import {
-  listDirectoryNames,
-  makeTempWorkspace,
-  readText,
-  writeSkill,
-} from "./support/helpers.mjs";
+import { main } from "../src/index.mjs";
+import { isPluginInstalled, PLUGIN_ID } from "../src/commands/migrate.mjs";
+import { MARKER_FILE } from "../src/lib/marker.mjs";
+import { listDirectoryNames, makeTempWorkspace, writeSkill } from "./support/helpers.mjs";
 
-test("top-level help exits successfully", async () => {
+const FRICTION_BLOCK = "<!-- BEGIN CFLOW FRICTION -->\nlog friction\n<!-- END CFLOW FRICTION -->";
+
+test("help names migrate as the only command", async () => {
   const io = makeIo();
 
-  const exitCode = await main(["--help"], io);
-
-  assert.equal(exitCode, 0);
-  assert.match(io.stdout.output, /Usage:/);
-  assert.match(io.stdout.output, /<repo>\/\.agents\/skills/);
-  assert.match(io.stdout.output, /--global targets ~\/\.agents\/skills/);
-  assert.equal(io.stderr.output, "");
+  assert.equal(await main(["--help"], io), 0);
+  assert.match(io.stdout.output, /cflow-skills migrate --global/);
+  assert.doesNotMatch(io.stdout.output, /cflow-skills install/);
 });
 
-test("short top-level help exits successfully", async () => {
-  const io = makeIo();
-
-  const exitCode = await main(["-h"], io);
-
-  assert.equal(exitCode, 0);
-  assert.match(io.stdout.output, /Usage:/);
-  assert.equal(io.stderr.output, "");
-});
-
-test("install delegates an exact tag while preserving install options", async () => {
-  const io = makeIo();
-  let delegated;
-
-  const exitCode = await main(
-    ["install", "--global", "--friction", "--dry-run", "--tag", "0.0.1"],
-    io,
-    {
-      installFromTag: async (request) => {
-        delegated = request;
-        return 7;
-      },
-    },
-  );
-
-  assert.equal(exitCode, 7);
-  assert.equal(delegated.tag, "0.0.1");
-  assert.deepEqual(delegated.installArgs, [
-    "install",
-    "--global",
-    "--friction",
-    "--dry-run",
-  ]);
-  assert.equal(delegated.io, io);
-});
-
-test("install accepts an inline tag for a repository target", async () => {
-  const io = makeIo();
-  let delegated;
-
-  const exitCode = await main(
-    ["install", "/tmp/example", "--tag=0.0.1"],
-    io,
-    {
-      installFromTag: async (request) => {
-        delegated = request;
-        return 0;
-      },
-    },
-  );
-
-  assert.equal(exitCode, 0);
-  assert.deepEqual(delegated.installArgs, ["install", "/tmp/example"]);
-});
-
-test("tag selection rejects missing, repeated, and remove usage", async () => {
-  for (const argv of [
-    ["install", "/tmp/example", "--tag"],
-    ["install", "/tmp/example", "--tag", "0.0.1", "--tag", "0.0.2"],
-    ["remove", "/tmp/example", "--tag", "0.0.1"],
-  ]) {
+test("install and remove fail and point to migrate", async () => {
+  for (const command of ["install", "remove"]) {
     const io = makeIo();
-    const exitCode = await main(argv, io);
 
-    assert.equal(exitCode, 1);
-    assert.match(io.stderr.output, /Error: --tag/);
+    assert.equal(await main([command, "--global"], io), 1);
+    assert.match(io.stderr.output, new RegExp(`${command} is gone: Cflow installs as a plugin`));
+    assert.match(io.stderr.output, /cflow-skills migrate/);
   }
 });
 
-test("destination resolution follows Codex user and repository skill locations", () => {
-  const homeDirectory = path.join(path.sep, "tmp", "cflow-home");
-  const codexHome = path.join(path.sep, "tmp", "custom-codex-home");
-
-  assert.deepEqual(
-    resolveDestinations(
-      { global: true },
-      { homeDirectory, environment: { CODEX_HOME: codexHome } },
-    ),
-    {
-      skillsRoot: path.join(homeDirectory, ".agents", "skills"),
-    },
-  );
-
-  const repo = path.join(path.sep, "tmp", "repo");
-  assert.deepEqual(resolveDestinations({ global: false, targetPath: repo }), {
-    skillsRoot: path.join(repo, ".agents", "skills"),
-  });
-});
-
-test("global install and remove use HOME .agents and preserve foreign skills", async () => {
-  const homeDirectory = await makeTempWorkspace();
-  const skillsRoot = path.join(homeDirectory, ".agents", "skills");
-  const dependencies = { homeDirectory, environment: {} };
+test("global migrate removes owned skills and friction, keeps the rest, installs the Codex plugin once", async () => {
+  const workspace = await makeTempWorkspace();
+  const home = path.join(workspace, "home");
+  const skillsRoot = path.join(home, ".agents", "skills");
+  await writeOwnedSkill(skillsRoot, "cf-clean");
+  await writeOwnedSkill(skillsRoot, "cf-docs");
+  await writeSkill(skillsRoot, "cf-mine");
   await writeSkill(skillsRoot, "foreign-skill");
 
-  const io = makeIo();
-  assert.equal(await main(["install", "--global"], io, dependencies), 0);
-  assert.ok((await listDirectoryNames(skillsRoot)).includes("cf-clean"));
-  assert.ok(io.stdout.output.includes(`Skills destination: ${skillsRoot}`));
+  const cflowHome = path.join(home, ".agents", "cflow");
+  await mkdir(path.join(cflowHome, "bin"), { recursive: true });
+  await mkdir(path.join(cflowHome, "friction"), { recursive: true });
+  await writeFile(path.join(cflowHome, "bin", "friction.mjs"), "// logger\n");
+  await writeFile(path.join(cflowHome, "friction", "2026-10.jsonl"), "{}\n");
+  const agentsFile = path.join(home, ".codex", "AGENTS.md");
+  await mkdir(path.dirname(agentsFile), { recursive: true });
+  await writeFile(agentsFile, `# Global agent instructions\n\nKeep this.\n\n${FRICTION_BLOCK}\n`);
 
-  const removeIo = makeIo();
-  assert.equal(await main(["remove", "--global"], removeIo, dependencies), 0);
-  assert.deepEqual(await listDirectoryNames(skillsRoot), ["foreign-skill"]);
+  const codex = fakeCodex();
+  const dependencies = { homeDirectory: home, environment: {}, runCodex: codex.run };
+
+  const first = makeIo();
+  assert.equal(await main(["migrate", "--global"], first, dependencies), 0);
+  assert.deepEqual(await listDirectoryNames(skillsRoot), ["cf-mine", "foreign-skill"]);
+  assert.deepEqual(await listDirectoryNames(cflowHome), ["friction"]);
+  assert.equal(await readFile(agentsFile, "utf8"), "# Global agent instructions\n\nKeep this.\n");
+  assert.deepEqual(codex.calls, [
+    "plugin list",
+    "plugin marketplace add gualask/clean-flow",
+    `plugin add ${PLUGIN_ID}`,
+  ]);
+  assert.match(first.stdout.output, /Removed old Cflow skills: cf-clean, cf-docs/);
+  assert.match(first.stdout.output, /Codex plugin: installed/);
+
+  const second = makeIo();
+  assert.equal(await main(["migrate", "--global"], second, dependencies), 0);
+  assert.deepEqual(await listDirectoryNames(skillsRoot), ["cf-mine", "foreign-skill"]);
+  assert.deepEqual(codex.calls.slice(3), ["plugin list"]);
+  assert.match(second.stdout.output, /Removed old Cflow skills: none/);
+  assert.match(second.stdout.output, /Codex plugin: already installed/);
 });
 
-test("repository install is idempotent and install/remove dry runs preserve the target", async () => {
-  const targetRoot = await makeTempWorkspace();
-  const skillsRoot = path.join(targetRoot, ".agents", "skills");
-  assert.equal(await main(["install", targetRoot, "--dry-run"], makeIo()), 0);
-  assert.deepEqual(await listDirectoryNames(skillsRoot), []);
-
-  assert.equal(await main(["install", targetRoot], makeIo()), 0);
-  const installed = await listDirectoryNames(skillsRoot);
-  assert.ok(installed.includes("cf-clean"));
-  const repeatIo = makeIo();
-  assert.equal(await main(["install", targetRoot], repeatIo), 0);
-  assert.ok(repeatIo.stdout.output.includes(`Unchanged: ${installed.length}`));
-
-  assert.equal(await main(["remove", targetRoot, "--dry-run"], makeIo()), 0);
-  assert.deepEqual(await listDirectoryNames(skillsRoot), installed);
-  assert.equal(await main(["remove", targetRoot], makeIo()), 0);
-  assert.deepEqual(await listDirectoryNames(skillsRoot), []);
-});
-
-test("a conflict in .agents preserves foreign skills and prevents installation", async () => {
-  const targetRoot = await makeTempWorkspace();
-  const skillsRoot = path.join(targetRoot, ".agents", "skills");
-  const foreignSkill = await writeSkill(skillsRoot, "cf-clean");
-  const before = await readText(path.join(foreignSkill, "SKILL.md"));
+test("repository migrate dry run changes nothing and says what it would do", async () => {
+  const workspace = await makeTempWorkspace();
+  const repo = path.join(workspace, "repo");
+  const skillsRoot = path.join(repo, ".agents", "skills");
+  await writeOwnedSkill(skillsRoot, "cf-clean");
+  const codex = fakeCodex();
   const io = makeIo();
-  assert.equal(await main(["install", targetRoot], io), 1);
-  assert.equal(await readText(path.join(foreignSkill, "SKILL.md")), before);
+
+  assert.equal(await main(["migrate", repo, "--dry-run"], io, { runCodex: codex.run }), 0);
   assert.deepEqual(await listDirectoryNames(skillsRoot), ["cf-clean"]);
-  assert.match(io.stdout.output, /Conflicts: 1/);
-  assert.match(io.stdout.output, /Applied: no/);
+  assert.deepEqual(codex.calls, ["plugin list"]);
+  assert.match(io.stdout.output, /Would remove old Cflow skills: cf-clean/);
+  assert.match(io.stdout.output, /Codex plugin: would run codex plugin marketplace add/);
 });
 
-function makeIo() {
+test("a failed plugin install leaves the old skills in place", async () => {
+  const workspace = await makeTempWorkspace();
+  const repo = path.join(workspace, "repo");
+  const skillsRoot = path.join(repo, ".agents", "skills");
+  await writeOwnedSkill(skillsRoot, "cf-clean");
+  const io = makeIo();
+  const failing = async (args) => {
+    if (args[1] === "marketplace") {
+      throw new Error("marketplace root does not contain a supported manifest");
+    }
+    return "";
+  };
+
+  assert.equal(await main(["migrate", repo], io, { runCodex: failing }), 1);
+  assert.deepEqual(await listDirectoryNames(skillsRoot), ["cf-clean"]);
+  assert.match(io.stderr.output, /supported manifest/);
+});
+
+test("without codex on PATH or in an extension, migrate changes nothing and fails", async () => {
+  const workspace = await makeTempWorkspace();
+  const home = path.join(workspace, "home");
+  const skillsRoot = path.join(home, ".agents", "skills");
+  await writeOwnedSkill(skillsRoot, "cf-clean");
+  const io = makeIo();
+
+  assert.equal(await main(["migrate", "--global"], io, { homeDirectory: home, environment: { PATH: "" } }), 1);
+  assert.deepEqual(await listDirectoryNames(skillsRoot), ["cf-clean"]);
+  assert.match(io.stdout.output, /Nothing changed: codex was found neither on PATH nor in a Codex IDE extension/);
+  assert.match(io.stdout.output, /codex plugin marketplace add gualask\/clean-flow && codex plugin add cflow@clean-flow/);
+});
+
+test("without codex on PATH, migrate uses the newest codex bundled in the Codex IDE extension", async () => {
+  const workspace = await makeTempWorkspace();
+  const home = path.join(workspace, "home");
+  const skillsRoot = path.join(home, ".agents", "skills");
+  await writeOwnedSkill(skillsRoot, "cf-clean");
+  const log = path.join(workspace, "codex.log");
+  const older = await writeFakeCodex(home, "openai.chatgpt-26.5.0-darwin-arm64", log, "older");
+  const newer = await writeFakeCodex(home, "openai.chatgpt-26.51021.22027-darwin-arm64", log, "newer");
+  const io = makeIo();
+
+  const exitCode = await main(["migrate", "--global"], io, {
+    homeDirectory: home,
+    environment: { PATH: "", CFLOW_MARKETPLACE: "/tmp/clean-flow-checkout" },
+  });
+
+  assert.equal(exitCode, 0, io.stderr.output);
+  assert.deepEqual(await listDirectoryNames(skillsRoot), []);
+  assert.match(io.stdout.output, new RegExp(`Codex: ${newer.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} \\(bundled in the Codex IDE extension\\)`));
+  assert.deepEqual((await readFile(log, "utf8")).trim().split("\n"), [
+    "newer plugin list",
+    "newer plugin marketplace add /tmp/clean-flow-checkout",
+    "newer plugin add cflow@clean-flow",
+  ]);
+  assert.ok(older);
+});
+
+test("the Codex plugin counts as installed only on an installed status", () => {
+  assert.equal(isPluginInstalled("PLUGIN  STATUS  VERSION\ncflow@clean-flow  installed, enabled  0.4.4  /x\n"), true);
+  assert.equal(isPluginInstalled("cflow@clean-flow  not installed    /x\n"), false);
+  assert.equal(isPluginInstalled("other@clean-flow  installed, enabled  1.0.0  /x\n"), false);
+});
+
+async function writeOwnedSkill(root, name) {
+  const skillDir = await writeSkill(root, name);
+  await writeFile(
+    path.join(skillDir, MARKER_FILE),
+    `${JSON.stringify({ owner: "clean-flow", pack: "cflow", sourceSkill: name, sourceKind: "skill", fingerprint: "x" })}\n`,
+  );
+  return skillDir;
+}
+
+async function writeFakeCodex(home, extensionName, log, label) {
+  const binary = path.join(home, ".vscode", "extensions", extensionName, "bin", "macos-aarch64", "codex");
+  await mkdir(path.dirname(binary), { recursive: true });
+  await writeFile(binary, `#!/bin/sh\necho "${label} $*" >> "${log}"\n`);
+  await chmod(binary, 0o755);
+  return binary;
+}
+
+function fakeCodex() {
+  let installed = false;
+  const calls = [];
   return {
-    stdout: makeWritableBuffer(),
-    stderr: makeWritableBuffer(),
+    calls,
+    async run(args) {
+      calls.push(args.join(" "));
+      if (args.join(" ") === `plugin add ${PLUGIN_ID}`) {
+        installed = true;
+      }
+      return args[1] === "list" && installed ? `${PLUGIN_ID}  installed, enabled  0.4.4  /x\n` : "";
+    },
   };
 }
 
-function makeWritableBuffer() {
+function makeIo() {
+  return {
+    stdout: makeStream(),
+    stderr: makeStream(),
+  };
+}
+
+function makeStream() {
   return {
     output: "",
     write(chunk) {

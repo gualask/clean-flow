@@ -9,12 +9,12 @@ import { fileURLToPath } from "node:url";
 import {
   classifyContextBudget,
   parseGitLsFilesResult,
-} from "../skills/_shared/scripts/repo-tree.mjs";
+} from "../shared/scripts/repo-tree.mjs";
 import { makeTempWorkspace } from "./support/helpers.mjs";
 
 const execFileAsync = promisify(execFile);
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SCRIPT_PATH = path.join(REPO_ROOT, "skills", "_shared", "scripts", "repo-tree.mjs");
+const SCRIPT_PATH = path.join(REPO_ROOT, "shared", "scripts", "repo-tree.mjs");
 
 test("repo-tree accepts successful Git output when spawnSync also reports an error", () => {
   const result = parseGitLsFilesResult({

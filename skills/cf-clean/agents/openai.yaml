@@ -1,6 +1,0 @@
-interface:
-  display_name: "Cflow:clean"
-  short_description: "Check code against what the Cflow skills ask"
-  default_prompt: "Use $cf-clean to check this code against Cflow."
-policy:
-  allow_implicit_invocation: true
