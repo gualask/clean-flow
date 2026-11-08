@@ -55,7 +55,7 @@ test("global migrate removes owned skills and friction, keeps the rest, installs
   assert.deepEqual(await listDirectoryNames(cflowHome), ["friction"]);
   assert.equal(await readFile(agentsFile, "utf8"), "# Global agent instructions\n\nKeep this.\n");
   assert.deepEqual(codex.calls, [
-    "plugin list",
+    "plugin list --marketplace clean-flow",
     "plugin marketplace add gualask/clean-flow",
     `plugin add ${PLUGIN_ID}`,
   ]);
@@ -65,7 +65,7 @@ test("global migrate removes owned skills and friction, keeps the rest, installs
   const second = makeIo();
   assert.equal(await main(["migrate", "--global"], second, dependencies), 0);
   assert.deepEqual(await listDirectoryNames(skillsRoot), ["cf-mine", "foreign-skill"]);
-  assert.deepEqual(codex.calls.slice(3), ["plugin list"]);
+  assert.deepEqual(codex.calls.slice(3), ["plugin list --marketplace clean-flow"]);
   assert.match(second.stdout.output, /Removed old Cflow skills: none/);
   assert.match(second.stdout.output, /Codex plugin: already installed/);
 });
@@ -80,7 +80,7 @@ test("repository migrate dry run changes nothing and says what it would do", asy
 
   assert.equal(await main(["migrate", repo, "--dry-run"], io, { runCodex: codex.run }), 0);
   assert.deepEqual(await listDirectoryNames(skillsRoot), ["cf-clean"]);
-  assert.deepEqual(codex.calls, ["plugin list"]);
+  assert.deepEqual(codex.calls, ["plugin list --marketplace clean-flow"]);
   assert.match(io.stdout.output, /Would remove old Cflow skills: cf-clean/);
   assert.match(io.stdout.output, /Codex plugin: would run codex plugin marketplace add/);
 });
@@ -135,7 +135,7 @@ test("migrate runs the codex it finds on PATH", async () => {
   assert.deepEqual(await listDirectoryNames(skillsRoot), []);
   assert.match(io.stdout.output, new RegExp(`Codex: ${binary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\n`));
   assert.deepEqual((await readFile(log, "utf8")).trim().split("\n"), [
-    "plugin list",
+    "plugin list --marketplace clean-flow",
     "plugin marketplace add /tmp/clean-flow-checkout",
     "plugin add cflow@clean-flow",
   ]);
@@ -174,7 +174,7 @@ function fakeCodex() {
       if (args.join(" ") === `plugin add ${PLUGIN_ID}`) {
         installed = true;
       }
-      return args[1] === "list" && installed ? `${PLUGIN_ID}  installed, enabled  0.4.4  /x\n` : "";
+      return args[1] === "list" && args.includes("--marketplace") && installed ? `${PLUGIN_ID}  installed, enabled  0.4.4  /x\n` : "";
     },
   };
 }

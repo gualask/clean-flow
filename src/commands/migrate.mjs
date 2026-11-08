@@ -11,7 +11,8 @@ import { listDirectories, pathExists } from "../lib/fs.mjs";
 import { isOwnedMarker, readMarker } from "../lib/marker.mjs";
 
 export const MARKETPLACE_SOURCE = "gualask/clean-flow";
-export const PLUGIN_ID = "cflow@clean-flow";
+export const MARKETPLACE_NAME = "clean-flow";
+export const PLUGIN_ID = `cflow@${MARKETPLACE_NAME}`;
 
 export function codexInstallCommands(marketplaceSource = MARKETPLACE_SOURCE) {
   return [
@@ -125,7 +126,8 @@ function codexRunner(binary, environment) {
 }
 
 async function installCodexPlugin({ dryRun, runCodex, marketplaceSource }) {
-  if (isPluginInstalled(await runCodex(["plugin", "list"]))) {
+  // Unfiltered, the listing includes OpenAI's remote catalog: megabytes, past execFile's buffer.
+  if (isPluginInstalled(await runCodex(["plugin", "list", "--marketplace", MARKETPLACE_NAME]))) {
     return { status: "already-installed" };
   }
   if (dryRun) {
