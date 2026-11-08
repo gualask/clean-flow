@@ -106,6 +106,14 @@
           "conditional": [
             "references/pushback.md"
           ]
+        },
+        "defect": {
+          "required": [
+            "references/wider.md"
+          ],
+          "conditional": [
+            "references/pushback.md"
+          ]
         }
       }
     },

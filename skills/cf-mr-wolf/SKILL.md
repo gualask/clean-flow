@@ -1,7 +1,11 @@
 ---
 name: cf-mr-wolf
-description: "Recover the goal behind a reported symptom, or the shape of a change nobody has decided yet. Use when the user reports a symptom, an experience, or a doubt without naming what should change, or asks what a change would consist of while its shape is still open — even when the target is already named. Do not use once the request names both its target and the change to make to it, even when voiced as a doubt: a named component with its technical alternatives, a proposal whose worth or impact is the question, a bounded edit, a defect whose fix is one localized edit, a request to clean up or refactor a named area, or code review."
+description: "Use when the user asks to fix a defect or a bug in the code — a new request, a follow-up that picks one found earlier, or a go-ahead on a fix proposed earlier, even when it names the file and the fix; when they report a symptom, an experience, or a doubt without naming what should change; or when they ask what a change would consist of while its shape is still open. Not for a feature, a rename, a move, a refactor of a named area, a choice between named technical alternatives, the worth of a proposal, or code review."
 ---
+
+## A defect to fix
+
+When the request asks to fix a defect, read [references/wider.md](references/wider.md), which checks whether the defect is one site of a wider problem, and follow it before changing any file. The only question below and its branches apply to every other request.
 
 ## The only question
 

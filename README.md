@@ -120,7 +120,8 @@ Produces one target tree with what each directory owns and the `file:line` that 
 <img src="./public/wolf.png" alt="cf-mr-wolf thumbnail" width="96" align="left" hspace="12">
 
 Recovers the goal behind a symptom or a doubt that names nothing to decide on: it reads the code, tells you what it found in your terms, says it does not yet know which part matters to you, and asks.  
-It is a gate: it investigates and stops, hands off to the owning skill in one line, or steps aside entirely. It offers no menu of options and recommends nothing until you answer.
+It is a gate: it investigates and stops, hands off to the owning skill in one line, or steps aside entirely. It offers no menu of options and recommends nothing until you answer.  
+Asked to fix a defect, it first searches the whole repository for the same mechanism: when other sites share its cause, it names the cause and every site and asks whether to fix the cause or only the defect; otherwise it fixes the defect. On Claude Code a request to fix a defect opened it in 5 of 5 runs and "go ahead with the fix" after a review that proposed it in 6 of 6. On Codex both open it every time, but it named a shared cause in none of 7 runs where Claude Code named it in 3 of 4.
 
 <br clear="left">
 

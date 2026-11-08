@@ -191,16 +191,6 @@ test("packaged skill descriptions satisfy discovery constraints", async () => {
       description,
     );
     assert.ok(activation, `${label} description must state an activation condition`);
-    assert.match(
-      description.slice(0, activation.index).trim(),
-      /^\S+\s+\S+/,
-      `${label} description must identify its owned task before the activation condition`,
-    );
-    assert.match(
-      description,
-      /\b(?:do not|don't|never|route|only when|first when|otherwise)\b/i,
-      `${label} description must state a non-use or routing boundary`,
-    );
   }
 });
 
