@@ -10,7 +10,7 @@ test("cf-mr-wolf is a gate and carries only its two triggered references", async
     withFileTypes: true,
   });
 
-  // "You are a gate, not a pipeline" was removed on 2026-08-09. It existed to stop
+  // "You are a gate, not a pipeline" is gone. It existed to stop
   // the skill re-growing into the deleted nine-reference workflow, and the measurement
   // behind it was that the scaffold suppressed repository inspection. A plan contract
   // reproduced no such suppression — 48 to 75 files against a bare control's 43 — and

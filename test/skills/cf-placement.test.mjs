@@ -10,7 +10,7 @@ test("placement carries its gates in the body and ships no references", async ()
     "utf8",
   );
 
-  // cf-placement merged cf-split and cf-cohesion on 2026-10-25, built around the
+  // cf-placement merges cf-split and cf-cohesion, built around the
   // gates the bare model missed; every line below held in its trial cells.
   assert.match(
     placementContract,

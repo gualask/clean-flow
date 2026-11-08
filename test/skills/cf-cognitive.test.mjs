@@ -13,10 +13,10 @@ test("cognitive owns first-level reference loading in its skill contract", async
     cognitiveContract,
     /Read references\/navigation-cost\.md for the thresholds/,
   );
-  // local-refactor-rules.md left cf-cognitive on 2026-10-24: its rules are the
+  // cf-cognitive ships no local-refactor-rules.md: its rules are the
   // four tests in the body, and without it the lifecycle cell kept its shape.
   assert.doesNotMatch(cognitiveContract, /local-refactor-rules\.md/);
-  // The three per-flow reference files were merged into SKILL.md on 2026-08-16,
+  // The three flows live in SKILL.md, not in per-flow reference files,
   // so the contract itself must carry all three flows and ship no flow file.
   for (const flow of [
     /- \*\*Discovery\*\* \(/,
@@ -25,7 +25,7 @@ test("cognitive owns first-level reference loading in its skill contract", async
   ]) {
     assert.match(cognitiveContract, flow);
   }
-  // The Defects slot, added 2026-08-16. It is a SLOT and not a sentence on
+  // The Defects slot. It is a SLOT and not a sentence on
   // purpose: a field that must be filled is not passed over in silence. Its first
   // version reported 2 of 3 against a floor of 0 of 8 on a case with a planted
   // defect and stayed quiet 3 of 3 with the defect removed, but once filled
@@ -53,8 +53,7 @@ test("cognitive routes to placement up front, not by post-edit condition", async
   );
 
   // Routing is stated once, on what the request is, and named again in the
-  // result. The two post-edit conditional routes were dropped with the merge of
-  // 2026-08-16: a vague condition inside a pointer fired 4 of 9 times on
+  // result. It carries no post-edit conditional route: a vague condition inside a pointer fired 4 of 9 times on
   // identical input, and no bed ever exercised either clause.
   assert.match(
     cognitiveContract,

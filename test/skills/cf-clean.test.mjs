@@ -15,7 +15,7 @@ test("reference audit is local to review, read-only, and repository-wide", async
     "utf8",
   );
 
-  // cf-execute, its only other consumer, was removed on 2026-10-26: the audit lives in review alone.
+  // cf-execute, its only other consumer, is gone: the audit lives in review alone.
   await assert.rejects(fs.readFile(path.join(SHARED_REFERENCES_ROOT, "reference-audit.md"), "utf8"));
   assert.match(referenceAudit, /repository-wide/);
   assert.match(referenceAudit, /configuration/);

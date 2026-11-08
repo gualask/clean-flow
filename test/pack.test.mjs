@@ -81,8 +81,8 @@ test("editing flows defer out-of-scope hard-trigger remedies without softening t
   assert.doesNotMatch(navigationCost, /severity/i);
   assert.match(navigationCost, /Widening the pass solely to remedy it/);
   assert.match(cognitiveContract, /- \*\*Deferred\*\*: after execution only, per the report\/action rule\./);
-  // Function length left the hard triggers on 2026-10-24; without this slot line a
-  // split and a regrouping both deferred `none` (1 run each, 2026-10-25). It matches
+  // Function length is no hard trigger; without this slot line a
+  // split and a regrouping both deferred `none` (1 run each). It matches
   // cf-clean's lens 5.
   assert.match(
     placementContract,
@@ -324,7 +324,7 @@ test("packaged skill runtime files stay within token budget warnings", async () 
     );
     assert.ok(cognitiveExecution, "expected a configured cf-cognitive execution flow");
     // A routed request ends the turn: an explicit extraction is named for cf-placement, not run
-    // (2026-10-06; "do not open it" had held 0 of 2 on 2026-10-04, "do not edit files" held 1 of 1).
+    // ("do not open it" held 0 of 2, "do not edit files" held 1 of 1).
     assert.deepEqual(
       cognitiveExecution.handoffs,
       [],
