@@ -63,7 +63,6 @@ test("cf-clean owns reference loading and remains read-only", async () => {
     cleanMetadata.description,
     /Use only when the request names cf-clean or asks for a Cflow cleanup or alignment pass on pending work, commits, a path, or the repository\./,
   );
-  assert.match(cleanMetadata.description, /Do not use for a generic code review, a bug hunt, or test assertion quality/);
   assert.doesNotMatch(
     cleanMetadata.description,
     /\b(?:evidence|candidate|owning routes|sweep|lens|reference|handoff|audit surface|primary file)\b/i,

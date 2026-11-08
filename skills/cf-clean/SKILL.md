@@ -1,6 +1,6 @@
 ---
 name: cf-clean
-description: "Check code against what the Cflow skills ask — structure, placement, readability, dead names, dependency direction, ownership, leftovers and documentation drift — and route each finding to the skill that resolves it. Use only when the request names cf-clean or asks for a Cflow cleanup or alignment pass on pending work, commits, a path, or the repository. Do not use for a generic code review, a bug hunt, or test assertion quality, and do not use it to fix findings."
+description: "Check code against what the Cflow skills ask — structure, placement, readability, dead names, dependency direction, ownership, leftovers and documentation drift. Use only when the request names cf-clean or asks for a Cflow cleanup or alignment pass on pending work, commits, a path, or the repository."
 ---
 Check one target against the criteria of every Cflow diagnostic skill, record findings with evidence, and route each one to the skill that owns the next decision.
 

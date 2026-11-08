@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
-import { SKILLS_ROOT, parseFrontmatter } from "../support/skill-contract-helpers.mjs";
+import { SKILLS_ROOT } from "../support/skill-contract-helpers.mjs";
 
 test("placement carries its gates in the body and ships no references", async () => {
   const placementContract = await fs.readFile(
@@ -38,15 +38,4 @@ test("placement carries its gates in the body and ships no references", async ()
   for (const removed of ["cf-split", "cf-cohesion"]) {
     await assert.rejects(fs.readdir(path.join(SKILLS_ROOT, removed)));
   }
-});
-
-test("cf-placement excludes non-code content", async () => {
-  const skillFile = path.join(SKILLS_ROOT, "cf-placement", "SKILL.md");
-  const skill = await fs.readFile(skillFile, "utf8");
-  const description = parseFrontmatter(
-    skill,
-    "skills/cf-placement/SKILL.md",
-  ).description;
-
-  assert.match(description, /Do not use for non-code content/);
 });

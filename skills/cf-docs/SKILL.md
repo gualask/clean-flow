@@ -1,6 +1,6 @@
 ---
 name: cf-docs
-description: Write or audit Markdown documentation. Use when the request writes a Markdown file outside `.cflow/` — a doc, README, CHANGELOG, AGENTS.md or CLAUDE.md, or a design note, including updating, trimming, or reorganizing docs — when it writes, adds to, updates, or checks off a todo.md recording remaining work and open questions, or when it asks to audit or fact-check docs against the code. Do not use to read a doc or a todo file to answer a question, or for files under `.cflow/`; do not use otherwise.
+description: "Write or audit Markdown documentation. Use when the request writes a Markdown file outside `.cflow/` — a doc, README, CHANGELOG, AGENTS.md or CLAUDE.md, or a design note, including updating, trimming, or reorganizing docs — when it writes, adds to, updates, or checks off a todo.md recording remaining work and open questions, or when it asks to audit or fact-check docs against the code. Not for reading a todo file to answer a question."
 ---
 Produce docs that are accurate against the code, lean, and free of duplicated concepts.
 

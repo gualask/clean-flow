@@ -1,6 +1,6 @@
 ---
 name: cf-placement
-description: Split a source file that has grown too large into nearby files, or regroup scattered related files into one folder, preserving behavior. Use when a file is too long or mixes responsibilities, when related files are scattered or hard to find, or when asked whether a file should be split or files should live together. Do not use for non-code content; route cleanup inside functions to cf-cognitive and module or package boundaries to cf-architecture.
+description: "Split a source file that has grown too large into nearby files, or regroup scattered related files into one folder, preserving behavior. Use when a file is too long or mixes responsibilities, when related files are scattered or hard to find, or when asked whether a file should be split or files should live together."
 ---
 Split a source file into nearby files, or regroup related files into owner folders, while preserving behavior.
 

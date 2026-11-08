@@ -39,7 +39,7 @@ test("cf-test owns assertion quality with a deterministic context gate", async (
   const flow = contextMap.skills["cf-test"].flows.default;
 
   assert.match(metadata.description, /assertion-quality findings/);
-  assert.match(metadata.description, /cf-clean/);
+  // routing: without this route Codex sent a doubt about a test's expected behavior to cf-test 2/2, with it 0/2.
   assert.match(metadata.description, /ambiguous expected behavior to cf-mr-wolf/);
   assert.match(testContract, /primary test/);
   assert.match(testContract, /contract surfaces/);

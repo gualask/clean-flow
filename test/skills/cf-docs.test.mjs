@@ -42,6 +42,8 @@ test("cf-docs routes by Markdown write intent or an audit request", async () => 
   for (const contract of [description, body]) {
     assert.match(contract, /writes a Markdown file/);
     assert.match(contract, /audit (?:or fact-check )?(?:existing )?(?:docs|them) against the code/i);
-    assert.match(contract, /do not use (?:it )?otherwise/i);
   }
+  assert.match(body, /do not use (?:it )?otherwise/i);
+  // routing: without the clause Codex opened cf-docs to answer "what is left in the todo?" 2/2, with it 0/2.
+  assert.match(description, /Not for reading a todo file to answer a question/);
 });

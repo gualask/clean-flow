@@ -1,6 +1,6 @@
 ---
 name: cf-brainstorm
-description: "Turn a feature or product idea into an approved design spec before any implementation. Use only when the user explicitly asks to brainstorm, explore, or co-design an idea; never trigger it from implementation requests, bug fixes, refactor work, or other Cflow flows. Do not use for ambiguous requests, approach questions, or worth-building judgments."
+description: "Turn a feature or product idea into an approved design spec before any implementation. Use when the user asks to brainstorm, explore, or co-design an idea. Not for implementation requests."
 ---
 Do not write code, scaffold projects, or start implementation until the design has been presented and the user has approved it.
 

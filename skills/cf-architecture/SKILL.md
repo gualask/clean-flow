@@ -1,6 +1,6 @@
 ---
 name: cf-architecture
-description: "Assess and propose repository or subsystem architecture. Use when the user asks to evaluate or design its structure, including exploration without a known problem. Route worth-doing or impact judgments about a named change to cf-scenario."
+description: "Assess and propose repository or subsystem architecture. Use when the user asks to evaluate or design its structure, including exploration without a known problem."
 ---
 Propose the target tree of this repository from its code, tests, docs, dependencies and history, not from directory styles.
 
