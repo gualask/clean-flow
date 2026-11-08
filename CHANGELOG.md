@@ -1,50 +1,36 @@
 # Changelog
 
-## 2026-10-12
+## 0.5.0 - 2026-11-08
 
-- `cf-split` and `cf-execute` count a directory for split placement with the bundled `dir-population.mjs`, now shared by four skills, instead of a prose definition of a real source file; the model ran it from the skill path and wrote no count of its own in 4 of 4 runs that counted a directory. `cf-split` uses one name per concept (candidate, file-level split, file-length hard trigger, placement counts) and states its two routes as "Route … to …"; `cf-cognitive` defines the file-length verdict once (`route` to `cf-split`, or the named exemption), and its Assessment names the shortlist, each target's classification, or the target functions addressed. `cf-cognitive` and `cf-cohesion` call the navigation-cost section the report/action rule throughout. Measured: ten cells across `cf-split`, `cf-execute`, and `cf-cognitive` matched the previous text or the expected outcome, one run each (2026-10-12).
+### Added
 
-## 2026-10-11
+- Cflow installs as the `cflow` plugin from the `clean-flow` marketplace, in Claude Code and Codex; a release reaches you when it changes the plugin version, and a tag pins one release.
+- `cflow-skills migrate` moves an installation made by the old installer onto the Codex plugin, removing only the skills that installer wrote and the friction logger.
+- `cf-architecture` assesses a repository or subsystem, proposes a target tree, checks the code against the structure the repository states, and records a structural change you take up as an approved spec.
+- `cf-mr-wolf` takes requests to fix a defect, first checking whether the same cause shows up elsewhere in the repository.
+- `cf-test` reports duplicated setup, nondeterministic tests, and cases repeated across layers.
+- `cf-docs` reorganizes docs after you confirm the target tree, and follows the rules of CHANGELOG, AGENTS.md and CLAUDE.md files.
 
-- `navigation-cost.md` and `file-split-rules.md` use one name per concept across their five consumers (`cf-cognitive`, `cf-cohesion`, `cf-review`, `cf-split`, `cf-execute`): owner cluster and owner folder (were owner family, owner group, owner directory, subfolder), soft signal, named exemption, naming test; `cf-review` lens 9 no longer points to a placement test the reference does not have, the directory trigger no longer names placement guardrails three consumers never receive, and three restated rules are stated once. Measured: eight cells across all five consumers matched the previous text in substance, one run each (2026-10-11).
-- `cf-architecture` gives one row per dimension the code already varies along besides its entry points (platform or build target, provider, storage, configuration): its variants and every place that chooses among them, or one sentence saying there is none. A choice made in more than one module gets the place where it should be made once; when the variants have their own implementations, the row names each one-variant decision left in the capability or common code (guarded by a build or runtime condition or not) and each contract part answered by refusing stubs, with the implementation it belongs in. The traced workflow also asks whether a new variant would touch one place or several, and a contract toward an environment or provider states the capability's needs. Measured: platform decisions went to the adapters in 3 of 3 runs against 0 of 2 before on a repository with Windows-only logic under `cfg`; on a repository with a single Win32/POSIX branch, no new port was proposed (0 of 2, against 2 of 2 without the conditions).
+### Changed
 
-## 2026-10-10
+- `cf-review` is now `cf-clean`: it checks pending work, commits, a path, or the whole repository against every Cflow skill and routes each finding; on the whole repository it sweeps one area per run. It no longer looks for bugs.
+- `cf-split` and `cf-cohesion` are merged into `cf-placement`, which splits an oversized file into nearby files or regroups scattered related files into one folder.
+- `cf-todo` is merged into `cf-docs`, which keeps the todo file of next steps and open questions.
+- `cf-cognitive` measures nesting and length before judging, refactors inside the file, and claims behavior is preserved only when the tests pass.
+- `cf-scenario` opens with a decision on the named change and traces it to the result a user sees when a doc or spec states the behavior it alters.
+- `cf-mr-wolf` investigates and asks when a request does not name what should change, and hands a request that does to the skill that owns it.
+- `cf-brainstorm` opens when you ask to brainstorm or explore an idea, writes the draft only once the design is settled, and hands ownership decisions to `cf-architecture`.
+- `cf-clean` and `cf-test` run every pass themselves, splitting a large target into batches, instead of delegating to subagents.
+- `cf-deadcode` reports only the boundary names missing a sender or a receiver.
+- Skill descriptions say only when to use each skill, so a skill opens on fewer unrelated requests.
 
-- `cf-review` reviews under a focus: **Bugs and requirements** (a new bug lens, behavior drift, requirement alignment), **Leftovers and docs** (stale references, incomplete transitions, documentation drift), **Structure**, or **All**. A request that names no focus gets one fixed question with Bugs and requirements as default. Bugs and behavior drift route to `cf-mr-wolf`; a stale path in documentation goes only to the documentation lens; directory population is counted by `dir-population.mjs`, now shared with `cf-cohesion`; a range covering the whole repository is reviewed like any other; persisting findings is left to `cf-todo`; one name per concept (finding, route, authoritative source, requirement alignment), with each rule stated once and the agent brief using the handoff's field names.
-- `repo-tree.mjs --context-budget` leaves lockfiles out of the metrics and lists them on a `generated` line; the context gate keeps them out of the corpus (`cf-review`, `cf-test`). Measured: `pnpm-lock.yaml` was a primary file in 3 of 3 range reviews and an agent read all 1,252 lines.
-- `cf-mr-wolf` treats a request that names a target without its change as naming none, so it investigates and asks instead of answering with a plan; routes a decidable target to the owning skill and continues under it in the same turn instead of ending on the skill's name; and uses one name per concept (decidable target, findings).
-- `cf-execute`'s `description` no longer lists its phases (safety net, verification, review), in line with the rule that a description never summarizes the workflow; it states what the skill produces and that it resumes a `.cflow` execution plan. Routing unchanged: planning, resuming, and checking a work unit still open `cf-execute`, a plain implementation request opens no skill, and a review of uncommitted changes opens `cf-review`.
+### Removed
 
-## 2026-10-09
+- `cflow-skills install` and `remove`: install the plugin instead.
+- `cf-start`: ask the agent to implement an approved spec directly.
+- The optional friction logger.
 
-- `cf-todo` writes in the language of the repository's existing docs even when the request uses another language, asks for a missing done criterion instead of writing the task, records an open question's impact and direction only when the session stated them, extends an existing todo file in its own shape, names the ADR or owning doc for a decided question's durable rationale in **Changes** (routed to `cf-docs`), and uses one name per concept (todo file, task, done criterion, checked-task rollover).
-
-## 2026-10-08
-
-- `cf-test` reports only and never edits a test, names the action each lens produces (`strengthen`, `remove`, `rewrite`, `redesign`) so candidates group under the skill's own labels, gives every candidate the same fields as the agent brief with route `cf-mr-wolf` or `none`, names its scopes in the `description` (pending tests, a named history range, explicit tests, the existing suite), leaves persisting candidates to `cf-todo`, and uses one name per concept (authoritative source, invariant, observable contract, test case, candidate).
-- `cf-scenario` traces a business-alignment candidate from `cf-review` as `file:line` steps from the changed line to the result a user sees before comparing it with the source, opens with **Decision:** (`make it`, `do not make it`, `make it only if` a condition) followed by the cost in each other scenario with `file:line`, and uses one name per concept (named change, cost in other scenarios). `cf-test` routes ambiguous expected behavior to `cf-mr-wolf`.
-
-## 2026-10-07
-
-- `cf-deadcode` no longer excludes removal requests in its `description`: asked to remove unused code, the model opens it and removes what its table finds.
-- `cf-docs` drops the `standard`/`conservative` modes: implementation detail stays in the doc and is reported as a candidate move unless the request authorizes source edits. Trimming removes only restated content, history, and decoration, never a fact no other doc carries; each rule is stated once, under the same name in rules, passes, and output. Its trigger now excludes `.cflow/` in the predicate itself, and new docs follow the language of the repository's existing docs.
-- `cf-cohesion` routes without editing (a new package goes to `cf-architecture` even when the move is requested), counts files per directory in discovery with a bundled script, moves only the evaluated cluster without splitting or adding barrels, runs the moved files' tests, and uses one name per concept.
-
-## 2026-10-03
-
-- `cf-cognitive` ranks functions by length and nesting, measures before and after editing, and runs the target's tests.
-- `cf-split` moves and runs the tests of extracted code, and settles placement after the split.
-- `repo-tree.mjs` keeps three views (folder tree, `--largest`, `--context-budget`) and ships only to `cf-cognitive`, `cf-review`, and `cf-test`.
-
-## 2026-09-28
-
-- Added `cf-architecture`: it assesses a repository or subsystem from code evidence (owners of state and coordinators, what entry points decide, shared modules whose meaning belongs to one capability) and proposes one target tree with the smallest evidenced change. Ownership and contract rules live in its `SKILL.md`.
-- Added a shared draft → spec cycle, `design-spec-lifecycle.md`, used by `cf-brainstorm` and `cf-architecture`: one draft with an owner, questions settled only by the user, and promotion that ends the turn by naming the planning skill. The architecture spec adds a `Moves` table with `file:line` evidence.
-- Replaced `cf-start` with `cf-execute`: it plans and implements an approved spec, structural or feature, in `split`, `consolidate`, or `feature` units; keeps state in `.cflow/execution-plan.md`; runs the repository's full check before a unit is done; and asks before starting the next unit. Without a spec it hands the request to the skill that designs one. The installer prunes an installed `cf-start`.
-- Rerouted structure and broad-refactor requests to `cf-architecture`, including `cf-review` lens 4. `cf-docs` no longer claims files under `.cflow/`.
-
-## Up to 0.4.4 (2026-05-05 – 2026-09-08)
+## 0.4.4 and earlier
 
 - Public skills: `cf-start` (refactor controller: assessment, target shape, planning, execution, review, resume), `cf-mr-wolf` (gate for changes nobody has decided yet), `cf-scenario` (decides a named change against the scenarios it touches), `cf-cognitive`, `cf-split`, `cf-cohesion` (local cleanup), `cf-review` (read-only review of pending work or a history range), `cf-test`, `cf-docs`, `cf-todo`, explicit-only `cf-brainstorm` (design specs), `cf-deadcode` (producer/consumer table for names crossing boundaries as strings).
 - Navigation cost as the shared cleanup objective, with hard triggers on file length and directory population.
