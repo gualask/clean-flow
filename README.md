@@ -73,7 +73,7 @@ node ./bin/cflow-skills.mjs migrate --global
 node ./bin/cflow-skills.mjs migrate /path/to/repo
 ```
 
-`migrate` installs the Codex plugin first, with `codex` from your PATH or the one bundled in the Codex IDE extension, then removes only the skill directories the old installer wrote; when it finds no `codex` it changes nothing; `--global` also removes the friction logger and its `AGENTS.md` block, keeping the logs. Running it again changes nothing. `--dry-run` shows what it would do. Or ask Codex:
+`migrate` installs the Codex plugin first, with `codex` from your PATH, then removes only the skill directories the old installer wrote; without `codex` on PATH it changes nothing; `--global` also removes the friction logger and its `AGENTS.md` block, keeping the logs. Running it again changes nothing. `--dry-run` shows what it would do. Or ask Codex:
 
 ```text
 Fetch and follow instructions from https://raw.githubusercontent.com/gualask/clean-flow/refs/heads/main/install/codex/GLOBAL.md and migrate Cflow.

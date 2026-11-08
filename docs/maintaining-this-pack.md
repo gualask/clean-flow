@@ -233,7 +233,7 @@ Current automated coverage checks:
 - both plugin manifests against `package.json` (name, version, license) and each other (description), and each host's marketplace entry
 - `skills/` holding only skill directories
 - every vendored copy equal to its `shared/` source, and no skill file pointing at `shared/`
-- `migrate`: finds `codex` on PATH or, failing that, the newest one bundled in a Codex IDE extension; changes nothing without one; installs the Codex plugin once, then removes only skills the old installer owned and the friction pieces; changes nothing on a second run; leaves the old skills when the plugin install fails
+- `migrate`: finds `codex` on PATH; changes nothing without it; installs the Codex plugin once, then removes only skills the old installer owned and the friction pieces; changes nothing on a second run; leaves the old skills when the plugin install fails
 - structural checks for packaged public skills
 - runtime reference, script, and asset links inside each skill
 - exact context-map coverage of public skills, declared flows, and transitively reachable runtime Markdown

@@ -2,7 +2,7 @@
 
 Cflow installs as the `cflow` plugin. This moves an installation the old installer made in one repository onto it, or installs the plugin when there is nothing to move. The plugin is installed for the user, not for the repository.
 
-Prerequisites: `git`, `node`, and either `codex` on PATH or the Codex IDE extension (its bundled `codex` is used).
+Prerequisites: `git`, `node`, and `codex` on PATH (the Codex CLI; the one bundled in the desktop app is not used).
 
 Use the current repository unless the user gave a different path.
 
@@ -20,6 +20,6 @@ node "$TMP_ROOT/clean-flow/bin/cflow-skills.mjs" migrate "$TARGET_REPO"
 
 `migrate` installs the Codex plugin first, then removes only the skill directories in `<repo>/.agents/skills` that the old installer wrote. Running it again changes nothing.
 
-Report its output, and tell the user to start a new Codex session.
+Report its output, and tell the user to start a new Codex session, or restart the desktop app.
 
 To uninstall instead: `codex plugin remove cflow@clean-flow`.

@@ -20,15 +20,6 @@ export function codexInstallCommands(marketplaceSource = MARKETPLACE_SOURCE) {
   ];
 }
 
-// Where VS Code and its forks keep extensions; the Codex extension (openai.chatgpt-*) ships its
-// own codex under bin/<platform>/ and reads the same CODEX_HOME as the CLI.
-const EXTENSION_ROOTS = [
-  ".vscode/extensions",
-  ".vscode-insiders/extensions",
-  ".vscode-oss/extensions",
-  ".cursor/extensions",
-  ".windsurf/extensions",
-];
 const CODEX_BINARY = process.platform === "win32" ? "codex.exe" : "codex";
 
 const FRICTION_SCRIPT = path.join("bin", "friction.mjs");
@@ -40,7 +31,6 @@ export async function migrate({
   friction = null,
   dryRun = false,
   environment = process.env,
-  homeDirectory,
   marketplaceSource = MARKETPLACE_SOURCE,
   runCodex = null,
 }) {
@@ -54,10 +44,10 @@ export async function migrate({
   };
 
   if (!runCodex) {
-    result.codex = await findCodex({ environment, homeDirectory });
+    result.codex = await findCodex(environment);
     if (!result.codex) {
       // Without codex the plugin cannot be installed, so the old copies stay: nothing changes.
-      result.plugin = { status: "codex-missing", commands: codexInstallCommands(marketplaceSource) };
+      result.plugin = { status: "codex-missing" };
       return result;
     }
     runCodex = codexRunner(result.codex.path, environment);
@@ -108,45 +98,14 @@ async function removeFriction({ cflowHome, agentsFile, dryRun }) {
   return actions;
 }
 
-// codex on PATH first, else the newest one bundled in a Codex IDE extension.
-export async function findCodex({ environment, homeDirectory }) {
+export async function findCodex(environment) {
   for (const directory of (environment.PATH ?? "").split(path.delimiter).filter(Boolean)) {
     const candidate = path.join(directory, CODEX_BINARY);
     if (await isExecutable(candidate)) {
-      return { path: candidate, from: "PATH" };
+      return { path: candidate };
     }
   }
-
-  const bundled = [];
-  for (const root of EXTENSION_ROOTS) {
-    for (const extension of await listDirectories(path.join(homeDirectory, root))) {
-      if (!extension.name.startsWith("openai.chatgpt-")) {
-        continue;
-      }
-      for (const platform of await listDirectories(path.join(extension.path, "bin"))) {
-        const candidate = path.join(platform.path, CODEX_BINARY);
-        if (await isExecutable(candidate)) {
-          bundled.push({ path: candidate, from: "extension", version: extensionVersion(extension.name) });
-        }
-      }
-    }
-  }
-  bundled.sort((left, right) => compareVersions(right.version, left.version));
-  return bundled[0] ? { path: bundled[0].path, from: "extension" } : null;
-}
-
-function extensionVersion(directoryName) {
-  return (directoryName.match(/^openai\.chatgpt-(\d+(?:\.\d+)*)/)?.[1] ?? "0").split(".").map(Number);
-}
-
-function compareVersions(left, right) {
-  for (let index = 0; index < Math.max(left.length, right.length); index += 1) {
-    const difference = (left[index] ?? 0) - (right[index] ?? 0);
-    if (difference !== 0) {
-      return difference;
-    }
-  }
-  return 0;
+  return null;
 }
 
 async function isExecutable(candidate) {

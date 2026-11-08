@@ -14,8 +14,8 @@ Moves an installation made by the old installer onto the cflow plugin:
   - removes the Cflow-owned skill directories from ~/.agents/skills (--global)
     or <repo>/.agents/skills, and keeps every other skill
   - --global also removes the friction logger and its AGENTS.md block, keeping its logs
-  - installs the cflow plugin in Codex first, with codex from PATH or the one bundled in
-    the Codex IDE extension; when neither is found it changes nothing
+  - installs the cflow plugin in Codex first, with codex from PATH; without it, it changes
+    nothing
 Running it again changes nothing.
 `;
 
@@ -55,7 +55,6 @@ export async function main(
       friction,
       dryRun: options.dryRun,
       environment,
-      homeDirectory,
       // CFLOW_MARKETPLACE points the migration at a local checkout, for trying it before a release.
       marketplaceSource: environment.CFLOW_MARKETPLACE || MARKETPLACE_SOURCE,
       runCodex: dependencies.runCodex ?? null,
@@ -113,14 +112,13 @@ function parseArgs(argv) {
 
 function writeSummary(stream, result) {
   if (result.plugin.status === "codex-missing") {
-    const commands = result.plugin.commands.map(args => `codex ${args.join(" ")}`).join(" && ");
-    stream.write("Nothing changed: codex was found neither on PATH nor in a Codex IDE extension.\n");
-    stream.write(`Install the cflow plugin first (from the Codex extension, or with ${commands}), then run migrate again.\n`);
+    stream.write("Nothing changed: codex is not on PATH.\n");
+    stream.write("Install the Codex CLI (npm install -g @openai/codex), then run migrate again.\n");
     return;
   }
 
   if (result.codex) {
-    stream.write(`Codex: ${result.codex.path}${result.codex.from === "extension" ? " (bundled in the Codex IDE extension)" : ""}\n`);
+    stream.write(`Codex: ${result.codex.path}\n`);
   }
   const verb = result.dryRun ? "Would remove" : "Removed";
   stream.write(`Skills directory: ${result.skillsRoot}\n`);
@@ -131,7 +129,7 @@ function writeSummary(stream, result) {
 
   const plugin = {
     "already-installed": "Codex plugin: already installed",
-    installed: "Codex plugin: installed; start a new Codex session to use it",
+    installed: "Codex plugin: installed; start a new Codex session, or restart the desktop app, to use it",
     "would-install": `Codex plugin: would run ${(result.plugin.commands ?? []).map(args => `codex ${args.join(" ")}`).join(" && ")}`,
   }[result.plugin.status];
   stream.write(`${plugin}\n`);

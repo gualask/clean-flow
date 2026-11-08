@@ -2,7 +2,7 @@
 
 Cflow installs as the `cflow` plugin. This moves a global installation made by the old installer onto it, or installs the plugin when there is nothing to move.
 
-Prerequisites: `git`, `node`, and either `codex` on PATH or the Codex IDE extension (its bundled `codex` is used).
+Prerequisites: `git`, `node`, and `codex` on PATH (the Codex CLI; the one bundled in the desktop app is not used).
 
 ```bash
 TMP_ROOT="$(mktemp -d)"
@@ -17,6 +17,6 @@ node "$TMP_ROOT/clean-flow/bin/cflow-skills.mjs" migrate --global
 
 `migrate` installs the Codex plugin first, then removes only the skill directories in `$HOME/.agents/skills` that the old installer wrote, and the friction logger with its `AGENTS.md` block. Running it again changes nothing.
 
-Report its output, and tell the user to start a new Codex session.
+Report its output, and tell the user to start a new Codex session, or restart the desktop app.
 
 To uninstall instead: `codex plugin remove cflow@clean-flow`.

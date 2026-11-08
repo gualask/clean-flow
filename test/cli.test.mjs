@@ -103,7 +103,7 @@ test("a failed plugin install leaves the old skills in place", async () => {
   assert.match(io.stderr.output, /supported manifest/);
 });
 
-test("without codex on PATH or in an extension, migrate changes nothing and fails", async () => {
+test("without codex on PATH, migrate changes nothing and fails", async () => {
   const workspace = await makeTempWorkspace();
   const home = path.join(workspace, "home");
   const skillsRoot = path.join(home, ".agents", "skills");
@@ -112,34 +112,33 @@ test("without codex on PATH or in an extension, migrate changes nothing and fail
 
   assert.equal(await main(["migrate", "--global"], io, { homeDirectory: home, environment: { PATH: "" } }), 1);
   assert.deepEqual(await listDirectoryNames(skillsRoot), ["cf-clean"]);
-  assert.match(io.stdout.output, /Nothing changed: codex was found neither on PATH nor in a Codex IDE extension/);
-  assert.match(io.stdout.output, /codex plugin marketplace add gualask\/clean-flow && codex plugin add cflow@clean-flow/);
+  assert.match(io.stdout.output, /Nothing changed: codex is not on PATH/);
+  assert.match(io.stdout.output, /npm install -g @openai\/codex/);
 });
 
-test("without codex on PATH, migrate uses the newest codex bundled in the Codex IDE extension", async () => {
+test("migrate runs the codex it finds on PATH", async () => {
   const workspace = await makeTempWorkspace();
   const home = path.join(workspace, "home");
   const skillsRoot = path.join(home, ".agents", "skills");
   await writeOwnedSkill(skillsRoot, "cf-clean");
   const log = path.join(workspace, "codex.log");
-  const older = await writeFakeCodex(home, "openai.chatgpt-26.5.0-darwin-arm64", log, "older");
-  const newer = await writeFakeCodex(home, "openai.chatgpt-26.51021.22027-darwin-arm64", log, "newer");
+  const bin = path.join(workspace, "bin");
+  const binary = await writeFakeCodex(bin, log);
   const io = makeIo();
 
   const exitCode = await main(["migrate", "--global"], io, {
     homeDirectory: home,
-    environment: { PATH: "", CFLOW_MARKETPLACE: "/tmp/clean-flow-checkout" },
+    environment: { PATH: bin, CFLOW_MARKETPLACE: "/tmp/clean-flow-checkout" },
   });
 
   assert.equal(exitCode, 0, io.stderr.output);
   assert.deepEqual(await listDirectoryNames(skillsRoot), []);
-  assert.match(io.stdout.output, new RegExp(`Codex: ${newer.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} \\(bundled in the Codex IDE extension\\)`));
+  assert.match(io.stdout.output, new RegExp(`Codex: ${binary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\n`));
   assert.deepEqual((await readFile(log, "utf8")).trim().split("\n"), [
-    "newer plugin list",
-    "newer plugin marketplace add /tmp/clean-flow-checkout",
-    "newer plugin add cflow@clean-flow",
+    "plugin list",
+    "plugin marketplace add /tmp/clean-flow-checkout",
+    "plugin add cflow@clean-flow",
   ]);
-  assert.ok(older);
 });
 
 test("the Codex plugin counts as installed only on an installed status", () => {
@@ -157,10 +156,10 @@ async function writeOwnedSkill(root, name) {
   return skillDir;
 }
 
-async function writeFakeCodex(home, extensionName, log, label) {
-  const binary = path.join(home, ".vscode", "extensions", extensionName, "bin", "macos-aarch64", "codex");
-  await mkdir(path.dirname(binary), { recursive: true });
-  await writeFile(binary, `#!/bin/sh\necho "${label} $*" >> "${log}"\n`);
+async function writeFakeCodex(directory, log) {
+  const binary = path.join(directory, "codex");
+  await mkdir(directory, { recursive: true });
+  await writeFile(binary, `#!/bin/sh\necho "$*" >> "${log}"\n`);
   await chmod(binary, 0o755);
   return binary;
 }
