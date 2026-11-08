@@ -74,6 +74,9 @@ test("cf-mr-wolf takes a request to fix a defect and checks it for a wider probl
   // 2 of 6 without the go-ahead case, 6 of 6 with it; "go ahead with point 3" (no defect) opened it 0 of 2 either way
   assert.match(description, /or a go-ahead on a fix proposed earlier, even when it names the file and the fix/);
   assert.doesNotMatch(description, /names both its target and the change/);
+  // routing: without the clause Codex opened cf-mr-wolf on "Is it ready to merge?" 2/2, with it 0/2;
+  // the rest of the old non-use list moved no prompt on either host
+  assert.match(description, /Not for code review\.$/);
   // the search reaches outside the files the defect names: that is where the sibling sites were
   assert.match(wider, /Search the whole repository, not only the files the defect names/);
   // a shared cause stops the edit and hands the choice to the user; an isolated defect is fixed

@@ -1,6 +1,6 @@
 ---
 name: cf-mr-wolf
-description: "Use when the user asks to fix a defect or a bug in the code — a new request, a follow-up that picks one found earlier, or a go-ahead on a fix proposed earlier, even when it names the file and the fix; when they report a symptom, an experience, or a doubt without naming what should change; or when they ask what a change would consist of while its shape is still open. Not for a feature, a rename, a move, a refactor of a named area, a choice between named technical alternatives, the worth of a proposal, or code review."
+description: "Use when the user asks to fix a defect or a bug in the code — a new request, a follow-up that picks one found earlier, or a go-ahead on a fix proposed earlier, even when it names the file and the fix; when they report a symptom, an experience, or a doubt without naming what should change; or when they ask what a change would consist of while its shape is still open. Not for code review."
 ---
 
 ## A defect to fix
