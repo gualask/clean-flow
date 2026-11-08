@@ -22,7 +22,7 @@
     "defaultPrompt": [
       "Use cf-architecture to assess the architecture of this repository and recommend the next step.",
       "Use cf-clean on the uncommitted changes.",
-      "Use cf-mr-wolf to frame this cleanup before assessment."
+      "Use cf-mr-wolf: this module feels hard to change and I don't know why."
     ],
     "websiteURL": "https://github.com/gualask/clean-flow"
   }
