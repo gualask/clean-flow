@@ -10,7 +10,7 @@ It helps an agent understand the repository, choose the right refactor path, and
 Refactors often fail because the agent starts moving code before it understands the problem, the current boundaries, or the behavior that must stay fixed. Clean Flow keeps that work in check:
 
 - **Problem first**: when a request does not say what should change, the agent reads the code and asks what matters to you before touching anything.
-- **Clear ownership**: architecture reviews start from who decides what and which abstractions earn their place, not from directory styles.
+- **Clear ownership**: architecture reviews weigh candidate forms against what the system must guarantee, and every boundary has to earn its place.
 - **Low ceremony**: a new boundary, abstraction, or layer is proposed only when the code already needs it.
 - **Behavior preserved**: refactors run the tests that cover what they change, and claim behavior is preserved only when those pass.
 - **Report before change**: checks report and route what they find; they do not edit your code.

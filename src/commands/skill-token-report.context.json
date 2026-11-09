@@ -7,6 +7,7 @@
           "required": [],
           "conditional": [
             "references/spec.md",
+            "references/tree-check.md",
             "references/design-spec-lifecycle.md"
           ]
         }
