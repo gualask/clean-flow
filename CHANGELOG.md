@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.5.1 - 2026-11-09
+
+### Added
+
+- `cf-architecture` checks a proposed tree before you approve it, when you ask: it looks in entry points and adapters for rules left without an owner and drops new directories nothing justifies.
+
+### Changed
+
+- `cf-architecture` lists what the structure has to serve, compares the form the code has with at least two others, each with a drawback, and proposes the target tree of the form that wins.
+- `cf-architecture` proposes a layer, a split into modules, an application service, a port or a separate package only when the repository shows the condition that calls for it.
+
 ## 0.5.0 - 2026-11-08
 
 ### Added
