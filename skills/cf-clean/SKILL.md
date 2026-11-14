@@ -29,12 +29,12 @@ For paths and the repository, every source file under the target is a primary fi
 For any target:
 
 - **Audit surfaces** are repository-controlled references or documentation outside the primary files that lenses 1 or 3 inspect. Do not run the other lenses on an audit surface.
-- Test files are primary files for lenses 1–10; their assertion quality belongs to `cf-test`.
+- Test files are audit surfaces, not primary files, unless the request names them or asks to check tests. Their assertion quality belongs to `cf-test`.
 - Generated, vendored, and ignored paths stay out; the context gate's `generated` line names the lockfiles among them.
 
 ## Hard Gates
 
-**Report only violations whose remedy is confined to a nameable unit.** A smell whose fix propagates to every site sharing a shape — and which therefore no single commit can clear — stays out, however real it is. `references/sweep.md` names the excluded families and the rationalization to refuse.
+**Report only violations whose remedy is confined to a nameable unit.** A smell whose fix propagates to every site sharing a shape — and which therefore no single commit can clear — stays out, however real it is. `references/sweep.md` names the excluded families and the reason.
 
 ## Flow
 

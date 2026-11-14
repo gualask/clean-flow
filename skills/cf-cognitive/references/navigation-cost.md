@@ -37,14 +37,13 @@ The naming test: a unit that cannot be named by its result or role without "and"
 
 ## Hard Triggers
 
-Three signals are alarm bells, not soft signals. Past these thresholds the default verdict is that cleanup, extraction, or routing is needed, and the burden of proof inverts onto keeping the code as-is:
+Two signals are alarm bells, not soft signals. Past these thresholds the default verdict is that cleanup, extraction, or routing is needed, and the burden of proof inverts onto keeping the code as-is:
 
 - nesting deeper than function -> block -> block
 - a source file past roughly 300 LOC.
   This trigger fires only on implementation source; prose documentation and Markdown are never file-length candidates and are judged by their own documentation lenses.
-- a directory at or past roughly 10 direct real source files with no sub-grouping (group one owner cluster into an owner folder, or route the directory to the skill that owns that move).
-  Count only non-generated implementation sources in the target language; barrels, re-export files, generated files, fixtures, snapshots, and tests do not count.
-  This trigger reads the directory, not the unit being split or moved: it fires whatever the active skill's placement rules decide for that unit.
+
+Test files are out by default: the hard triggers and the soft signals reach a test file only when the request names it or asks to check tests.
 
 Past a hard trigger, `keep as-is` or "no finding" is allowed only by explicitly naming one of these exemptions:
 
@@ -53,7 +52,6 @@ Past a hard trigger, `keep as-is` or "no finding" is allowed only by explicitly 
 - data tables, constants, schemas, or generated code
 - one indivisible behavior that flattening or splitting would force readers to reassemble across units
 - for file length only: one indivisible owner with no stable internal bug/change targets; named helpers alone do not qualify
-- for directory population only: every file there belongs to the same owner cluster, or no owner cluster in it has three or more members. An owner cluster is the files whose names share the owner they serve (`invoice-*`, `user-session.*`); a module or layer folder is not one by itself
 
 No named exemption, no absolution. The test above still decides the remedy: guard clauses or same-file helpers for function-level pressure; file-level split is the default remedy for file-length pressure.
 Report any finding past a hard trigger without minimizing it with words like "minor", "light", "not yet serious", or "someday"; hedging is a form of downranking and is treated as a violation of this rule.
@@ -66,17 +64,6 @@ Widening the pass solely to remedy it, or dropping or softening the finding, are
 
 ## Soft Signals Are Not the Verdict
 
-Treat hop count, scattered files, a function past roughly 20-30 logical lines, and other distance or count signals, except the file-length and directory-population hard triggers above, as soft signals that prompt the test, never as the decision.
+Treat hop count, scattered files, a function past roughly 20-30 logical lines, and other distance or count signals, except the file-length hard trigger above, as soft signals that prompt the test, never as the decision.
 When a soft signal and the test disagree, the test wins.
 A stable, well-named owner that tells a maintainer where to look can stay even when soft counts look high; a short file can still fail the test when it hides where behavior lives.
-
-## What Counts as a Regression
-
-A change that satisfies a soft signal but raises reading cost is not a cleanup.
-Do not inline distinct responsibilities, hide ordering, or merge owners just to cut hops or shorten a call chain; that trades a cheap jump for expensive reading.
-Equally, do not split one indivisible behavior into units that must all be read together, or scatter an owner so its pieces become unpredictable to locate.
-
-## Proportionality
-
-Act only where the test shows real cost within the scope the active skill defines.
-Code that is already clear, cohesive, and proportionate is done.

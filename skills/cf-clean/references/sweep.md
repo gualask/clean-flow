@@ -50,7 +50,7 @@ Route: `cf-placement`
 
 Report a file outside the owner implied by its role, imports, and callers; a workflow spread across type folders or siblings; or a file in a catch-all bucket. On a change target, judge only files the change added, moved, or renamed. Judge it with the test in `references/navigation-cost.md`; similar names alone do not establish cohesion.
 
-Run bundled `scripts/dir-population.mjs`, resolved from the active skill root and never from the project working directory, with one `--include` per directory to check: on a change target, each directory where the change added, moved, or renamed a file; otherwise each directory holding primary files. Do not write a count of your own. A directory it marks is a finding under the directory-population hard trigger unless a named exemption applies.
+Run bundled `scripts/dir-population.mjs`, resolved from the active skill root and never from the project working directory, with one `--include` per directory to check: on a change target, each directory where the change added, moved, or renamed a file; otherwise each directory holding primary files. Do not write a count of your own. A directory it marks is a hard-trigger finding; "no finding" is allowed only by explicitly naming, for that directory, one of these exemptions: every file there belongs to the same owner cluster, or no owner cluster in it has three or more members. An owner cluster is the files whose names share the owner they serve (`invoice-*`, `user-session.*`); a module or layer folder is not one by itself.
 
 ### Lens 7 — Dependency Direction And Owner Placement
 
