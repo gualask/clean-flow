@@ -32,3 +32,4 @@ Clean Flow (Cflow): source pack of skills for cleanup/refactor flows, distribute
 - `migrate` must stay idempotent; don't bootstrap `.cflow/` here.
 - Run `pnpm test` before committing.
 - `CHANGELOG.md` is written only when releasing to `main`, from the commits since the previous release; work on `dev` adds nothing to it. Follow Keep a Changelog: one heading per release (`## <version> - <date>`), changes grouped under `Added`, `Changed`, `Fixed`, `Removed`, one short line per user-visible change saying what changed for whoever installs the pack. No measurements, run counts, token counts or rationale.
+- Work lands on `dev`; `main` moves only at a release. To release: add one `release: <version>` commit on `dev` with the CHANGELOG entry and the version bump, fast-forward `main` to it without squashing, tag it `<version>` (annotated, no `v` prefix), and push both branches and the tag.
