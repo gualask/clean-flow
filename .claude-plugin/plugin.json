@@ -1,7 +1,7 @@
 {
   "name": "cflow",
   "description": "Cleanup and refactor skills: frame the goal, assess the architecture, weigh a change, find dead code, simplify and regroup code, check work and tests, keep docs accurate, and turn ideas into specs.",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "author": {
     "name": "gualask"
   },

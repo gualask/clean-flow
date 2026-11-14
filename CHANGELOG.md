@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.2 - 2026-11-14
+
+### Changed
+
+- `cf-clean` leaves test files out of its checks unless you name them or ask to check tests; it still searches them for references to what the change removed.
+- `cf-cognitive` applies its thresholds to a test file only when you ask, and leaves a file alone when no function in it is nested too deep or too long: it reports the measures and stops.
+- `cf-deadcode` runs the project's dead-code tool, or the standard one for its language, also in the mode that leaves tests out, so it reports code only tests reach; when you name files it checks only the names those files send or receive.
+
+### Fixed
+
+- `cf-clean` and `cf-cognitive` use the same function-length signal.
+
 ## 0.5.1 - 2026-11-09
 
 ### Added
