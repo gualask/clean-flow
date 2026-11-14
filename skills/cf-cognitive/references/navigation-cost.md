@@ -64,6 +64,6 @@ Widening the pass solely to remedy it, or dropping or softening the finding, are
 
 ## Soft Signals Are Not the Verdict
 
-Treat hop count, scattered files, a function past roughly 20-30 logical lines, and other distance or count signals, except the file-length hard trigger above, as soft signals that prompt the test, never as the decision.
+Treat hop count, scattered files, a function past roughly 20 logical lines, and other distance or count signals, except the file-length hard trigger above, as soft signals that prompt the test, never as the decision.
 When a soft signal and the test disagree, the test wins.
 A stable, well-named owner that tells a maintainer where to look can stay even when soft counts look high; a short file can still fail the test when it hides where behavior lives.

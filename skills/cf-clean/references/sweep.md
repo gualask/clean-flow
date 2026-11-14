@@ -26,7 +26,7 @@ Check documents that reference primary files. Report each path, symbol, signatur
 
 ## Structure
 
-`references/navigation-cost.md` owns thresholds, the naming test, exemptions, and remedies for lenses 5, 6, and 9.
+`references/navigation-cost.md` owns the thresholds, exemptions, and remedies of lens 5, the test lens 6 judges with, and the naming test of lens 9.
 
 ### Lens 4 — Declared Invariants
 

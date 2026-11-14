@@ -73,6 +73,12 @@ test("cf-clean owns reference loading and remains read-only", async () => {
   assert.match(cleanContract, /\*\*A named history range\*\*/);
   assert.match(cleanContract, /\*\*Paths\*\*/);
   assert.match(cleanContract, /\*\*The repository\*\*/);
+  // Test files are searched, not judged, unless asked: 47 primary files of 50 on
+  // the default request, a mock of a deleted file still found in an untouched test.
+  assert.match(
+    cleanContract,
+    /Test files are audit surfaces, not primary files, unless the request names them or asks to check tests\./,
+  );
   assert.match(cleanContract, /With no target named, take pending work; with nothing pending, take the repository\./);
   assert.doesNotMatch(cleanContract, /never widen the pass to the repository/);
   assert.match(cleanContract, /`introduced` does not apply/);

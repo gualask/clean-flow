@@ -244,8 +244,14 @@ test("navigation-cost is the single source of hard-trigger threshold values", as
     "utf8",
   );
 
-  assert.match(canonicalContract, /past roughly 20-30 logical lines/);
+  assert.match(canonicalContract, /past roughly 20 logical lines/);
   assert.match(canonicalContract, /past roughly 300 LOC/);
+  // Test files stay out of the triggers unless asked: a 335-line test file was
+  // left alone on the default request and reported when the request included tests.
+  assert.match(
+    canonicalContract,
+    /Test files are out by default: the hard triggers and the soft signals reach a test file only when the request names it or asks to check tests\./,
+  );
 
   const consumers = [
     path.join(SKILLS_ROOT, "cf-cognitive", "SKILL.md"),

@@ -36,6 +36,13 @@ test("cognitive owns first-level reference loading in its skill contract", async
     cognitiveContract,
     /- \*\*Defects\*\*: behavior defects noticed against the code's documented rules, with file and line, or `none` naming what you checked against\./,
   );
+  // Execution on a file with nothing past a threshold: without this line the
+  // file was edited anyway 4 of 5; with it, left alone 3 of 3, and a file
+  // nesting 4 deep was still refactored.
+  assert.match(
+    cognitiveContract,
+    /when no function in the file fires the nesting trigger or passes 20 logical lines, edit nothing: report the measures and what could still change, and stop\./,
+  );
   const shipped = await fs.readdir(
     path.join(SKILLS_ROOT, "cf-cognitive", "references"),
   );
