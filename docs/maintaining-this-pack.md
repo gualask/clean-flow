@@ -71,6 +71,7 @@ Shared authoring scripts vendored into consuming skills:
 - `shared/scripts/repo-tree.mjs`
 - `shared/scripts/dir-population.mjs`
 - `shared/scripts/variant-history.mjs`
+- `shared/scripts/tree-check.mjs`
 
 ## Golden Rules
 

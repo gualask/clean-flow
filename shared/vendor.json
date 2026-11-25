@@ -6,6 +6,7 @@
         "design-spec-lifecycle.md"
       ],
       "scripts": [
+        "tree-check.mjs",
         "variant-history.mjs"
       ]
     },

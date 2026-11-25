@@ -4,7 +4,9 @@
     "cf-architecture": {
       "flows": {
         "default": {
-          "required": [],
+          "required": [
+            "references/forms.md"
+          ],
           "conditional": [
             "references/spec.md",
             "references/tree-check.md",
