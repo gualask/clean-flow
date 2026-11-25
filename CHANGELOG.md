@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.3 - 2026-11-25
+
+### Added
+
+- `cf-architecture` chooses the form from a catalog of recognized forms (layered, ports and adapters, modular monolith, vertical slices, plugins, pipeline): for each form it compares, it lists the conditions that form needs and whether the code meets them; when two forms tie, it names the written rule that decides, or asks you.
+- `cf-architecture` checks the proposed tree against the code's dependencies with a bundled script when an indexer for the language is installed (`rust-analyzer scip`, `scip-typescript`, `scip-go`, …): it reports cycles, uses against the direction and the elements to move, and says so when the tree is not checked.
+- `cf-architecture` answers a finding routed from `cf-clean`, `cf-placement` or `cf-cognitive` where it points, keeping the repository's form.
+
+### Changed
+
+- `cf-architecture` puts inside a module only the layers its code needs, named from one convention, and keeps an operation that composes modules in the module that owns it.
+
 ## 0.5.2 - 2026-11-14
 
 ### Changed
