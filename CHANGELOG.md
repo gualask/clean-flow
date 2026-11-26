@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.4 - 2026-11-26
+
+### Changed
+
+- `cf-architecture` checks the tree against the code's dependencies only when it designs the structure, no longer for a feature handed over from `cf-brainstorm` or a finding routed from another skill.
+- When no indexer for the language is installed, `cf-architecture` names it and asks whether to run it; on a yes it takes the command from the indexer's documentation and prefers a way that installs nothing.
+
 ## 0.5.3 - 2026-11-25
 
 ### Added
