@@ -40,9 +40,9 @@ A state or policy belongs to the capability when any kind of client invoking the
 
 Present one target tree in the conversation, in the shape of the winning form's entry in `references/forms.md`; where it has layers, their names come from one convention, named.
 
-Before presenting it, check its dependencies when a SCIP indexer for the code's language runs here (`rust-analyzer scip`, `scip-typescript`, `scip-python`, or the one for that language). Write the index outside the repository; write, also outside it, a file that assigns the current code to the tree's modules, with the form's groups in the order of its direction; run the bundled `scripts/tree-check.mjs`, resolved from the active skill root and never from the project working directory, with the index and that file: its first lines give the file's format and what it reports. Correct the tree until it reports no cycle, no use against the direction and no unassigned code; when one element causes a use, move that element, not its file. When the tree adds a port so that a module stops naming an element of another, declare it with a `port` line that names the port instead; every port the script lists appears in the tree under that name, with the condition in `Boundaries` that justifies it. When no indexer runs, say under the tree that its dependencies are not checked.
+Before presenting a tree drawn from the form `Form` decided, read [references/dependency-check.md](references/dependency-check.md): it checks the tree's dependencies against a SCIP index with the bundled script.
 
-When the user asks to check the tree before approving it, read [references/tree-check.md](references/tree-check.md); that request does not start the spec.
+When the user asks to check the tree before approving it, read [references/owner-check.md](references/owner-check.md); that request does not start the spec.
 
 ## Feature Handoff
 
@@ -50,7 +50,7 @@ When `cf-brainstorm` hands over its draft, its product decisions are settled: do
 
 ## Routed Finding
 
-When the request carries a finding another skill routed here (a dependency against the declared direction, a state or policy held by an adapter, files that would become a new package or module, code to move into another module), the repository's form stays: `Drivers` and `Form` do not apply. Decide only where the code the finding names belongs, with the rules in `Boundaries`, and stay in the modules the finding touches; name a problem outside them in one line. When an indexer runs, check the move with `scripts/tree-check.mjs` as `Target tree` says, the code assigned as it is with the move applied. Return the finding, where its code goes with the `file:line` that proves it, the elements that move, and the last output of the script or the line saying the move is not checked.
+When the request carries a finding another skill routed here (a dependency against the declared direction, a state or policy held by an adapter, files that would become a new package or module, code to move into another module), the repository's form stays: `Drivers` and `Form` do not apply. Decide only where the code the finding names belongs, with the rules in `Boundaries`, and stay in the modules the finding touches; name a problem outside them in one line. Return the finding, where its code goes with the `file:line` that proves it, and the elements that move.
 
 ## Artifacts
 
@@ -64,5 +64,5 @@ Return only:
 
 - **Drivers**: the list above, with the `file:line` of each; omitted for a feature handoff or a routed finding.
 - **Forms compared**: the form the code has and the alternatives, each with the facts of its **When** and whether they hold, what it would change here, its drawback and the evidence; then the facts checked again and the form they decide, or the question when they decide none; omitted for a feature handoff or a routed finding.
-- **Target tree**: once a form is decided, one tree; under each directory, what it owns, the change it isolates or the problem it solves, and the `file:line` that proves it; then the elements the tree moves out of their current file, and the last output of `scripts/tree-check.mjs`, or the line saying the dependencies are not checked.
+- **Target tree**: once a form is decided, one tree; under each directory, what it owns, the change it isolates or the problem it solves, and the `file:line` that proves it; then the elements the tree moves out of their current file; for a tree drawn from `Form`, also the last output of `scripts/tree-check.mjs`, or the line saying the dependencies are not checked.
 - **Unchanged**: the existing boundaries whose condition in `Boundaries` holds, with the same evidence.

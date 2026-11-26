@@ -30,7 +30,12 @@ test("architecture chooses the form from a catalog, on the facts of each form's 
 });
 
 test("architecture checks the target tree with the bundled script where an indexer runs", async () => {
-  const contract = await read("SKILL.md");
+  // Read only for a tree drawn from Form: a feature handoff and a routed finding, given the same trigger and slot for every
+  // tree, read it and ran the script without changing a decision; bound to the flow, they did neither.
+  const skill = await read("SKILL.md");
+  assert.match(skill, /Before presenting a tree drawn from the form `Form` decided, read \[references\/dependency-check\.md\]\(references\/dependency-check\.md\): it checks the tree's dependencies against a SCIP index with the bundled script\./);
+  assert.match(skill, /for a tree drawn from `Form`, also the last output of `scripts\/tree-check\.mjs`, or the line saying the dependencies are not checked\./);
+  const contract = await read("references/dependency-check.md");
 
   // Trees declared "without cycles" were never checked, and most element moves were missed;
   // with the check, the moves found rose and real cycles surfaced.
@@ -38,7 +43,9 @@ test("architecture checks the target tree with the bundled script where an index
   assert.match(contract, /when one element causes a use, move that element, not its file/);
   // An unnamed port line once silenced the check for types that were no port.
   assert.match(contract, /declare it with a `port` line that names the port instead; every port the script lists appears in the tree under that name/);
-  assert.match(contract, /When no indexer runs, say under the tree that its dependencies are not checked\./);
+  assert.match(contract, /When no indexer runs, say under the tree that its dependencies are not checked, name the indexer that would check them, and ask the user whether to run it\./);
+  // Asked to install, the model took a moved module path from memory; sent to the indexer's documentation, it ran the right one first.
+  assert.match(contract, /take the command from the indexer's own documentation, searched online, not from memory; prefer a form that runs it without installing it, and when it installs, say where before running it\./);
   await fs.access(path.join(skillDir, "scripts", "tree-check.mjs"));
 });
 
@@ -50,4 +57,7 @@ test("architecture keeps the form for a feature handoff and for a finding routed
   assert.match(contract, /## Routed Finding\n\nWhen the request carries a finding another skill routed here/);
   assert.match(contract, /the repository's form stays: `Drivers` and `Form` do not apply\. Decide only where the code the finding names belongs/);
   assert.match(contract, /omitted for a feature handoff or a routed finding\./);
+  // Without an indexer, routed findings reached the same decisions by reading, in less time: the check stays out of the section.
+  const routed = contract.slice(contract.indexOf("## Routed Finding"), contract.indexOf("## Artifacts"));
+  assert.doesNotMatch(routed, /tree-check|indexer/);
 });

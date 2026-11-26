@@ -9,7 +9,8 @@
           ],
           "conditional": [
             "references/spec.md",
-            "references/tree-check.md",
+            "references/owner-check.md",
+            "references/dependency-check.md",
             "references/design-spec-lifecycle.md"
           ]
         }

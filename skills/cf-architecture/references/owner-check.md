@@ -1,4 +1,4 @@
-# Tree Check
+# Owner Check
 
 Go through the files of the entry points and adapters one by one. List, with `file:line`, every check that refuses an operation, every sequence whose step order matters, and every recovery after an error. For each, name its owner in the tree. When it has no owner, or the rule on state and policy in `Boundaries` assigns it elsewhere, correct the tree.
 
